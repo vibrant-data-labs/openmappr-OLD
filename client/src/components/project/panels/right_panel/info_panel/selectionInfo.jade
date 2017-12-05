@@ -1,0 +1,6 @@
+dir-node-browser(ng-if="selInfo.panelMode == 'node' " sel-node="selInfo.principalNode" sel-group="selInfo.group" label-attr="selInfo.labelAttr" sel-browsing="selInfo.selectionBrowsing" sel-nodes="selInfo.genericSelNodes")
+dir-cluster-browser(ng-if="selInfo.panelMode == 'cluster' " sel-group="selInfo.group" node-groups="groupsAndClusters" sel-node="selInfo.principalNode")
+dir-nodes-list(ng-if="selInfo.panelMode != 'node' && selInfo.panelMode != 'network' ", nodes="selInfo.genericSelNodes", selected-groups="selInfo.selectedGroups", label-attr="selInfo.labelAttr" node-color-attr="selInfo.nodeColorAttr" panel-mode="selInfo.panelMode" sort-types="selInfo.sortTypes" sort-info="selInfo.sortInfo")
+dir-neighbor-nodes(ng-if="selInfo.panelMode == 'node' " sel-node="selInfo.principalNode" panel-mode="selInfo.panelMode" label-attr="selInfo.labelAttr" sel-nodes="selInfo.genericSelNodes" node-neighbors="selInfo.nodeNeighbors" link-info-attrs="selInfo.linkInfoAttrs")
+dir-neighbor-clusters(ng-if="selInfo.panelMode == 'cluster' " sel-group="selInfo.group" node-groups="groupsAndClusters")
+dir-node-info-attrs(ng-if="selInfo.panelMode == 'node' && ui.showInfoAttrs " sel-node="selInfo.principalNode" pinned-media="pinnedMedia")

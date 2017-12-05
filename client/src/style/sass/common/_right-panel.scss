@@ -1,0 +1,712 @@
+//
+// Right Panel Styling
+// Style for right panel in app and player
+
+.right-panel {
+    @include transition(bottom .5s ease-out);
+    // padding: 7px;
+    background: $panel-background;
+    border: 1px solid $horiz-line-color;
+    bottom: 0;
+    color: $panel-text-dark;
+    font-weight: 300;
+    overflow: hidden;
+    position: absolute;
+    left: 70px;
+    top: 0;
+    width: 320px;
+    z-index: 999;
+
+    .tab-content {
+        @include flex-vert-container;
+        overflow: auto;
+
+        .active {
+            color: inherit;
+            height: 100%;
+        }
+    }
+
+    .right-btns,
+    .left-btns {
+        position: relative;
+        z-index: 101;
+    }
+
+    .left-btns {
+        float: left;
+    }
+
+    .right-btns {
+        margin-bottom: -40px;
+    }
+
+    h6, .h6 {
+      font-weight: 300;
+    }
+
+    .square-btn {
+        &.small-btn {
+            height: 22px;
+            margin: 0;
+
+            h6 {
+                margin: 0;
+            }
+        }
+    }
+
+    .panel-number {
+        float: right;
+        margin-right: -5px;
+    }
+
+    ul {
+        margin: 0;
+    }
+
+    h6,
+    .h6 {
+        color: $text-color;
+        font-size: 13px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+
+        &.subtitle {
+            margin-top: -5px;
+        }
+    }
+
+    h7,
+    .h7 {
+        color: $text-color;
+        font-size: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+
+    //decrease spacing between columns
+    .row {
+        .less-gutter {
+            margin-left: -20px;
+        }
+
+        .less-gutter-right {
+            margin-right: -5px;
+        }
+    }
+
+
+    .title {
+        color: $text-color;
+
+        &.pointable-cursor:hover {
+            color: $panel-text-dark;
+        }
+
+        .toggle-arrow {
+            margin-left: -4px;
+        }
+    }
+
+    .subtitle {
+        color: $panel-text-dark;
+        width: 100%;
+        padding-right: 20px;
+        display: inline-block;
+
+        .toggle-arrow {
+            margin-left: -4px;
+        }
+    }
+
+
+    .x-btn {
+        margin-bottom: 3px;
+    }
+
+
+    .link-mask {
+        height: 20px;
+        margin-top: -6px;
+        overflow: hidden;
+        position: relative;
+        width: 20px;
+    }
+
+    .panel-item {
+        .link-mask {
+            margin-top: -2px;
+        }
+    }
+
+    .link-circle {
+        border: 2px solid $panel-border-dark;
+        border-radius: 100%;
+        height: 40px;
+        left: -20px;
+        position: absolute;
+        top: -20px;
+        width: 40px;
+    }
+
+    .small-btn {
+        .link-mask {
+            @include scale3d(.6, .6, 1);
+            margin: -6px;
+        }
+
+        .link-circle {
+            border-color: $body-bg;
+        }
+
+        .icon-legend-dots {
+            font-size: 10px;
+            margin: -1px;
+        }
+    }
+
+
+    .node-search,
+    .neighbor-search {
+      margin-right: auto;
+      margin-left: -3px;
+      height: 32px;
+      position: relative;
+      z-index: 1;
+
+      input {
+        padding: 2px 22px 2px 5px;
+      }
+
+      button:hover {
+        color: $active-color;
+      }
+
+      .close-btn {
+        margin-left: -22px;
+      }
+    }
+
+
+
+
+    .info-panel {
+        margin-top: 1px;
+
+        .info-item {
+            border-bottom: 5px solid $panel-border;
+            border-top: 5px solid $panel-border;
+            overflow: hidden;
+            padding: 10px 20px;
+            position: relative;
+
+            &:first-child {
+                border-top: 0;
+            }
+
+            &:last-child {
+                border-bottom: 10px solid $panel-border;
+                border-top: 0;
+            }
+
+            .node {
+                position: relative;
+            }
+
+            li {
+                margin: 10px 0;
+                overflow: hidden;
+
+                .h6 {
+                    margin: 5px 0;
+                }
+
+                .more-text {
+                    display: inline-block;
+                    margin-left: 15px;
+
+                    &:hover {
+                      color: $link-hover-color;
+                    }
+                }
+            }
+        }
+
+
+
+        .prev-btn,
+        .next-btn {
+            background: $panel-border-dark;
+            border-radius: 100%;
+            color: $text-color-dark;
+            cursor: pointer;
+            float: left;
+            height: 19px;
+            margin: 0 10px 0 0;
+            padding: 0;
+            text-align: center;
+            width: 19px;
+
+            &:hover {
+                color: $active-color;
+            }
+        }
+
+
+        .btn-link {
+            color: $text-color;
+        }
+
+        .info-icon {
+            padding-top: 7px;
+        }
+
+        .header {
+
+            .info-icon {
+                padding: 0;
+            }
+        }
+
+        .subtitle {
+            margin: -2px 0;
+        }
+
+        .attrs {
+            overflow: hidden;
+
+            ul {
+                margin: -10px 0 0 -20px;
+                padding-left: 20px;
+            }
+        }
+
+        .info-line-down {
+            border-left: 1px solid;
+            bottom: -19px;
+            left: 23px;
+            opacity: .5;
+            position: absolute;
+            top: 29px;
+        }
+
+        .info-line-across {
+            border-bottom: 1px solid;
+            left: 24px;
+            opacity: .5;
+            position: absolute;
+            right: -12px;
+            top: 18px;
+        }
+    }
+
+    .panel-container {
+        @include user-select(none);
+        overflow: hidden;
+
+        .panel-scroll {
+            overflow: auto;
+            width: 100%;
+        }
+
+        .nav-tabs {
+            > li {
+                > a {
+                    background: transparent;
+                    border: 0;
+                    box-shadow: inset 0 -2px 2px $shadow-color-light;
+                    color: $panel-text-dark;
+
+                }
+
+                > a:hover,
+                > a:focus {
+                    color: $active-color;
+                }
+
+                &.active {
+                    > a {
+                        background: $panel-tab-background;
+                        border: none;
+                        border-bottom: 1px solid $panel-border;
+                        box-shadow: none;
+                        color: $active-color;
+                        padding-bottom: 9px;
+                    }
+                }
+            }
+        }
+
+        input {
+            &[type='color'] {
+                width: 20px;
+            }
+
+            &.h6 {
+                margin-top: 0;
+            }
+        }
+
+        .panel {
+            background: transparent;
+            border: 0;
+        }
+
+        .panel-default > .panel-heading {
+            @include flex-display;
+            align-items: center;
+            background: $shadow-color-light;
+            border: 0;
+            border-radius: 0;
+            height: 35px;
+            margin: 0;
+            padding: 0 15px;
+        }
+
+        .panel-open > .panel-heading {
+            border-left: 5px solid $active-color;
+            padding-left: 10px;
+        }
+
+        .panel-group {
+            @include flex-vert-container;
+            margin: 0;
+
+            .panel {
+                @include flex-vert-container;
+
+                + .panel {
+                    border: 0;
+                    margin: 0;
+                }
+            }
+
+            .collapse {
+                .in {
+                    @include flex-vert-container;
+                    overflow: auto;
+                }
+            }
+        }
+
+        .panel-body {
+            border: 0;
+            padding: 0 20px;
+
+            .panel-item {
+                margin: 0 -20px;
+            }
+        }
+
+        .panel-list {
+            padding: 0;
+
+            .panel-item {
+                @include transition(all .3s ease-out);
+                @include user-select(none);
+                background: transparent;
+                border-bottom: 1px solid $panel-border;
+                opacity: 1;
+                overflow: hidden;
+                padding: 10px 20px 0;
+
+                &:last-child {
+                    border-bottom: 0;
+                }
+
+                &:hover,
+                &.highlighted {
+                    background: $panel-light-highlight;
+                }
+
+                &.no-hover:hover {
+                    background: inherit;
+                }
+
+                &.no-border {
+                    border: 0;
+                }
+
+                &.no-heading {
+                    padding-top: 0;
+                }
+
+                &.list-item {
+                    margin: 0 -20px;
+                    padding: 0 20px;
+                }
+
+                &.bg-active {
+                    border-left: 1px solid $active-color;
+                }
+
+                .visible-btn {
+                    color: $panel-text-dark;
+
+                    &:hover {
+                        color: $active-color;
+                    }
+                }
+
+                input {
+                    @include user-select(text);
+                }
+            }
+        }
+
+
+        .legend-container {
+            .panel-list {
+                .panel-item {
+                    padding-bottom: 10px;
+                }
+            }
+        }
+
+
+
+        .panel-sublist {
+            .panel-subitem {
+                @include transition(opacity .3s ease-out);
+                @include user-select(text);
+                border-bottom: 1px solid $panel-border;
+                margin: 0 -20px;
+                opacity: 1;
+                padding: 10px 20px;
+
+                &:first-child {
+                    border-top: 1px solid $panel-border;
+                }
+            }
+        }
+
+        .legend-line-down {
+            border-left: 1px solid;
+            bottom: -47px;
+            left: 23px;
+            opacity: .5;
+            position: absolute;
+            top: 29px;
+
+            &.only-one {
+                bottom: -14px;
+            }
+        }
+
+        .legend-line-across {
+            border-bottom: 1px solid;
+            left: 24px;
+            opacity: .5;
+            position: absolute;
+            right: 9px;
+            top: -2px;
+        }
+
+        //a bit less spacing than info panel
+        h6,
+        .h6 {
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+
+        .legend-icon {
+            padding-top: 7px;
+        }
+    }
+
+    .filter-panel {
+        ul {
+            margin-bottom: 0;
+        }
+    }
+
+    .accordion-panel {
+        min-height: 31px;
+
+        .header {
+            background: $panel-tab-background;
+            border-bottom: 1px solid $panel-border;
+            box-shadow: 0 2px 2px $shadow-color-light;
+            position: relative;
+            z-index: 2;
+
+            &.hovered {
+                h6 > i:first-child {
+                    color: $active-color;
+                }
+
+                .main {
+                    background: $panel-light-highlight;
+                }
+            }
+
+            &.active {
+                h6 {
+                    &.title {
+                        border-left: 5px solid $active-color;
+
+                        i {
+                            margin-left: -5px;
+                        }
+
+                    }
+                }
+
+                button {
+                    color: $panel-text-dark;
+                }
+
+            }
+
+            .main {
+                @include transition(all .3s ease-out);
+                background: $panel-background;
+                height: 39px;
+                position: relative;
+                z-index: 2;
+                margin-top: -2px;
+            }
+
+            h6 {
+                margin: 0;
+                padding: 10px 10px 8px;
+                max-height: 37px;
+
+                &.title {
+                    .text-link i {
+                        margin-left: 2px;
+                    }
+                }
+
+                .title-space {
+                  margin-left: 6px;
+                  white-space: normal;
+                }
+
+                .btn-icon {
+                    cursor: pointer;
+                    display: block;
+                    float: left;
+
+                    &:hover,
+                    &.active {
+                        color: $active-color;
+                    }
+                }
+            }
+
+            .title {
+                button {
+                    height: 15px;
+                    margin-top: -2px;
+                }
+            }
+
+            .hidden-btns {
+                background: $panel-hidden-btns;
+                box-shadow: inset 0 2px 2px $shadow-color-light;
+                height: 0;
+
+                h6 {
+                    background: $panel-hidden-btns;
+                    box-shadow: 0 2px 2px $shadow-color, inset 0 1px 1px $shadow-color;
+                    font-size: 11px;
+                    overflow: hidden;
+                    padding: 8px 10px;
+               }
+
+                .search {
+                    input {
+                        background: transparent;
+                        padding: 0 4px;
+                        width: 100%;
+                    }
+
+                    .fa-search {
+                        margin: 2px 8px 0 0;
+                        width: 0;
+                    }
+               }
+            }
+        }
+    }
+
+    .header {
+        .tag-checkbox {
+            top: 0;
+        }
+    }
+
+    .filter-item {
+        display: block;
+        min-width: 100%;
+        padding: 0 20px;
+
+        .loader {
+            margin-top: 50px;
+        }
+
+        .attr-title {
+            border-top: 10px solid $panel-border;
+            margin-left: -5px;
+            margin-right: -5px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .attr-subtitle {
+            margin-top: 10px;
+
+            &.filters-on {
+                margin-bottom: 40px;
+                margin-top: 0;
+            }
+        }
+
+
+    }
+
+    .filter-item:nth-child(2) .attr-title {
+      border-top: none;
+    }
+
+    //old stuff may need to remove
+    .panel-content {
+        width: 300px;
+    }
+
+    // new stuff
+    .left-panel-body {
+        position: relative;
+
+        .panel-scroll {
+          border: 11px solid #cccccc;
+          border-left-width: 4px;
+          border-right-width: 4px;
+          background: #eee;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 100%;
+          z-index: 1;
+          overflow: auto;
+        }
+
+        .panel-scroll--bottom {
+          z-index: 0;
+        }
+    }
+}
+
+
+//differences between app and player
+
+// #app .right-panel {
+//     left: 0px;
+// }
+
+#mappr-player .right-panel .content {
+    top: 0;
+}

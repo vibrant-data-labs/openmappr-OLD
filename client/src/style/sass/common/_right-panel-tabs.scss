@@ -1,0 +1,61 @@
+.right-panel__tabs {
+  font-weight: 500;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 70px;
+  background: #36474f;
+  z-index: 1002;
+
+
+  li {
+    color: #98a0a5;
+    text-align: center;
+    height: 70px;
+    cursor: pointer;
+    position: relative;
+
+    &.active,
+    &:hover {
+      color: #fff;
+    }
+
+    .highlighted {
+      color: $color-blue;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    .material-icons {
+      font-size: 34px;
+    }
+
+    h6 {
+      margin: 0 0 5px;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .badge {
+      color: $text-color-dark;
+      position: absolute;
+      border-radius: 10px;
+      background: $color-blue;
+      padding: 3px 6px;
+      left: 40px;
+      top: 0px;
+      box-shadow: -2px 1px 2px rgba(0, 0, 0, .5);
+    }
+
+  }
+
+  img {
+    width: 50px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+}

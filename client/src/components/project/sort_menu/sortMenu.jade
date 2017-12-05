@@ -1,0 +1,27 @@
+.attr-visibility
+	div.uib-dropdown(uib-dropdown dropdown-append-to-body is-open="ui.menuOpen")
+		span.uib-dropdown-toggle.text-muted(uib-dropdown-toggle uib-tooltip="Sort Options", tooltip-placement="right", tooltip-append-to-body="true" auto-close="disabled")
+			i.fa.fa-ellipsis-v
+		.uib-dropdown-menu.uib-dropdown-menu-flexing.pull-right(uib-dropdown-menu)
+			.uib-dropdown-click-close
+			.uib-dropdown-flex-content
+				.uib-dropdown-flex
+					ul.list-unstyled.dd-list.nowrap
+						li.row.pointable-cursor.vert-align(ng-click="$event.stopPropagation();")
+							.col-xs-10
+								.text-sm Sort Options:
+							.col-xs-2
+								button.close-btn(type="button", ng-click="ui.menuOpen = false;")
+									i.fa.fa-close
+						li.row.divider
+						li.row.pointable-cursor.vert-align(ng-repeat="sortOrder in sortOrders" ng-click="$event.stopPropagation();")
+							label.text-sm
+								input(type="radio", ng-model="sortConfig.sortOrder", value="{{sortOrder.id}}")
+								span &nbsp;{{::sortOrder.title}}
+						li.row.divider
+						li.row.pointable-cursor.vert-align(ng-repeat="sortType in sortTypes" ng-click="$event.stopPropagation();")
+							label.text-sm
+								input(type="radio", ng-model="sortConfig.sortType", value="{{sortType.id}}")
+								span &nbsp;{{::sortType.title}}
+						li.row.divider
+				.uib-dropdown-flexer

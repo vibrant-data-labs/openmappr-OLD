@@ -1,0 +1,26 @@
+.layout-dropdown {
+  position: absolute;
+  top: 5px;
+  left: 430px;
+  width: 250px;
+
+  .uib-dropdown {
+    max-width: 100%;
+
+
+    i {
+      margin-left: auto;
+    }
+
+    h6 {
+      font-size: 15px;
+    }
+  }
+}
+
+.layout-dropdown-menu {
+
+    .dd-list {
+      padding: 0;
+    }
+}
