@@ -6,28 +6,28 @@ Code is divided into top level modules, each with routes, controllers, models an
 
 ### Top Level Modules
 
-* auth - user authentication, includes passport config.
-* common - common elements like auth middlewares, permission middleware.
-* commonOps - commonOps module. has its own Readme.md file.
-* config - all common / dev / prod / testing config is made available as a module.
-* data_api - module for data api. makes networks available through the API
-* datasys - central data wrangling module. upload data, CRUD on dataset and networks.
-* etl - ETL pipeline. houses the ETL engine which runs scripts on spark cluster
-* libs - external libs outside of npm, mostly copy pasted code
-* migrators - migration code. Used when schema is changed, or need to run system wide validations
-* misc_controllers - small controllers which interface with a service. like job / elasticsearch / svg / maintenance controllers
-* models - (depreciated -> contains schema for the old db. Used by survey and hence not removed)
-* orgs - module for organization management.
-* player - module for player managment. also contains a top_router for player specific routes
-* project - project module. cloning, deleting and so on.
-* recipe - Recipe Engine module. each individual stage has its own file.
-* schemas - All schemas are here. This is because I feel they might be shared across multiple projects
-* scriptStore - contains script runner to run generic scripts on data. depreciated
-* services - common Services needed by all modules
-* snapshot - snapshot module.
-* survey - survey module
-* user - user management module
-* utils - common utility functions. Also contains parsing code.
+* auth            - user authentication, includes passport config.
+* common          - common elements like auth middlewares, permission middleware.
+* commonOps       - commonOps module. has its own Readme.md file.
+* config          - all common / dev / prod / testing config is made available as a module.
+* data_api        - module for data api. makes networks available through the API
+* datasys         - central data wrangling module. upload data, CRUD on dataset and networks.
+* etl             - ETL pipeline. houses the ETL engine which runs scripts on spark cluster
+* libs            - external libs outside of npm, mostly copy pasted code
+* migrators       - migration code. Used when schema is changed, or need to run system wide validations
+* misc_controllers- small controllers which interface with a service. like job / elasticsearch / svg / maintenance controllers
+* models          - (depreciated -> contains schema for the old db. Used by survey and hence not removed)
+* orgs            - module for organization management.
+* player          - module for player managment. also contains a top_router for player specific routes
+* project         - project module. cloning, deleting and so on.
+* recipe          - Recipe Engine module. each individual stage has its own file.
+* schemas         - All schemas are here. This is because I feel they might be shared across multiple projects
+* scriptStore     - contains script runner to run generic scripts on data. depreciated
+* services        - common Services needed by all modules
+* snapshot        - snapshot module.
+* survey          - survey module
+* user            - user management module
+* utils           - common utility functions. Also contains parsing code.
 
 ### Top Level files
 - main_server.js - the server initialization code.
@@ -38,7 +38,7 @@ Code is divided into top level modules, each with routes, controllers, models an
 - ../server.js - entry point. Ensures node 5 is running.
 
 # Running
-Node 5 needs to be installed. see below section on how to install it.
+Node 5 or greater needs to be installed. see below section on how to install it.
 ## developers
 there are 2 scripts for running dev version
 
