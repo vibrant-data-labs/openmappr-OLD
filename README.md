@@ -2,7 +2,7 @@ mappr - a network analysis and visualization platform.
 
 
 ##Sever-side Organization
-Code is divided into top level modules, each with routes, controllers, models and services. (if needed) 
+Code is divided into top level modules, each with routes, controllers, models and services. (if needed)
 
 ### Top Level Modules
 
@@ -30,9 +30,9 @@ Code is divided into top level modules, each with routes, controllers, models an
 * utils - common utility functions. Also contains parsing code.
 
 ### Top Level files
-- main_server.js - the server initialization code. 
-- main_router.js - Each modules furnishes its own router. Which is combined together in the this file. 
-- admin_router.js - similar to main_routers, for adminstrator account. 
+- main_server.js - the server initialization code.
+- main_router.js - Each modules furnishes its own router. Which is combined together in the this file.
+- admin_router.js - similar to main_routers, for adminstrator account.
 - misc_routes.js - bunch of routes, connecting misc_controllers
 - routes.js - all routes which have not been ported over.
 - ../server.js - entry point. Ensures node 5 is running.
@@ -90,3 +90,20 @@ echo 5 > ~/.nvmrc
 ```
 npm install -g yo bower grunt-cli
 ```
+
+# Sass
+Sass and Compass need to be installed in order for sass to compile to css.
+
+* make sure ruby is installed first (by default on macs)
+
+* install sass
+```
+gem install sass
+```
+[Sass install](http://sass-lang.com/install)
+
+* install Compass
+```
+gem install compass
+```
+[Compass install](http://compass-style.org/install/)
