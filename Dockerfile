@@ -1,4 +1,4 @@
-FROM node:5.12.0
+FROM node:8
 # replace this with your application's default port
 EXPOSE 8080
 
@@ -64,7 +64,7 @@ RUN set -ex \
 RUN gem install sass && gem install compass
 
 COPY package.json /usr/src/mappr/
-RUN npm install && npm install --only=dev && npm cache clean
+RUN npm install && npm install --only=dev && npm cache --force clean
 
 COPY .bowerrc /usr/src/mappr/
 COPY bower.json /usr/src/mappr/
