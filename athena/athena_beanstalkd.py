@@ -43,8 +43,10 @@ _BS_CLIENT = None
 
 def init(host, port, pipe):
     global _BS_CLIENT
+    print("Attempting to connect to beanstalk: %s:%s"%(host, port))
     _BS_CLIENT = beanstalkc.Connection(host, port)
     jobTracker.init(_BS_CLIENT)
+    print("Connected with beanstalk successfully!")
     _BS_CLIENT.watch(pipe)
 
 def run_server():
@@ -207,7 +209,7 @@ def run_etl_algo(job, job_id, payload):
     options        = taskData.get('options', None)
 
     print "Running etl algo: %s" % algoName
-    print options    
+    print options
     algo = SimMatToNetwork(0, recipeId)
     try:
         print "algo initialized"
@@ -237,7 +239,7 @@ def run_etl_algo(job, job_id, payload):
                 "result" : algo.result
             }
         }))
-    except AthenaError: 
+    except AthenaError:
         print "AthenaError"
         traceback.print_exc()
         _BS_CLIENT.put(json.dumps({
@@ -293,6 +295,8 @@ if configObjName == "ProductionConfig":
     conf = config.ProductionConfig
 elif configObjName == "TestingConfig":
     conf = config.TestingConfig
+elif configObjName == "DockerConfig":
+    conf = config.DockerConfig
 else:
     conf = config.DevelopmentConfig
 

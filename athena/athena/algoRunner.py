@@ -5,7 +5,7 @@ from algorithms.CoordinateExchanger import CoordinateExchanger
 from algorithms.DecorateNetwork import DecorateNetwork
 #from algorithms.LayoutForceDirected import LayoutForceDirected
 from algorithms.EdgesFromAttributes import EdgesFromAttributes
-from algorithms.SimilarityLinker import SimilarityLinker
+# from algorithms.SimilarityLinker import SimilarityLinker
 from algorithms.RandomLayout import RandomLayout
 from algorithms.LayoutClustered import LayoutClustered
 from algorithms.ComputeNodeSimilarity import ComputeNodeSimilarity
@@ -18,7 +18,7 @@ registeredAlgos = {
     'network_properties': DecorateNetwork,
 #    'layout_ForceDirected': LayoutForceDirected,
     'links_FromAttributes': EdgesFromAttributes,
-    'similarity_linker': SimilarityLinker,
+    # 'similarity_linker': SimilarityLinker,
 #    'layout_random': RandomLayout,
     'layout_clustered': LayoutClustered,
     'compute_node_sim': ComputeNodeSimilarity    

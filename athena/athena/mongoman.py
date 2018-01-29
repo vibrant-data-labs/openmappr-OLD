@@ -41,15 +41,15 @@ def get_grid_fs():
     assert __fs != None, "GridFS has not been initialized"
     return __fs
 
-def init(uri, database) : 
+def init(uri, database) :
     print "Initializing Mongo with URI : %s for database : %s" % (uri, database)
     global __client
     global __db
     global __fs
     __client = MongoClient(uri)
     __db = __client[database]
-    # print __db
-    # print __db.getCollectionNames()
+    print __db
+    #print __db.collection_names()
     __fs = GridFS(__db)
     # make sure the index are correct on chunk collection
     print "validating chunk index"
@@ -90,7 +90,7 @@ def get_dataset_from_rec(datasetId):
         db_rec["id"] = db_rec["_id"]
         datapoints = get_file_by_mapping(db_rec["datapointsFile"])
         db_rec["datapoints"] = datapoints
-    return db_rec 
+    return db_rec
 
 def get_network_from_rec(networkId):
     print "Finding network Record for Id %s" % str(networkId)
@@ -107,7 +107,7 @@ def get_mapping(entityId):
     print "Finding entity mapping for Id %s" % str(entityId)
     db = get_db()
     mappings = db.datamappings.find({ "entityRef" : ObjectId(entityId), "isDeleted" : False}).sort("createdAt", DESCENDING)
-    return mappings    
+    return mappings
 
 def get_file_by_mapping(fileId):
     mappings = get_mapping(fileId)
@@ -145,7 +145,7 @@ def get_dataset_json(datasetId):
     db_rec = get_dataset_from_rec(datasetId)
     if db_rec is not None:
         return db_rec
-    else: 
+    else:
         mappings = get_mapping(datasetId)
         dsJson = None
         if mappings.count() == 0:
@@ -165,7 +165,7 @@ def get_network_json(networkId):
     nw_rec = get_network_from_rec(networkId)
     if nw_rec is not None:
         return nw_rec
-    else: 
+    else:
         mappings = get_mapping(networkId)
         nwJson = None
         if mappings.count() == 0:
@@ -202,7 +202,7 @@ def exists_in_project(networkId, project):
 def store_via_mapping(mapped_id, entity_js, filename, metadata):
     db = get_db()
     fs = get_grid_fs()
-    
+
     meta = dict(metadata)
     meta["mappedId"] = ObjectId(mapped_id)
     objId = fs.put(entity_js, filename=filename, metadata=metadata)
@@ -261,7 +261,7 @@ def save_network(network):
     nw_dic.pop("nodes", None)
     nw_dic.pop("links", None)
     nw_dic.pop("id", None)
-    
+
     updateResult = db.networkrecords.replace_one({"_id" : networkId}, nw_dic, True)
     print "Network replace result: %s" % str(updateResult.raw_result)
     # check if the network already exists, if yes, then simply update it. otherwise add a new network
@@ -279,7 +279,7 @@ def save_network(network):
                    "$push" : { "networks" : networkObj }
                }
            )
-    
+
     # objId = ObjectId()
     # print "Saving network with Id: %s to mapping: %s" % (network.id, str(objId))
 

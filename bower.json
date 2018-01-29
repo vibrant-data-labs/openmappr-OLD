@@ -63,6 +63,7 @@
     "responsive-tables": "*"
   },
   "resolutions": {
-    "angular": "~1.5.1"
+    "angular": "~1.5.1",
+    "jquery": "~2.1.0"
   }
 }

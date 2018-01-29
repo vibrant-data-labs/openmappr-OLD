@@ -131,8 +131,8 @@ function init (app) {
 
 
     // configure database ==================================
-    mongoose.connect(config.dbUrl, { promiseLibrary : Promise });
-    var oldDbConn = mongoose.createConnection(config.oldDbUrl, { promiseLibrary : Promise });
+    mongoose.connect(config.dbUrl, { promiseLibrary : Promise, useMongoClient: true });
+    var oldDbConn = mongoose.createConnection(config.oldDbUrl, { promiseLibrary : Promise, useMongoClient: true });
     db_old.onConnect(oldDbConn);
 
     // configure search ====================================

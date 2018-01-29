@@ -22,10 +22,11 @@ router.get("/", ensureAuth, controller.getOrgs);
 var orgRoute = router.route('/:oid');
 // /:oid routes
 orgRoute
-    .get(ensureAuth, readAccess, controller.readDoc);
+    .get(ensureAuth, readAccess, controller.readDoc)
     // .post(ensureAuth, writeAccess, controller.updateDoc)
     // .put(ensureAuth, writeAccess, controller.updateDoc)
     // .delete(ensureAuth, ensureAdminAccess, controller.deleteDoc);
+    .delete(controller.deleteOrg);
 
 router.get('/:oid/accept/:inviteToken', cleanUserOrgCache, user_controller.acceptOrgInvite);
 

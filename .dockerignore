@@ -1,9 +1,17 @@
-# Python Athena server #
+# Docker specific
+# ###############
+.DS_STORE
+.editorconfig
+.eslintrc.js
+.gitignore
+.git
+
+# Copied from .gitignore
+# ######################
+
+# Ignore Athena and scripts#
 #########################
-athena/venv
-athena/.idea
-venv
-*.pyc
+athena
 
 # Bower #
 ###########
@@ -11,7 +19,6 @@ client/src/bower_components
 
 # Node #
 ###################
-
 lib-cov
 *.seed
 *.log
@@ -64,7 +71,6 @@ node_modules
 ######################
 *.sql
 *.sqlite
-/mongo/data
 
 # OS generated files #
 ######################

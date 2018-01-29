@@ -139,8 +139,10 @@ angular.module('mappr')
                                 if (pathSplitArr[1] == 'projects') {
                                     if (!pathSplitArr[2]) throw new Error('Project URL has no project ID');
                                     orgIdP = projFactory.getOrgIdForProjId(pathSplitArr[2]);
-                                } else {
+                                } else if (user.lastSignedIn.orgId) {
                                     orgIdP = $q.when(user.lastSignedIn.orgId);
+                                } else {
+                                    orgIdP = $q.when(user.orgs[0].ref);
                                 }
                                 return orgIdP.then(function(orgId) {
                                     return orgFactory.listById(orgId);

@@ -23,7 +23,7 @@ function deleteProject(projectId, user, org, shouldSaveUserOrg) {
     var onDataDel = projModel.listByIdAsync(projectId)
         .then(function(proj) {
             if (!proj) {
-                return Promise.reject(new Error("Not found any project with id: " + projectId));
+                return Promise.reject(new Error(logPrefix + "Not found any project with id: " + projectId));
             }
             // delete all datasets
             var onDSDeletion = Promise.resolve(null);
@@ -53,6 +53,10 @@ function deleteProject(projectId, user, org, shouldSaveUserOrg) {
                     return projModel.removeByIdAsync(proj._id);
                     // if removal successful, respond well
                 });
+        })
+        .catch(err => {
+            console.error(err);
+            throw err;
         });
 
     // update user / org

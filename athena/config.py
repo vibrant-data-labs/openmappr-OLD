@@ -18,4 +18,8 @@ class TestingConfig(Config):
     TESTING = True
     DATABASE = 'MAPPR_TEST'
 
+class DockerConfig(Config):
+    DATABASE_URI = 'mongodb://mongo:27017/MAPPRDB'
+    BEANSTALK_HOST = "beanstalk"
+
 # create other configs here

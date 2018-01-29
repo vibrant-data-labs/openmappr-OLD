@@ -386,23 +386,23 @@ function saveDatasetRecord(dataset) {
     recObj._id = dataset.id;
 
     var onSaveP = DatasetRecord.findById(recObj._id).exec()
-    .then(function (oldRec) {
-        if(!oldRec) {
-            console.log(`[DSModel.saveDatasetRecord] Creating new Dataset Record by id: ${recObj._id}`);
-            return new DatasetRecord(recObj).save();
-        } else {
-            console.log(`[DSModel.saveDatasetRecord] updating existing Dataset Record of id: ${oldRec._id}`);
-        }
-        /// update older record with this new one
-        oldRec.projectId       = recObj.projectId;
-        oldRec.name            = recObj.name;
-        oldRec.attrDescriptors = _.map(recObj.attrDescriptors, attr => _.omit(attr, "_id"));
-        oldRec.sourceInfo      = recObj.sourceInfo;
-        oldRec.nDatapoints     = recObj.nDatapoints;
-        oldRec.datapointsFile  = recObj.datapointsFile;
-        oldRec.modifiedAt      = Date.now();
-        return oldRec.save();
-    });
+        .then(function (oldRec) {
+            if(!oldRec) {
+                console.log(`[DSModel.saveDatasetRecord] Creating new Dataset Record by id: ${recObj._id}`);
+                return new DatasetRecord(recObj).save();
+            } else {
+                console.log(`[DSModel.saveDatasetRecord] updating existing Dataset Record of id: ${oldRec._id}`);
+            }
+            /// update older record with this new one
+            oldRec.projectId       = recObj.projectId;
+            oldRec.name            = recObj.name;
+            oldRec.attrDescriptors = _.map(recObj.attrDescriptors, attr => _.omit(attr, "_id"));
+            oldRec.sourceInfo      = recObj.sourceInfo;
+            oldRec.nDatapoints     = recObj.nDatapoints;
+            oldRec.datapointsFile  = recObj.datapointsFile;
+            oldRec.modifiedAt      = Date.now();
+            return oldRec.save();
+        });
 
     onSaveP.tap(() => console.log("[DSModel.saveDatasetRecord] Saving dataset record... done"));
     return onSaveP;
@@ -423,7 +423,7 @@ function saveDataset (dataset, skipDatapoints) {
             entityId : new ObjectID(dataset.id),
             nDatapoints : dataset.datapoints.length
         })
-        .tap(() => console.log("[DSModel.saveDataset] Saving datapoints... done"));
+            .tap(() => console.log("[DSModel.saveDataset] Saving datapoints... done"));
     } else {
         shouldIndex = false;
         console.log("[DSModel.saveDataset] Datapoints save skipped");
@@ -434,17 +434,17 @@ function saveDataset (dataset, skipDatapoints) {
         dataset.datapointsFile = pointsFileId;
         return saveDatasetRecord(dataset);
     })
-    .then(() => dataset)
-    .tap(function(dataset) {
-        if(shouldIndex) {
-            return elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function (err){
-                if(err) {
-                    return console.warn("[DSModel.saveDataset] error storing data to elasticsearch", err);
-                }
-                console.log("[DSModel.saveDataset] Successfully stored data to elasticsearch");
-            });
-        } else return null;
-    });
+        .then(() => dataset)
+        .tap(function(dataset) {
+            if(shouldIndex) {
+                return elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function (err){
+                    if(err) {
+                        return console.warn("[DSModel.saveDataset] error storing data to elasticsearch", err);
+                    }
+                    console.log("[DSModel.saveDataset] Successfully stored data to elasticsearch");
+                });
+            } else return null;
+        });
     return onSaveP.tap(() => console.log(`[Dataset.saveDataset] Successfully saved dataset: ${dataset.name}`));
 
     // // var dataMap = new DataMapping({
@@ -494,32 +494,32 @@ function saveNetworkRecord(network) {
     recObj._id = network.id;
 
     var onSaveP = NetworkRecord.findById(network.id).exec()
-    .then(function (oldRec) {
-        if(!oldRec) { return new NetworkRecord(recObj).save(); }
+        .then(function (oldRec) {
+            if(!oldRec) { return new NetworkRecord(recObj).save(); }
 
-        /// update older record with this new one
-        oldRec.projectId       = recObj.projectId;
-        oldRec.datasetId       = recObj.datasetId;
-        oldRec.name            = recObj.name;
-        oldRec.description     = recObj.description;
+            /// update older record with this new one
+            oldRec.projectId       = recObj.projectId;
+            oldRec.datasetId       = recObj.datasetId;
+            oldRec.name            = recObj.name;
+            oldRec.description     = recObj.description;
 
-        oldRec.nodeAttrDescriptors = _.map(recObj.nodeAttrDescriptors, attr => _.omit(attr, "_id"));
-        oldRec.linkAttrDescriptors = _.map(recObj.linkAttrDescriptors, attr => _.omit(attr, "_id"));
+            oldRec.nodeAttrDescriptors = _.map(recObj.nodeAttrDescriptors, attr => _.omit(attr, "_id"));
+            oldRec.linkAttrDescriptors = _.map(recObj.linkAttrDescriptors, attr => _.omit(attr, "_id"));
 
-        oldRec.nodesFile      = recObj.nodesFile;
-        oldRec.linksFile      = recObj.linksFile;
+            oldRec.nodesFile      = recObj.nodesFile;
+            oldRec.linksFile      = recObj.linksFile;
 
-        oldRec.networkInfo = recObj.networkInfo;
-        oldRec.clusterInfo = recObj.clusterInfo;
-        oldRec.generatorInfo = recObj.generatorInfo;
+            oldRec.networkInfo = recObj.networkInfo;
+            oldRec.clusterInfo = recObj.clusterInfo;
+            oldRec.generatorInfo = recObj.generatorInfo;
 
-        oldRec.nNodes     = recObj.nNodes;
-        oldRec.nLinks     = recObj.nLinks;
+            oldRec.nNodes     = recObj.nNodes;
+            oldRec.nLinks     = recObj.nLinks;
 
-        oldRec.modifiedAt      = Date.now();
+            oldRec.modifiedAt      = Date.now();
 
-        return oldRec.save();
-    });
+            return oldRec.save();
+        });
 
     onSaveP.tap(() => console.log("[DSModel.saveNetwork] Saving network record... done"));
     return onSaveP;
@@ -562,10 +562,10 @@ function saveNetwork (network, skipNodes, skipLinks) {
         network.linksFile = linksFileId;
         return saveNetworkRecord(network);
     })
-    .then(function (nwRec) {
-        console.log(`[Dataset.saveNetwork] Successfully saved network: ${nwRec.name}`);
-        return network;
-    });
+        .then(function (nwRec) {
+            console.log(`[Dataset.saveNetwork] Successfully saved network: ${nwRec.name}`);
+            return network;
+        });
     return onSaveP;
 }
 
@@ -661,132 +661,132 @@ function _fileExists (fileId) {
  */
 function readDatasetFromRecord(entityId, skipDatapoints) {
     return DatasetRecord.findById(entityId).exec()
-    .then(function (dsRec) {
-        if(!dsRec) { return null; }
+        .then(function (dsRec) {
+            if(!dsRec) { return null; }
 
-        var dsObj = dsRec.toObject();
-        if(skipDatapoints) {
-            console.log(`[DSModel.readDatasetFromRecord] skipping datapoints`);
-            return dsObj;
-        }
-        console.log("[DSModel.readDatasetFromRecord] Found record: ", _.omit(dsObj, "attrDescriptors"));
-        return _readFromMapping(dsObj.datapointsFile)
-            .then(function (datapoints) {
-                if(!datapoints || datapoints.length === 0) {
-                    throw new Error("Datapoints not found");
-                }
-                dsObj.datapoints = datapoints;
+            var dsObj = dsRec.toObject();
+            if(skipDatapoints) {
+                console.log(`[DSModel.readDatasetFromRecord] skipping datapoints`);
                 return dsObj;
-            });
-    });
+            }
+            console.log("[DSModel.readDatasetFromRecord] Found record: ", _.omit(dsObj, "attrDescriptors"));
+            return _readFromMapping(dsObj.datapointsFile)
+                .then(function (datapoints) {
+                    if(!datapoints || datapoints.length === 0) {
+                        throw new Error("Datapoints not found");
+                    }
+                    dsObj.datapoints = datapoints;
+                    return dsObj;
+                });
+        });
 }
 
 function _readFromMapping(entityId) {
     return DataMapping.find({ entityRef : entityId, isDeleted: false }).sort("-createdAt").exec()
-    .then(function(items) {
-        if(!items) {
-            throw new Error("Unable to find anything for entityId");
-        }
-        if(items.length === 0) {
-            console.log("[DSModel._readFromMapping] There is no mapping for entity: " + entityId);
-            return _readData(entityId);
-        } else {
-            _.each(items, mapping => console.log(`Found Mapping ${entityId} -> ${mapping.fileDataRef} createdAt ${mapping.createdAt}`));
-            return Promise.reduce(items, function(entity, mapping) {
-                if(!entity) {
-                    console.log("[DSModel._readFromMapping] Reading mapping : ", mapping);
-                    return _fileExists(mapping.fileDataRef)
-                        .then(function(found) {
-                            if(found) { return _readData(mapping.fileDataRef);}
-                            else return null;
-                        });
-                } else {
-                    return entity;
-                }
-            }, null);
-        }
-    });
+        .then(function(items) {
+            if(!items) {
+                throw new Error("Unable to find anything for entityId");
+            }
+            if(items.length === 0) {
+                console.log("[DSModel._readFromMapping] There is no mapping for entity: " + entityId);
+                return _readData(entityId);
+            } else {
+                _.each(items, mapping => console.log(`Found Mapping ${entityId} -> ${mapping.fileDataRef} createdAt ${mapping.createdAt}`));
+                return Promise.reduce(items, function(entity, mapping) {
+                    if(!entity) {
+                        console.log("[DSModel._readFromMapping] Reading mapping : ", mapping);
+                        return _fileExists(mapping.fileDataRef)
+                            .then(function(found) {
+                                if(found) { return _readData(mapping.fileDataRef);}
+                                else return null;
+                            });
+                    } else {
+                        return entity;
+                    }
+                }, null);
+            }
+        });
 }
 
 function _readOldData(entityId) {
     // body...
     return DataMapping.find({ entityRef : entityId, isDeleted: false }).sort("-createdAt").exec()
-    .then(function(items) {
-        if(!items) {
-            throw new Error("Unable to find anything for entityId");
-        }
-        if(items.length === 0) {
-            console.log("[DSModel._readOldData] There is no mapping for entity: " + entityId);
-            return _readData(entityId);
-        } else {
-            _.each(items, mapping => console.log(`Found Mapping ${entityId} -> ${mapping.fileDataRef} createdAt ${mapping.createdAt}`));
-            return Promise.reduce(items, function(entity, mapping) {
-                if(!entity) {
-                    console.log("[DSModel._readOldData] Reading mapping : ", mapping);
-                    return _fileExists(mapping.fileDataRef)
-                        .then(function(found) {
-                            if(found) { return _readData(mapping.fileDataRef).tap(data => data._mapping = mapping); }
-                            else return null;
-                        });
-                } else {
-                    return entity;
-                }
-            }, null);
-        }
-    });
+        .then(function(items) {
+            if(!items) {
+                throw new Error("Unable to find anything for entityId");
+            }
+            if(items.length === 0) {
+                console.log("[DSModel._readOldData] There is no mapping for entity: " + entityId);
+                return _readData(entityId);
+            } else {
+                _.each(items, mapping => console.log(`Found Mapping ${entityId} -> ${mapping.fileDataRef} createdAt ${mapping.createdAt}`));
+                return Promise.reduce(items, function(entity, mapping) {
+                    if(!entity) {
+                        console.log("[DSModel._readOldData] Reading mapping : ", mapping);
+                        return _fileExists(mapping.fileDataRef)
+                            .then(function(found) {
+                                if(found) { return _readData(mapping.fileDataRef).tap(data => data._mapping = mapping); }
+                                else return null;
+                            });
+                    } else {
+                        return entity;
+                    }
+                }, null);
+            }
+        });
 }
 
 function readDataset (entityId, skipDatapoints) {
     return readDatasetFromRecord(entityId, skipDatapoints)
-    .then(function (dataset) {
-        if(dataset) { return dataset; }
-        console.log("[DSModel.readDataset] No Record found for dataset. reading from mapping");
-        return _readOldData(entityId);
-    });
+        .then(function (dataset) {
+            if(dataset) { return dataset; }
+            console.log("[DSModel.readDataset] No Record found for dataset. reading from mapping");
+            return _readOldData(entityId);
+        });
 }
 
 function readNetworkFromRecord(entityId, skipNodes, skipLinks) {
     return NetworkRecord.findById(entityId).exec()
-    .then(function (nwRec) {
-        if(!nwRec) { return null; }
-        var nwObj = nwRec.toObject();
-        nwObj.networkInfo = nwObj.networkInfo || {};
-        nwObj.generatorInfo = nwObj.generatorInfo || {};
-        console.log("[DSModel.readNetworkFromRecord] Found record: ", _.omit(nwObj, ["nodeAttrDescriptors", "linkAttrDescriptors"]));
-        var nP = Promise.resolve(nwObj);
-        if(!skipNodes) {
-            nP = _readFromMapping(nwObj.nodesFile)
-                .then(function (nodes) {
-                    if(!nodes || nodes.length === 0) {
-                        throw new Error("nodes not found");
-                    }
-                    nwObj.nodes = nodes;
-                    return nwObj;
-                });
-        }
-        if(!skipLinks) {
-            nP = nP.then(function (nwObj) {
-                return _readFromMapping(nwObj.linksFile)
-                    .then(function (links) {
-                        if(!links || links.length === 0) {
-                            throw new Error("links not found");
+        .then(function (nwRec) {
+            if(!nwRec) { return null; }
+            var nwObj = nwRec.toObject();
+            nwObj.networkInfo = nwObj.networkInfo || {};
+            nwObj.generatorInfo = nwObj.generatorInfo || {};
+            console.log("[DSModel.readNetworkFromRecord] Found record: ", _.omit(nwObj, ["nodeAttrDescriptors", "linkAttrDescriptors"]));
+            var nP = Promise.resolve(nwObj);
+            if(!skipNodes) {
+                nP = _readFromMapping(nwObj.nodesFile)
+                    .then(function (nodes) {
+                        if(!nodes || nodes.length === 0) {
+                            throw new Error("nodes not found");
                         }
-                        nwObj.links = links;
+                        nwObj.nodes = nodes;
                         return nwObj;
                     });
-            });
-        }
-        return nP;
-    });
+            }
+            if(!skipLinks) {
+                nP = nP.then(function (nwObj) {
+                    return _readFromMapping(nwObj.linksFile)
+                        .then(function (links) {
+                            if(!links || links.length === 0) {
+                                throw new Error("links not found");
+                            }
+                            nwObj.links = links;
+                            return nwObj;
+                        });
+                });
+            }
+            return nP;
+        });
 }
 
 function readNetwork (networkId, skipNodes, skipLinks) {
     return readNetworkFromRecord(networkId, skipNodes, skipLinks)
-    .then(function (network) {
-        if(network) { return network; }
-        console.log("[DSModel.readNetwork] No Record found for network. reading from mapping");
-        return _readOldData(networkId);
-    });
+        .then(function (network) {
+            if(network) { return network; }
+            console.log("[DSModel.readNetwork] No Record found for network. reading from mapping");
+            return _readOldData(networkId);
+        });
 }
 
 /**
@@ -841,63 +841,73 @@ function _removeEntityById (entityId) {
 function removeDatasetById (datasetId) {
     console.assert(datasetId.length > 1, "Dataset Id must be valid");
     return readDatasetFromRecord(datasetId, true)
-    .then(function (dsRec) {
-        if(!dsRec) return _removeEntityById(datasetId);
-        _removeData(dsRec.datapointsFile);
-        _removeEntityById(dsRec.datapointsFile);
-        return DatasetRecord.remove({"_id" : dsRec._id }).exec().tap(function (res) {
-            console.log("[DSModel.removeDatasetById] deletion results:", res.result);
+        .then(function (dsRec) {
+            if(!dsRec) return _removeEntityById(datasetId);
+            let removals = Promise.all([
+                _removeData(dsRec.datapointsFile),
+                _removeEntityById(dsRec.datapointsFile)]);
+            return removals.then(() =>
+                DatasetRecord.remove({"_id" : dsRec._id })
+                    .exec()
+                    .tap(function (res) {
+                        console.log("[DSModel.removeDatasetById] deletion results:", res.result);
+                    }
+                    ));
         });
-    });
 }
 // User needs to manually remove it from project and org
 function removeNetworkById (networkId) {
     console.assert(networkId.length > 1, "Network Id must be valid");
     return readNetworkFromRecord(networkId, true, true)
-    .then(function (nwRec) {
-        if(!nwRec) return _removeEntityById(networkId);
-        _removeData(nwRec.nodesFile);
-        _removeData(nwRec.linksFile);
-        _removeEntityById(nwRec.nodesFile);
-        _removeEntityById(nwRec.linksFile);
-        return NetworkRecord.remove({"_id" : nwRec._id }).exec().tap(function (res) {
-            console.log("[DSModel.removeNetworkById] deletion results:", res.result);
+        .then(function (nwRec) {
+            if(!nwRec) return _removeEntityById(networkId);
+            let removals = Promise.all([
+                _removeData(nwRec.nodesFile),
+                _removeData(nwRec.linksFile),
+                _removeEntityById(nwRec.nodesFile),
+                _removeEntityById(nwRec.linksFile)]);
+            return removals.then(() =>
+                NetworkRecord.remove({"_id" : nwRec._id })
+                    .exec()
+                    .tap(function (res) {
+                        console.log("[DSModel.removeNetworkById] deletion results:", res.result);
+                    }
+                    ));
         });
-    });
 }
 function cloneDataset (dataSetRef, projectId) {
     var logPrefix = "[DSModel.cloneDataset] ";
     var datasetP = readDataset(dataSetRef, false)
-    .then(function(dataset) {
-        console.log(logPrefix + "Fetched data. Starting to clone");
+        .then(function(dataset) {
+            console.log(logPrefix + "Fetched data. Starting to clone");
 
-        var cloneDS = dataset;
-        cloneDS.id = new ObjectID().toString();
-        cloneDS.projectId = projectId;
-        cloneDS.datapointsFile = null;
-        cloneDS.createdAt = Date.now();
-        cloneDS.modifiedAt = Date.now();
+            var cloneDS = dataset;
+            cloneDS.id = new ObjectID().toString();
+            cloneDS.projectId = projectId;
+            cloneDS.datapointsFile = null;
+            cloneDS.createdAt = Date.now();
+            cloneDS.modifiedAt = Date.now();
 
-        return saveDataset(cloneDS);
-    });
+            return saveDataset(cloneDS);
+        });
     datasetP.tap(function(dataset) { console.log(logPrefix + "Saved cloned data :", dataset.id); });
     return datasetP;
 }
 function cloneNetwork (networkId, datasetId, projectId) {
     var logPrefix = "[DSModel.cloneNetwork] ";
     var networkP = readNetwork(networkId)
-    .then(function(network) {
-        console.log(logPrefix + "Fetched data. Starting to clone");
-        var cloneNW = network;
-        cloneNW.id = new ObjectID().toString();
-        cloneNW.datasetId = datasetId;
-        cloneNW.projectId = projectId;
-        cloneNW.createdAt = Date.now();
-        cloneNW.modifiedAt = Date.now();
-        cloneNW.nodesFile = null;
-        cloneNW.linksFile = null;
-        return saveNetwork(cloneNW);
-    });
+        .then(function(network) {
+            console.log(logPrefix + "Fetched data. Starting to clone");
+            var cloneNW = network;
+            cloneNW.id = new ObjectID().toString();
+            cloneNW.datasetId = datasetId;
+            cloneNW.projectId = projectId;
+            cloneNW.createdAt = Date.now();
+            cloneNW.modifiedAt = Date.now();
+            cloneNW.nodesFile = null;
+            cloneNW.linksFile = null;
+            return saveNetwork(cloneNW);
+        });
     networkP.tap(function(network) { console.log(logPrefix + "Saved cloned data :", network._id); });
     return networkP;
 }
@@ -905,32 +915,32 @@ function cloneNetwork (networkId, datasetId, projectId) {
 function genSubNetwork (parentNetworkId, nodeIds, linkIds, nodeColorMap, networkName) {
     var logPrefix = "[DSModel.genSubNetwork] ";
     var networkP = readNetwork(parentNetworkId)
-    .then(function(network) {
-        console.log(logPrefix + "Fetched Parent network. Starting to filter out data");
-        var subNw = network;
-        subNw.id = new ObjectID();
-        subNw.name = networkName || subNw.name;
-        subNw.clusterInfo = {};
-        subNw.createdAt = Date.now();
-        subNw.modifiedAt = Date.now();
+        .then(function(network) {
+            console.log(logPrefix + "Fetched Parent network. Starting to filter out data");
+            var subNw = network;
+            subNw.id = new ObjectID();
+            subNw.name = networkName || subNw.name;
+            subNw.clusterInfo = {};
+            subNw.createdAt = Date.now();
+            subNw.modifiedAt = Date.now();
 
-        subNw.nodes = _.filter(network.nodes, function(n) { return _.contains(nodeIds, n.id); });
-        subNw.links = _.filter(network.links, function(l) { return _.contains(linkIds, l.id); });
-        subNw.nodesFile = null;
-        subNw.linksFile = null;
-        console.log(logPrefix + "Generating network with " + subNw.nodes.length + "nodes and " + subNw.links.length + 'links');
+            subNw.nodes = _.filter(network.nodes, function(n) { return _.contains(nodeIds, n.id); });
+            subNw.links = _.filter(network.links, function(l) { return _.contains(linkIds, l.id); });
+            subNw.nodesFile = null;
+            subNw.linksFile = null;
+            console.log(logPrefix + "Generating network with " + subNw.nodes.length + "nodes and " + subNw.links.length + 'links');
 
-        var nwInfo = subNw.generatorInfo['subGraph'] = {};
-        nwInfo.parentNWId = parentNetworkId;
-        if(_.size(nodeColorMap) > 0) { // create the baseColor attribute
-            Network.prototype.addNodeAttrDescr.call(subNw, "ParentNetworkColor", "ParentNetworkColor", "color", "Parent_Color", null, {}, false);
-            _.each(subNw.nodes, function(n) {
-                n.attr["ParentNetworkColor"] = nodeColorMap[n.id] || "#c8c8c8";
-            });
+            var nwInfo = subNw.generatorInfo['subGraph'] = {};
+            nwInfo.parentNWId = parentNetworkId;
+            if(_.size(nodeColorMap) > 0) { // create the baseColor attribute
+                Network.prototype.addNodeAttrDescr.call(subNw, "ParentNetworkColor", "ParentNetworkColor", "color", "Parent_Color", null, {}, false);
+                _.each(subNw.nodes, function(n) {
+                    n.attr["ParentNetworkColor"] = nodeColorMap[n.id] || "#c8c8c8";
+                });
 
-        }
-        return saveNetwork(subNw);
-    });
+            }
+            return saveNetwork(subNw);
+        });
     networkP.tap(function(network) { console.log(logPrefix + "Saved subgraph data :", network._id); });
     return networkP;
 }

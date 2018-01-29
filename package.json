@@ -23,7 +23,7 @@
     "cookie-parser": "^1.4.0",
     "csv-parser": "^1.9.3",
     "ejs": "^2.3.4",
-    "elasticsearch": ">10.0.0",
+    "elasticsearch": "^14.0.0",
     "express": "^4.13.3",
     "express-promise": "^0.4.0",
     "express-session": "^1.13.0",
@@ -67,7 +67,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^2.10.2",
+    "eslint": "^4.15.0",
     "grunt": "^0.4.5",
     "grunt-aws-s3": "^0.14.1",
     "grunt-concurrent": "^2.0.4",

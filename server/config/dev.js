@@ -8,7 +8,8 @@ module.exports = {
         //host: 'search-mappr-elastic-qfr5ebmqflpfuk54rthtues2ti.us-west-1.es.amazonaws.com',
         host: '<>:9200',
         requestTimeout: 990000,
-        log: 'error'
+        log: 'error',
+        apiVersion: '2.4'
     },
     'athena' : {
         url : '<>:5000'

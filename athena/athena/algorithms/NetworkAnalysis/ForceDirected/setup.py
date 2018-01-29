@@ -37,10 +37,11 @@ setup(
     ext_modules=ext_modules,
     description=DESCRIPTION,
     license='BSD',
-    cmdclass={'build_ext': build_ext},
-    install_requires=[
-        'Cython>=0.19.1',
-        'numpy>=1.7.1',
-        'scipy>=0.12.0'
-    ]
+    cmdclass={'build_ext': build_ext}
+    # ,
+    # install_requires=[
+    #     'Cython>=0.19.1',
+    #     'numpy>=1.7.1',
+    #     'scipy>=0.12.0'
+    # ]
 )

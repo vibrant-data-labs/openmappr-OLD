@@ -22,6 +22,9 @@ function initConfig (app) {
         console.log("Production environment detected");
         config = require('../config/dev.js');
 
+    }  else if (app.get('env') === 'docker') {
+        console.log("Docker environment detected");
+        config = require('../config/docker.js');
     } else {
         config = require('../config/local.js'); // fallback to local config
     }

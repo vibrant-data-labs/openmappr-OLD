@@ -9,7 +9,7 @@ USER=ubuntu
 GROUP=ubuntu
 NUM_WORKERS=4
 
-echo "Starting $NAME"
+echo "Starting my $NAME"
 
 # activate the virtualenv
 # cd $VENVDIR

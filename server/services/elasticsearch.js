@@ -67,17 +67,83 @@ function _getSearchQuery(searchText, filterAttrIds) {
         }
     };
 
-    console.log(logPrefix + 'search query: ', JSON.stringify(queryObj));
-    console.log(logPrefix + 'highlight query: ', JSON.stringify(highlightObj));
+    // console.log(logPrefix + 'search query: ', JSON.stringify(queryObj));
+    // console.log(logPrefix + 'highlight query: ', JSON.stringify(highlightObj));
     return {queryObj, highlightObj};
+}
+
+function createIndex (client) {
+    return client.indices.exists({
+        index: es_index
+    })
+    .then(function(resp) {
+        if(!resp) {
+            return client.indices.create({
+                    index : es_index,
+                    body : {
+                        "settings": {
+                            "analysis": {
+                                "filter": {
+                                    "my_en_stop": {
+                                        "type": "stop",
+                                        "stopwords": "_english_"
+                                    }
+                                },
+                                "analyzer": {
+                                    "custom_string_analyzer": {
+                                        "filter": [
+                                            "lowercase",
+                                            "my_en_stop",
+                                            "asciifolding",
+                                            "snowball"
+                                        ],
+                                        "char_filter": [
+                                            "html_strip",
+                                            "my_spl_char_mapping"
+                                        ],
+                                        "type": "custom",
+                                        "tokenizer": "whitespace"
+                                    }
+                                },
+                                "char_filter": {
+                                    "my_spl_char_mapping": {
+                                        "type": "mapping",
+                                        "mappings": [
+                                            "&=>\\u0020and\\u0020",
+                                            ":=>\\u0020",
+                                            "'=>\\u0020",
+                                            "?=>\\u0020",
+                                            "/=>"
+                                        ]
+                                    }
+                                }
+                            }
+                            // "number_of_shards": "1",
+                            // "number_of_replicas": "1"
+                        }
+                }
+            })
+            .then(function(resp) {
+                console.log(logPrefix, resp);
+                return true;
+            })
+            .catch(function(err) {
+                console.error(err);
+                throw err;
+            });
+        } else {
+            console.log(logPrefix, "index already exists");
+            return true;
+        }
+    });
 }
 
 module.exports = {
     _getSearchQuery : _getSearchQuery,
     init: function(clientFactory) {
         elasticSearchClientFactory = clientFactory;
+        return createIndex(elasticSearchClientFactory());
     },
-
     sanitycheck: function(dataSetId, query, callback){
         var dsId = dataSetId.toString != null ? dataSetId.toString() : dataSetId;
         var queryObj = {"wildcard":{"_all":query+'*'}};

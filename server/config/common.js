@@ -24,8 +24,8 @@ module.exports = {
             multipartUploadSize: 15728640, // this is the default (15 MB)
             s3Options: {
                 // s3admin user keys
-                accessKeyId: "<>",
-                secretAccessKey: "<>",
+                accessKeyId: "<jhkhk>",
+                secretAccessKey: "<kjhkjhkj>",
                 region: "us-west-1"
                 // any other options are passed to new AWS.S3()
                 // See: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Config.html#constructor-property
@@ -41,7 +41,7 @@ module.exports = {
         ETL_BUCKET : "<>" // the bucket where a lot of user data is stored
     },
     alchemy: {
-        ACCESS_KEY : '<>'
+        ACCESS_KEY : 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' // 40 chars
     },
     defaultUser: {
         name : "Monster User",
