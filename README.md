@@ -1,5 +1,10 @@
 mappr - a network analysis and visualization platform.
 
+## How to run via docker
+
+* `docker-compose build` - build the relevant images. Required if any of the source file changes. It takes awhile so be patient
+* `docker-compose up` - start the various services and get the project running. Once the project is running, open http://localhost:8080 and login as `user@mappr.io` with password `woot`
+
 
 ##Sever-side Organization
 Code is divided into top level modules, each with routes, controllers, models and services. (if needed)
