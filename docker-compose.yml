@@ -38,5 +38,7 @@ services:
       - "9300:9300"
   nginx:
     build: ./nginx
+    links:
+      - web
     ports:
       - "80:80"
