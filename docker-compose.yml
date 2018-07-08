@@ -38,6 +38,8 @@ services:
       - "9300:9300"
   nginx:
     build: ./nginx
+    depends_on:
+      - "web"
     links:
       - web
     ports:
