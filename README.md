@@ -84,16 +84,24 @@ You can __unpause__ service(s) by using the `docker-compose unpause {service_nam
 
 ### Rebuilding and Restarting a service
 
-When you make changes to any of the services and want to see those changes getting reflected in your setup, you will need to rebuild that service. You can do so by running the following command:
+When you make changes to any of the services and want to see those changes getting reflected in your setup, you will need to rebuild that service. First, you will need to stop and remove the service using the `docker-compose stop` and `docker-compose rm` command:
+
+
+```
+docker-compose stop {service_name}
+docker-compose rm {service_name}
+```
+
+Then, you need to rebuild the service. You can do so by running the following command:
 
 ```
 docker-compose build --no-cache {service_name}
 ```
 
-And then restart the service by running the following command:
+Then run the following command again to bring up the service:
 
 ```
-docker-compose restart {service_name}
+docker-compose up -d
 ```
 
 ### Logging into the container running a service
