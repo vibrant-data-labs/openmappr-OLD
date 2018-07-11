@@ -38,6 +38,7 @@ module.exports = {
         }
     },
     listAlgo : function listAlgo(req, res){
+        req.socket.setTimeout(0);
         // console.log("Got request for algo listing!");
         AthenaAPI.getAlgoList()
         .then(function(listing) {

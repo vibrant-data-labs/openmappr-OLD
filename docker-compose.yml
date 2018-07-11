@@ -36,3 +36,11 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+  nginx:
+    build: ./nginx
+    depends_on:
+      - "web"
+    links:
+      - web
+    ports:
+      - "80:80"
