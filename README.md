@@ -1,4 +1,25 @@
-# Mappr - a network analysis and visualization platform
+# openMappr - a network analysis and visualization platform
+
+*openMappr* allows you to visualize and interactively explore relationship data as a network. You save multiple layouts and views as 'snapshots' and publish/share them with others as a 'player' (an interactive, read-only version of map).   
+
+There are 2 modes for using it:
+
+*1. Visualize Existing Network - 
+In this case, you need an excel file with 2 sheets. One labeled 'nodes' and the other labeled 'links'.  
+
+The nodes sheet requires at minimum one columns called `id` (or `ID`) where every row is a unique node id. You can also include any number of additional columns as node attributes which can be used for coloring nodes, sizing nodes, selecting/filtering nodes, or laying out nodes in x-y space (e.g., as a scatterplot with links between the points). Node attributes can also include urls to images (which can be rendered as images within the node), video and audio links (which can be played within the visualization), the websites (hyperlinks), and twitter feeds (which can be rendered within the visualization for each node).  
+
+The links sheet requres at minumum two columns called `source` (or `Source`,`from`, `From`) and `target` (or `Target`, `target`, `to`). You can also include additional columns of link attributes for coloring links, or setting link thickness. 
+
+*2. Generating a Similarity Network from Node Tag Attributes - 
+In this case you just need a 'nodes' file (.csv or .xlsx).
+
+The nodes sheet requres at minumum two columns: one called (`id` or `ID`) where every row is a unique node id, and one column with a string pipe-separated tags (e.g., 'tag1|tag2|tag3', or 'tag1 | tag2 | tag3').  Then openMappr can generate affinity links between nodes that have similar tag profiles.  The basic code for generating a similarity (or affinity) network from items with tags is available here https://github.com/foodwebster/Tag2Network            
+
+
+A more complete user guide will be uploaded soon :) 
+Mappr was originally created by Vibrant Data Inc., which was acquired by Rakuten Inc. in 2016. 
+openMappr was open-sourced in 2017. 
 
 ## Setup
 
@@ -10,6 +31,8 @@ There are two ways to setup the application:
 We will cover both the approaches one by one
 
 ## Docker Setup
+
+You can use Docker to install openMappr locally on your machine, or on a remote machine (e.g., AWS EC2). Note that if you install it locally on your laptop, you will have all the main functionality *except* you wil not be able to publish and share the interactive visualization with others. 
 
 - Install `docker` and `docker-compose`. Go to the official website and follow the instructions for your OS
 - Build the services by running the following command in the terminal from the project's root directory
@@ -42,7 +65,13 @@ openmappr_mongo_1           docker-entrypoint.sh /bin/ ...   Up      0.0.0.0:270
 openmappr_web_1             ./run_docker_mode.sh             Up      0.0.0.0:8080->8080/tcp
 ```
 
-If the state is __Up__ for all the services, it means your setup is running fine. You should be able to access the web-server by opening the web browser and navigating to `http://localhost:8080`
+If the state is __Up__ for all the services, it means your setup is running fine. 
+You should be able to access the web-server. 
+Launch openMappr by opening a web browser and navigating to `http://localhost:8080` 
+then enter `user@mappr.io`  `woot`
+
+If you are running it locally, if you close the Terminal window, it will shut down openMappr.
+To run again in the future, just a) make sure Docker is running, b) open the Terminal, type `docker-compose up`, and c) open a web browswer and type `http://localhost:8080` 
 
 ## Useful Docker Compose Commands
 
