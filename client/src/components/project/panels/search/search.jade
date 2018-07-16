@@ -27,7 +27,7 @@
 								h6.no-margin.truncate {{::attrVM.title}}
 									span &nbsp;&nbsp;&nbsp;
 										i.fa.fa-info-circle(ng-if="::attrVM.metadata.descr" uib-tooltip="{{::attrVM.metadata.descr}}" tooltip-placement="right" tooltip-append-to-body="true")
-	.square-btn.no-background.no-border.pull-left.search-input
+	.square-btn.no-background.no-border.search-input
 		input.h4.form-control(ng-show="!ui.overlayOpen" style="width: 100%" type="text", ng-model="globalSearch.text",  ng-keyup="searchFn($event)" ng-focus="ui.showInfoIcon = true" ng-blur="ui.showInfoIcon = false")
 		input.h4.form-control(ng-show="ui.overlayOpen" style="width: 100%" type="text", ng-model="globalSearch.text" ng-change="highlightTextInOverlay($event)" ng-focus="ui.showInfoIcon = true" ng-blur="ui.showInfoIcon = false")
 		i.fa.fa-info-circle(ng-show="ui.showInfoIcon" uib-tooltip="Searching “climate change” will find the exact phrase, while a search for: climate change, will find “climate” OR “change”. Search is not case sensitive. Use the drop down to the left to select which attributes to search (default is all)." tooltip-placement="bottom" tooltip-append-to-body="true")
@@ -66,15 +66,15 @@
 														.col-xs-9
 																h6.no-margin New Group
 							.col-xs-3
-								.square-btn.small-btn.pull-right(ng-if="searchResults.length > 0" ng-click="selectAllNodes(); $event.stopPropagation();") 
+								.square-btn.small-btn.pull-right(ng-if="searchResults.length > 0" ng-click="selectAllNodes(); $event.stopPropagation();")
 									h6 Select&nbsp;All
 						.row.vert-align.show-more(ng-if="ui.showLimit < searchResults.length")
 							.col-xs-12
 								.more-btn.pull-right(ng-click='showMore()')
-									.h6.no-margin 
+									.h6.no-margin
 										em show more results
 					.panel-scroll.flex-fill
-						.panel-list.width-100 
+						.panel-list.width-100
 							.panel-item.no-animate(ng-repeat="node in searchResults | limitTo: ui.showLimit track by node.id", ng-click="selectNode(node); $event.stopPropagation();", ng-mouseenter="hoverNode(node); $event.stopPropagation();")
 								.row.vert-align(uib-tooltip-html="getSearchHighlights(node);" tooltip-placement="auto left-top" tooltip-append-to-body="true")
 									.col-xs-1
@@ -86,7 +86,7 @@
 					//- 		//description of what found
 					//- 		span {{searchResults.length}} Nodes found for ...
 					//- .panel-scroll.flex-fill
-					//- 	.panel-list 
+					//- 	.panel-list
 					//- 		.panel-item
 					//- 			.row.vert-align
 					//- 				.col-xs-1
