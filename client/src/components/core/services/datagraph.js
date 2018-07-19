@@ -798,6 +798,7 @@ function ($timeout, $q, $rootScope, aggregatorService, dataService, networkServi
         _rawData.nodeAttrsBase = orderedAttrs;
         _rawData.nodeAttrs = _rawData.nodeAttrsBase;
         $rootScope.$broadcast(BROADCAST_MESSAGES.dataGraph.nodeAttrsUpdated);
+        $rootScope.$broadcast(BROADCAST_MESSAGES.project.load, {});
     }
 
     function updateEdgeAttrsOrder() {

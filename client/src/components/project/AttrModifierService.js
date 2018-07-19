@@ -94,7 +94,6 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
 
     };
     AttrModifier.prototype.attrModified = function() {
-        $rootScope.$broadcast(BROADCAST_MESSAGES.project.load, {});
         return this.typeChangeRequested()
             || this.new_render_type !== this.attr.renderType
             || this.title !== this.attr.title
@@ -105,6 +104,7 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
             || this.metaInfoUpdated();
     };
     AttrModifier.prototype.applyModifications = function() {
+        $rootScope.$broadcast(BROADCAST_MESSAGES.project.load, {});
         if(this.typeChangeRequested()) {
             this.changeType();
             $rootScope.$broadcast(BROADCAST_MESSAGES.attr.typeChanged, { id: this.attr.id, attrType: this.new_type });
