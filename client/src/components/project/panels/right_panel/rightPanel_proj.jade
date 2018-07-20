@@ -6,8 +6,6 @@
 			.accordion-panel.info-panel.flex-transclude(ng-show="panelUI.selectionPanelOpen" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/custom_data_groups/selectionSets.html" ')
 			// change ng-style to ng-class and work on data-dir-virtual-scroll rendering
 			.accordion-panel.filter-panel.flex-transclude(ng-style="panelUI.filterPanelOpen ? { 'height': 'auto', 'opacity': 1} : { 'height': 0, 'opacity': 0 }" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/distribution_panel/filterPanel.html" ')
-		.content.animate-fade.flex-vert-container(ng-show="panelUI.algoPanelOpen")
-			.accordion-panel.algo-panel.flex-fill.animate-fade(ng-include=' "#{server_prefix}#{view_path}/partials/project/algoPanel.html" ')
 		.accordion.height-100.flex-vert-container(ng-show="panelUI.stylePanelOpen" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/style/stylepanel.html" ')
 		//layout panel needs to perform layout operations regardless of if it's shown
 		.accordion.height-100.flex-vert-container(ng-show="panelUI.layoutPanelOpen" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/layout/layoutpanel.html" ')
