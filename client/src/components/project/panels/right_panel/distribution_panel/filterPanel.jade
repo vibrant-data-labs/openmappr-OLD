@@ -41,23 +41,17 @@
 								//- 	h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
 								.col-xs-1(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ")
 									dir-tag-list-sort(attr="::attr")
-								.col-xs-1(ng-if="MAPP_EDITOR_OPEN && attr.inViewport")
+								.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
 									dir-attr-mod(attr="::attr", placement="selection")
-						.col-xs-12(ng-if="attr.inViewport")
+						.col-xs-12()
 							.row(ng-if="attr.attrType === 'string' && attr.principalVal", style="height:20px;")
 								.col-xs-1
-								.col-xs-11 
+								.col-xs-11
 									div
 										h6.truncate.no-margin(style="color:{{nodeColorStr}};" ng-text-truncate="attr.principalVal" ng-tt-chars-threshold="200" ng-tt-more-label="more..." ng-tt-less-label="...less")
 										//- h6.truncate.no-margin {{attr.principalVal}}
 							dir-attr-renderer(attr-to-render="attr", node-color-str="nodeColorStr", is-node="true", show-filter="ui.enableFilters", disable-filter="attr.disableFilter" theme="appUi.theme" pinned-media="pinnedMedia")
 							.clearfix
-						.col-xs-12.loader(ng-show="!attr.inViewport",)
-							.row.vert-align
-								.col-xs-5
-								.col-xs-2
-									i.fa.fa-spinner.fa-pulse.fa-2x
-								.col-xs-5
 						.col-xs-12
 							.attr-subtitle.row(ng-if="attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float' || attr.attrType === 'year' " ng-class="{'filters-on':ui.enableFilters}")
 								.col-xs-2(ng-if="attr.metadata.minLabel")
