@@ -332,8 +332,10 @@ function($q, $rootScope, uiService, dataService, projFactory, graphSelectionServ
                 selections: []
             };
             selectionSets = projSettings.selectionData.selections;
-
-            projFactory.updateProjectSettings(projSettings)
+            projFactory.currProject()
+            .then(function () {
+                return projFactory.updateProjectSettings(projSettings);
+            })
             .then(function() {
                 console.log(logPrefix + 'added selection sets');
             })
