@@ -22,8 +22,13 @@ function ($http, $q, $timeout, $rootScope, projFactory, AttrSanitizeService, BRO
     this.getDefault = getDefault;
     this.exist = exist;
     this.getNetworks=function() { return loadedNetworks; };
-    this.getCurrentNetwork= function() { return loadedNetworks[currentNWId]; };
-    this.setCurrentNetwork= function(nwId) { currentNWId = nwId; };
+    this.getCurrentNetwork= function() {
+        return loadedNetworks[currentNWId];
+    };
+    this.setCurrentNetwork= function(nwId) {
+        currentNWId = nwId;
+        _currentNetworkDefer.resolve(loadedNetworks[currentNWId]);
+    };
     this.createSubNetwork = createSubNetwork;
     this.changeDataPointCatNames = extAPIService.processInQueue(changeDataPointCatNames);
     this.getNetworksByProject= getNetworksByProject;
@@ -37,7 +42,13 @@ function ($http, $q, $timeout, $rootScope, projFactory, AttrSanitizeService, BRO
     this.currNetNeedsReGen= currNetNeedsReGen;
     this.hasNetworkProps= hasNetworkProps;
     this.getSelectionClusterVal= getSelectionClusterVal;
-
+    this.getCurrentNetworkPromisified = function() {
+        if(currentNWId) {
+            return $q.when(loadedNetworks[currentNWId]);
+        } else {
+            return _currentNetworkDefer.promise;
+        }
+    }
 
 
     /*************************************
@@ -45,6 +56,7 @@ function ($http, $q, $timeout, $rootScope, projFactory, AttrSanitizeService, BRO
     **************************************/
     var loadedNetworks = {};
     var currentNWId = null;
+    var _currentNetworkDefer = $q.defer();
     // var logPrefix = 'networkService: ';
 
     // Copied from DataUtils.js
@@ -54,10 +66,6 @@ function ($http, $q, $timeout, $rootScope, projFactory, AttrSanitizeService, BRO
         'InterclusterFraction', 'fracIntergroup_Clusters', 'fracIntergroup_Cluster1', 'fracIntergroup_Cluster2', 'fracIntergroup_Cluster3', 'fracIntergroup_Cluster4',
         'ClusterBridging','bridging_Clusters', 'bridging_Cluster1', 'bridging_Cluster2', 'bridging_Cluster3', 'bridging_Cluster4'
     ];
-
-
-
-
 
 
     /*************************************

@@ -118,7 +118,9 @@ function($scope, $rootScope, $timeout, $q ,$uibModal, dataGraph, networkService,
     var listenerRemoveFns = []; //A list of function references which unregister the listener/watch
 
     //need to set variables before creating layout settings below
-    setMediaAttrVars();
+    dataGraph.getRawData().then(function (resolve) {
+        setMediaAttrVars();
+    });
 
     ///
     /// Layout Settings
@@ -480,10 +482,9 @@ function($scope, $rootScope, $timeout, $q ,$uibModal, dataGraph, networkService,
 
 
     //create layouts
-    initLayouts();
-
-
-
+    dataGraph.getRawData().then(function (resolve) {
+        initLayouts();
+    });
 
     /*************************************
     ********* Core Functions *************
