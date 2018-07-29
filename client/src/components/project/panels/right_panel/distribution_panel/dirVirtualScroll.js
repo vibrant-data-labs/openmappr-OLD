@@ -90,9 +90,9 @@ function($timeout, $rootScope, $window, projFactory, FilterPanelService, BROADCA
             modifiedRepeatExpr += ' track by ' + trackByExpr;
         }
 
-
-
-        collection.repeatElem.setAttribute(collection.repeatAttr.name, modifiedRepeatExpr);
+        $timeout(function() {
+            collection.repeatElem.setAttribute(collection.repeatAttr.name, modifiedRepeatExpr);
+        });
 
         // returns ng-repeat element and its expr
         function findRepeatElement(node) {
