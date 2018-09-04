@@ -1,6 +1,23 @@
 angular.module('common')
-.directive('dirNetworkInfo', ['$rootScope', 'graphSelectionService', 'graphHoverService', 'FilterPanelService', 'infoPanelService', 'projFactory', 'layoutService',
-function($rootScope, graphSelectionService, graphHoverService, FilterPanelService, infoPanelService, projFactory, layoutService) {
+.directive('dirNetworkInfo', [
+    '$rootScope',
+    'graphSelectionService',
+    'graphHoverService',
+    'FilterPanelService',
+    'infoPanelService',
+    'projFactory',
+    'layoutService',
+    'dataGraph',
+    function(
+        $rootScope,
+        graphSelectionService,
+        graphHoverService,
+        FilterPanelService,
+        infoPanelService,
+        projFactory,
+        layoutService,
+        dataGraph
+    ) {
     'use strict';
 
     /*************************************
@@ -16,7 +33,7 @@ function($rootScope, graphSelectionService, graphHoverService, FilterPanelServic
             generalInfo: '=',
             mapprSettings: '='
         },
-        link: postLinkFn
+        link: postLinkFnWrapper
     };
 
     /*************************************
@@ -33,6 +50,18 @@ function($rootScope, graphSelectionService, graphHoverService, FilterPanelServic
     /*************************************
     ******** Controller Function *********
     **************************************/
+
+    /*************************************
+    ******** Post Link Wrapper Function **
+    This is to ensure postLink is called
+    after the getRawData has completed
+    **************************************/
+    function postLinkFnWrapper(scope) {
+        dataGraph.getRawData().then(function (resolve) {
+            postLinkFn(scope);
+        });
+    }
+
 
     /*************************************
     ******** Post Link Function *********

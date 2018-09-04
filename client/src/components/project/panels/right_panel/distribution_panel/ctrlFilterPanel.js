@@ -49,13 +49,13 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     /*************************************
     ********* Initialise *****************
     **************************************/
-    if(dataGraph.getRawDataUnsafe()) {
+    dataGraph.getRawData().then(function (resolve) {
         initialise(!FilterPanelService.isInitialized());
-    }
+    });
 
-    $timeout(function() {
-        $scope.ui.renderDistr = true; //Wait for panel to fully open, then start rendering distribtuions
-    }, 1000);
+    networkService.getCurrentNetworkPromisified().then(function(currentNetworkP) {
+        $scope.ui.renderDistr = true;
+    });
 
     /*************************************
     ********* Core Functions *************
