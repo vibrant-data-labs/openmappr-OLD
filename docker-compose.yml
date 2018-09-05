@@ -3,6 +3,7 @@ services:
   web:
     build: .
     command: ./run_docker_mode.sh
+    restart: unless-stopped
     depends_on:
       - "athena"
       - "elasticsearch"
@@ -13,6 +14,7 @@ services:
   athena:
     build: ./athena
     command: ./run_docker_mode.sh
+    restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1
     depends_on:
@@ -20,16 +22,19 @@ services:
       - "beanstalk"
   beanstalk:
     image: kusmierz/beanstalkd
+    restart: unless-stopped
     ports:
       - "11300:11300"
   mongo:
     build: ./mongo
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - ./mongo/data:/data/db
   elasticsearch:
     image: elasticsearch:2.4
+    restart: unless-stopped
     #image: docker.elastic.co/elasticsearch/elasticsearch:5.6.6
     environment:
       - "discovery.type=single-node"
@@ -40,6 +45,7 @@ services:
       - "9300:9300"
   nginx:
     build: ./nginx
+    restart: unless-stopped
     depends_on:
       - "web"
     links:
