@@ -11,6 +11,7 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+      - "./client:/usr/src/mappr/client"
   athena:
     build: ./athena
     command: ./run_docker_mode.sh

@@ -19,6 +19,7 @@ angular.module('common')
                 {
                     iconClass: 'info_outline',
                     title: 'Info',
+                    tooltipTitle: 'See project information',
                     panel: 'modal',
                     // highlighted: true,
                     cmd: function() {
@@ -29,14 +30,16 @@ angular.module('common')
                     iconClass: 'local_library',
                     title: 'Slides',
                     panel: 'slides',
+                    tooltipTitle: 'See slide information and change views if there are more than one',
                     cmd: function() {
                         $scope.panelUI.openPanel('slides');
                     }
                 },
                 {
-                    iconClass: 'equalizer',
-                    title: 'Stats',
+                    iconClass: 'filter_list',
+                    title: 'Filters',
                     panel: 'filter',
+                    tooltipTitle: 'Filter data by one or more attributes',
                     cmd: function() {
                         $scope.panelUI.openPanel('filter');
                     }
@@ -45,14 +48,16 @@ angular.module('common')
                     iconClass: 'map',
                     title: 'Legend',
                     panel: 'summary',
+                    tooltipTitle: 'See color and sizing information',
                     cmd: function() {
                         $scope.panelUI.openPanel('summary');
                     }
                 },
                 {
-                    iconClass: 'near_me',
-                    title: 'Selection',
+                    iconClass: 'list',
+                    title: 'List',
                     showSelCount: true,
+                    tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
                     panel: 'info',
                     cmd: function() {
                         $scope.panelUI.openPanel('info');

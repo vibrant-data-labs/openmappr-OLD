@@ -25,8 +25,9 @@ angular.module('common')
             //     }
             // },
                 {
-                    iconClass: 'equalizer',
-                    title: 'Stats',
+                    iconClass: 'filter_list',
+                    title: 'Filters',
+                    tooltipTitle: 'Filter data by one or more attributes',
                     panel: 'filter',
                     cmd: function() {
                         $scope.panelUI.openPanel('filter');
@@ -35,15 +36,17 @@ angular.module('common')
                 {
                     iconClass: 'map',
                     title: 'Legend',
+                    tooltipTitle: 'See color and sizing information',
                     panel: 'summary',
                     cmd: function() {
                         $scope.panelUI.openPanel('summary');
                     }
                 },
                 {
-                    iconClass: 'near_me',
-                    title: 'Selection',
+                    iconClass: 'list',
+                    title: 'List',
                     showSelCount: true,
+                    tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
                     panel: 'info',
                     cmd: function() {
                         $scope.panelUI.openPanel('info');
@@ -53,6 +56,7 @@ angular.module('common')
                     iconClass: 'local_library',
                     title: 'Player',
                     panel: 'player',
+                    tooltipTitle: 'Publish shareable map and add project information',
                     cmd: function() {
                         $scope.panelUI.openPanel('player');
                     }
@@ -60,6 +64,7 @@ angular.module('common')
                 {
                     iconClass: 'favorite',
                     title: 'Groups',
+                    tooltipTitle: 'Save customer selections',
                     panel: 'selection',
                     cmd: function() {
                         $scope.panelUI.openPanel('selection');
@@ -69,6 +74,7 @@ angular.module('common')
                     iconClass: 'brush',
                     title: 'Style',
                     panel: 'style',
+                    tooltipTitle: 'Edit styling for nodes, links, and labels',
                     cmd: function() {
                         $scope.panelUI.openPanel('style');
                     }
