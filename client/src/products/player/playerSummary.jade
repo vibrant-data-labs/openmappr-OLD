@@ -5,11 +5,10 @@
 			.row.vert-align.main
 				.col-xs-12
 					h6.title.text-uppercase.pointable-cursor.vert-align
-							i.fa-fw.fa-1-3x.btn-icon.icon-legend-dots(ng-class="{'active': panelUI.summaryPanelOpen}")
 							.title-space.width-100
 								span.inline.nowrap {{dataGroupVMs.length}} Colored By:&nbsp;&nbsp;
-								span.inline.nowrap.width-100
-									span.text-uppercase.subtitle.truncate {{dataGroupsInfo.colorNodesBy.title}}
+								span.inline.nowrap.width-80
+									span.text-uppercase.truncate {{dataGroupsInfo.colorNodesBy.title}}
 									span.subtitle(ng-if="dataGroupsInfo.colorNodesBy.metadata.descr" uib-tooltip="{{dataGroupsInfo.colorNodesBy.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
 										| &nbsp;&nbsp;&nbsp;
 										i.fa.fa-info-circle
@@ -118,9 +117,6 @@
 						.row.pointable-cursor(ng-show="linkGroupVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();')
 							.col-xs-12
 								em.text-right more&hellip;
-						//- .row.pointable-cursor(ng-if='$last', ng-click='ui.showAllNodes = false; $event.stopPropagation();' ng-show='ui.showAllNodes')
-						//- 	.col-xs-12
-						//- 		em.text-right less&hellip;
 				.panel-list(ng-if="isEdgeColorNumeric")
 					.panel-item.row.vert-align.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.linkGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.num, $event)', ng-mouseenter='hoverNodesByAttrib(l.num, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)', uib-tooltip="{{::l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
 						.col-xs-2
@@ -134,18 +130,3 @@
 						.row.pointable-cursor(ng-show="linkGroupVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();')
 							.col-xs-12
 								em.text-right more&hellip;
-						//- .row.pointable-cursor(ng-if='$last', ng-click='ui.showAllNodes = false; $event.stopPropagation();' ng-show='ui.showAllNodes')
-						//- 	.col-xs-12
-						//- 		em.text-right less&hellip;
-			//- if edge color selected
-			//- .panel-scroll(ng-if="ui.showingLinks && mapprSettings.edgeColorStrat == 'select'", dir-kill-tooltip-on-scroll)
-			//- 	.panel-list
-			//- 		.panel-item.row.vert-align
-			//- 			.col-xs-2
-			//- 				.link-mask
-			//- 					//l.color needs to return border color
-			//- 					.link-circle(style="border-color:{{mapprSettings.edgeColorDefaultValue}};")
-			//- 			.col-xs-10
-			//- 				h6.less-gutter All Edges
-			//- 
-			//- 

@@ -1,76 +1,15 @@
 .legend-container.flex-vert-container.width-100(ng-controller="DataPresentationCtrl", ng-mouseleave="rightPanelExited();")
-	//- .header(ng-class="{'active': panelUI.summaryPanelOpen, 'hovered': panelUI.summaryPanelHover}" ng-click="panelUI.togglePanel('summary')" ng-mouseenter="panelUI.summaryPanelOpen ? showLegendBtns = true : showLegendBtns = false; panelUI.summaryPanelHover = true;" ng-mouseleave="showLegendBtns = false; panelUI.summaryPanelHover = false;")
 	.header(ng-mouseenter="panelUI.summaryPanelOpen ? showLegendBtns = true : showLegendBtns = false;" ng-mouseleave="showLegendBtns = false;")
 		.row.vert-align.main
 			.col-xs-12
 				h6.title.text-uppercase.truncate.vert-align
-					i.fa-fw.fa-1-3x.btn-icon.icon-legend-dots(ng-class="{'active': panelUI.summaryPanelOpen}")
 					.title-space
 						span.inline.nowrap
 							span {{dataGroupVMs.length}}&nbsp;
-							//- span(uib-dropdown dropdown-append-to-body)
-							//- 	span.text-link(uib-dropdown-toggle auto-close="outsideClick") {{ui.showingLinks && 'LINK' || 'NODE'}}
-							//- 	.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
-							//- 		.uib-dropdown-click-close
-							//- 		//inline style to center dropdowns
-							//- 		.uib-dropdown-flex-content(style="margin-left: 18px;")
-							//- 			.uib-dropdown-triangle
-							//- 			.uib-dropdown-flex.center
-							//- 				ul.dd-list.list-unstyled
-							//- 					//- ng-repeat here
-							//- 					li.row.vert-align.pointable-cursor(ng-click="ui.showingLinks = false;")
-							//- 						.col-xs-2
-							//- 							span.info-icon
-							//- 								.big-circle
-							//- 						.col-xs-10
-							//- 							h6.no-margin.text-uppercase Nodes
-							//- 					li.row.vert-align.pointable-cursor(ng-click="ui.showingLinks = true;")
-							//- 						.col-xs-2
-							//- 							i.icon-link.fa-1-2x.vcenter
-							//- 						.col-xs-10
-							//- 							h6.no-margin.text-uppercase Links
-							//- span Groups&nbsp;
 							span Colored
-							//- span(uib-dropdown dropdown-append-to-body)
-							//- 	span.text-link(uib-dropdown-toggle auto-close="outsideClick") Colored
-							//- 		i.fa.fa-angle-down
-							//- 	.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
-							//- 		.uib-dropdown-click-close
-							//- 		//inline style to center dropdowns
-							//- 		.uib-dropdown-flex-content(style="margin-left: 28px;")
-							//- 			.uib-dropdown-triangle
-							//- 			.uib-dropdown-flex.center
-							//- 				ul.dd-list.list-unstyled
-							//- 					//- ng-repeat here
-							//- 					li.row.vert-align.pointable-cursor
-							//- 						.col-xs-2
-							//- 							span.info-icon
-							//- 								.color-icon
-							//- 						.col-xs-10
-							//- 							h6.no-margin.text-uppercase Colored
-							//- 					li.row.vert-align.pointable-cursor
-							//- 						.col-xs-2
-							//- 							.med-circle
-							//- 							.small-circle
-							//- 						.col-xs-10
-							//- 							h6.no-margin.text-uppercase Sized
 							span &nbsp;By&nbsp;
 						span.inline.nowrap
 							dir-filter-dropdown(ng-click="$event.stopPropagation();" ng-if="!ui.showingLinks" ng-model="dataGroupsInfo.colorNodesBy", change-val="colorByAttrUpdate(val)" default-title="dataGroupsInfo.colorNodesBy.title", vals-list="nodeColorAttrs", show-triangle="false", dd-class="text-link" is-right="false")
-							//- span(uib-dropdown dropdown-append-to-body, ng-if="!ui.showingLinks")
-							//- 	span.text-link(uib-dropdown-toggle auto-close="outsideClick") {{dataGroupsInfo.colorNodesBy.title}}
-							//- 		i.fa.fa-angle-down
-							//- 	.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
-							//- 		.uib-dropdown-click-close
-							//- 		//inline style to center dropdowns
-							//- 		.uib-dropdown-flex-content(style="margin-left: 28px;")
-							//- 			.uib-dropdown-triangle.right
-							//- 			.uib-dropdown-flex.right
-							//- 				ul.dd-list.list-unstyled
-							//- 					//- ng-repeat here
-							//- 					li.row.vert-align.pointable-cursor(ng-repeat="colorAttr in nodeColorAttrs")
-							//- 						.col-xs-12(ng-click="colorByAttrUpdate(colorAttr);")
-							//- 							h6.no-margin.text-uppercase {{colorAttr.title}}
 							span(uib-dropdown dropdown-append-to-body, ng-if="ui.showingLinks")
 								span.text-link(uib-dropdown-toggle auto-close="outsideClick") {{dataGroupsInfo.colorEdgesBy.title}}
 									i.fa.fa-angle-down
@@ -122,7 +61,7 @@
 							span(ng-if="ui.summaryToggleOpen" ng-click="ui.summaryToggleOpen = false;")
 								i.fa.fa-caret-down.fa-fw
 								span Compact View
-		
+
 		.clearfix
 	.list-content.panel-scroll.flex-fill
 		///
@@ -178,7 +117,7 @@
 									.col-xs-4
 										.h6.less-gutter.pointable-cursor {{l.bridgers.length}} Bridgers
 									.col-xs-1
-										//- i.fa.fa-plus(ng-click='selectNodeNeighborByIds(l.bridgers, $event); $event.stopPropagation();', ng-mouseenter='hoverNodeNeighborByIds(l.bridgers, $event); $event.stopPropagation();', ng-mouseleave='hoverNodesByIds([], $event); $event.stopPropagation();')
+
 				// Numerical Legend display
 				li.panel-item.pointable-cursor.vert-align.row(ng-if="isNodeColorNumeric", ng-class="{'highlighted' : l.highlightOnNodeHover}", ng-repeat="l in dataGroupVMs | limitTo: ui.dataGroupsViewCount track by l.originalTitle", ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.num, $event)', ng-mouseenter='hoverNodesByAttrib(l.num, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)', uib-tooltip="{{l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
 					.col-xs-1
@@ -186,9 +125,8 @@
 					.col-xs-10.h6(ng-style = "{'cursor': 'pointer'}") {{l.count}} {{l.name}}
 				div
 					.col-xs-12
-						a.more-text.h6.pull-right.pointable-cursor(ng-show="dataGroupVMs.length > ui.dataGroupsViewCount", ng-click='loadMoreDataGroups(); $event.stopPropagation();') 
+						a.more-text.h6.pull-right.pointable-cursor(ng-show="dataGroupVMs.length > ui.dataGroupsViewCount", ng-click='loadMoreDataGroups(); $event.stopPropagation();')
 							em more&hellip;
-						//- .more-text.h6.pull-right.pointable-cursor(ng-if='$last', ng-click='nodeDetailUI.lists.showAllNodeColors = false; $event.stopPropagation();' ng-show='nodeDetailUI.lists.showAllNodeColors') less&hellip;
 
 			// if node color selected
 			ul.panel-list(ng-if="mapprSettings.nodeColorStrat == 'select'")
@@ -233,9 +171,8 @@
 									i.text-muted-light.fa.fa-pencil
 				.row
 					.col-xs-12
-						a.more-text.h6.pull-right.pointable-cursor(ng-show="dataGroupLinkVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();') 
+						a.more-text.h6.pull-right.pointable-cursor(ng-show="dataGroupLinkVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();')
 							em more&hellip;
-						//- .more-text.h6.pull-right.pointable-cursor(ng-if='$last', ng-click='nodeDetailUI.lists.showAllNodeColors = false; $event.stopPropagation();' ng-show='nodeDetailUI.lists.showAllNodeColors') less&hellip;
 						// Numerical Legend display
 						li.panel-item.pointable-cursor.vert-align.row(ng-if="isLinkColorNumeric", ng-repeat="l in dataGroupVMs | limitTo: ui.linkGroupsViewCount track by l.originalTitle" uib-tooltip="{{l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
 							.col-xs-1
@@ -243,17 +180,5 @@
 									//l.color needs to return border color
 									.link-circle(ng-style='l.color')
 							.col-xs-10.h6(ng-style = "{'cursor': 'pointer'}") {{l.num}} {{l.name}}
-							a.more-text.h6.pointable-cursor(ng-show="dataGroupLinkVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();') 
+							a.more-text.h6.pointable-cursor(ng-show="dataGroupLinkVMs.length > ui.linkGroupsViewCount", ng-click='loadMoreLinkGroups(); $event.stopPropagation();')
 								em more&hellip;
-							//- .more-text.h6.pointable-cursor(ng-if='$last', ng-click='nodeDetailUI.lists.showAllEdgeColors = false; $event.stopPropagation();' ng-show='nodeDetailUI.lists.showAllEdgeColors') less&hellip;
-							//-
-							//- // if edge color selected
-							//- ul.panel-list(ng-if="mapprSettings.edgeColorStrat == 'select'")
-							//- 	li.panel-item.vert-align.row.vert-align
-							//- 		.col-xs-12
-							//- 			h6 Color
-							//- 	li.panel-item.vert-align.row
-							//- 		.col-xs-1
-							//- 			.link-mask
-							//- 				.link-circle(style='border-color:{{mapprSettings.edgeColorDefaultValue}};')
-							//- 		.col-xs-10.h6 All Links
