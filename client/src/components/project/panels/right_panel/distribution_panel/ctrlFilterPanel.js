@@ -24,7 +24,6 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.resetFilters = resetFilters;
 
 
-
     /*************************************
     ****** Event Listeners/Watches *******
     **************************************/
@@ -55,6 +54,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
 
     networkService.getCurrentNetworkPromisified().then(function(currentNetworkP) {
         $scope.ui.renderDistr = true;
+        $scope.ui.enableFilters = true;
     });
 
     /*************************************
