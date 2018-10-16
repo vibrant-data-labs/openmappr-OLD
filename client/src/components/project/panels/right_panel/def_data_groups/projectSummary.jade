@@ -73,15 +73,13 @@
 				li.panel-item.pointable-cursor.animate-repeat(ng-if="!isNodeColorNumeric", ng-class="{'highlighted' : l.highlightOnNodeHover}", ng-repeat="l in dataGroupVMs | limitTo: ui.dataGroupsViewCount track by l.originalTitle")
 					.row.flex-container.pointable-cursor(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700); !ui.editEnabled && (l.showClusterEdit = true);', ng-mouseleave='hoverNodesByAttrib(undefined, $event); !l.editClusterName && (l.showClusterEdit = false);', uib-tooltip="{{l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
 						.col-xs-1
-							.legend-icon(ng-if="!l.editClusterName")
-								i.fa-1-3x.icon-legend-dots(ng-style='l.color')
+							.legend-icon(ng-if="!l.editClusterName", ng-style='l.color')
 							div.animate-fade(ng-if="(l.archetypes.length > 0 || l.bridgers.length > 0) && ui.summaryToggleOpen")
 								.legend-line-down(style="border-color: {{l.colorval}}" ng-class="{'only-one':(l.bridgers.length == 0 || l.archetypes.length == 0)}")
 							input(type="color", ng-model='l.colorval', ng-click="$event.stopPropagation();", ng-change="changeColor(l, l.colorval)", ng-if="l.editClusterName")
-						.col-xs-2(ng-if='!l.editClusterName')
-							h6.pull-right.panel-number {{l.num}}
-						.col-xs-8(ng-if='!l.editClusterName')
-							h6.less-gutter {{l.name}}
+						h6.panel-number(ng-if='!l.editClusterName') ({{l.num}})
+						.col-xs-10(ng-if='!l.editClusterName')
+							h6.less-gutter.panel-text {{l.name}}
 						.col-xs-11.form-inline(ng-if="l.editClusterName", ng-click="$event.stopPropagation()")
 							.row.top-align
 								.col-xs-11

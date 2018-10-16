@@ -58,7 +58,12 @@
 
     .panel-number {
         float: right;
-        margin-right: -5px;
+        margin-right: 25px;
+        padding-top: 20px;
+    }
+
+    .panel-text {
+        padding-top: 10px;
     }
 
     ul {
@@ -89,7 +94,7 @@
     //decrease spacing between columns
     .row {
         .less-gutter {
-            margin-left: -20px;
+            margin-left: -28px;
         }
 
         .less-gutter-right {
@@ -410,7 +415,6 @@
                 border-bottom: 1px solid $panel-border;
                 opacity: 1;
                 overflow: hidden;
-                padding: 10px 20px 0;
 
                 &:last-child {
                     border-bottom: 0;
@@ -456,17 +460,6 @@
             }
         }
 
-
-        .legend-container {
-            .panel-list {
-                .panel-item {
-                    padding-bottom: 10px;
-                }
-            }
-        }
-
-
-
         .panel-sublist {
             .panel-subitem {
                 @include transition(opacity .3s ease-out);
@@ -508,11 +501,13 @@
         h6,
         .h6 {
             margin-bottom: 8px;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
         .legend-icon {
-            padding-top: 7px;
+            padding-left: 10px;
+            border-left: 6px solid;
+            height: 100%;
         }
     }
 
