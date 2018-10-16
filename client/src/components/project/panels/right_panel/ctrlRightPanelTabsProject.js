@@ -53,7 +53,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'local_library',
+                    iconClass: 'slideshow',
                     title: 'Player',
                     panel: 'player',
                     tooltipTitle: 'Publish shareable map and add project information',

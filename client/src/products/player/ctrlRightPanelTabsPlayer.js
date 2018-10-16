@@ -27,7 +27,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'local_library',
+                    iconClass: 'slideshow',
                     title: 'Slides',
                     panel: 'slides',
                     tooltipTitle: 'See slide information and change views if there are more than one',
