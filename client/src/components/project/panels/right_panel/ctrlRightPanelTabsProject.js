@@ -25,7 +25,7 @@ angular.module('common')
             //     }
             // },
                 {
-                    iconClass: 'filter_list',
+                    iconClass: 'fa fa-fw fa-2x fa-filter',
                     title: 'Filters',
                     tooltipTitle: 'Filter data by one or more attributes',
                     panel: 'filter',
@@ -34,7 +34,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'map',
+                    iconClass: 'fa fa-fw fa-2x fa-map',
                     title: 'Legend',
                     tooltipTitle: 'See color and sizing information',
                     panel: 'summary',
@@ -43,7 +43,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'list',
+                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
                     title: 'List',
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
@@ -53,7 +53,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'slideshow',
+                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
                     title: 'Player',
                     panel: 'player',
                     tooltipTitle: 'Publish shareable map and add project information',
@@ -62,7 +62,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'favorite',
+                    iconClass: 'fa fa-fw fa-2x fa-heart',
                     title: 'Groups',
                     tooltipTitle: 'Save customer selections',
                     panel: 'selection',
@@ -71,7 +71,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'brush',
+                    iconClass: 'fa fa-fw fa-2x fa-paint-brush',
                     title: 'Style',
                     panel: 'style',
                     tooltipTitle: 'Edit styling for nodes, links, and labels',
