@@ -77,8 +77,8 @@
 						//- 		em.text-right less&hellip;
 				.panel-list(ng-if="isNodeColorNumeric")
 					.panel-item.row.vert-align.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.dataGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.num, $event)', ng-mouseenter='hoverNodesByAttrib(l.num, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)', uib-tooltip="{{::l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
-						.col-xs-2.vert-align
-							i.fa-1-3x.icon-legend-dots(ng-style='l.color')
+						.col-xs-2
+							.legend-icon-numeric(ng-style='l.color')
 						.col-xs-10
 							h6 {{l.count}} {{l.name}}
 					div
