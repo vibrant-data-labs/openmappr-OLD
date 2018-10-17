@@ -59,11 +59,6 @@
     .panel-number {
         float: right;
         margin-right: 25px;
-        padding-top: 20px;
-    }
-
-    .panel-text {
-        padding-top: 10px;
     }
 
     ul {
@@ -500,13 +495,13 @@
         //a bit less spacing than info panel
         h6,
         .h6 {
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             margin-top: 5px;
         }
 
         .legend-icon {
             padding-left: 10px;
-            border-left: 6px solid;
+            border-left: 10px solid;
             height: 100%;
         }
     }
