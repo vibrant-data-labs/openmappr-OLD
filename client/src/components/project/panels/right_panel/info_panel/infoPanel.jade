@@ -4,14 +4,12 @@
 		.row.vert-align.main
 			.col-xs-9
 				h6.title.text-uppercase.truncate
-					i.fa-fw.fa-1-2x.btn-icon.icon-network(ng-show="selInfo.selNodesCount == 0" ng-class="{'active': panelUI.infoPanelOpen}")
-					i.fa.fa-fw.fa-1-3x.fa-mouse-pointer.btn-icon(style="line-height: .9;" ng-show="ui.graphInteracted || selInfo.selNodesCount != 0" ng-class="{'active': panelUI.infoPanelOpen}")
 					span
 						span &nbsp;&nbsp;
 						span.sel-info(ng-if="selInfo.selNodesCount == 1 || !MAPP_EDITOR_OPEN") {{ui.infoTitle}}
 						span(ng-click="$event.stopPropagation();")
 							span(ng-if="selInfo.selNodesCount > 1 && MAPP_EDITOR_OPEN" uib-dropdown dropdown-append-to-body)
-								span(uib-dropdown-toggle auto-close="outsideClick") 
+								span(uib-dropdown-toggle auto-close="outsideClick")
 									span.text-link {{ui.infoTitle}}
 										i.fa.fa-angle-down
 								.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
@@ -26,7 +24,7 @@
 														button.h6.dropdown-btn.text-uppercase.flex-fill.nowrap.power-btn(type="button" ng-click="selectionAsNW();") New Network from Selection
 						span(ng-click="$event.stopPropagation();")
 							span(ng-if="!ui.graphInteracted && selInfo.selNodesCount == 0 && MAPP_EDITOR_OPEN" uib-dropdown dropdown-append-to-body)
-								span(uib-dropdown-toggle ) 
+								span(uib-dropdown-toggle )
 									span.text-link {{ui.infoTitle}}
 										i.fa.fa-angle-down
 								.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
@@ -44,7 +42,7 @@
 														button.h6.dropdown-btn.text-uppercase.flex-fill.power-btn(type="button" ng-click="selectionAsNW();") New Network from Selection
 												//- ng-repeat here
 												li.row.vert-align.pointable-cursor(ng-repeat="network in networkList | orderBy:'-dateCreated'" ng-click="switchNetwork(network.id)")
-													.col-xs-1 
+													.col-xs-1
 														i.icon-network.fa-1-2x.active(ng-if="network.id == currentNetwork.id")
 													.col-xs-11(ng-if="network.id != currentNetwork.id")
 														h6.no-margin.truncate.text-muted {{network.name}}
