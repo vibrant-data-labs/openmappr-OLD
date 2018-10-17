@@ -5,8 +5,8 @@
 			.row.vert-align.main
 				.col-xs-10
 					h6.title.text-uppercase
-						i.fa.fa-fw.fa-1-3x.fa-pie-chart.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
-						span &nbsp;&nbsp;Stats&nbsp;&nbsp;&nbsp;&nbsp;
+						i.fa.fa-fw.fa-1-3x.fa-filter.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
+						span &nbsp;&nbsp;Filters&nbsp;&nbsp;&nbsp;&nbsp;
 						span.text-link(ng-click="ui.statsSearchKey = '';$event.stopPropagation();" ng-if="ui.statsSearchKey" uib-tooltip="Clear Search" tooltip-placement="top" tooltip-append-to-body="true")
 							span {{ui.filteredAttrs.length}} of {{ui.totalAttrsCount}}
 							i.fa.fa-fw.fa-times
