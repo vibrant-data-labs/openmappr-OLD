@@ -79,16 +79,15 @@
 						input(type="color", ng-model='l.colorval', ng-click="$event.stopPropagation();", ng-change="changeColor(l, l.colorval)", ng-if="l.editClusterName")
 						h6.panel-number(ng-if='!l.editClusterName') ({{l.num}})
 						h6.less-gutter.panel-text(ng-if='!l.editClusterName') {{l.name}}
-						form-inline(ng-if="l.editClusterName", ng-click="$event.stopPropagation()")
-							.row.top-align
-									textarea.form-control.small-control.h6.no-margin.width-100(type='text', ng-model='l.name', placeholder="Name" ng-change="updateLabelForAttrValue(l)", ng-model-options="{ debounce: 1000 }")
-									textarea.form-control.small-control.h6.width-100(type='text',ng-model='l.descr', placeholder="Description" ng-change="updateDescrForAttrValue(l)", ng-model-options="{ debounce: 1000 }")
-									//- input.form-control.small-control.h6(type='text',ng-model='l.suggestion', placeholder="Suggestion" ng-model-options="{ debounce: 1000 }" dir-select-all)
-								.less-gutter(ng-show="l.showClusterEdit && l.editClusterName")
-									button.square-btn.small-btn.panel-btn.pull-left(type="button", ng-click="$event.stopPropagation(); updateClusterInfo(l); l.showClusterEdit = false; l.editClusterName = false;")
-										i.fa.fa-fw.fa-check
-									button.square-btn.small-btn.panel-btn.pull-left(type="button", ng-click="$event.stopPropagation(); l.showClusterEdit = false; l.editClusterName = false; discardClusterInfoUpdates(l)")
-										i.fa.fa-fw.fa-times
+						form-inline.panel-edit-form(ng-if="l.editClusterName", ng-click="$event.stopPropagation()")
+							textarea.form-control.small-control.h6.no-margin.width-100(type='text', ng-model='l.name', placeholder="Name" ng-change="updateLabelForAttrValue(l)", ng-model-options="{ debounce: 1000 }")
+							textarea.form-control.small-control.h6.width-100(type='text',ng-model='l.descr', placeholder="Description" ng-change="updateDescrForAttrValue(l)", ng-model-options="{ debounce: 1000 }")
+							//- input.form-control.small-control.h6(type='text',ng-model='l.suggestion', placeholder="Suggestion" ng-model-options="{ debounce: 1000 }" dir-select-all)
+							.less-gutter(ng-show="l.showClusterEdit && l.editClusterName")
+							button.square-btn.small-btn.panel-btn.pull-left(type="button", ng-click="$event.stopPropagation(); updateClusterInfo(l); l.showClusterEdit = false; l.editClusterName = false;")
+								i.fa.fa-fw.fa-check
+							button.square-btn.small-btn.panel-btn.pull-left(type="button", ng-click="$event.stopPropagation(); l.showClusterEdit = false; l.editClusterName = false; discardClusterInfoUpdates(l)")
+								i.fa.fa-fw.fa-times
 						.panel-edit-icon(ng-show="!l.editClusterName")
 							div(ng-show="l.showClusterEdit && !l.editClusterName")
 								a.visible-btn.vcenter(type="button", ng-click="$event.stopPropagation(); l.editClusterName = true;")
