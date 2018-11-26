@@ -13,7 +13,7 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     var numShowDataGroups = 0;
     var numShowLinkGroups = 0;
     var ITEMS_TO_SHOW = 100;
-    var ITEMS_TO_SHOW_INITIALLY = 14;
+    var ITEMS_TO_SHOW_INITIALLY = 20;
     var categoriesToHighlight = [];
     var highlightLegendCategoriesThrottled = _.throttle(highlightLegendCategories, 100);
     var tempColorChangesMap = {};
