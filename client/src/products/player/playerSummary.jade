@@ -37,14 +37,12 @@
 			.panel-scroll(ng-if="!ui.showingLinks && mapprSettings.nodeColorStrat != 'select' && mapprSettings.nodeColorStrat != 'fixed'", dir-kill-tooltip-on-scroll)
 				.panel-list(ng-if="!isNodeColorNumeric" ng-class="{'highlighted': ui.highlightingNodes}")
 					.panel-item.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.dataGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", uib-tooltip="{{::l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
-						.row.flex-container(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)')
-							.col-xs-1.flex-fill
-								.legend-icon(ng-style='l.color')
-								div(ng-if="ui.summaryToggleOpen && (l.archetypes.length > 0 || l.bridgers.length > 0)")
-									.legend-line-down.animate-fade(style="border-color: {{l.colorval}}" ng-class="{'only-one':(l.bridgers.length == 0 || l.archetypes.length == 0)}")
+						.flex-container(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)')
+							.legend-icon(ng-style='l.color')
+							div(ng-if="ui.summaryToggleOpen && (l.archetypes.length > 0 || l.bridgers.length > 0)")
+								.legend-line-down.animate-fade(style="border-color: {{l.colorval}}" ng-class="{'only-one':(l.bridgers.length == 0 || l.archetypes.length == 0)}")
 							h6.panel-number ({{l.num}})
-							.col-xs-10
-								h6.less-gutter.panel-text {{l.name}}
+							h6.less-gutter.panel-text {{l.name}}
 						div.animate-fade(ng-if="ui.summaryToggleOpen")
 							.row.vert-align(ng-show="l.archetypes.length > 0")
 								.col-xs-3
