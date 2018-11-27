@@ -4,9 +4,9 @@
         .header(style="height: 36px;")
             h6.title.text-uppercase Style Network
                 .pull-right.vert-align
-                    button(ng-if="appUi.theme == 'light'" uib-tooltip="Switch to Dark Theme" tooltip-append-to-body="true" tooltip-placement="right" ng-click="changeTheme('dark', $event);") 
+                    button(ng-if="appUi.theme == 'light'" uib-tooltip="Switch to Dark Theme" tooltip-append-to-body="true" tooltip-placement="right" ng-click="changeTheme('dark', $event);")
                         i.fa.fa-moon-o.toggle-icon
-                    button(ng-if="appUi.theme == 'dark'" uib-tooltip="Switch to Light Theme" tooltip-append-to-body="true" tooltip-placement="right" ng-click="changeTheme('light', $event);") 
+                    button(ng-if="appUi.theme == 'dark'" uib-tooltip="Switch to Light Theme" tooltip-append-to-body="true" tooltip-placement="right" ng-click="changeTheme('light', $event);")
                         i.fa.fa-sun-o.toggle-icon
                     //- button(ng-click="panelUI.openPanel('summary');")
                     //-     i.fa.fa-times.toggle-icon
@@ -29,7 +29,7 @@
                                                 .onoffswitch-inner
                                                 .onoffswitch-switch
                         .panel-list.flex-fill.panel-scroll.flex-vert-container
-                            .panel-item.no-hover(ng-if="renderProcesses.process1.shouldLoad", ng-repeat = "section in layoutUI.nodeTab.renderSettings | toArray")
+                            .panel-item.style-panel-item.no-hover(ng-if="renderProcesses.process1.shouldLoad", ng-repeat = "section in layoutUI.nodeTab.renderSettings | toArray")
                                 h6.title.text-uppercase {{section.$key}}
                                 ul.panel-sublist.list-unstyled
                                     li.panel-subitem(ng-repeat="opt in section", ng-mouseenter='layoutUI.setHoverSetting(opt)', ng-show='opt.enabled', ng-class='layoutUI.getClass(opt)', ng-click="$event.stopPropagation()")
@@ -133,7 +133,7 @@
                                                 span(uib-tooltip="Define how Nodes are Clustered" tooltip-placement="right" tooltip-append-to-body="true") Aggregations
                                     div(ng-if="renderProcesses.process4.shouldLoad", ng-repeat = "section in layoutUI.nodeTab.aggregations | toArray")
                                         .row.vert-align
-                                            .col-xs-12 
+                                            .col-xs-12
                                                 h6.title.text-uppercase {{section.$key}}
                                         ul.panel-sublist.list-unstyled
                                             li.panel-subitem(ng-repeat="opt in section", ng-mouseenter='layoutUI.setHoverSetting(opt)', ng-show='opt.enabled', ng-class='layoutUI.getClass(opt)', ng-click="$event.stopPropagation()")
@@ -152,7 +152,7 @@
                                                 span Stage
                                     div(ng-if="renderProcesses.process5.shouldLoad", ng-repeat = "section in layoutUI.settingsTab.stage | toArray")
                                         .row.vert-align
-                                            .col-xs-12 
+                                            .col-xs-12
                                                 h6.title.text-uppercase  {{section.$key}}
                                         ul.panel-sublist.list-unstyled
                                             li.panel-subitem(ng-repeat="opt in section", ng-mouseenter='layoutUI.setHoverSetting(opt)', ng-show='opt.enabled', ng-class='layoutUI.getClass(opt)', ng-click="$event.stopPropagation()")
@@ -172,7 +172,7 @@
                                                 span Export Image
                                     div
                                         .row.vert-align
-                                            .col-xs-12 
+                                            .col-xs-12
                                                 h6.title.text-uppercase  Export Image
                                         ul.panel-sublist.list-unstyled
                                             li.panel-subitem(ng-click="$event.stopPropagation()")
@@ -186,20 +186,20 @@
                                                 span ETL extractions
                                     div(ng-controller="HacksCardCtrl")
                                         .row.vert-align
-                                            .col-xs-12 
+                                            .col-xs-12
                                                 h6.title.text-uppercase  Export Users of selected merchants
                                         ul.panel-sublist.list-unstyled
                                             li.panel-subitem(ng-click="$event.stopPropagation()")
                                                 .row.vert-align
                                                     button.btn.btn-default.btn-xs.pull-left(type="button", ng-click="exportUsersOfMerchants()") run Script
                                         .row.vert-align
-                                            .col-xs-12 
+                                            .col-xs-12
                                                 h6.title.text-uppercase  Export Users of all clusters
                                         ul.panel-sublist.list-unstyled
                                             li.panel-subitem(ng-click="$event.stopPropagation()")
                                                 .row.vert-align
                                                     button.btn.btn-default.btn-xs.pull-left(type="button", ng-click="exportClusterUsers()") export users for every cluster
-                                                    
+
 
                                 //- uib-accordion-group(is-open="spAccordionStatus.misc.legend")
                                 //-     uib-accordion-heading
@@ -209,7 +209,7 @@
                                 //-                 span Legend
                                 //-     div(ng-if="renderProcesses.process6.shouldLoad", ng-repeat = "section in layoutUI.settingsTab.legend | toArray")
                                 //-         .row.vert-align
-                                //-             .col-xs-12 
+                                //-             .col-xs-12
                                 //-                 h6.title.text-uppercase {{section.$key}}
                                 //-         ul.panel-sublist.list-unstyled
                                 //-             li.panel-subitem(ng-repeat="opt in section", ng-mouseenter='layoutUI.setHoverSetting(opt)', ng-show='opt.enabled', ng-class='layoutUI.getClass(opt)', ng-click="$event.stopPropagation()")
@@ -228,7 +228,7 @@
                                 //-                 span Link Mapping
                                 //-     div(ng-if="renderProcesses.process7.shouldLoad", ng-repeat = "section in layoutUI.settingsTab.linkMapping | toArray")
                                 //-         .row.vert-align
-                                //-             .col-xs-12 
+                                //-             .col-xs-12
                                 //-                 h6.title.text-uppercase {{section.$key}}
                                 //-         ul.panel-sublist.list-unstyled
                                 //-             li.panel-subitem(ng-repeat="opt in section", ng-mouseenter='layoutUI.setHoverSetting(opt)', ng-show='opt.enabled', ng-class='layoutUI.getClass(opt)', ng-click="$event.stopPropagation()")
@@ -259,7 +259,7 @@
                                 //-                             select(ng-model='activeSetting', ng-change='getKeyValue()', ng-options='mkey for mkey in mapprSettingsKeys')
                                 //-                         input.form-control(ng-model='activeSettingValue', ng-change="setValue()")
                                 //-                         .divider
-                                //-                         button.btn.btn-default.btn-xs(href="#", ng-click="updateValue()") Update 
+                                //-                         button.btn.btn-default.btn-xs(href="#", ng-click="updateValue()") Update
                                 //-                 li.list-group-item.row.vert-align.border-section
                                 //-                     .col-xs-4.text-small Render SVG
                                 //-                     .col-xs-6
