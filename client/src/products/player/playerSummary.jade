@@ -6,7 +6,7 @@
 				.col-xs-12
 					h6.title.text-uppercase.pointable-cursor.vert-align
 							.title-space.width-100
-								span.inline.nowrap {{dataGroupVMs.length}} Colored By:&nbsp;&nbsp;
+								span.inline.nowrap Colored By:&nbsp;&nbsp;
 								span.inline.nowrap.width-80
 									span.text-uppercase.truncate {{dataGroupsInfo.colorNodesBy.title}}
 									span.subtitle(ng-if="dataGroupsInfo.colorNodesBy.metadata.descr" uib-tooltip="{{dataGroupsInfo.colorNodesBy.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
@@ -36,7 +36,7 @@
 			///
 			.panel-scroll(ng-if="!ui.showingLinks && mapprSettings.nodeColorStrat != 'select' && mapprSettings.nodeColorStrat != 'fixed'", dir-kill-tooltip-on-scroll)
 				.panel-list(ng-if="!isNodeColorNumeric" ng-class="{'highlighted': ui.highlightingNodes}")
-					.panel-item.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.dataGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", uib-tooltip="{{::l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
+					.panel-item.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.dataGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", uib-tooltip="{{::l.name}}", tooltip-placement="right", tooltip-append-to-body="true")
 						.flex-container(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)')
 							.legend-icon(ng-style='l.color')
 							div(ng-if="ui.summaryToggleOpen && (l.archetypes.length > 0 || l.bridgers.length > 0)")
