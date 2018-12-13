@@ -1,6 +1,12 @@
 angular.module('common')
-    .controller('RightPanelTabsProjectCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
+    .controller('RightPanelTabsProjectCtrl', [
+        '$scope',
+        '$rootScope',
+        'graphSelectionService',
+        'BROADCAST_MESSAGES',
+        'dataGraph',
+        '$uibModal',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal) {
             'use strict';
 
             /*************************************
@@ -78,7 +84,17 @@ angular.module('common')
                     cmd: function() {
                         $scope.panelUI.openPanel('style');
                     }
-                }
+                },
+                {
+                    iconClass: 'fa fa-fw fa-2x fa-database',
+                    title: 'Edit data',
+                    panel: 'style',
+                    tooltipTitle: 'Edit Data',
+                    cmd: function() {
+                        return $scope.openNetworkDataModal();
+                    }
+                },
+
             ];
 
             /**
@@ -105,6 +121,31 @@ angular.module('common')
                 updateSelCount();
             });
 
+            function openNetworkDataModal() {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: '/partials/components/project/data_modal/networkDataModal.html',
+                    controller: 'NetworkDataModalCtrl',
+                    size: 'lg',
+                    resolve: {
+                        mapprSettings: function() {
+                            return $scope.mapprSettings;
+                        }
+                    }
+                });
+
+                //Called when modal is closed
+                modalInstance.result.then(
+                    function() {
+                        console.log('Closing network data modal');
+                    },
+                    function() {
+                        console.warn("Modal dismissed at: " + new Date());
+                    }
+                );
+            }
+
+            $scope.openNetworkDataModal = openNetworkDataModal;
 
 
             /*************************************

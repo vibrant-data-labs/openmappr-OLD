@@ -17,7 +17,8 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     var categoriesToHighlight = [];
     var highlightLegendCategoriesThrottled = _.throttle(highlightLegendCategories, 100);
     var tempColorChangesMap = {};
-
+    var projSettings = projFactory.getProjectSettings();
+    var defNodesTitle = 'Nodes';
 
 
     /*************************************
@@ -60,6 +61,21 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     $scope.changeColor = changeColor;
     $scope.sortByFreq = sortByFreq;
     $scope.sortByAlpha = sortByAlpha;
+    $scope.nodeSizeAttrs = layoutService.getNodeSizeAttrs();
+    $scope.MAPP_EDITOR_OPEN = $rootScope.MAPP_EDITOR_OPEN;
+
+    $scope.sizeByAttrUpdate = sizeByAttrUpdate;
+    function sizeByAttrUpdate(){
+        console.log(logPrefix + 'sizeBy: ', $scope.vm.nodeSizeAttr.id);
+        $scope.mapprSettings.nodeSizeAttr =  $scope.vm.nodeSizeAttr.id;
+    }
+
+    $scope.vm = {
+        nodeSizeAttr: null,
+        nodesTitle: projSettings.nodesTitle || defNodesTitle
+    };
+
+    $scope.vm.nodeSizeAttr = _.find($scope.nodeSizeAttrs, 'id', $scope.mapprSettings.nodeSizeAttr);
 
 
     $scope.colorByAttrUpdate = function colorByAttrUpdate(colorAttr){

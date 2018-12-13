@@ -83,8 +83,6 @@
 			.col-xs-3.vert-align.right(ng-if="MAPP_EDITOR_OPEN")
 				button(ng-if="selInfo.selNodesCount == 1;" ng-click="toggleNodeOverlay(); $event.stopPropagation();" uib-tooltip="Toggle Node Overlay" tooltip-placement="bottom-left" tooltip-append-to-body="true")
 					i.fa.fa-1-2x.fa-expand.toggle-icon(ng-class="{'active':mapprSettings.nodeFocusShow}")
-				button(uib-tooltip="Edit Data" tooltip-append-to-body="true" tooltip-placement="bottom-left" ng-click="openNetworkDataModal(); $event.stopPropagation();")
-					i.fa.fa-1-2x.fa-database.toggle-icon
 		.hidden-btns(ng-click="$event.stopPropagation()", ng-if="MAPP_EDITOR_OPEN || (!MAPP_EDITOR_OPEN && player.settings.showExportBtn)")
 			h6.text-uppercase.animate-hidden-panel-btns(ng-show="(showInfoDrawer && panelUI.infoPanelOpen) || keepDrawerOpen" )
 				//spacer
