@@ -11,6 +11,12 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "100k"
+      max-file: "10"
+
   athena:
     build: ./athena
     command: ./run_docker_mode.sh
