@@ -75,6 +75,7 @@ function($scope, $rootScope, $timeout, graphSelectionService, dataGraph, layoutS
     $scope.openNetworkDataModal = openNetworkDataModal;
 
     $scope.exportSelection = $rootScope.MAPP_EDITOR_OPEN ? exportSelectionFromApp : exportSelectionFromPlayer;
+    $rootScope.exportSelection = $scope.exportSelection;
 
     $scope.hideDropdowns = function() {
         //hack to close dropdown

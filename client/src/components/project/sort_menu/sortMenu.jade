@@ -1,7 +1,9 @@
 .attr-visibility
 	div.uib-dropdown(uib-dropdown dropdown-append-to-body is-open="ui.menuOpen")
-		span.uib-dropdown-toggle.text-muted(uib-dropdown-toggle uib-tooltip="Sort Options", tooltip-placement="right", tooltip-append-to-body="true" auto-close="disabled")
-			i.fa.fa-ellipsis-v
+		span.uib-dropdown-toggle(uib-dropdown-toggle uib-tooltip="Sort Options", tooltip-placement="right", tooltip-append-to-body="true" auto-close="disabled")
+			span.pull-right {{sortConfig.sortType}} &nbsp;
+				i.fa.fa.fa-sort-asc(ng-if="sortConfig.sortOrder==='asc'")
+				i.fa.fa.fa-sort-desc(ng-if="sortConfig.sortOrder==='desc'")
 		.uib-dropdown-menu.uib-dropdown-menu-flexing.pull-right(uib-dropdown-menu)
 			.uib-dropdown-click-close
 			.uib-dropdown-flex-content

@@ -109,7 +109,9 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
         $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
             $scope.selInfo.refreshSelInfo = true;
             $scope.selInfo.selectionBrowsing = false;
-            refresh([]);
+            // CHECKPOINT
+            var selNodes = dataGraph.getAllNodes();
+            refresh(selNodes);
         });
 
         $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function(e, data) {
@@ -119,6 +121,8 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
 
         function initialise() {
             var selNodes = graphSelectionService.getSelectedNodes();
+            // CHECKPOINT
+            if (!selNodes.length) selNodes = dataGraph.getAllNodes();
             $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);
             refresh(selNodes);
             console.log('All node groups -> ', $scope.groupsAndClusters);

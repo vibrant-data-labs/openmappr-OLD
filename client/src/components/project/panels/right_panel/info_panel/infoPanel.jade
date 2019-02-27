@@ -128,8 +128,5 @@
 						span
 							button.square-btn.small-btn.panel-btn(type="button", ng-click="invertSelection();") Invert Selection
 	#info-panel-scroll.panel-scroll.flex-fill.flex-vert-container
-		div(ng-if="(ui.interactionType == 'hover' && !ui.graphHover) || selInfo.selNodesCount === 0")
-			dir-network-info(label-attr="mapprSettings.labelAttr" ui="ui" sel-info="selInfo" general-info="generalInfo" mappr-settings="mapprSettings")
-
 		div(ng-if="panelUI.infoPanelOpen")
-			dir-selection-info(ng-show="selInfo.genericSelNodes.length > 0 && (ui.interactionType != 'hover' || ui.graphHover) ")
+			dir-selection-info(ng-show="selInfo.genericSelNodes.length > 0")

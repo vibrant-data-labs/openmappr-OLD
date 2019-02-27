@@ -16,7 +16,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             panelMode: '=',
             selectedGroups: '=',
             sortTypes: '=',
-            sortInfo: '='
+            sortInfo: '=',
         },
         templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
         link: postLinkFn
@@ -27,7 +27,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
     **************************************/
     // var logPrefix = 'dirNodesList: ';
     var ITEMS_TO_SHOW = 100;
-    var ITEMS_TO_SHOW_INITIALLY = 10;
+    var ITEMS_TO_SHOW_INITIALLY = 20;
 
 
     /*************************************
