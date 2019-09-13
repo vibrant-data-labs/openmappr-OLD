@@ -104,6 +104,10 @@ angular.module('hcApp', [
 
 }])
 
+.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.debugInfoEnabled(false);
+}])
+
 .config(function($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
     // Allow same origin resource loads.

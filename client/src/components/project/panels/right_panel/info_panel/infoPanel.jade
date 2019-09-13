@@ -1,6 +1,6 @@
 .panel-container.flex-vert-container.width-100
 	//- .header(ng-class="{'active': panelUI.infoPanelOpen, 'hovered': panelUI.infoPanelHover}" ng-click="panelUI.togglePanel('info');" ng-mouseenter="panelUI.infoPanelOpen ? showInfoDrawer = true : showInfoDrawer = false; panelUI.infoPanelHover = true;" ng-mouseleave="showInfoDrawer = false; panelUI.infoPanelHover = false;")
-	.header(ng-mouseenter="panelUI.infoPanelOpen ? showInfoDrawer = true : showInfoDrawer = false;" ng-mouseleave="showInfoDrawer = false;")
+	.header
 		.row.vert-align.main
 			.col-xs-9
 				h6.title.text-uppercase.truncate
@@ -17,7 +17,7 @@
 									//inline style to center dropdowns
 									.uib-dropdown-flex-content(style="margin-left: 25px;")
 										.uib-dropdown-triangle
-										.uib-dropdown-flex.center
+										.uib-dropdown-flex
 											ul.dd-list.list-unstyled(ng-controller="NetworkUtilsCtrl")
 												li.row.vert-align.no-hover
 													.col-xs-12.flex-container
@@ -84,7 +84,7 @@
 				button(ng-if="selInfo.selNodesCount == 1;" ng-click="toggleNodeOverlay(); $event.stopPropagation();" uib-tooltip="Toggle Node Overlay" tooltip-placement="bottom-left" tooltip-append-to-body="true")
 					i.fa.fa-1-2x.fa-expand.toggle-icon(ng-class="{'active':mapprSettings.nodeFocusShow}")
 		.hidden-btns(ng-click="$event.stopPropagation()", ng-if="MAPP_EDITOR_OPEN || (!MAPP_EDITOR_OPEN && player.settings.showExportBtn)")
-			h6.text-uppercase.animate-hidden-panel-btns(ng-show="(showInfoDrawer && panelUI.infoPanelOpen) || keepDrawerOpen" )
+			h6.text-uppercase
 				//spacer
 				.row.vert-align
 					.col-xs-7

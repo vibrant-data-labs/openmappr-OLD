@@ -1,5 +1,5 @@
 .legend-container.flex-vert-container.width-100(ng-controller="DataPresentationCtrl", ng-mouseleave="rightPanelExited();")
-	.header(ng-mouseenter="panelUI.summaryPanelOpen ? showLegendBtns = true : showLegendBtns = false;" ng-mouseleave="showLegendBtns = false;")
+	.header
 		.row.vert-align.main
 			.col-xs-12
 				h6.title.text-uppercase.truncate.vert-align
@@ -41,40 +41,41 @@
 								i.fa.fa-info-circle
 
 
-		.hidden-btns(ng-click="$event.stopPropagation()" ng-if="!isNodeColorNumeric")
-			h6.text-uppercase.animate-hidden-panel-btns(ng-show="(showLegendBtns && panelUI.summaryPanelOpen) || keepDrawerOpen")
-				.row.vert-align
-					.col-xs-7.nowrap.vert-align
-						span &nbsp;&nbsp;Sort by:&nbsp;&nbsp;
-						span(uib-dropdown dropdown-append-to-body)
-							span(uib-dropdown-toggle auto-close="outsideClick" ng-click="keepDrawerOpen = true;")
-								span.text-link {{mapprSettings.legendSortOption}}
-									i.fa.fa-angle-down
-							.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
-								.uib-dropdown-click-close(ng-click="keepDrawerOpen = false;")
-								//inline style to center dropdowns
-								.uib-dropdown-flex-content(style="margin-left: 25px;")
-									.uib-dropdown-triangle
-									.uib-dropdown-flex.center
-										ul.dd-list.list-unstyled
-											li.row.vert-align.pointable-cursor(ng-click="sortByFreq(); keepDrawerOpen = false;")
-												.col-xs-12
-													h6.no-margin Frequency
-											li.row.vert-align.pointable-cursor(ng-click="sortByAlpha(); keepDrawerOpen = false;")
-												.col-xs-12
-													h6.no-margin Alphabetic
-						span &nbsp;&nbsp;
-						button(type="button", ng-click="mapprSettings.legendSortIsReverse = !mapprSettings.legendSortIsReverse" uib-tooltip="Reverse Order" tooltip-placement="bottom-left" tooltip-append-to-body="true")
-							i.fa.fa-long-arrow-down.text-link.no-underline(ng-if="!mapprSettings.legendSortIsReverse")
-							i.fa.fa-long-arrow-up.text-link.no-underline(ng-if="mapprSettings.legendSortIsReverse")
-					.col-xs-5.nowrap(ng-if="ui.showViewToggle")
-						span.text-link
-							span(ng-if="!ui.summaryToggleOpen" ng-click="ui.summaryToggleOpen = true;")
-								i.fa.fa-caret-right.fa-fw
-								span Expanded View
-							span(ng-if="ui.summaryToggleOpen" ng-click="ui.summaryToggleOpen = false;")
-								i.fa.fa-caret-down.fa-fw
-								span Compact View
+		div.row.vert-align.main(ng-click="$event.stopPropagation()" ng-if="!isNodeColorNumeric")
+			.col-xs-12
+				h6.title.text-uppercase.truncate.vert-align
+					.title-space
+						span.inline.nowrap
+							span Sort by:&nbsp;&nbsp;
+							span(uib-dropdown dropdown-append-to-body)
+								span(uib-dropdown-toggle auto-close="outsideClick" ng-click="keepDrawerOpen = true;")
+									span.text-link {{mapprSettings.legendSortOption}}
+										i.fa.fa-angle-down
+								.uib-dropdown-menu.uib-dropdown-menu-flexing(uib-dropdown-menu)
+									.uib-dropdown-click-close(ng-click="keepDrawerOpen = false;")
+									//inline style to center dropdowns
+									.uib-dropdown-flex-content(style="margin-left: 25px;")
+										.uib-dropdown-triangle
+										.uib-dropdown-flex.center
+											ul.dd-list.list-unstyled
+												li.row.vert-align.pointable-cursor(ng-click="sortByFreq(); keepDrawerOpen = false;")
+													.col-xs-12
+														h6.no-margin Frequency
+												li.row.vert-align.pointable-cursor(ng-click="sortByAlpha(); keepDrawerOpen = false;")
+													.col-xs-12
+														h6.no-margin Alphabetic
+							span &nbsp;&nbsp;
+							button(type="button", ng-click="mapprSettings.legendSortIsReverse = !mapprSettings.legendSortIsReverse" uib-tooltip="Reverse Order" tooltip-placement="bottom-left" tooltip-append-to-body="true")
+								i.fa.fa-long-arrow-down.text-link.no-underline(ng-if="!mapprSettings.legendSortIsReverse")
+								i.fa.fa-long-arrow-up.text-link.no-underline(ng-if="mapprSettings.legendSortIsReverse")
+						.col-xs-5.nowrap(ng-if="ui.showViewToggle")
+							span.text-link
+								span(ng-if="!ui.summaryToggleOpen" ng-click="ui.summaryToggleOpen = true;")
+									i.fa.fa-caret-right.fa-fw
+									span Expanded View
+								span(ng-if="ui.summaryToggleOpen" ng-click="ui.summaryToggleOpen = false;")
+									i.fa.fa-caret-down.fa-fw
+									span Compact View
 
 		.clearfix
 	.list-content.panel-scroll.flex-fill
