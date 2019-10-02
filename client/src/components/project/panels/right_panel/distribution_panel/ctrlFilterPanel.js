@@ -37,6 +37,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.$on(BROADCAST_MESSAGES.selectStage, onStageSelect);
     $scope.$on(BROADCAST_MESSAGES.snapshot.changed, onSnapshotChange);
     $scope.$on(BROADCAST_MESSAGES.fp.filter.changed, onFilterChange);
+    $scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, onFilterChange);
     $scope.$on('TOGGLEFILTERS', toggleFiltersVisiblity);
     $scope.$on('RESETFILTERS', resetFilters);
 
