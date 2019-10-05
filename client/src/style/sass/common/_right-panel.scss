@@ -66,7 +66,10 @@
     .panel-text {
         max-width: 230px;
         max-height: 30px;
-        overflow-wrap: break-word;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
     }
 
     .panel-edit-icon {
@@ -588,6 +591,10 @@
                 position: relative;
                 z-index: 2;
                 margin-top: -2px;
+            }
+
+            .colored-legend {
+                margin-top: -10px;
             }
 
             h6 {
