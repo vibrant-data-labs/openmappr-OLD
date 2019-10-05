@@ -32,12 +32,12 @@
 					.row
 						.attr-title
 							.row.vert-align
-								.col-xs-10
+								.col-xs-6
 									h6.title.truncate(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true") {{::attr.title}}
 								//- .col-xs-4
 								//- .col-xs-4
 								//- 	h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
-								.col-xs-1(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ")
+								.col-xs-5(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", style="padding-left:0;")
 									dir-tag-list-sort(attr="::attr")
 								.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
 									dir-attr-mod(attr="::attr", placement="selection")

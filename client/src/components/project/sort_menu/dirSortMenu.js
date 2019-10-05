@@ -52,6 +52,19 @@ angular.module('common')
         };
 
         scope.sortOrders = sortOrders;
+
+        scope.setSortOrder = function setSortOrder(sortOrder, $event) {
+            var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            scope.sortConfig = scope.sortConfig || {};
+            scope.sortConfig.sortOrder = newSortOrder;
+            $event.stopPropagation();
+        }
+    
+        scope.setSortType = function setSortType(sortType, $event) {
+            scope.sortConfig = scope.sortConfig || {};
+            scope.sortConfig.sortType = sortType;
+            $event.stopPropagation();
+        }
     }
 
 
