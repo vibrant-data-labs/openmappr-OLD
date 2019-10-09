@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-.controller('InfoPanelCtrl', ['$scope', '$rootScope', '$timeout', 'graphSelectionService', 'dataGraph', 'layoutService', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService',
-function($scope, $rootScope, $timeout, graphSelectionService, dataGraph, layoutService, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService) {
+.controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService',
+function($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService) {
     'use strict';
 
     /*************************************

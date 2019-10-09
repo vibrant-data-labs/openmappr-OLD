@@ -600,7 +600,6 @@
             h6 {
                 margin: 0;
                 padding: 10px 10px 8px;
-                max-height: 37px;
 
                 &.title {
                     .text-link i {
@@ -737,4 +736,9 @@
 
 #mappr-player .right-panel .content {
     top: 0;
+}
+
+
+.nodes-list__selected-info {
+    padding: 0 20px 10px 20px !important;
 }
