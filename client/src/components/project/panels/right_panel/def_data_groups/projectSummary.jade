@@ -5,7 +5,7 @@
 					h6.title.text-uppercase.truncate.vert-align
 						.title-space
 							span.inline.nowrap
-								span Sized By &nbsp;
+								span Sized By: &nbsp;
 							span.inline.nowrap
 								dir-filter-dropdown(ng-model="vm.nodeSizeAttr", change-val="sizeByAttrUpdate()", vals-list="nodeSizeAttrs", default-title=" 'Size By' " show-triangle="false", dd-class="text-link" is-right="false" left-margin="120px")
 								span(ng-if="vm.nodeSizeAttr.metadata.descr" uib-tooltip="{{vm.nodeSizeAttr.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
@@ -57,7 +57,7 @@
 					.title-space
 						span.inline.nowrap
 							span Colored
-							span &nbsp;By&nbsp;
+							span &nbsp;By:&nbsp;
 						span.inline.nowrap
 							dir-filter-dropdown(ng-click="$event.stopPropagation();" ng-if="!ui.showingLinks" ng-model="dataGroupsInfo.colorNodesBy", change-val="colorByAttrUpdate(val)" default-title="dataGroupsInfo.colorNodesBy.title", vals-list="nodeColorAttrs", show-triangle="false", dd-class="text-link" is-right="false")
 							span(uib-dropdown dropdown-append-to-body, ng-if="ui.showingLinks")

@@ -6,6 +6,17 @@
 				.col-xs-12
 					h6.title.text-uppercase.pointable-cursor.vert-align
 							.title-space.width-100
+								span.inline.nowrap Sized By:&nbsp;&nbsp;
+								span.inline.nowrap.width-80
+									span.text-uppercase.truncate {{vm.nodeSizeAttr.title}}
+									span.subtitle(ng-if="vm.nodeSizeAttr.metadata.descr" uib-tooltip="{{vm.nodeSizeAttr.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
+										| &nbsp;&nbsp;&nbsp;
+										i.fa.fa-info-circle
+
+			.row.vert-align.main
+				.col-xs-12
+					h6.title.text-uppercase.pointable-cursor.vert-align
+							.title-space.width-100
 								span.inline.nowrap Colored By:&nbsp;&nbsp;
 								span.inline.nowrap.width-80
 									span.text-uppercase.truncate {{dataGroupsInfo.colorNodesBy.title}}
@@ -19,18 +30,6 @@
 								.link-circle
 						.square-btn.small-btn.vert-align(ng-if="ui.showingLinks" uib-tooltip="View Nodes Summary" tooltip-placement="right" tooltip-append-to-body="true" ng-click="ui.showingLinks = false;")
 							i.icon-legend-dots
-
-			.row.vert-align.main
-				.col-xs-12
-					h6.title.text-uppercase.pointable-cursor.vert-align
-							.title-space.width-100
-								span.inline.nowrap Sized By:&nbsp;&nbsp;
-								span.inline.nowrap.width-80
-									span.text-uppercase.truncate {{vm.nodeSizeAttr.title}}
-									span.subtitle(ng-if="vm.nodeSizeAttr.metadata.descr" uib-tooltip="{{vm.nodeSizeAttr.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
-										| &nbsp;&nbsp;&nbsp;
-										i.fa.fa-info-circle
-
 
 			.hidden-btns(ng-click="$event.stopPropagation()" ng-if="!isNodeColorNumeric && ui.showViewToggle")
 				h6.text-uppercase.animate-hidden-panel-btns(ng-show="(showLegendBtns && panelUI.summaryPanelOpen) || keepDrawerOpen")
