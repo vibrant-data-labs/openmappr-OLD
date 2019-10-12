@@ -65,6 +65,11 @@ angular.module('common')
             scope.sortConfig.sortType = sortType;
             $event.stopPropagation();
         }
+
+        scope.getSortTypeLabel = function getSortTypeLabel(sortType) {
+            var sortConfig = _.find(scope.sortTypes, { id: sortType })
+            return sortConfig && sortConfig.title;
+        }
     }
 
 
