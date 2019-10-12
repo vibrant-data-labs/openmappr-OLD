@@ -2,12 +2,11 @@
 	ul.list-unstyled.panel-list
 		li.panel-item.list-item.no-hover
 			.vert-align
-				span.dark-grey-font {{nodeNeighbors.length}} Node(s)
 				span.m-r-5.m-l-auto Sorted By:
 				dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
 			.row.vert-align.m-t-10
 				.col-xs-9
-					h6 First Degree Neighbors:
+					h6 {{nodeNeighbors.length}} First Degree Neighbors:
 				.col-xs-2.pointable-cursor
 					i.fa.fa-mouse-pointer(uib-tooltip="append neighbors to selection" tooltip-placement="right" tooltip-append-to-body="true" ng-click="addNeighborsToSelection()")
 					
