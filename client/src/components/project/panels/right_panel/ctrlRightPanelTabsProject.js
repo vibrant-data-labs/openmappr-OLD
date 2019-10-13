@@ -121,6 +121,10 @@ angular.module('common')
                 updateSelCount();
             });
 
+            $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
+                updateSelCount();
+            });
+
             function openNetworkDataModal() {
 
                 var modalInstance = $uibModal.open({

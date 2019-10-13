@@ -37,7 +37,6 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.$on(BROADCAST_MESSAGES.selectStage, onStageSelect);
     $scope.$on(BROADCAST_MESSAGES.snapshot.changed, onSnapshotChange);
     $scope.$on(BROADCAST_MESSAGES.fp.filter.changed, onFilterChange);
-    $scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, onFilterChange);
     $scope.$on('TOGGLEFILTERS', toggleFiltersVisiblity);
     $scope.$on('RESETFILTERS', resetFilters);
 
@@ -151,7 +150,14 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         }
         // Set 'sortType' for tag attrs
         setSortForTags($scope.nodeDistrAttrs, newSelection.length > 0);
-        $scope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+        
+        if (!nodes || nodes.length < 1) {
+            graphSelectionService.clearSelections(true);
+            FilterPanelService.clear();
+        }
+
+        $rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+        
         updateInfoData($scope.currentSelection);
     }
 
