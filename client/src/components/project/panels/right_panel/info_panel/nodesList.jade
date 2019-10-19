@@ -25,12 +25,12 @@
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="node in nodes | filter: filterNode | limitTo: viewLimit track by node.id" ng-click="selectNode(node.id, $event)" ng-mouseenter="hoverNode(node.id, $event)" ng-mouseleave="unHoverNode(node.id, $event)")
 			.row.vert-align
 				.col-xs-2
-					.big-circle(style="background: {{node.colorStr}};")
+					.big-circle(style="background: {{::getNodeColor(node)}};")
 				.col-xs-8
 					h6.less-gutter.truncate(uib-tooltip-html="getNodeTooltipHtml(node)" tooltip-placement="right" tooltip-append-to-body="true") {{node.attr[labelAttr]}}
 				.col-xs-2
 
-	ul.list-unstyled.panel-list
+	ul.list-unstyled.panel-list.m-t-10
 		li.panel-item.list-item.no-hover
 			.row.vert-align
 				.col-xs-2
@@ -40,7 +40,7 @@
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="group in selectedGroups" ng-click="selectGroup(group, $event)" ng-mouseenter="hoverGroup(group, $event)" ng-mouseleave="unHoverGroup(group, $event)")
 			.row.vert-align
 				.col-xs-2
-					.big-circle(style="background: {{group.colorStr}};")
+					.big-circle(style="background: {{getGroupColor(group.name)}};")
 				.col-xs-8
 					h6.less-gutter.truncate(uib-tooltip="{{group.name}}" tooltip-placement="right" tooltip-append-to-body="true") {{group.name}}
 				.col-xs-2

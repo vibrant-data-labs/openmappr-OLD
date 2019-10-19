@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService',
-function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -39,9 +39,15 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
     **************************************/
     function postLinkFn(scope, elem, attrs, parCtrl) {
 
+        var memoizedGetFunctionColor = _.memoize(getFunctionColor);
+
         scope.nodeSearchQuery = '';
         scope.numShowGroups = 0;
         scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
+
+        layoutService.getCurrent().then(function (layout) {
+            scope.layout = layout;
+        });
 
         scope.$watch('nodes', function() {
             scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
@@ -106,6 +112,20 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             html += '</ul>';
             return html;
         };
+
+        scope.getNodeColor = function(node) {
+            if (node && node.attr && node.attr.Cluster) {
+                return memoizedGetFunctionColor(node.attr.Cluster);
+            }
+        }
+
+        scope.getGroupColor = function(groupName) {
+            return memoizedGetFunctionColor(groupName);
+        }
+
+        function getFunctionColor(cluster) {
+            return d3.rgb(scope.layout.scalers.color(cluster)).toString();
+        }
 
         function selectNodes(nodeIds, ev) {
             parCtrl.replaceSelection();
