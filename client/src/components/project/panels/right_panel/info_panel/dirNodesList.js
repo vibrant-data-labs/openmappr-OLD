@@ -120,7 +120,9 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         }
 
         scope.getGroupColor = function(groupName) {
-            return memoizedGetFunctionColor(groupName);
+            if (scope.layout) {
+                return memoizedGetFunctionColor(groupName);
+            }
         }
 
         function getFunctionColor(cluster) {
