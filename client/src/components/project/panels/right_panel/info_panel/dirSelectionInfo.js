@@ -87,7 +87,8 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
                 console.warn(logPrefix + 'Selection in place, not refreshing info');
                 return;
             }
-            refresh([]);
+            // Fix for removing selection on hover out
+            refresh(dataGraph.getAllNodes());
         });
 
         $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
