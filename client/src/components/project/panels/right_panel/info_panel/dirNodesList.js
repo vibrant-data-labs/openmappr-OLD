@@ -114,8 +114,8 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         };
 
         scope.getNodeColor = function(node) {
-            if (node && node.attr && node.attr.Cluster) {
-                return memoizedGetFunctionColor(node.attr.Cluster);
+            if (node && node.attr && node.attr[scope.nodeColorAttr]) {
+                return memoizedGetFunctionColor(node.attr[scope.nodeColorAttr]);
             }
         }
 
