@@ -153,7 +153,6 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         
         if (!nodes || nodes.length < 1) {
             graphSelectionService.clearSelections(true);
-            FilterPanelService.clear();
         }
 
         $rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
