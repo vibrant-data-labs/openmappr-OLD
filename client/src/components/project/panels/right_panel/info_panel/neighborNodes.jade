@@ -24,7 +24,7 @@
 						em show more neighbors&hellip;
 					a.more-text.h6.pull-right.text-right.pointable-cursor(ng-show="numShowGroups !== 0", ng-click='viewLess(); $event.stopPropagation();') 
 						em show less neighbors&hellip;
-		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="neighbor in nodeNeighbors | filter:{label: neighborSearchQuery} | orderBy: neighborsSort | limitTo: viewLimit" ng-click="selectNode(neighbor.id)" ng-mouseenter="hoverNode(neighbor.id, $event)" ng-mouseleave="unHoverNode(neighbor.id, $event);")
+		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="neighbor in nodeNeighbors | filter:{label: neighborSearchQuery} | orderBy: scope.sortInfo.sortType : order : neighborsSort | limitTo: viewLimit" ng-click="selectNode(neighbor.id)" ng-mouseenter="hoverNode(neighbor.id, $event)" ng-mouseleave="unHoverNode(neighbor.id, $event);")
 			.row.vert-align
 				.col-xs-2
 					.big-circle(style="background: {{neighbor.colorStr}};")

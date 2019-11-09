@@ -49,6 +49,7 @@ function(graphSelectionService, graphHoverService, linkService, dataGraph, zoomS
         };
 
         scope.setNeighborSort = setNeighborSort;
+        scope.comparator = comparator;
         scope.numShowGroups = 0;
         scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodeNeighbors.length);
 
@@ -135,21 +136,44 @@ function(graphSelectionService, graphHoverService, linkService, dataGraph, zoomS
         }
 
         function setNeighborSort() {
-            var neighborsSort = scope.sortInfo.sortType;
-
-            if (scope.nodeNeighbors.length > 0) {
-                if (scope.nodeNeighbors[0].hasOwnProperty(neighborsSort)) {
-                    scope.neighborsSort = neighborsSort;
-                } else if (scope.nodeNeighbors[0].attr && scope.nodeNeighbors[0].attr.hasOwnProperty(neighborsSort)) {
-                    scope.neighborsSort = 'attr.' + neighborsSort;
-                }
-            } else {
-                scope.neighborsSort = neighborsSort;
-            }
+            // if (scope.nodeNeighbors.length > 0) {
+            //     if (scope.nodeNeighbors[0].attr && scope.nodeNeighbors[0].attr.hasOwnProperty(neighborsSort)) {
+            //         scope.neighborsSort = 'attr.' + neighborsSort;
+            //     } else if (scope.nodeNeighbors[0].hasOwnProperty(neighborsSort)) {
+            //         scope.neighborsSort = neighborsSort;
+            //     }
+            // } else {
+            //     scope.neighborsSort = neighborsSort;
+            // }
 
             if (scope.sortInfo.sortOrder === 'desc') {
-                scope.neighborsSort = '-' + scope.neighborsSort;
+                scope.order = true;
+            } else {
+                scope.order = false;
             }
+
+            scope.neighborsSort = comparator;
+        }
+
+        function comparator(v1, v2) {
+            if (!v1.value || !v2.value) {
+                return 0;
+            }
+            
+            var value1 = v1.value[scope.sortInfo.sortType] || (v1.value.attr && v1.value.attr[scope.sortInfo.sortType]);
+            var value2 = v2.value[scope.sortInfo.sortType] || (v2.value.attr && v2.value.attr[scope.sortInfo.sortType]);
+
+            if (typeof value1 === 'string') {
+                return value1.localeCompare(value2);
+            } else if (typeof value1 === 'number') {
+                if (value1 == value2) {
+                    return 0;
+                }
+
+                return (value1 < value2) ? -1 : 1; 
+            }
+
+            return 0;
         }
     }
 
