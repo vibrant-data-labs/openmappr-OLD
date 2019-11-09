@@ -114,7 +114,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         };
 
         scope.getNodeColor = function(node) {
-            if (node && node.attr && node.attr[scope.nodeColorAttr]) {
+            if (scope.layout && node && node.attr && node.attr[scope.nodeColorAttr]) {
                 return memoizedGetFunctionColor(node.attr[scope.nodeColorAttr]);
             }
         }
@@ -126,7 +126,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         }
 
         function getFunctionColor(cluster) {
-            return scope.layout && d3.rgb(scope.layout.scalers.color(cluster)).toString();
+            return d3.rgb(scope.layout.scalers.color(cluster)).toString();
         }
 
         function selectNodes(nodeIds, ev) {
