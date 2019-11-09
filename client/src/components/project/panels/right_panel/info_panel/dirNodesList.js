@@ -126,7 +126,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         }
 
         function getFunctionColor(cluster) {
-            return d3.rgb(scope.layout.scalers.color(cluster)).toString();
+            return scope.layout && d3.rgb(scope.layout.scalers.color(cluster)).toString();
         }
 
         function selectNodes(nodeIds, ev) {
