@@ -89,6 +89,10 @@ angular.module('common')
                 updateSelCount();
             });
 
+            $scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
+                updateSelCount();
+            });
+
             /*************************************
              ********* Initialise *****************
              **************************************/
