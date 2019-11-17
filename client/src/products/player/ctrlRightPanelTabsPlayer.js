@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('RightPanelTabsPlayerCtrl', ['$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
-        function($scope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
+    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
+        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
             'use strict';
 
             /*************************************
@@ -89,7 +89,7 @@ angular.module('common')
                 updateSelCount();
             });
 
-            $scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
+            $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
                 updateSelCount();
             });
 
