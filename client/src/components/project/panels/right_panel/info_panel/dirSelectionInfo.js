@@ -102,6 +102,7 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
                 if(principalNodeIdx < 0) { throw new Error('principal Node not found in selected nodes list'); }
                 $scope.selInfo.principalNode = $scope.selInfo.genericSelNodes[principalNodeIdx];
                 $scope.selInfo.nodeNeighbors = getNodeNeighbors([$scope.selInfo.principalNode]);
+                initialise();
                 return;
             }
             refresh(_.get(data, 'nodes', []));
