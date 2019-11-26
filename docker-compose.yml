@@ -58,3 +58,4 @@ services:
       - web
     ports:
       - "80:80"
+      - ./data/certbot/conf:/etc/letsencrypt
