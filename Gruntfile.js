@@ -6,8 +6,8 @@ module.exports = function(grunt) {
 
 	// secrets
 	var aws = {
-		accessKeyId: '',
-		secretAccessKey: '',
+		accessKeyId: 'AKIAYRX73XY266KUGYNR',
+		secretAccessKey: '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',
 		region: 'us-west-2'
 	}
 
@@ -538,7 +538,7 @@ module.exports = function(grunt) {
 
 	addTask('aws_s3', 'prod_upload', {
 	    options: {
-	        bucket: 'mappr-builds',
+	        bucket: 'new-mappr-builds',
 	        gzipRename: 'ext',
 	        // params: {
 	        //   ContentEncoding: 'gzip' // applies to all the files!
@@ -670,8 +670,8 @@ module.exports = function(grunt) {
 		'concurrent:prod4',
 		'clean:gzip_tmp',
 		'aws_s3:prod_upload',
-        'http_upload:upload_app_sourcemap_to_atatus',
-        'http_upload:upload_player_sourcemap_to_atatus'
+        // 'http_upload:upload_app_sourcemap_to_atatus',
+        // 'http_upload:upload_player_sourcemap_to_atatus'
 	]);
 
 

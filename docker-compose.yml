@@ -1,7 +1,12 @@
 version: '3'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        grunt_env: ''
+        script_file: 'run_docker_mode'
     command: ./run_docker_mode.sh
     restart: unless-stopped
     depends_on:
@@ -37,7 +42,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./mongo/data:/data/db
+      - mongodata:/data/db
   elasticsearch:
     image: elasticsearch:2.4
     restart: unless-stopped
@@ -70,3 +75,5 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+volumes:
+  mongodata:

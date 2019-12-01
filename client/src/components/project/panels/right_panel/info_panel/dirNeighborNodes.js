@@ -92,8 +92,7 @@ function(graphSelectionService, graphHoverService, linkService, dataGraph, zoomS
         scope.getNeighborInfoHtml = function(neighbor) {
             try {
                 var sortAttrs = _.filter(dataGraph.getNodeAttrs(), {isNumeric: true, visible: true}) || [];
-            }
-            catch {
+            } catch (e){
                 var sortAttrs = []; 
             }
 
