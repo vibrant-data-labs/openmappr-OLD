@@ -128,7 +128,7 @@ angular.module('common')
             function openNetworkDataModal() {
 
                 var modalInstance = $uibModal.open({
-                    templateUrl: '/partials/components/project/data_modal/networkDataModal.html',
+                    templateUrl: '#{server_prefix}#{view_path}/components/project/data_modal/networkDataModal.html',
                     controller: 'NetworkDataModalCtrl',
                     size: 'lg',
                     resolve: {
