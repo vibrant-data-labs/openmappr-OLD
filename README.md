@@ -290,3 +290,10 @@ gem install compass
 ```
 
 [Compass install](http://compass-style.org/install/)
+
+## Building OpenMappr on production server
+
+1. SSH to the server `ssh -A -i privateKey.pem ec2-user@18.210.173.224`
+2. To use your local Github account to run `git pull` on the repo on the server, make sure you've `ssh-agent` running on your local. I think Unix handles that by default, but not Windows (it's still not that cool).
+3. Go into the `openmappr` directory
+4. Run `nohup ./rebuild-prod-web.sh > output.log 2>&1 &`
