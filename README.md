@@ -297,3 +297,4 @@ gem install compass
 2. To use your local Github account to run `git pull` on the repo on the server, make sure you've `ssh-agent` running on your local. I think Unix handles that by default, but not Windows (it's still not that cool).
 3. Go into the `openmappr` directory
 4. Run `nohup ./rebuild-prod-web.sh > output.log 2>&1 &`
+5. To check status of the build process, run `tail -f output.log`. It usually takes around 10-15 mins, it sped up when I increased the server disk space from 100GB to 200GB.
