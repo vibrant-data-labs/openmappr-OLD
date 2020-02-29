@@ -147,8 +147,9 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
         };
 
         // mousr stuff
-        scope.onCatClick = function(catData, $event) {
-            renderCtrl.selectNodesByAttrib(attrId, catData.id, $event);
+        scope.onCatClick = function(catData) {
+            catData.isChecked = !catData.isChecked;
+            scope.onFilterUpdate();
         };
         scope.onCatMouseover = function(catData, $event) {
             if(isCompareView && attrId == 'Cluster') {

@@ -1292,6 +1292,18 @@ i {
 }
 
 //checkbox
+.tag-checkbox-container {
+    &:hover {
+        .tag-checkbox {
+            label {
+                &:after {
+                    opacity: 0.3;
+                }
+            }
+        }
+    }
+}
+
 .tag-checkbox {
     display: inline-block;
     height: 18px;
