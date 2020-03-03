@@ -4,7 +4,7 @@
 		.header(ng-mouseenter="panelUI.filterPanelOpen ? showFilterSearch = true : showFilterSearch = false;" ng-mouseleave="showFilterSearch = false;")
 			.row.vert-align.main
 				.col-xs-10
-					h6.title.text-uppercase
+					h6.title.text-uppercase.pull-left
 						i.fa.fa-fw.fa-1-3x.fa-filter.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
 						span &nbsp;&nbsp;Filters&nbsp;&nbsp;&nbsp;&nbsp;
 						span.text-link(ng-click="ui.statsSearchKey = '';$event.stopPropagation();" ng-if="ui.statsSearchKey" uib-tooltip="Clear Search" tooltip-placement="top" tooltip-append-to-body="true")
@@ -16,6 +16,7 @@
 						//- span(ng-if="activeFilterCount > 0") {{activeFilterCount}}&nbsp;
 						//- span(ng-if="activeFilterCount == 1") FILTER&nbsp;&nbsp;
 						//- span(ng-if="activeFilterCount != 1") FILTERS&nbsp;&nbsp;
+					button.btn.pull-right.btn-primary(ng-click="applyFilters();") Subset
 				.col-xs-2.vert-align.right(ng-if="panelUI.filterPanelOpen" ng-click="$event.stopPropagation();")
 					h6.no-margin(ng-if="ui.activeFilterCount > 0")
 						span.text-link(ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") {{ui.activeFilterCount}}
