@@ -1,36 +1,36 @@
 .info-item
 	ul.list-unstyled.panel-list
-		li.panel-item.list-item.no-hover
+		li.panel-item.list-item.no-hover.nodes-list__selected-info(ng-if="nodes.length > 1")
+			.vert-align.list-panel-header
+				span.dark-grey-font {{nodes.length}} Selected
+				span.m-l-auto.m-r-5 Sorted By:
+				dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
+				//- dir-export()
+		li.panel-item.list-item(ng-if="viewLimit < nodes.length || numShowGroups !== 0")
 			.row.vert-align
-				.col-xs-1
-					dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
-				.col-xs-6
-					h6.less-gutter Nodes:
-				.col-xs-4.pointable-cursor
-					h6.less-gutter ({{viewLimit}} of {{nodes.length}})
-		li.panel-item.list-item
-			.row.vert-align
-				.col-xs-6
+				.col-xs-7
 					.node-search.flex-container.vert-align(ng-show="viewLimit < nodes.length")
 						input.animate-open-right.h6.no-margin(ng-show="showSearch" type="text" ng-model="nodeSearchQuery" ng-model-options="{debounce: 300}" placeholder="search nodes...")
 						button(ng-show="!showSearch" ng-click="showSearch = true" uib-tooltip="Search nodes" tooltip-append-to-body="true")
 							i.fa.fa-search
 						button.close-btn(ng-show="showSearch" ng-click="showSearch = false; nodeSearchQuery = '';")
 							i.fa.fa-times
-				.col-xs-6(ng-show="viewLimit < nodes.length || numShowGroups !== 0")
-					a.more-text.h6.pull-right(ng-show="viewLimit < nodes.length" ng-click='viewMore(); $event.stopPropagation();') 
-						em show more nodes
-					a.more-text.h6.pull-right(ng-show="numShowGroups !== 0" ng-click='viewLess(); $event.stopPropagation();') 
-						em show less nodes
+				.col-xs-5(ng-show="viewLimit < nodes.length || numShowGroups !== 0")
+					a.more-text.h6(ng-show="viewLimit < nodes.length" ng-click='viewMore(); $event.stopPropagation();')
+						em
+							u more
+					a.more-text.h6.pull-right(ng-show="numShowGroups !== 0" ng-click='viewLess(); $event.stopPropagation();')
+						em
+							u less
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="node in nodes | filter: filterNode | limitTo: viewLimit track by node.id" ng-click="selectNode(node.id, $event)" ng-mouseenter="hoverNode(node.id, $event)" ng-mouseleave="unHoverNode(node.id, $event)")
 			.row.vert-align
 				.col-xs-2
-					.big-circle(style="background: {{node.colorStr}};")
+					.big-circle(style="background: {{::getNodeColor(node)}};")
 				.col-xs-8
 					h6.less-gutter.truncate(uib-tooltip-html="getNodeTooltipHtml(node)" tooltip-placement="right" tooltip-append-to-body="true") {{node.attr[labelAttr]}}
 				.col-xs-2
 
-	ul.list-unstyled.panel-list
+	ul.list-unstyled.panel-list.m-t-10
 		li.panel-item.list-item.no-hover
 			.row.vert-align
 				.col-xs-2
@@ -40,7 +40,7 @@
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="group in selectedGroups" ng-click="selectGroup(group, $event)" ng-mouseenter="hoverGroup(group, $event)" ng-mouseleave="unHoverGroup(group, $event)")
 			.row.vert-align
 				.col-xs-2
-					.big-circle(style="background: {{group.colorStr}};")
+					.big-circle(style="background: {{getGroupColor(group.name)}};")
 				.col-xs-8
 					h6.less-gutter.truncate(uib-tooltip="{{group.name}}" tooltip-placement="right" tooltip-append-to-body="true") {{group.name}}
 				.col-xs-2

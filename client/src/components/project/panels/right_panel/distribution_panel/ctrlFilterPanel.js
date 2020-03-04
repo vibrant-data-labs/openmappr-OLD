@@ -24,7 +24,6 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.resetFilters = resetFilters;
 
 
-
     /*************************************
     ****** Event Listeners/Watches *******
     **************************************/
@@ -55,6 +54,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
 
     networkService.getCurrentNetworkPromisified().then(function(currentNetworkP) {
         $scope.ui.renderDistr = true;
+        $scope.ui.enableFilters = true;
     });
 
     /*************************************
@@ -150,7 +150,13 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         }
         // Set 'sortType' for tag attrs
         setSortForTags($scope.nodeDistrAttrs, newSelection.length > 0);
-        $scope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+        
+        if (!nodes || nodes.length < 1) {
+            graphSelectionService.clearSelections(true);
+        }
+
+        $rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+        
         updateInfoData($scope.currentSelection);
     }
 

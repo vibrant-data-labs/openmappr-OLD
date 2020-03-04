@@ -4,9 +4,9 @@
 		.header(ng-mouseenter="panelUI.filterPanelOpen ? showFilterSearch = true : showFilterSearch = false;" ng-mouseleave="showFilterSearch = false;")
 			.row.vert-align.main
 				.col-xs-10
-					h6.title.text-uppercase
-						i.fa.fa-fw.fa-1-3x.fa-pie-chart.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
-						span &nbsp;&nbsp;Stats&nbsp;&nbsp;&nbsp;&nbsp;
+					h6.title.text-uppercase.pull-left
+						i.fa.fa-fw.fa-1-3x.fa-filter.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
+						span &nbsp;&nbsp;Filters&nbsp;&nbsp;&nbsp;&nbsp;
 						span.text-link(ng-click="ui.statsSearchKey = '';$event.stopPropagation();" ng-if="ui.statsSearchKey" uib-tooltip="Clear Search" tooltip-placement="top" tooltip-append-to-body="true")
 							span {{ui.filteredAttrs.length}} of {{ui.totalAttrsCount}}
 							i.fa.fa-fw.fa-times
@@ -16,11 +16,10 @@
 						//- span(ng-if="activeFilterCount > 0") {{activeFilterCount}}&nbsp;
 						//- span(ng-if="activeFilterCount == 1") FILTER&nbsp;&nbsp;
 						//- span(ng-if="activeFilterCount != 1") FILTERS&nbsp;&nbsp;
+					button.btn.pull-right.btn-primary(ng-click="applyFilters();") Subset
 				.col-xs-2.vert-align.right(ng-if="panelUI.filterPanelOpen" ng-click="$event.stopPropagation();")
 					h6.no-margin(ng-if="ui.activeFilterCount > 0")
-						span.text-link(ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") {{ui.activeFilterCount}}
-					button(type="button" uib-tooltip="Toggle Filters" tooltip-placement="bottom-right" ng-click="ui.enableFilters = !ui.enableFilters; toggleFiltersVisibility(); $event.stopPropagation();")
-						i.fa.fa-1-3x.fa-filter.toggle-icon(ng-class="{'active':ui.enableFilters}")
+						button.btn.pull-right.btn-primary(ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") Reset
 			.hidden-btns(ng-click="$event.stopPropagation()")
 				h6.search.vert-align.animate-hidden-panel-btns(ng-show="showFilterSearch && panelUI.filterPanelOpen" )
 					input.h6.no-margin.form-control.pull-left(placeholder="Search Attributes.." ng-model="ui.statsSearchKey", ng-model-options="{'debounce': 500}", ng-change="attrSearched();")
@@ -34,12 +33,12 @@
 					.row
 						.attr-title
 							.row.vert-align
-								.col-xs-10
+								.col-xs-6
 									h6.title.truncate(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true") {{::attr.title}}
 								//- .col-xs-4
 								//- .col-xs-4
 								//- 	h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
-								.col-xs-1(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ")
+								.col-xs-5(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", style="padding-left:0;")
 									dir-tag-list-sort(attr="::attr")
 								.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
 									dir-attr-mod(attr="::attr", placement="selection")

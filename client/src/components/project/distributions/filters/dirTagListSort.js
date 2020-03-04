@@ -11,7 +11,7 @@ function(FilterPanelService, BROADCAST_MESSAGES) {
         scope: {
             attr: '='
         },
-        template: '<dir-sort-menu sort-types="sortTypes" sort-config="attr.sortOps"></dir-sort-menu>',
+        template: '<dir-sort-menu align-to-right="true" sort-types="sortTypes" sort-config="attr.sortOps"></dir-sort-menu>',
         link: postLinkFn
     };
 

@@ -150,8 +150,9 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
         };
 
         // mousr stuff
-        scope.onCatClick = function(catData, $event) {
-            renderCtrl.selectNodesByAttrib(attrId, catData.id, $event);
+        scope.onCatClick = function(catData) {
+            catData.isChecked = !catData.isChecked;
+            scope.onFilterUpdate();
         };
         scope.onCatMouseover = function(catData, $event) {
             if(isCompareView && attrId == 'Cluster') {
@@ -194,9 +195,9 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
             filterConfig.state.selectedVals = _.clone(filteringCatVals);
             filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
 
-            scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                filterConfig : filterConfig
-            });
+            // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
+            //     filterConfig : filterConfig
+            // });
         }
         function genSelector (selectedVals) {
             var selector = SelectorService.newSelector();

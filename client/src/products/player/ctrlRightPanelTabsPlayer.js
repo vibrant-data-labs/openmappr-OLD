@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('RightPanelTabsPlayerCtrl', ['$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
-        function($scope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
+    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
+        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
             'use strict';
 
             /*************************************
@@ -17,8 +17,9 @@ angular.module('common')
 
             $scope.rightPanelTabs = [
                 {
-                    iconClass: 'info_outline',
+                    iconClass: 'fa fa-fw fa-2x fa-info-circle',
                     title: 'Info',
+                    tooltipTitle: 'See project information',
                     panel: 'modal',
                     // highlighted: true,
                     cmd: function() {
@@ -26,33 +27,37 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'local_library',
+                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
                     title: 'Slides',
                     panel: 'slides',
+                    tooltipTitle: 'See slide information and change views if there are more than one',
                     cmd: function() {
                         $scope.panelUI.openPanel('slides');
                     }
                 },
                 {
-                    iconClass: 'equalizer',
-                    title: 'Stats',
+                    iconClass: 'fa fa-fw fa-2x fa-filter',
+                    title: 'Filters',
                     panel: 'filter',
+                    tooltipTitle: 'Filter data by one or more attributes',
                     cmd: function() {
                         $scope.panelUI.openPanel('filter');
                     }
                 },
                 {
-                    iconClass: 'map',
+                    iconClass: 'fa fa-fw fa-2x fa-map',
                     title: 'Legend',
                     panel: 'summary',
+                    tooltipTitle: 'See color and sizing information',
                     cmd: function() {
                         $scope.panelUI.openPanel('summary');
                     }
                 },
                 {
-                    iconClass: 'near_me',
-                    title: 'Selection',
+                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
+                    title: 'List',
                     showSelCount: true,
+                    tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
                     panel: 'info',
                     cmd: function() {
                         $scope.panelUI.openPanel('info');
@@ -81,6 +86,10 @@ angular.module('common')
             });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
+                updateSelCount();
+            });
+
+            $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
                 updateSelCount();
             });
 

@@ -3,6 +3,7 @@
 athena/venv
 athena/.idea
 venv
+data
 *.pyc
 
 # Bower #

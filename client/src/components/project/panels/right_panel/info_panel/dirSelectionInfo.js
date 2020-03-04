@@ -87,7 +87,8 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
                 console.warn(logPrefix + 'Selection in place, not refreshing info');
                 return;
             }
-            refresh([]);
+            // Fix for removing selection on hover out
+            refresh(dataGraph.getAllNodes());
         });
 
         $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
@@ -101,6 +102,7 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
                 if(principalNodeIdx < 0) { throw new Error('principal Node not found in selected nodes list'); }
                 $scope.selInfo.principalNode = $scope.selInfo.genericSelNodes[principalNodeIdx];
                 $scope.selInfo.nodeNeighbors = getNodeNeighbors([$scope.selInfo.principalNode]);
+                initialise();
                 return;
             }
             refresh(_.get(data, 'nodes', []));
@@ -109,7 +111,9 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
         $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
             $scope.selInfo.refreshSelInfo = true;
             $scope.selInfo.selectionBrowsing = false;
-            refresh([]);
+            // CHECKPOINT
+            var selNodes = dataGraph.getAllNodes();
+            refresh(selNodes);
         });
 
         $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function(e, data) {
@@ -119,6 +123,8 @@ function(dataGraph, graphSelectionService, infoPanelService, AttrInfoService, li
 
         function initialise() {
             var selNodes = graphSelectionService.getSelectedNodes();
+            // CHECKPOINT
+            if (!selNodes.length) selNodes = dataGraph.getAllNodes();
             $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);
             refresh(selNodes);
             console.log('All node groups -> ', $scope.groupsAndClusters);

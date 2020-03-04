@@ -527,7 +527,7 @@ function($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtS
 
     function clickStageHander (eventName, event) {
         console.log('Stage Clicked: %O', event);
-        clearSelections(renderEnabled);
+        // clearSelections(renderEnabled);
         if(eventEnabled) {
             $rootScope.$broadcast(BROADCAST_MESSAGES.selectStage);
         }

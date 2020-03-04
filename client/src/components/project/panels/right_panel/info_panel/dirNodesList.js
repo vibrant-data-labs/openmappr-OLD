@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService',
-function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -16,7 +16,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             panelMode: '=',
             selectedGroups: '=',
             sortTypes: '=',
-            sortInfo: '='
+            sortInfo: '=',
         },
         templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
         link: postLinkFn
@@ -27,7 +27,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
     **************************************/
     // var logPrefix = 'dirNodesList: ';
     var ITEMS_TO_SHOW = 100;
-    var ITEMS_TO_SHOW_INITIALLY = 10;
+    var ITEMS_TO_SHOW_INITIALLY = 20;
 
 
     /*************************************
@@ -39,9 +39,15 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
     **************************************/
     function postLinkFn(scope, elem, attrs, parCtrl) {
 
+        var memoizedGetFunctionColor = _.memoize(getFunctionColor);
+
         scope.nodeSearchQuery = '';
         scope.numShowGroups = 0;
         scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
+
+        layoutService.getCurrent().then(function (layout) {
+            scope.layout = layout;
+        });
 
         scope.$watch('nodes', function() {
             scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
@@ -106,6 +112,22 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             html += '</ul>';
             return html;
         };
+
+        scope.getNodeColor = function(node) {
+            if (scope.layout && node && node.attr && node.attr[scope.nodeColorAttr]) {
+                return memoizedGetFunctionColor(node.attr[scope.nodeColorAttr]);
+            }
+        }
+
+        scope.getGroupColor = function(groupName) {
+            if (scope.layout) {
+                return memoizedGetFunctionColor(groupName);
+            }
+        }
+
+        function getFunctionColor(cluster) {
+            return d3.rgb(scope.layout.scalers.color(cluster)).toString();
+        }
 
         function selectNodes(nodeIds, ev) {
             parCtrl.replaceSelection();

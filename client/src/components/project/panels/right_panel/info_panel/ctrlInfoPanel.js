@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-.controller('InfoPanelCtrl', ['$scope', '$rootScope', '$timeout', 'graphSelectionService', 'dataGraph', 'layoutService', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService',
-function($scope, $rootScope, $timeout, graphSelectionService, dataGraph, layoutService, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService) {
+.controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService',
+function($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService) {
     'use strict';
 
     /*************************************
@@ -75,6 +75,7 @@ function($scope, $rootScope, $timeout, graphSelectionService, dataGraph, layoutS
     $scope.openNetworkDataModal = openNetworkDataModal;
 
     $scope.exportSelection = $rootScope.MAPP_EDITOR_OPEN ? exportSelectionFromApp : exportSelectionFromPlayer;
+    $rootScope.exportSelection = $scope.exportSelection;
 
     $scope.hideDropdowns = function() {
         //hack to close dropdown

@@ -79,11 +79,13 @@ COPY mapping.json /usr/src/mappr/
 COPY *.js /usr/src/mappr/
 COPY *.sh /usr/src/mappr/
 
+ARG grunt_env
+ARG script_file
 
 RUN npm install -g grunt-cli
-RUN grunt
+RUN grunt $grunt_env
 
-RUN chmod +x ./run_docker_mode.sh && \
+RUN chmod +x ./$script_file.sh && \
 	chmod +x ./wait-for-it.sh
 
 ENV NODE_ENV "docker"

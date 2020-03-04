@@ -381,7 +381,7 @@ function ($http, $q, $timeout, $rootScope, projFactory, AttrSanitizeService, BRO
         }, []);
 
         if(_.isObject(network.networkInfo) && network.networkInfo.hideArchsBridgers == null) {
-            network.networkInfo.hideArchsBridgers = false;
+            network.networkInfo.hideArchsBridgers = true;
         }
         return network;
     }

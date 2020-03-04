@@ -95,7 +95,7 @@ angular.module('hcApp', [
     // Allow same origin resource loads.
     'self',
     // Allow loading from our assets domain.
-    'https://s3-us-west-2.amazonaws.com/mappr-builds/**',
+    'https://s3-us-west-2.amazonaws.com/new-mappr-builds/**',
     'http://d1vk2agkq7tezn.cloudfront.net/**'
   ]);
 })

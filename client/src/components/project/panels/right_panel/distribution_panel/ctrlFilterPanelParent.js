@@ -39,6 +39,10 @@ function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES) {
         $scope.$broadcast(BROADCAST_MESSAGES.fp.attrSearched, {query: $scope.ui.statsSearchKey});
     };
 
+    $scope.applyFilters = function applyFilters() {
+        $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.changed);
+    }
+
 
     /*************************************
     ****** Event Listeners/Watches *******

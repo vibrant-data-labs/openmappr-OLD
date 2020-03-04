@@ -1,13 +1,12 @@
 .info-item(ng-show="nodeNeighbors.length != 0")
 	ul.list-unstyled.panel-list
 		li.panel-item.list-item.no-hover
-			.row.vert-align
-				.col-xs-1
-					dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
-				.col-xs-9
-					h6.less-gutter First Degree Neighbors:
-				.col-xs-2.pointable-cursor
-					i.fa.fa-mouse-pointer(uib-tooltip="append neighbors to selection" tooltip-placement="right" tooltip-append-to-body="true" ng-click="addNeighborsToSelection()")
+			.vert-align
+				span.m-r-5.m-l-auto Sorted By:
+				dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
+			.row.vert-align.m-t-10
+				.col-xs-12
+					h6 {{nodeNeighbors.length}} First Degree Neighbors:
 					
 		li.panel-item.list-item.no-hover
 			.row.vert-align
@@ -23,7 +22,7 @@
 						em show more neighbors&hellip;
 					a.more-text.h6.pull-right.text-right.pointable-cursor(ng-show="numShowGroups !== 0", ng-click='viewLess(); $event.stopPropagation();') 
 						em show less neighbors&hellip;
-		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="neighbor in nodeNeighbors | filter:{label: neighborSearchQuery} | orderBy: neighborsSort | limitTo: viewLimit" ng-click="selectNode(neighbor.id)" ng-mouseenter="hoverNode(neighbor.id, $event)" ng-mouseleave="unHoverNode(neighbor.id, $event);")
+		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="neighbor in nodeNeighbors | filter:{label: neighborSearchQuery} | orderBy: scope.sortInfo.sortType : order : neighborsSort | limitTo: viewLimit" ng-click="selectNode(neighbor.id)" ng-mouseenter="hoverNode(neighbor.id, $event)" ng-mouseleave="unHoverNode(neighbor.id, $event);")
 			.row.vert-align
 				.col-xs-2
 					.big-circle(style="background: {{neighbor.colorStr}};")

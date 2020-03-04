@@ -64,9 +64,9 @@ function(FilterPanelService, SelectorService, AttrInfoService, BROADCAST_MESSAGE
             };
             filterConfig.selector = filterConfig.isEnabled ? genSelector(selectedVals) : null;
 
-            scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                filterConfig : filterConfig
-            });
+            // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
+            //     filterConfig : filterConfig
+            // });
         };
 
         scope.showMore = function() {

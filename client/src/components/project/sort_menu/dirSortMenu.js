@@ -15,7 +15,8 @@ angular.module('common')
         restrict: 'E',
         scope: {
             sortTypes: '=', // List of Sort types objects eg. {id: 'alphabetical', title: 'Alphabetical'}
-            sortConfig: '=' // Model for sort => {sortType: 'alphabetical', sortOrder: 'desc'}
+            sortConfig: '=', // Model for sort => {sortType: 'alphabetical', sortOrder: 'desc'}
+            alignToRight: '<'
         },
         templateUrl: '#{server_prefix}#{view_path}/components/project/sort_menu/sortMenu.html',
         link: postLinkFn
@@ -52,6 +53,24 @@ angular.module('common')
         };
 
         scope.sortOrders = sortOrders;
+
+        scope.setSortOrder = function setSortOrder(sortOrder, $event) {
+            var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            scope.sortConfig = scope.sortConfig || {};
+            scope.sortConfig.sortOrder = newSortOrder;
+            $event.stopPropagation();
+        }
+    
+        scope.setSortType = function setSortType(sortType, $event) {
+            scope.sortConfig = scope.sortConfig || {};
+            scope.sortConfig.sortType = sortType;
+            $event.stopPropagation();
+        }
+
+        scope.getSortTypeLabel = function getSortTypeLabel(sortType) {
+            var sortConfig = _.find(scope.sortTypes, { id: sortType })
+            return sortConfig && sortConfig.title;
+        }
     }
 
 
