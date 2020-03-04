@@ -135,6 +135,7 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
 
         scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
             filteringCatVals = [];
+            draw(); // Reset scope data
         });
 
         scope.overCat = function(catData, event) {
@@ -187,8 +188,9 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
         };
 
         // mousr stuff
-        scope.onCatClick = function(catData, $event) {
-            renderCtrl.selectNodesByAttrib(attrId, catData.id, $event);
+        scope.onCatClick = function(catData) {
+            catData.isChecked = !catData.isChecked;
+            scope.onFilterUpdate();
         };
 
         scope.onFilterUpdate = function() {
@@ -214,7 +216,7 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
             filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
             filterConfig.state.selectedVals = _.clone(filteringCatVals);
             filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
-
+            
             // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
             //     filterConfig : filterConfig
             // });
