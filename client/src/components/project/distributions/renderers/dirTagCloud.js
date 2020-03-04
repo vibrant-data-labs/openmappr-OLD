@@ -215,9 +215,9 @@ function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorS
             filterConfig.state.selectedVals = _.clone(filteringCatVals);
             filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
 
-            scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                filterConfig : filterConfig
-            });
+            // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
+            //     filterConfig : filterConfig
+            // });
         }
         function genSelector (selectedVals) {
             var selector = SelectorService.newSelector();
