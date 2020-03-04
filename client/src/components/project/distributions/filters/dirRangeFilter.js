@@ -87,9 +87,9 @@ function(FilterPanelService, AttrInfoService, SelectorService, BROADCAST_MESSAGE
             filterConfig.state.filterRange = _.clone(filterRange);
             filterConfig.selector = filterConfig.isEnabled ? genSelector(filterRange[0], filterRange[1]) : null;
 
-            scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                filterConfig : filterConfig
-            });
+            // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
+            //     filterConfig : filterConfig
+            // });
         }
 
         function genSelector (min, max) {
