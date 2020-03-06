@@ -16,6 +16,7 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+      - "./client:/usr/src/mappr/client"
     logging:
       driver: "json-file"
       options:
@@ -54,24 +55,24 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-  nginx:
-    build: ./nginx
-    restart: unless-stopped
-    depends_on:
-      - "web"
-    links:
-      - web
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-  certbot:
-    image: certbot/certbot
-    restart: unless-stopped
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  # nginx:
+  #   build: ./nginx
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - "web"
+  #   links:
+  #     - web
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./data/certbot/conf:/etc/letsencrypt
+  #     - ./data/certbot/www:/var/www/certbot
+  #   command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  # certbot:
+  #   image: certbot/certbot
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./data/certbot/conf:/etc/letsencrypt
+  #     - ./data/certbot/www:/var/www/certbot
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
