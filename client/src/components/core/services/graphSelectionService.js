@@ -248,7 +248,7 @@ function($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtS
         var fn = _.noop;
         if(snapshot.ndSelState && snapshot.ndSelState.length > 0) {
             nodeIdsInSelection = _.pluck(snapshot.ndSelState,'id');
-            fn = function() {selectByIds(nodeIdsInSelection);};
+            fn = function() {selectByIds(nodeIdsInSelection, 0);};
         } else {
             console.log('No Selections in the snapshot: %O, resetting Selections.', snapshot);
             nodeIdsInSelection = [];
