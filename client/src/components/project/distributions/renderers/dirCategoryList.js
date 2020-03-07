@@ -99,6 +99,16 @@ angular.module('common')
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
                 });
+
+                scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
+                    scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
+                       if (cat.isChecked) {
+                           cat.isSubsetted = cat.isChecked;
+                       }
+                       
+                       return cat;
+                    });
+                });
                 /**
          * watch filters being enabled disabled
          */

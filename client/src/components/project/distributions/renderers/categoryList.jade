@@ -15,6 +15,7 @@
 	.clearfix
 .cat-list.h6(ng-mouseleave="outCat()", ng-mouseover="overCat(catData, $event)")
 	.cat-item(ng-class="{'filter':showFilter}" ng-repeat="catData in catListData.data | filter:{text: distrData.searchQuery} | limitTo: distrData.numShownCats track by catData.id")
+		.cat-checkbox-background(ng-class="{'cat-item-subsetted': catData.isSubsetted }")
 		.cat-bar-container
 			.cat-global-bar.transition(ng-if="!catData.principalNodeBar" style="width:{{(catData.globalpercent).toFixed(2)}}%")
 			div(ng-if="catData.principalNodeBar")

@@ -117,6 +117,16 @@ angular.module('common')
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
                 });
+
+                scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
+                    scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
+                       if (cat.isChecked) {
+                           cat.isSubsetted = cat.isChecked;
+                       }
+                       
+                       return cat;
+                    });
+                });
                 /**
          * watch filters being enabled disabled
          */
@@ -269,6 +279,7 @@ angular.module('common')
                     var globalFreq = attrInfo.valuesCount[catVal],
                         selTagFreq = currSelFreqs[catVal] || 0;
                     var isChecked = _.contains(filteringCatVals, catVal);
+                    var isSubsetted = _.contains(filteringCatVals, catVal);
 
                     if(selTagFreq > 0) { highlightedCats.push(catVal); }
 
@@ -296,6 +307,7 @@ angular.module('common')
                         isChecked : isChecked,
                         isCurrent : selTagFreq > 0,
                         importance: importance,
+                        isSubsetted: isSubsetted,
                         checkboxClass : {
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
