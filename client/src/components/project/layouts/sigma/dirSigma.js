@@ -454,7 +454,7 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
 
         function updateSelectionIndices () {
             graphSelectionService.clearSelectionCaches();
-            graphSelectionService._selectNodes(_.filter(sig.graph.nodes(), 'isSelected'), undefined, inputMgmtService.inputMapping().clickNode);
+            graphSelectionService._selectNodes(_.filter(sig.graph.nodes(), 'isSelected'), 0, inputMgmtService.inputMapping().clickNode);
         }
 
         function filterOutNodes(graph, dataPointIds) {

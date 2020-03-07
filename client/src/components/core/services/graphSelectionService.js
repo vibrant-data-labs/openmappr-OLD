@@ -396,8 +396,10 @@ function($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtS
         else if(settings('edgeDirectionalRender') === 'outgoing')
             neighbourFn = 'getOutNodeNeighbours';
 
-        if(typeof degree !== 'undefined')
+        if(typeof degree !== 'undefined') {
             addNeigh = degree == 1;
+        }
+
         var edgePaths = !!settings('edgePath');
 
         _.each(nodes, function(n) {
