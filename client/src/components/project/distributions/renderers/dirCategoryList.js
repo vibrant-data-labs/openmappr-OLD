@@ -129,27 +129,6 @@ angular.module('common')
                     scope.catListData.data = sortCatData(scope.catListData.data, sortType, sortOrder, scope.catListData.inSelectionMode);
                 }, true);
 
-                scope.overCat = function(catData, event) {
-                    var curTarget = $(event.currentTarget);
-                    var off = curTarget.offset(),
-                        tElem = event.target,
-                        tElemPosnObj = tElem.getBoundingClientRect();
-                    // console.log('off: ', off);
-                    scope.tooltipText = tooltipText;
-                    element.find('.tooltip-positioner').css({
-                        top : tElemPosnObj.top - off.top + 30,
-                        left: off.left + 180
-                    });
-                    scope.openTooltip = true;
-                };
-
-                scope.outCat = function() {
-                    $timeout(function() {
-                        scope.openTooltip = false;
-                        renderCtrl.unHoverNodes();
-                    }, 100);
-                };
-
                 scope.showMore = function() {
                     distrData.numShowGroups++;
                     distrData.numShownCats = Math.min(scope.catListData.data.length, distrData.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY);
