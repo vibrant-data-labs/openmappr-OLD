@@ -199,7 +199,7 @@ angular.module('common')
                 // mousr stuff
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
-                    applyFilter();
+                    selectFilter();
                     renderCtrl.unHoverNodes();
                     var selectedValues = getSelectedValues();
                     console.log('selectedValues', selectedValues);
@@ -207,7 +207,7 @@ angular.module('common')
                 };
 
                 scope.onFilterUpdate = function() {
-                    applyFilter();
+                    selectFilter();
                 };
 
                 function getSelectedValues() {
@@ -224,19 +224,19 @@ angular.module('common')
                         catData.checkboxClass['cat-checkbox-disable'] = isfilterDisabled;
                     });
                 }
-                /// when a filter is applied, all the other filters are greyed out.
-                /// When the current selection is refreshed, the tagList gets sorted depending upon the importance in the CS
-                function applyFilter () {
+
+                /// Old behaviour: when a filter is applied, all the other filters are greyed out.
+                ///                 When the current selection is refreshed, the tagList gets sorted depending upon the importance in the CS
+                /// New behaviour: The filter is just selected, its applied after the user presses the Subset button
+                function selectFilter () {
                     var filterConfig = FilterPanelService.getFilterForId(attrId);
                     filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
 
                     filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
                     filterConfig.state.selectedVals = _.clone(filteringCatVals);
                     filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
-                    // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                    //     filterConfig : filterConfig
-                    // });
                 }
+
                 function genSelector (selectedVals) {
                     var selector = SelectorService.newSelector();
                     selector.ofMultipleAttrValues(attrId, selectedVals, true);

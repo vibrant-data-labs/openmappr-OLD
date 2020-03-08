@@ -16,7 +16,7 @@ div.tag-list
 		.row.vert-align
 			.col-xs-2
 				.tag-checkbox
-					input(id="checkbox-{{$index}}-{{attrId}}" type="checkbox", ng-model="attrValVM.checked", ng-change="applyFilters();")
+					input(id="checkbox-{{$index}}-{{attrId}}" type="checkbox", ng-model="attrValVM.checked", ng-change="selectFilters();")
 					label(for="checkbox-{{$index}}-{{attrId}}")
 			.col-xs-8.truncate.tag-text.h6 {{attrValVM.value}}
 			.col-xs-2 
