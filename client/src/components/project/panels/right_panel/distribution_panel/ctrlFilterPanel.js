@@ -36,7 +36,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.$on(BROADCAST_MESSAGES.selectNodes, onNodeSelect);
     $scope.$on(BROADCAST_MESSAGES.selectStage, onStageSelect);
     $scope.$on(BROADCAST_MESSAGES.snapshot.changed, onSnapshotChange);
-    $scope.$on(BROADCAST_MESSAGES.fp.filter.changed, onFilterChange);
+    $scope.$on(BROADCAST_MESSAGES.fp.filter.changed, onFilterSubset);
     $scope.$on('TOGGLEFILTERS', toggleFiltersVisiblity);
     $scope.$on('RESETFILTERS', resetFilters);
 
@@ -160,7 +160,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         updateInfoData($scope.currentSelection);
     }
 
-    function onFilterChange(ev) {
+    function onFilterSubset(ev) {
         FilterPanelService.applyFilters();
         updateSelAndGraph(ev);
         if(_.isEmpty(FilterPanelService.getInitialSelection())) {
