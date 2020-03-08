@@ -17,7 +17,7 @@
 						//- span(ng-if="activeFilterCount == 1") FILTER&nbsp;&nbsp;
 						//- span(ng-if="activeFilterCount != 1") FILTERS&nbsp;&nbsp;
 				div.col-xs-6.flex-container-end.vert-align.m-r-5
-					button.btn.btn-sm.btn-primary.m-r-5(ng-click="applyFilters();") Subset
+					button.btn.btn-sm.btn-primary.m-r-5(ng-click="subsetFilters();") Subset
 					button.btn.btn-sm.btn-info(ng-if="panelUI.filterPanelOpen && ui.activeFilterCount > 0" ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") Reset
 			.hidden-btns(ng-click="$event.stopPropagation()")
 				h6.search.vert-align.animate-hidden-panel-btns(ng-show="showFilterSearch && panelUI.filterPanelOpen" )
