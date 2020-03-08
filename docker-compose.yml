@@ -35,13 +35,13 @@ services:
   beanstalk:
     image: kusmierz/beanstalkd
     restart: unless-stopped
-    ports:
-      - "11300:11300"
+    # ports:
+    #   - "11300:11300"
   mongo:
     build: ./mongo
     restart: unless-stopped
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     volumes:
       - ./mongo/data:/data/db
   elasticsearch:
@@ -52,9 +52,9 @@ services:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
       - "action.auto_create_index=true"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    # ports:
+    #   - "9200:9200"
+    #   - "9300:9300"
   nginx:
     build: ./nginx
     restart: unless-stopped
