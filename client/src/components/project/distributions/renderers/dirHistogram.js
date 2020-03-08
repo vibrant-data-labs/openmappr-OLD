@@ -4,8 +4,8 @@ angular.module('common')
             'use strict';
 
             /*************************************
-    ******** Directive description *******
-    **************************************/
+            ******** Directive description *******
+            **************************************/
             var dirDefn = {
                 restrict: 'AE',
                 require: '?^dirAttrRenderer',
@@ -17,8 +17,8 @@ angular.module('common')
             };
 
             /*************************************
-    ************ Local Data **************
-    **************************************/
+            ************ Local Data **************
+            **************************************/
             window.mappr.stats = window.mappr.stats || {};
             window.mappr.stats.distr = window.mappr.stats.distr || {};
 
@@ -34,7 +34,8 @@ angular.module('common')
                 catMarginBottom: 75,
                 marginLeft: 20,
                 marginRight: 10,
-                barColor: '#555555',
+                // barColor: '#555555',
+                barColor: '#bdbdbd',
                 barColorAfterSelection: '#bdbdbd',
                 strokeColor: '#000',
                 textColor: '#000',
@@ -59,13 +60,13 @@ angular.module('common')
 
 
             /*************************************
-    ******** Controller Function *********
-    **************************************/
+            ******** Controller Function *********
+            **************************************/
 
 
             /*************************************
-    ******** Post Link Function *********
-    **************************************/
+            ******** Post Link Function *********
+            **************************************/
             function postLinkFn(scope, element, attrs, renderCtrl) {
                 var histoBars; // Ref for histo svg bars
                 var mappTheme = projFactory.getProjectSettings().theme || 'light';
@@ -218,8 +219,8 @@ angular.module('common')
 
 
             /*************************************
-    ************ Local Functions *********
-    **************************************/
+            ************ Local Functions *********
+            **************************************/
             // Number formatting
             var SIFormatter = d3.format("s");
             var floatFormatter = d3.format(",.2f");
@@ -749,7 +750,6 @@ angular.module('common')
 
                     barElem.selectAll('[data-mask-bar="true"]').remove();
                     globalBar.attr('opacity', 1);
-
                     var globalBarFillColor = selectedNodes.length ? opts.barColorAfterSelection : opts.barColor;
                     globalBar.style({
                         fill: globalBarFillColor,

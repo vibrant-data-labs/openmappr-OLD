@@ -3,8 +3,8 @@
  * This service builds intelligence about an attribute in the dataset
  */
 angular.module('common')
-    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory',
-        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory) {
+    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService',
+        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService) {
             "use strict";
 
             /*************************************
@@ -156,6 +156,7 @@ angular.module('common')
                     filterCfg.selector = null;
                     filterCfg.state = {};
                 });
+                graphHoverService.clearHovers();
                 applyFilters();
             }
 

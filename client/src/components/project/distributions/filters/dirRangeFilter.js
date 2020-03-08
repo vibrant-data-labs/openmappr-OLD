@@ -52,6 +52,8 @@ angular.module('common')
                     },
                     stop: function(ev, ui) {
                         console.log(logPrefix + 'Slider stop - event & ui ', ev, ui);
+                        var valueRange = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]);
+                        renderCtrl.hoverNodesByAttribRange(attrInfo.attr.id, valueRange.min, valueRange.max, window.event);
                         applyFilters(scope.bounds, scope.filterRange);
                     }
                 };
@@ -104,6 +106,20 @@ angular.module('common')
                     var selector = SelectorService.newSelector();
                     selector.ofAttrRange(attrId, valMin, valMax);
                     return selector;
+                }
+
+                function getValueRangeFilterRange(min, max) {
+                    var attrMax = attrInfo.stats.max, attrMin = attrInfo.stats.min;
+                    var step = (attrMax - attrMin) / binCount;
+
+                    var
+                        valMin = attrMin + (min === 0 ? 0 : min * step),
+                        valMax = max === binCount ? attrMax : attrMin + max * step;
+
+                    return {
+                        min: valMin,
+                        max: valMax
+                    };
                 }
             }
 
