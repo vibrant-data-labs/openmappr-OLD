@@ -1249,7 +1249,7 @@ function($q, dataGraph, renderGraphfactory,AttrInfoService, leafletData, partiti
                 rangeY = rangeY * wd/rangeX;
                 rangeX = wd;
             }
-            this.setAxisAttr(this.attr.x, 'x', centerX - rangeX/2, centerX + rangeX/2);
+            this.setAxisAttr(this.attr.x, 'x', centerX - (rangeX - 80), centerX + rangeX/2);
             this.setAxisAttr(this.attr.y, 'y', centerY - rangeY/2, centerY + rangeY/2);
         });
 
