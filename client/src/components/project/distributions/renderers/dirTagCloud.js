@@ -202,7 +202,6 @@ angular.module('common')
                     selectFilter();
                     renderCtrl.unHoverNodes();
                     var selectedValues = getSelectedValues();
-                    console.log('selectedValues', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 };
 

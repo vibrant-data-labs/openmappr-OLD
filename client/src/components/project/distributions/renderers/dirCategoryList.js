@@ -21,7 +21,6 @@ angular.module('common')
             var dirPrefix = '[dirCategoryList] ';
             var ITEMS_TO_SHOW = 100;
             var ITEMS_TO_SHOW_INITIALLY = 10;
-            var tooltipText;
 
 
             /*************************************
@@ -48,6 +47,7 @@ angular.module('common')
                 scope.distrData = distrData;
                 scope.catListData = [];
                 scope.colorStr = FilterPanelService.getColorString();
+                scope.tooltipText = '';
 
                 /**
          * Prepares the data which is put into scope
@@ -141,28 +141,34 @@ angular.module('common')
                 // mousr stuff
                 scope.onCatClick = function(catData) {
                     catData.isChecked = !catData.isChecked;
-                    scope.onFilterUpdate();
+                    selectFilter();
+                    renderCtrl.unHoverNodes();
+                    var selectedValues = getSelectedValues();
+                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 };
+
                 scope.onCatMouseover = function(catData, $event) {
                     if(isCompareView && attrId == 'Cluster') {
-                        tooltipText = _.get(renderCtrl.getClusterMeta(), catData.text + '.descr');
+                        scope.tooltipText = _.get(renderCtrl.getClusterMeta(), catData.text + '.descr');
                     }
                     else {
                         if(scope.catListData.inSelectionMode) {
-                            tooltipText = catData.text + "(" + catData.selFreq + " of " + catData.globalFreq + ")";
+                            scope.tooltipText = catData.text + "(" + catData.selFreq + " of " + catData.globalFreq + ")";
                         }
                         else {
-                            tooltipText = catData.text;
+                            scope.tooltipText = catData.text;
                         }
                     }
-
-                    // hover nodes
-                    renderCtrl.hoverNodesByAttrib(attrId, catData.id, $event);
                 };
 
                 scope.onFilterUpdate = function() {
                     selectFilter();
                 };
+
+                function getSelectedValues() {
+                    var filterConfig = FilterPanelService.getFilterForId(attrId);
+                    return filterConfig.state.selectedVals;
+                }
 
 
                 /// filter stuff
