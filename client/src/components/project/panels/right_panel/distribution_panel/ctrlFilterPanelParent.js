@@ -46,6 +46,10 @@ function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES) {
         $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.changed);
     }
 
+    $scope.undoFilters = function undoFilters() {
+        $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.undo);
+    }
+
 
     /*************************************
     ****** Event Listeners/Watches *******

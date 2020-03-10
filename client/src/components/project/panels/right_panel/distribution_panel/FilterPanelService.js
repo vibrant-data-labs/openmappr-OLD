@@ -27,6 +27,32 @@ angular.module('common')
             this.getInitSel = this.getInitialSelection;
             this.isInitialized = function() { return initialized; };
 
+            this.getSelectionHistoryIndex = function getSelectionHistoryIndex() {
+                return currentSelectionIndex;
+            };
+
+            this.setSelectionHistoryIndex = function setSelectionHistoryIndex(index) {
+                currentSelectionIndex = index;
+            };
+
+            this.appendToSelectionHistory = function appendToSelectionHistory(attrFilterMap) {
+                selectionHistory = selectionHistory || [];
+                selectionHistory.push(attrFilterMap);
+                currentSelectionIndex = selectionHistory.length;
+            };
+
+            this.getLastFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
+                var attrFilterMap = selectionHistory[currentSelectionIndex];
+                currentSelectionIndex--;
+                return attrFilterMap;
+            };
+
+            this.undoFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
+                attrFilterConfigMap = angular.copy(selectionHistory[currentSelectionIndex]);
+                currentSelectionIndex--;
+                applyFilters();
+            };
+
             this.shouldReplaceNewSel = function() { return replaceNewSel; };
             this.rememberSelection = function(val) { replaceNewSel = !val; };
 
@@ -97,6 +123,8 @@ angular.module('common')
             var initialSelection      = [], // The base selection used to configure. Filters are applied it this
                 currentSelection        = [], // the selection being highlighted on the graph. filtered subset
                 attrFilterConfigMap     = {}, // the configuration of filter objects
+                selectionHistory = [],
+                currentSelectionIndex = 0,
                 initialized = false,
                 replaceNewSel = true,
                 filtersVisible = true;

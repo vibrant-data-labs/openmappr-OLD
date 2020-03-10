@@ -295,7 +295,9 @@ angular.module('hcApp', [
         filter: {
             changed: 'filter:changed',
             reset: 'filter:reset',
-            visibilityToggled: 'filter:visibilityToggled'
+            visibilityToggled: 'filter:visibilityToggled',
+            undo: 'filter:undo',
+            redo: 'filter:redo'
         },
         resized: 'stats:resized',
         attrSearched: 'stats:attrSearched'

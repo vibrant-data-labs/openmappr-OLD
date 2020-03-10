@@ -37,6 +37,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     $scope.$on(BROADCAST_MESSAGES.selectStage, onStageSelect);
     $scope.$on(BROADCAST_MESSAGES.snapshot.changed, onSnapshotChange);
     $scope.$on(BROADCAST_MESSAGES.fp.filter.changed, onFilterSubset);
+    $scope.$on(BROADCAST_MESSAGES.fp.filter.undo, onFilterUndo);
     $scope.$on('TOGGLEFILTERS', toggleFiltersVisiblity);
     $scope.$on('RESETFILTERS', resetFilters);
 
@@ -162,12 +163,16 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
 
     function onFilterSubset(ev) {
         FilterPanelService.applyFilters();
-        updateSelAndGraph(ev);
-        if(_.isEmpty(FilterPanelService.getInitialSelection())) {
-            $scope.$evalAsync(function() {
-                FilterPanelService.rememberSelection(true);
-            });
-        }
+
+        FilterPanelService.appendToSelectionHistory(FilterPanelService.getAttrFilterConfigMap());
+
+        _selectNodes(ev);
+    }
+
+    function onFilterUndo() {
+        FilterPanelService.undoFilterFromSelectionHistory();
+
+        _selectNodes();        
     }
 
     function resetFilters() {
@@ -273,6 +278,15 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
                 attr.sortOps.sortType = selectionMode ? 'statistical' : 'frequency';
             }
         });
+    }
+
+    function _selectNodes(ev) {
+        updateSelAndGraph(ev);
+        if(_.isEmpty(FilterPanelService.getInitialSelection())) {
+            $scope.$evalAsync(function() {
+                FilterPanelService.rememberSelection(true);
+            });
+        }
     }
 
 
