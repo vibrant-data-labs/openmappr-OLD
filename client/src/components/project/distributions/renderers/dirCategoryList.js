@@ -91,9 +91,12 @@ angular.module('common')
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
                 });
+
                 // on current selection change, update highlights
                 scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                     try {
+                        var filterConfig = FilterPanelService.getFilterForId(attrId);
+                        filteringCatVals = filterConfig.state.selectedVals || [];
                         draw();
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
@@ -246,6 +249,7 @@ angular.module('common')
                         globalFreq : globalFreq,
                         globalpercent : Math.max(1,globalFreq / maxFreq * 100),
                         isChecked : isChecked,
+                        isSubsetted: isChecked,
                         isCurrent : selTagFreq > 0,
                         principalNodeBar: principalNode && principalNode.attr[attrInfo.attr.id] == catVal,
                         singleNodeSel: !!principalNode,
