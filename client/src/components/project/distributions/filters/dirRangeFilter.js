@@ -37,9 +37,8 @@ angular.module('common')
 
                 console.assert(attrInfo.isNumeric || attrInfo.isYear, logPrefix + 'attribute should be isNumeric/isYear');
 
-                scope.filterRange = filterConfig.state.filterRange
-                    ? _.clone(filterConfig.state.filterRange)
-                    :  [0, binCount];
+                setRange();
+
                 scope.bounds = {
                     min : 0,
                     max : binCount,
@@ -68,6 +67,13 @@ angular.module('common')
                     // console.log(logPrefix + 'dirRangeFilter filter obj: ', filterConfig);
                 });
 
+                scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
+                    filterConfig = FilterPanelService.getFilterForId(attrId);
+                    // Reset filter values selection on selection reset
+                    setRange();
+                    // console.log(logPrefix + 'dirRangeFilter filter obj: ', filterConfig);
+                });
+
                 scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
                     scope.filterRange = [0, binCount];
                 });
@@ -76,6 +82,12 @@ angular.module('common')
                     binCount = renderCtrl.getBinCount();
                     scope.filterRange = [0, binCount];
                     scope.bounds.max = binCount;
+                }
+
+                function setRange() {
+                    scope.filterRange = filterConfig.state.filterRange
+                        ? _.clone(filterConfig.state.filterRange)
+                        :  [0, binCount];
                 }
 
                 function applyFilters(bounds, filterRange) {
@@ -88,10 +100,6 @@ angular.module('common')
                     filterConfig.isEnabled = !disableFilter;
                     filterConfig.state.filterRange = _.clone(filterRange);
                     filterConfig.selector = filterConfig.isEnabled ? genSelector(filterRange[0], filterRange[1]) : null;
-
-                    // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-                    //     filterConfig : filterConfig
-                    // });
                 }
 
                 function genSelector (min, max) {
