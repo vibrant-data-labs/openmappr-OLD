@@ -167,17 +167,20 @@ angular.module('common')
                 FilterPanelService.applyFilters();
                 _selectNodes(ev);
                 FilterPanelService.setFilterMapAfterSubset(FilterPanelService.getAttrFilterConfigMap());
-                FilterPanelService.appendToSelectionHistory(filterGetLastState);
+                var undoRedoResultObject = FilterPanelService.appendToSelectionHistory(filterGetLastState);
+                $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
             }
 
             function onFilterUndo() {
-                FilterPanelService.undoFilterFromSelectionHistory();
+                var undoRedoResultObject = FilterPanelService.undoFilterFromSelectionHistory();
+                $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
 
                 _selectNodes({}, true);
             }
 
             function onFilterRedo() {
-                FilterPanelService.redoFilterFromSelectionHistory();
+                var undoRedoResultObject = FilterPanelService.redoFilterFromSelectionHistory();
+                $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
 
                 _selectNodes({}, true);
             }
@@ -185,6 +188,7 @@ angular.module('common')
             function resetFilters() {
                 FilterPanelService.resetFilters();
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.reset);
+                $scope.$emit(BROADCAST_MESSAGES.fp.filter.reset);
                 updateSelAndGraph(window.event);
             }
 

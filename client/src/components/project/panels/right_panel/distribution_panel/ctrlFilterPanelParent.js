@@ -24,6 +24,9 @@ angular.module('common')
                 filteredAttrs: []
             };
 
+            $scope.enableUndo = false;
+            $scope.enableRedo = false;
+
             /**
     * Scope methods
     */
@@ -76,6 +79,16 @@ angular.module('common')
                     $scope.ui.statsSearchKey = attr.title;
                     $scope.attrSearched();
                 }
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, function(evt, undoRedoStatus) {
+                $scope.enableUndo = undoRedoStatus.enableUndo;
+                $scope.enableRedo = undoRedoStatus.enableRedo;
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function handleReset() {
+                $scope.enableUndo = false;
+                $scope.enableRedo = false;
             });
 
             /*************************************

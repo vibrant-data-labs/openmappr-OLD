@@ -29,7 +29,15 @@ angular.module('common')
 
             this.appendToSelectionHistory = function appendToSelectionHistory(previousFilterMapState) {
                 selectionUndoHistory = selectionUndoHistory || [];
+                if (selectionUndoHistory.length === 0) {
+                    selectionRedoHistory = [];
+                }
+
                 selectionUndoHistory.push(previousFilterMapState);
+                return {
+                    enableUndo: !!(selectionUndoHistory && selectionUndoHistory.length),
+                    enableRedo: !!(selectionRedoHistory && selectionRedoHistory.length),
+                };
             };
 
             this.getLastFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
@@ -42,6 +50,10 @@ angular.module('common')
                 attrFilterConfigMap = angular.copy(lastFilterState);
                 attrFilterConfigMapAfterSubset = angular.copy(attrFilterConfigMap);
                 applyFilters();
+                return {
+                    enableUndo: !!(selectionUndoHistory && selectionUndoHistory.length),
+                    enableRedo: !!(selectionRedoHistory && selectionRedoHistory.length),
+                };
             };
 
             this.redoFilterFromSelectionHistory = function redo() {
@@ -50,6 +62,10 @@ angular.module('common')
                 attrFilterConfigMap = angular.copy(futureFilterState);
                 attrFilterConfigMapAfterSubset = angular.copy(attrFilterConfigMap);
                 applyFilters();
+                return {
+                    enableUndo: !!(selectionUndoHistory && selectionUndoHistory.length),
+                    enableRedo: !!(selectionRedoHistory && selectionRedoHistory.length),
+                };
             };
 
             this.shouldReplaceNewSel = function() { return replaceNewSel; };
@@ -195,6 +211,9 @@ angular.module('common')
                 });
                 graphHoverService.clearHovers();
                 applyFilters();
+
+                selectionRedoHistory = [];
+                selectionUndoHistory = [];
             }
 
             function updateFilterForId(fc) {

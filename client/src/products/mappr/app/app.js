@@ -299,6 +299,7 @@
                     undo: 'filter:undo',
                     redo: 'filter:redo',
                     changFilterFromService: 'filter:changeFromService',
+                    undoRedoStatus: 'filter:undoRedoStatus'
                 },
                 resized: 'stats:resized',
                 attrSearched: 'stats:attrSearched'
