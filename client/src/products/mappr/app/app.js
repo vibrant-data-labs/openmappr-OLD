@@ -297,7 +297,8 @@ angular.module('hcApp', [
             reset: 'filter:reset',
             visibilityToggled: 'filter:visibilityToggled',
             undo: 'filter:undo',
-            redo: 'filter:redo'
+            redo: 'filter:redo',
+            changFilterFromService: 'filter:changeFromService',
         },
         resized: 'stats:resized',
         attrSearched: 'stats:attrSearched'
