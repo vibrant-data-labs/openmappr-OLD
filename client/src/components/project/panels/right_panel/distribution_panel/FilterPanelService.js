@@ -27,9 +27,10 @@ angular.module('common')
             this.getInitSel = this.getInitialSelection;
             this.isInitialized = function() { return initialized; };
 
-            this.appendToSelectionHistory = function appendToSelectionHistory(attrFilterMap) {
+            this.appendToSelectionHistory = function appendToSelectionHistory(previousFilterMapState) {
                 selectionUndoHistory = selectionUndoHistory || [];
-                selectionUndoHistory.push(attrFilterMap);
+                selectionUndoHistory.push(previousFilterMapState);
+                selectionUndoHistory.push(angular.copy(attrFilterConfigMap));
             };
 
             this.getLastFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
@@ -56,7 +57,7 @@ angular.module('common')
             this.getCurrentSelection = function() { return currentSelection; };
             this.getCurrSel = this.getCurrentSelection;
 
-            this.getAttrFilterConfigMap = function() { return attrFilterConfigMap; };
+            this.getAttrFilterConfigMap = function() { return angular.copy(attrFilterConfigMap); };
 
             this.getInfoObjForInitialS = function() { return initialSelectionInfoObj; };
             // this.getInfoObjForCurrentS = function() { return currentSelectionInfoObj; };

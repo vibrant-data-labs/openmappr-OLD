@@ -95,8 +95,17 @@ angular.module('common')
                 // on current selection change, update highlights
                 scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                     try {
+                        draw();
+                    } catch(e) {
+                        console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
+                    }
+                });
+
+                scope.$on(BROADCAST_MESSAGES.fp.filter.changFilterFromService, function() {
+                    try {
+                        debugger;
                         var filterConfig = FilterPanelService.getFilterForId(attrId);
-                        filteringCatVals = filterConfig.state.selectedVals || [];
+                        filteringCatVals = (filterConfig && filterConfig.state && filterConfig.state.selectedVals) || [];
                         draw();
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);

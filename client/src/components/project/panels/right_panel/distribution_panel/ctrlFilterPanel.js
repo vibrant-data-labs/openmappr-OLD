@@ -162,17 +162,16 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
     }
 
     function onFilterSubset(ev) {
+        var filterGetLastState = FilterPanelService.getAttrFilterConfigMap();
         FilterPanelService.applyFilters();
-
-        FilterPanelService.appendToSelectionHistory(FilterPanelService.getAttrFilterConfigMap());
-
         _selectNodes(ev);
+        FilterPanelService.appendToSelectionHistory(filterGetLastState);
     }
 
     function onFilterUndo() {
         FilterPanelService.undoFilterFromSelectionHistory();
 
-        _selectNodes();        
+        _selectNodes({}, true);        
     }
 
     function resetFilters() {
@@ -242,7 +241,7 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.visibilityToggled, {filtersVisible: $scope.ui.enableFilters});
     }
 
-    function updateSelAndGraph(ev) {
+    function updateSelAndGraph(ev, useFilterState) {
         var currentSelection = FilterPanelService.getCurrentSelection(),
             renderer = renderGraphfactory.getRenderer();
 
@@ -269,6 +268,10 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
 
         updateInfoData($scope.currentSelection);
         $rootScope.$broadcast(BROADCAST_MESSAGES.fp.currentSelection.changed, {nodes: currentSelection});
+
+        if (useFilterState) {
+            $rootScope.$broadcast(BROADCAST_MESSAGES.fp.filter.changFilterFromService);
+        }
     }
 
     function setSortForTags(attrs, selectionMode) {
@@ -280,8 +283,8 @@ function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, data
         });
     }
 
-    function _selectNodes(ev) {
-        updateSelAndGraph(ev);
+    function _selectNodes(ev, undoOrRedo) {
+        updateSelAndGraph(ev, !!undoOrRedo);
         if(_.isEmpty(FilterPanelService.getInitialSelection())) {
             $scope.$evalAsync(function() {
                 FilterPanelService.rememberSelection(true);
