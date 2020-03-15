@@ -55,7 +55,11 @@ function(FilterPanelService, SelectorService, AttrInfoService, BROADCAST_MESSAGE
             });
         });
 
-        scope.applyFilters = function() {
+        /**
+         * This only selects the filters and highlights the nodes
+         * The filter is not applied
+         */
+        scope.selectFilters = function() {
             var selectedVals = _.map(_.filter(scope.attrValVMs, 'checked'), 'id');
 
             filterConfig.isEnabled = selectedVals.length > 0;
@@ -63,10 +67,6 @@ function(FilterPanelService, SelectorService, AttrInfoService, BROADCAST_MESSAGE
                 selectedVals: selectedVals
             };
             filterConfig.selector = filterConfig.isEnabled ? genSelector(selectedVals) : null;
-
-            // scope.$emit(BROADCAST_MESSAGES.fp.filter.changed, {
-            //     filterConfig : filterConfig
-            // });
         };
 
         scope.showMore = function() {

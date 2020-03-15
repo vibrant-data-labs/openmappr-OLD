@@ -6,6 +6,7 @@
 		.h6 more ({{distrData.numShownCats}}/{{::catListData.data.length}})
 .cat-list.h6(ng-mouseleave="outCat()", ng-mouseover="overCat(catData, $event)")
 	.cat-item(ng-class="{'filter':showFilter}" ng-repeat="catData in catListData.data | limitTo: distrData.numShownCats track by catData.id")
+		.cat-checkbox-background(ng-class="{'cat-item-subsetted': catData.isSubsetted }")
 		.cat-bar-container
 			.cat-global-bar.transition(style="width:{{catData.globalpercent}}%")
 			//- .cat-global-bar.transition(ng-if="catData.isCurrent" style="width:{{(catData.globalpercent - catData.selPercent).toFixed(2)}}%; background-color:{{catData.colorStr}};")

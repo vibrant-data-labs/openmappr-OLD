@@ -144,7 +144,7 @@ function init (app) {
             }
         }));
     });
-    
+
     // configure passport ====================================
     require('./auth/passport')(passport);
 

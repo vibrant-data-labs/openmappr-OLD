@@ -3,7 +3,7 @@
 		//- .header(ng-click="panelUI.togglePanel('filter');" ng-class="{'active': panelUI.filterPanelOpen, 'hovered': panelUI.filterPanelHover}" ng-mouseenter="panelUI.filterPanelOpen ? showFilterSearch = true : showFilterSearch = false; panelUI.filterPanelHover = true;" ng-mouseleave="showFilterSearch = false; panelUI.filterPanelHover = false;")
 		.header(ng-mouseenter="panelUI.filterPanelOpen ? showFilterSearch = true : showFilterSearch = false;" ng-mouseleave="showFilterSearch = false;")
 			.row.vert-align.main
-				.col-xs-10
+				.col-xs-6
 					h6.title.text-uppercase.pull-left
 						i.fa.fa-fw.fa-1-3x.fa-filter.btn-icon(ng-class="{'active': panelUI.filterPanelOpen}")
 						span &nbsp;&nbsp;Filters&nbsp;&nbsp;&nbsp;&nbsp;
@@ -16,10 +16,13 @@
 						//- span(ng-if="activeFilterCount > 0") {{activeFilterCount}}&nbsp;
 						//- span(ng-if="activeFilterCount == 1") FILTER&nbsp;&nbsp;
 						//- span(ng-if="activeFilterCount != 1") FILTERS&nbsp;&nbsp;
-					button.btn.pull-right.btn-primary(ng-click="applyFilters();") Subset
-				.col-xs-2.vert-align.right(ng-if="panelUI.filterPanelOpen" ng-click="$event.stopPropagation();")
-					h6.no-margin(ng-if="ui.activeFilterCount > 0")
-						button.btn.pull-right.btn-primary(ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") Reset
+				div.col-xs-6.flex-container-end.vert-align.m-r-5
+					button.btn.btn-sm.m-r-5(title="Undo" ng-click="undoFilters();" ng-disabled="!enableUndo" ng-class="{'btn-info': enableUndo, 'btn-default': !enableUndo}")
+						i.fa.fa-undo
+					button.btn.btn-sm.m-r-5(title="Redo" ng-click="redoFilters();" ng-disabled="!enableRedo" ng-class="{'btn-info': enableRedo, 'btn-default': !enableRedo}")
+						i.fa.fa-repeat
+					button.btn.btn-sm.btn-primary.m-r-5(ng-click="subsetFilters();") Subset
+					button.btn.btn-sm.btn-info(ng-if="panelUI.filterPanelOpen && ui.activeFilterCount > 0" ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") Reset
 			.hidden-btns(ng-click="$event.stopPropagation()")
 				h6.search.vert-align.animate-hidden-panel-btns(ng-show="showFilterSearch && panelUI.filterPanelOpen" )
 					input.h6.no-margin.form-control.pull-left(placeholder="Search Attributes.." ng-model="ui.statsSearchKey", ng-model-options="{'debounce': 500}", ng-change="attrSearched();")
