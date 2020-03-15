@@ -16,7 +16,7 @@ angular.module('common')
             // this.buildFilters = buildFilters;
             this.applyFilters = applyFilters; // updates CS and returns it
             this.resetFilters = resetFilters;
-            this.getFilterForId = function getFilterForId(id) { return attrFilterConfigMap[id]; };
+            this.getFilterForId = function getFilterForId(id) { return attrFilterConfigMap && attrFilterConfigMap[id]; };
             this.updateFilterForId = updateFilterForId;
             this.getActiveFilterCount = getActiveFilterCount;
             this.updateFiltersVis = updateFiltersVis;
@@ -27,29 +27,26 @@ angular.module('common')
             this.getInitSel = this.getInitialSelection;
             this.isInitialized = function() { return initialized; };
 
-            this.getSelectionHistoryIndex = function getSelectionHistoryIndex() {
-                return currentSelectionIndex;
-            };
-
-            this.setSelectionHistoryIndex = function setSelectionHistoryIndex(index) {
-                currentSelectionIndex = index;
-            };
-
             this.appendToSelectionHistory = function appendToSelectionHistory(attrFilterMap) {
-                selectionHistory = selectionHistory || [];
-                selectionHistory.push(attrFilterMap);
-                currentSelectionIndex = selectionHistory.length;
+                selectionUndoHistory = selectionUndoHistory || [];
+                selectionUndoHistory.push(attrFilterMap);
             };
 
             this.getLastFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
-                var attrFilterMap = selectionHistory[currentSelectionIndex];
-                currentSelectionIndex--;
-                return attrFilterMap;
+                return _.last(selectionUndoHistory);
             };
 
-            this.undoFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
-                attrFilterConfigMap = angular.copy(selectionHistory[currentSelectionIndex]);
-                currentSelectionIndex--;
+            this.undoFilterFromSelectionHistory = function undo() {
+                var lastFilterState = selectionUndoHistory.pop();
+                selectionRedoHistory.push(lastFilterState);
+                attrFilterConfigMap = _.last(selectionUndoHistory);
+                applyFilters();
+            };
+
+            this.redoFilterFromSelectionHistory = function redo() {
+                var futureFilterState = selectionRedoHistory.pop();
+                selectionUndoHistory.push(futureFilterState);
+                attrFilterConfigMap = _.last(selectionUndoHistory);
                 applyFilters();
             };
 
@@ -123,8 +120,8 @@ angular.module('common')
             var initialSelection      = [], // The base selection used to configure. Filters are applied it this
                 currentSelection        = [], // the selection being highlighted on the graph. filtered subset
                 attrFilterConfigMap     = {}, // the configuration of filter objects
-                selectionHistory = [],
-                currentSelectionIndex = 0,
+                selectionUndoHistory = [],
+                selectionRedoHistory = [],
                 initialized = false,
                 replaceNewSel = true,
                 filtersVisible = true;
