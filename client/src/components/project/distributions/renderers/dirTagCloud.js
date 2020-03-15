@@ -118,6 +118,17 @@ angular.module('common')
                     }
                 });
 
+                scope.$on(BROADCAST_MESSAGES.fp.filter.changFilterFromService, function() {
+                    try {
+                        var filterConfig = FilterPanelService.getFilterForId(attrId);
+                        filteringCatVals = (filterConfig && filterConfig.state && filterConfig.state.selectedVals) || [];
+                        draw();
+                        hoverSelectedNodes();
+                    } catch(e) {
+                        console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
+                    }
+                });
+
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
                         if (cat.isChecked) {
@@ -200,9 +211,7 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    renderCtrl.unHoverNodes();
-                    var selectedValues = getSelectedValues();
-                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
+                    hoverSelectedNodes(event);
                 };
 
                 scope.onFilterUpdate = function() {
@@ -212,6 +221,12 @@ angular.module('common')
                 function getSelectedValues() {
                     var filterConfig = FilterPanelService.getFilterForId(attrId);
                     return filterConfig.state.selectedVals;
+                }
+
+                function hoverSelectedNodes(event) {
+                    renderCtrl.unHoverNodes();
+                    var selectedValues = getSelectedValues() || [];
+                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
                 /// filter stuff
@@ -278,7 +293,6 @@ angular.module('common')
                     var globalFreq = attrInfo.valuesCount[catVal],
                         selTagFreq = currSelFreqs[catVal] || 0;
                     var isChecked = _.contains(filteringCatVals, catVal);
-                    var isSubsetted = _.contains(filteringCatVals, catVal);
 
                     if(selTagFreq > 0) { highlightedCats.push(catVal); }
 
@@ -306,7 +320,7 @@ angular.module('common')
                         isChecked : isChecked,
                         isCurrent : selTagFreq > 0,
                         importance: importance,
-                        isSubsetted: isSubsetted,
+                        isSubsetted: isChecked,
                         checkboxClass : {
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,

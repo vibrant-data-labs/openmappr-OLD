@@ -30,7 +30,6 @@ angular.module('common')
             this.appendToSelectionHistory = function appendToSelectionHistory(previousFilterMapState) {
                 selectionUndoHistory = selectionUndoHistory || [];
                 selectionUndoHistory.push(previousFilterMapState);
-                selectionUndoHistory.push(angular.copy(attrFilterConfigMap));
             };
 
             this.getLastFilterFromSelectionHistory = function getLastFilterFromSelectionHistory() {
@@ -38,16 +37,18 @@ angular.module('common')
             };
 
             this.undoFilterFromSelectionHistory = function undo() {
+                selectionRedoHistory.push(angular.copy(attrFilterConfigMapAfterSubset));
                 var lastFilterState = selectionUndoHistory.pop();
-                selectionRedoHistory.push(lastFilterState);
-                attrFilterConfigMap = _.last(selectionUndoHistory);
+                attrFilterConfigMap = angular.copy(lastFilterState);
+                attrFilterConfigMapAfterSubset = angular.copy(attrFilterConfigMap);
                 applyFilters();
             };
 
             this.redoFilterFromSelectionHistory = function redo() {
+                selectionUndoHistory.push(angular.copy(attrFilterConfigMapAfterSubset));
                 var futureFilterState = selectionRedoHistory.pop();
-                selectionUndoHistory.push(futureFilterState);
-                attrFilterConfigMap = _.last(selectionUndoHistory);
+                attrFilterConfigMap = angular.copy(futureFilterState);
+                attrFilterConfigMapAfterSubset = angular.copy(attrFilterConfigMap);
                 applyFilters();
             };
 
@@ -71,6 +72,14 @@ angular.module('common')
             // Used for preventing accidental FP hover interactions while scrolling
             this.updateFPScrollStatus = updateFPScrollStatus;
             this.getFPScrollStatus = getFPScrollStatus;
+
+            this.setFilterMapAfterSubset = function setFilterMapAfterSubset(map) {
+                attrFilterConfigMapAfterSubset = map;
+            };
+
+            this.getFilterMapAfterSubset = function getFilterMapAfterSubset() {
+                return angular.copy(attrFilterConfigMapAfterSubset);
+            };
 
 
 
@@ -121,6 +130,7 @@ angular.module('common')
             var initialSelection      = [], // The base selection used to configure. Filters are applied it this
                 currentSelection        = [], // the selection being highlighted on the graph. filtered subset
                 attrFilterConfigMap     = {}, // the configuration of filter objects
+                attrFilterConfigMapAfterSubset     = {}, // the configuration of filter objects
                 selectionUndoHistory = [],
                 selectionRedoHistory = [],
                 initialized = false,
@@ -144,6 +154,7 @@ angular.module('common')
                 initialSelection      = [];
                 currentSelection        = [];
                 attrFilterConfigMap = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');
+                attrFilterConfigMapAfterSubset = angular.copy(attrFilterConfigMap);
                 initialized = true;
             }
 

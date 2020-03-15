@@ -103,10 +103,10 @@ angular.module('common')
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changFilterFromService, function() {
                     try {
-                        debugger;
                         var filterConfig = FilterPanelService.getFilterForId(attrId);
                         filteringCatVals = (filterConfig && filterConfig.state && filterConfig.state.selectedVals) || [];
                         draw();
+                        hoverSelectedNodes();
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
@@ -114,11 +114,11 @@ angular.module('common')
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
-                       if (cat.isChecked) {
-                           cat.isSubsetted = cat.isChecked;
-                       }
-                       
-                       return cat;
+                        if (cat.isChecked) {
+                            cat.isSubsetted = cat.isChecked;
+                        }
+
+                        return cat;
                     });
                 });
                 /**
@@ -154,9 +154,7 @@ angular.module('common')
                 scope.onCatClick = function(catData) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    renderCtrl.unHoverNodes();
-                    var selectedValues = getSelectedValues();
-                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
+                    hoverSelectedNodes();
                 };
 
                 scope.onCatMouseover = function(catData, $event) {
@@ -180,6 +178,12 @@ angular.module('common')
                 function getSelectedValues() {
                     var filterConfig = FilterPanelService.getFilterForId(attrId);
                     return filterConfig.state.selectedVals;
+                }
+
+                function hoverSelectedNodes() {
+                    renderCtrl.unHoverNodes();
+                    var selectedValues = getSelectedValues() || [];
+                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
 
