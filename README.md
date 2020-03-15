@@ -1,40 +1,278 @@
 # openMappr - a network analysis and visualization platform
 
-*openMappr* allows you to visualize and interactively explore relationship data as a network. You save multiple layouts and views as 'snapshots' and publish/share them with others as a 'player' (an interactive, read-only version of map).   
+*openMappr* allows you to visualize and interactively explore relationship data as a network. You save multiple layouts and views as 'snapshots' and publish/share them with others as a 'player' (an interactive, read-only version of map).
 
 There are 2 modes for using it:
 
 *1. Visualize Existing Network -*
-In this case, you need an excel file with 2 sheets. One labeled 'nodes' and the other labeled 'links'.  
+In this case, you need an excel file with 2 sheets. One labeled 'nodes' and the other labeled 'links'.
 
-The nodes sheet requires at minimum one columns called `id` (or `ID`) where every row is a unique node id. You can also include any number of additional columns as node attributes which can be used for coloring nodes, sizing nodes, selecting/filtering nodes, or laying out nodes in x-y space (e.g., as a scatterplot with links between the points). Node attributes can also include urls to images (which can be rendered as images within the node), video and audio links (which can be played within the visualization), the websites (hyperlinks), and twitter feeds (which can be rendered within the visualization for each node).  
+The nodes sheet requires at minimum one columns called `id` (or `ID`) where every row is a unique node id. You can also include any number of additional columns as node attributes which can be used for coloring nodes, sizing nodes, selecting/filtering nodes, or laying out nodes in x-y space (e.g., as a scatterplot with links between the points). Node attributes can also include urls to images (which can be rendered as images within the node), video and audio links (which can be played within the visualization), the websites (hyperlinks), and twitter feeds (which can be rendered within the visualization for each node).
 
-The links sheet requres at minumum two columns called `source` (or `Source`,`from`, `From`) and `target` (or `Target`, `target`, `to`). You can also include additional columns of link attributes for coloring links, or setting link thickness. 
+The links sheet requres at minumum two columns called `source` (or `Source`,`from`, `From`) and `target` (or `Target`, `target`, `to`). You can also include additional columns of link attributes for coloring links, or setting link thickness.
 
-*2. Generating a Similarity Network from Node Tag Attributes -* 
+*2. Generating a Similarity Network from Node Tag Attributes -*
 In this case you just need a 'nodes' file (.csv or .xlsx).
 
-The nodes sheet requres at minumum two columns: one called `id` (or `ID`) where every row is a unique node id, and one column with a pipe-separated string of tags (e.g., 'tag1|tag2|tag3', or 'tag1 | tag2 | tag3').  Then openMappr can generate affinity links between nodes that have similar tag profiles.  The basic code for generating a similarity (or affinity) network from items with tags is available here https://github.com/foodwebster/Tag2Network            
+The nodes sheet requres at minumum two columns: one called `id` (or `ID`) where every row is a unique node id, and one column with a pipe-separated string of tags (e.g., 'tag1|tag2|tag3', or 'tag1 | tag2 | tag3').  Then openMappr can generate affinity links between nodes that have similar tag profiles.  The basic code for generating a similarity (or affinity) network from items with tags is available here https://github.com/foodwebster/Tag2Network
 
 
 *A more complete user guide will be uploaded soon :) *
-Mappr was originally created by Vibrant Data Inc., which was acquired by Rakuten Inc. in 2016. 
-openMappr was open-sourced in 2017. 
+Mappr was originally created by Vibrant Data Inc., which was acquired by Rakuten Inc. in 2016.
+openMappr was open-sourced in 2017.
 
 ## Setup
 
-There are two ways to setup the application:
+There are two ways to setup the application on your local machine or a server:
 
 - Using Docker - Recommended if you want to quickly get the application up and running and don't need to make frequent changes
-- Local Setup - Recommended if you are actively developing and testing the application. Going forward, we will try to make the docker setup more suitable for active development
+- Local + Docker Setup - Recommended if you are actively developing and testing the application
 
 We will cover both the approaches one by one
 
-## Docker Setup
+For both the approaches, you will need to install **docker** and **docker-compose** so we will be covering that first
 
-You can use Docker to install openMappr locally on your machine, or on a remote machine (e.g., AWS EC2). Note that if you install it locally on your laptop, you will have all the main functionality *except* you wil not be able to publish and share the interactive visualization with others. 
+### Docker Installation
 
-- Install `docker` and `docker-compose`. Go to the official website and follow the instructions for your OS
+Docker installation instructions keep getting updated with newer versions of docker getting launched so the recommended way of installing docker for your OS is to follow the official installation instructions. Go to
+
+https://docs.docker.com/install/
+
+Scroll down a little and you should see links to installation instructions for different platforms
+
+![](2020-03-15-18-22-17.png)
+
+Click on the link for your platform and follow the installation instructions to install docker for your OS
+
+### Docker-Compose Installation
+
+Just like Docker installation, the best and recommended way to install **docker-compose** is to visit the official site. Go to
+
+https://docs.docker.com/compose/install/
+
+Scroll down a bit and you should see tabs for different platforms like Mac, Windows, Linux, etc.
+
+![](2020-03-15-18-26-40.png)
+
+Click the appropriate tab depending on your platform and follow the installation instructions to install docker-compose
+
+### Verifying Docker and Docker-Compose installations
+
+Once you have installed both **docker** and **docker-compose**, you can open the terminal window and type the following commands to check if your installation is working fine or not
+
+```
+docker --version
+docker info
+```
+
+Output of these commands should look something like this:
+
+![](2020-03-15-18-30-58.png)
+
+Run the following command to verify **docker-compose** installation
+
+```
+docker-compose --version
+```
+
+Output should look something like this:
+
+![](2020-03-15-18-31-44.png)
+
+
+
+Now that we have both **docker** and **docker-compose** installed and working, we can proceed with setting up our application. As we previously mentioned, there are two ways to setup the application:
+
+- Docker setup - Recommended if you want to quickly get the application up and running and don't need to make frequent changes
+- Local + Docker setup - Recommended if you are actively developing and testing the application
+
+First, we will cover the **Local + Docker setup** and then we will cover **Docker Setup**. If you only need to run the application and don't need to change any code, you can jump to **Docker setup** directly.
+
+### Local + Docker setup
+
+Our entire application can be broken down to multiple parts. In **docker-compose** terminology, we call these services. Each of these service runs in an isolated docker container. The services for our application are:
+
+- Elasticsearch
+- MongoDB
+- Athena
+- Beanstalk
+- Web (our web application build in Express and AngularJS)
+- Nginx
+- Certbot
+
+If you open the file **docker-compose.yml** and collapse everything at level 1, you should see the list of all the services. Here is a screenshot:
+
+![](2020-03-15-18-47-26.png)
+
+For this setup (Local + Docker), we use the file **docker-compose-local.yml**.
+
+If you open that file, you should see the following services only:
+
+- Athena
+- Beanstalk
+- MongoDB
+- Elasticsearch
+
+For running on our local machine, we don't need **nginx** and **certbot** services so we haven't added those. And to be able to quickly make changes to our web application code and test them, we haven't included the service **web** in the **docker-compose-local.yml** file. We will be running the web app locally. Hence, we call it **Local + Docker setup**.
+
+To run this setup:
+
+- Clone this repository to your local machine
+- Go to project root directory (**openmappr**)
+- Run the following command to bring up all the docker services
+
+```
+docker-compose -f docker-compose-local.yml up -d
+```
+
+If you're running it for the first time, it will take a while and once completed, it should create containers for all the services mentioned in our **docker-compose-local.yml** file. To verify that everything ran fine, run the following command
+
+
+```
+docker-compose -f docker-compose-local.yml ps
+```
+
+The output should look like this:
+
+![](2020-03-15-18-58-48.png)
+
+
+The **State** should be **Up** for all the services. If it is not, it means something is wrong
+
+If all the services are up and running, great! Now we can proceed with the instructions for setting up our web app
+
+For that, we need to:
+
+- Install Node.js (We need Node version 8 for our project)
+- Install Ruby
+- Install Sass
+- Install Compass
+
+For Node.js installation, visit the official site and download the LTS version for your platform. As of March 14 2020, the LTS version of Node is 12.16.1. You can go ahead and install this. Then we will use **n** (a node module) to change the version of node to 8 which is required for our project. Once you have installed Node.js, it also installs **npm** (node package manager)
+
+Go to terminal and run the following command to install **n**
+
+```
+sudo npm install -g n
+```
+
+**n** is a module which helps us change the version of node on our machine to whichever version we want. Run the following command to change the version of node to 8.12
+
+```
+sudo n 8.12.0
+```
+
+Once completed, you can run the following command to verify
+
+```
+node --version
+```
+
+The output should be:
+
+```
+v8.12.0
+```
+
+Now that Node.js is installed, next step is to install Ruby. If you're a Mac user, Ruby should be already installed on your system. For any other platform, I would recommend visiting the official site (https://www.ruby-lang.org/en/documentation/installation/) and follow the instructions
+
+Once installed, run the following command in terminal to verify
+
+
+```
+ruby --version
+```
+
+The output will look something like this (version may vary based on your installation)
+
+```
+ruby 2.3.1p112 (2016-04-26) [x86_64-linux-gnu]
+```
+
+Once Ruby is installed, run the following commands to install **Sass** and **Compass** (if you face permission denied error, you might need to run the commands with **sudo**)
+
+
+```
+gem install sass
+gem install compass
+```
+
+Then go to the project's root directory (openmappr) and run the following commands
+
+```
+sudo npm install -g yo bower grunt-cli
+```
+
+```
+npm install
+bower install
+```
+
+This should install all the dependencies for our web application. Once this completes, run the following command to bring our Express server up
+
+```
+./run_local_mode.sh
+```
+
+Then open another terminal window and run the following command to build the front end app:
+
+```
+grunt
+```
+
+Once this completes, run the following command to watch for changes
+
+```
+grunt watch
+```
+
+If everything is running fine without any error, it means you have successfully completed the setup and should be able to access the application from your browser.
+
+Launch openMappr by opening a web browser and navigating to `http://localhost:8080`. Then enter `user@mappr.io` and password `woot`
+
+
+**To stop the web app**, press `CTRL+C` on the windows where you ran `./run_local_mode.sh` and `grunt watch` commands
+
+**To stop docker services**, run the command
+
+```
+docker-compose down
+```
+
+**If you later want to bring everything up**, run these commands (in this order):
+
+- Run docker services
+
+```
+docker-compose -f docker-compose-local.yml up -d
+```
+
+- Run ExpressJS app
+
+```
+./run_local_mode.sh
+```
+
+- Build and run client app
+
+```
+grunt
+grunt watch
+```
+
+**If docker images and volumes start taking up lots of space on your hard disk**, run this command from time to time:
+
+```
+docker system prune
+```
+
+This completes our instructions for **Local + Docker setup**. Next we will cover **Docker only setup** which is relatively easier and recommended if you only want to run the application and don't need to make any changes to the code
+
+### Docker Setup
+
+You can use Docker to install openMappr locally on your machine, or on a remote machine (e.g., AWS EC2). Note that if you install it locally on your laptop, you will have all the main functionality *except* you wil not be able to publish and share the interactive visualization with others.
+
+- Install **docker** and **docker-compose** using the instructions mentioned above in this README file.
 - Build the services by running the following command in the terminal from the project's root directory
 
 ```
@@ -65,15 +303,13 @@ openmappr_mongo_1           docker-entrypoint.sh /bin/ ...   Up      0.0.0.0:270
 openmappr_web_1             ./run_docker_mode.sh             Up      0.0.0.0:8080->8080/tcp
 ```
 
-If the state is __Up__ for all the services, it means your setup is running fine. 
-You should be able to access the web-server. 
-Launch openMappr by opening a web browser and navigating to `http://localhost:8080` 
+If the state is __Up__ for all the services, it means your setup is running fine.
+You should be able to access the web-server.
+Launch openMappr by opening a web browser and navigating to `http://localhost:8080`
 then enter `user@mappr.io`  `woot`
 
-If you are running it locally, if you close the Terminal window, it will shut down openMappr.
-To run again in the future, just a) make sure Docker is running, b) open the Terminal, type `docker-compose up`, and c) open a web browswer and type `http://localhost:8080` 
 
-## Useful Docker Compose Commands
+### Useful Docker Compose Commands
 
 These commands are only available from the project's root directory containing the `docker-compose.yml` file. You might find these helpful in your development and setup.
 
@@ -163,31 +399,18 @@ docker-compose down
 
 
 
-## Local Setup
+## Local + Docker Setup
 
-Alternatively, if you are not using docker, you can setup the entire project locally by following the instructions below.
-
-To run it locally, we need 6 things:
-
-- Mongo running locally on port 27017. It is the default mongo port.
-- Beanstalkd - http://kr.github.io/beanstalkd/
-- python 2.x for running athena. Refer to the athena [Readme.md](athena/README.md) for details.
-- Node 6 or greater for running the server. Refer to Node Env setup guide section.
-- Sass. Refer to Sass install section.
-- Elasticsearch 2.4. Optional component needed for search.
+If you are frequently changing the frontend code, you can use this setup to speed up your development process. You will still need to install both **docker** and **docker-compose** but we will use it only for running all the other services except our web application. For our web application (front end and backend), we will use a local setup. This way, you can easily use `nodemon` and `grunt watch` to automatically update the application code whenever you make any changes.
 
 There are 2 scripts for running dev version of webapp:
 
 - `run_local_mode.sh` - the most common. run the server in local mode
-- `run_test_mode.sh` - runs the server in testing mode. mostly for testing apis and other things.
 
 ### Steps
 
 These are the steps needed to get the full system running locally.
-* Have mongodb running at 27017 using ` mongod --config /usr/local/etc/mongod.conf & ` (if installed via brew)
-* Have beanstalkd running. `beanstalkd &` (if installed via brew)
-* Run elasticsearch. `elasticsearch &` (if installed via brew)
-* Run athena via `./run_dev_mode.sh`. Ensure virtual environment was created as directed by [Readme.md](athena/README.md)
+
 * Build webapp
     * Ensure all packages are installed by doing the steps listed in the _Setting up the node environment_ section.
     * `grunt` to build webapp. Then do `grunt watch` to watch for source code changes
