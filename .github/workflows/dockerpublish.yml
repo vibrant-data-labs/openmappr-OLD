@@ -28,7 +28,7 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file Dockerfile --build-arg script_file='run_dcoker_mode'
+            docker build . --file Dockerfile --build-arg script_file='run_docker_mode'
           fi
 
   push:
