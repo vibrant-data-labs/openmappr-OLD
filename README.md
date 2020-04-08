@@ -2,7 +2,7 @@
 
 *openMappr* allows you to visualize and interactively explore relationship data as a network. You save multiple layouts and views as 'snapshots' and publish/share them with others as a 'player' (an interactive, read-only version of map).
 
-There are 2 modes for using it:
+There are 2 modes for using it:  
 
 *1. Visualize Existing Network -*
 In this case, you need an excel file with 2 sheets. One labeled 'nodes' and the other labeled 'links'.
