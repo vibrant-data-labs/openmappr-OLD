@@ -32,7 +32,7 @@ Run this
 3. Install dependencies with `
 4. Run `git clone https://github.com/selfhostedofficial/openmappr`
 5. Enter `cd openmappr`
-6. Run `sudo chmod +x rebuilt-prod-web.sh`
+6. Run `sudo chmod +x rebuild-prod-web.sh`
 7. Run `nohup ./rebuild-prod-web.sh > output.log 2>&1 &`
 8. Run `tail -f output.log`
 
