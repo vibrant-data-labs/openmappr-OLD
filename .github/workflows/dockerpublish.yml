@@ -28,25 +28,25 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file Dockerfile --build-arg script_file='run_docker_mode'
+            docker build . --file Dockerfile --tag openmappr_web --build-arg script_file='run_docker_mode'
           fi
 
-  push:
-    needs: build
-
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Build image
-        run: docker build . --file Dockerfile --tag image
+#  push:
+#    needs: build
+#
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'push'
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Build openmappr_web
+#        run: docker build . --file Dockerfile --tag openmappr_web --build-arg script_file='run_docker_mode'
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Push image
+      - name: Push openmappr_web
         run: |
           IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
           
@@ -65,5 +65,5 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          docker tag image $IMAGE_ID:$VERSION
+          docker tag openmappr_web $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
