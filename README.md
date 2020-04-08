@@ -41,9 +41,6 @@ Run this
 
 There are 3* (1 now) Github actions.
 
-1. 
-
-
-1. Docker Build
-2. Push to Github Registry
-3. Deploy to Server 
+1. [Docker build and push to Github Package](https://github.com/selfhostedofficial/openmappr/actions)
+2. Deploy to Production
+3. Deploy PR to staging (self-delete after 30 days no use)
