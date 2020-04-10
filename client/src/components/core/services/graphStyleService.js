@@ -608,7 +608,7 @@ angular.module('common')
                         key: 'nodeFocusRenderTemplate',
                         title: 'RenderTemplate',
                         type: 'select',
-                        values: ['scroll', 'content'],
+                        values: ['scroll', 'content', 'node-right-panel'],
                         class: 'node-setting',
                         parents: {drawNodes: true, nodeFocusShow: true},
                         tooltip: 'The Template for Rendering the Overlay',

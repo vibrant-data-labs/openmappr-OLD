@@ -290,6 +290,12 @@ a {
     }
 }
 
+.shadown-btn--no-hover {
+    &.active, &:hover {
+        color: inherit;
+    }
+}
+
 .shadow-btn--icon-btn {
     display: inline-block;
     min-width: 0;
@@ -302,6 +308,31 @@ a {
     .material-icons {
       font-size: inherit;
     }
+
+    button {
+        &:not(:last-child) {
+            border-right: 1px solid #ccc;
+            padding-right: 6px;
+        }
+        
+        &.active,
+        &:hover {
+            &[disabled] {
+                color: #ccc;
+            }
+
+            color: $color-slice-blue;
+        }
+
+        &[disabled] {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.shadow-btn--icon-btn__text {
+    font-size: 0.7em;
 }
 
 .shadow-btn--tall {

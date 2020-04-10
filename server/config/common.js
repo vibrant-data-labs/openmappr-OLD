@@ -35,7 +35,7 @@ module.exports = {
     },
     etl: {
         AUTH_HEADER : "<>",
-        DATABRICKS_URL : "<>",
+        DATABRICKS_URL : "/",
         CLUSTER_ID : "<>",
         TEMP_BUCKET : "<>", // a temp bucket used to store maps
         ETL_BUCKET : "<>" // the bucket where a lot of user data is stored

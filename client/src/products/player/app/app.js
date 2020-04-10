@@ -42,7 +42,8 @@
         'ngAudio',
         'angular-google-analytics',
         'analytics.mixpanel',
-        'vs-repeat'
+        'vs-repeat',
+        'angular-intro'
     ])
 
         .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {

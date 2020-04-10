@@ -6,7 +6,10 @@ angular.module('common')
         'BROADCAST_MESSAGES',
         'dataGraph',
         '$uibModal',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal) {
+        'ngIntroService',
+        '$timeout',
+        'FilterPanelService',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService) {
             'use strict';
 
             /*************************************
@@ -37,6 +40,21 @@ angular.module('common')
                     panel: 'filter',
                     cmd: function() {
                         $scope.panelUI.openPanel('filter');
+
+
+
+                        let nodeID = graphSelectionService.selectedNodeIds()[0];
+                        console.log({NodeRightPanelCtrl: dataGraph.getNodeById(nodeID)});
+                        console.log({NodeRightPanelCtrl : 
+                            $scope.nodeInfoAttrs
+                           });
+                        
+
+                        
+                        $timeout(function () {
+                            ngIntroService.setOptions(FilterPanelService.getFilterIntroOptions());
+                            ngIntroService.start();
+                        }, 100);
                     }
                 },
                 {

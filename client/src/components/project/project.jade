@@ -13,10 +13,12 @@
 						dir-list-layout.animate-fade(ng-if="plotType == 'list'")
 						drawaxis(ng-if="plotType == 'scatterplot'")
 						div(ng-controller="NodeOverlayCtrl", ng-include=' "#{server_prefix}#{view_path}/components/project/overlays/node_overlay/nodeOverlay.html" ')
+						div(ng-controller="NodeOverlayCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/node_right_panel/NodeRightPanel.html" ')
 						div(ng-controller="NodePopCtrl", ng-include=' "#{server_prefix}#{view_path}/components/project/overlays/node_pop/nodePop.html" ')
 						div(ng-controller="RightPanelTabsProjectCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/rightPanelTabs.html" ')
 						div(ng-controller="RightPanelCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/rightPanel_proj.html" ')
 						.publish-panel(ng-controller="SnapshotPanelCtrl",
 							ng-include=' "#{server_prefix}#{view_path}/components/project/panels/snapshot/snapshotpanel.html" ')
+				
 			#forbidden(ng-if="!org.userAuthorised", style="position:fixed; top: 50px; left: 50px;")
 				h4 You are not authorized to view this project!

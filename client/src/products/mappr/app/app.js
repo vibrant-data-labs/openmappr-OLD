@@ -45,7 +45,8 @@
         'ng.deviceDetector',
         'ngFileUpload',
         'analytics.mixpanel',
-        'vs-repeat'
+        'vs-repeat',
+        'angular-intro'
     ])
 
         .config(['$routeProvider', '$locationProvider', '$httpProvider', 'USER_ROLES', function ($routeProvider, $locationProvider, $httpProvider, USER_ROLES) {

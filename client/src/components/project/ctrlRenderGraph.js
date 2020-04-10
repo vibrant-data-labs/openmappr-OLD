@@ -42,6 +42,8 @@ angular.module('common')
             };
             $scope.rawDataId = null;
             $scope.plotType = 'original';
+            $scope.enableUndo = false;
+            $scope.enableRedo = false;
 
             /**
     * Scope methods
@@ -49,10 +51,27 @@ angular.module('common')
             $scope.zoomInfo.zoomOut = zoomService.zoomOut;
             $scope.zoomInfo.zoomIn = zoomService.zoomIn;
             $scope.zoomInfo.zoomExtents = zoomExtents;
+            $scope.zoomInfo.zoomReset = zoomService.zoomReset;
             $scope.switchSnapshot = switchSnapshot; //A function for children to switch between snapshots and networks
 
             $scope.updatePlotType = function(plotType) {
                 $scope.plotType = plotType || 'original';
+            };
+
+            $scope.resetFilters = function() {
+                $scope.$broadcast('RESETFILTERS');
+            };
+
+            $scope.subsetFilters = function subsetFilters() {
+                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.changed);
+            };
+
+            $scope.undoFilters = function undoFilters() {
+                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.undo);
+            };
+
+            $scope.redoFilters = function redoFilters() {
+                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.redo);
             };
 
 
@@ -69,6 +88,16 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.player.load, function(event, data) { onProjectOrPlayerLoad(event, data); });
 
             $scope.$on(BROADCAST_MESSAGES.network.changed, onNetworkChange);
+
+            $scope.$on(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, function(evt, undoRedoStatus) {
+                $scope.enableUndo = undoRedoStatus.enableUndo;
+                $scope.enableRedo = undoRedoStatus.enableRedo;
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function handleReset() {
+                $scope.enableUndo = false;
+                $scope.enableRedo = false;
+            });
 
 
 

@@ -12,7 +12,7 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
     var dirDefn = {
         template:
             '<div id="sig-holder" class="sig-holder">'+
-                '<div class="graph-container"></div>' +
+                '<div id="mainCanvas" class="graph-container"></div>' +
             '</div>',
         restrict: 'EA',
         scope: true,

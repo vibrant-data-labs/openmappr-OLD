@@ -1,6 +1,7 @@
 angular.module('common')
-    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'dataGraph',
-        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, dataGraph) {
+    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
+        '$timeout', '$window',
+        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window) {
             'use strict';
 
             /*************************************
@@ -11,6 +12,27 @@ angular.module('common')
             /*************************************
              ********* Scope Bindings *************
              **************************************/
+            /**
+             *  LOAD CHANGE ngIntroService
+             */
+
+            ngIntroService.setOptions({showProgress: true})
+
+            ngIntroService.onBeforeChange(function (targetElement) {
+                if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'slides'){
+                    var nodeID = graphSelectionService.dataGraph.getAllNodes()[0].id;
+                    graphSelectionService.selectByIds(nodeID);
+                    $scope.zoomInfo.zoomExtents();
+                }
+            });
+            ngIntroService.onExit(function () {
+                if ($scope.panelUI.currentPanelOpen == 'slides'){
+                    graphSelectionService.clearSelectionCaches();
+                    $scope.zoomInfo.zoomReset();
+                }
+                $window.localStorage[$scope.panelUI.currentPanelOpen] = true;
+            });
+
             /**
              *  Scope data
              */
@@ -24,6 +46,20 @@ angular.module('common')
                     // highlighted: true,
                     cmd: function() {
                         $scope.panelUI.openPanel('modal');
+                        if(!$window.localStorage.modal)
+                            $timeout(function () {
+                                ngIntroService.setOptions(
+                                    {
+                                        steps:[
+                                            {
+                                                element: '#firstLoad',
+                                                intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
+                                            }
+                                        ]
+                                    }
+                                );
+                                ngIntroService.start();
+                            }, 100);
                     }
                 },
                 {
@@ -33,6 +69,32 @@ angular.module('common')
                     tooltipTitle: 'See slide information and change views if there are more than one',
                     cmd: function() {
                         $scope.panelUI.openPanel('slides');
+                        if(!$window.localStorage.slides)
+                            $timeout(function () {
+                                ngIntroService.setOptions(
+                                    {
+                                        steps:[
+                                            {
+                                                element: '#slideNavigator',
+                                                intro: 'Slide Navigator'
+                                            },
+                                            {
+                                                element: '#slideDescription',
+                                                intro: 'Slide Description'
+                                            }, 
+                                            {
+                                                element: '#mainCanvas',
+                                                intro: 'Main Canvas'
+                                            },
+                                            {
+                                                element: '#nodeZoom',
+                                                intro: 'Zoom in to node'
+                                            }
+                                        ]
+                                    },
+                                );
+                                ngIntroService.start();
+                            }, 100);
                     }
                 },
                 {
@@ -41,7 +103,12 @@ angular.module('common')
                     panel: 'filter',
                     tooltipTitle: 'Filter data by one or more attributes',
                     cmd: function() {
-                        $scope.panelUI.openPanel('filter');
+                        $scope.panelUI.openPanel('filter');                        
+                        if(!$window.localStorage.filter)
+                            $timeout(function () {
+                                ngIntroService.setOptions(FilterPanelService.getFilterIntroOptions());
+                                ngIntroService.start();
+                            }, 100);
                     }
                 },
                 {
@@ -74,15 +141,15 @@ angular.module('common')
              **************************************/
 
             $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function() {
-               updateSelCount();
+                updateSelCount();
             });
 
             $scope.$on(BROADCAST_MESSAGES.selectNodes, function() {
-               updateSelCount();
+                updateSelCount();
             });
 
             $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
-               updateSelCount();
+                updateSelCount();
             });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
@@ -102,7 +169,7 @@ angular.module('common')
              **************************************/
 
             function updateSelCount() {
-               $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
+                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
             }
 
         }

@@ -106,6 +106,8 @@ module.exports = function(grunt) {
 		http_upload: {}
 	};
 
+	grunt.loadNpmTasks('grunt-contrib-compass');
+
 	function addTask(plugin, task, config) {
 		if(arguments.length < 3) {
 			console.log('plugin --> ', plugin);

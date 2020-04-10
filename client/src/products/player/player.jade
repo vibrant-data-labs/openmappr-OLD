@@ -29,7 +29,8 @@
 						div(ng-include=' "#{server_prefix}#{view_path}/player/header.html" ')
 						div(ng-include=' "#{server_prefix}#{view_path}/player/introOverlay.html" ')
 						div(ng-controller="LayoutDropdownCtrl" ng-include=' "#{server_prefix}#{view_path}/player/layoutDropdown.html" ')
-						div(ng-include=' "#{server_prefix}#{view_path}/player/graphControls.html" ')
+						//- div(ng-include=' "#{server_prefix}#{view_path}/player/graphControls.html" ')
+						div(ng-include=' "#{server_prefix}#{view_path}/player/playbar.html" ')
 
 						#image-layout.animate-fade(ng-repeat="snap in player.snapshots | filter: {type: 'image'}" ng-if="snapInfo.activeSnap.id == snap.id")
 							img(ng-class="{'tall':isTallImg()}" ng-src="{{snapInfo.activeSnap.picture}}" imageonload="")

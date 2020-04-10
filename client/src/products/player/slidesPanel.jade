@@ -1,7 +1,7 @@
 .slides-panel.flex-transclude.width-100(ng-mouseleave="rightPanelExited();")
 	.flex-vert-container.width-100
 		.header
-			.row.vert-align.main
+			#slideNavigator.row.vert-align.main
 				.col-xs-10
 					.vert-align
 						h6.title.text-uppercase.nowrap Slide {{snapInfo.curSnapInd + 1}}/{{player.snapshots.length}}:
@@ -18,7 +18,7 @@
 			.row
 				.col-xs-12
 					.timer(style="width: {{((currentTime / 1000) % (player.settings.snapDuration)) / player.settings.snapDuration * 100}}%;")
-		.left-panel-body.flex-fill
+		#slideDescription.left-panel-body.flex-fill
 			.panel-scroll(ng-repeat="snap in player.snapshots" ng-if="snap.id === snapInfo.activeSnap.id" ng-class="snapDescClass")
 				.panel-item
 					.filter-item

@@ -23,6 +23,7 @@
 @import 'common/right-panel';
 @import 'common/right-panel-tabs';
 @import 'common/pinned-media';
+@import 'common/intro';
 
 //move to more general file that's shared with app once
 //transferring app over
@@ -31,6 +32,7 @@
 @import 'player/overlay';
 @import 'player/layout-dropdown';
 @import 'player/graph-controls';
+@import 'player/playbar';
 
 //import last so will override any light theme styling
 @import 'common/dark-theme';

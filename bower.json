@@ -54,7 +54,9 @@
     "toastr": "~2.1.1",
     "twix": "~0.7.2",
     "weather-icons": "~0.0.1",
-    "angular-google-analytics": "*"
+    "angular-google-analytics": "*",
+    "intro.js": "^2.9.3",
+    "angular-intro.js": "^3.4.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.1",

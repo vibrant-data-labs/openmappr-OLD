@@ -1,5 +1,5 @@
 #right-panel.right-panel(ng-if="panelUI.showRightPanel" ng-controller="RightPanelCtrl")
-	.height-100
+	#mainFilterPanel.height-100
 		.accordion.height-100.flex-vert-container(ng-show="!panelUI.stylePanelOpen && !panelUI.layoutPanelOpen && !panelUI.playerPanelOpen")
 			.accordion-panel.info-panel.flex-transclude(ng-show="panelUI.infoPanelOpen" ng-controller="InfoPanelCtrl", ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/infoPanel.html" ')
 			.accordion-panel.panel-container.flex-transclude(ng-show="panelUI.summaryPanelOpen", ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/def_data_groups/projectSummary.html" ')

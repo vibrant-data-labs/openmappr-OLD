@@ -15,7 +15,7 @@
 			.h6 more
 	.clearfix
 .cat-list.h6.tag-cloud(ng-if="selNodesCount === 0 || (selNodesCount > 0 && catListData.highlightedCats.length > 0)")
-	.cat-item(ng-class="{'filter':showFilter, 'cat-item-subsetted': catData.isSubsetted}", ng-repeat="catData in catListData.data | filter:{text: distrData.searchQuery} | limitTo: distrData.numShownCats track by catData.id")
+	.cat-item(ng-mouseenter="overCat(catData, $event)", ng-mouseleave="outCat(catData)", ng-class="{'filter':showFilter, 'cat-item-subsetted': catData.isSubsetted}", ng-repeat="catData in catListData.data | filter:{text: distrData.searchQuery} | limitTo: distrData.numShownCats track by catData.id")
 		.cat-highlight(style="opacity: 0;")
 		//- .cat-highlight(style="opacity: {{catData.selPercentOfSel/100}}")
 		//- .cat-bar-container

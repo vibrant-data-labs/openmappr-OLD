@@ -121,7 +121,8 @@ function ($scope, $rootScope, $timeout, dataGraph, dataService, layoutService, o
             // }
         },
         setHoverSetting: function(opt) {
-            //console.log(opt);
+
+            console.log({setHoverSetting: opt});
             var control = opt;// _.findWhere($scope.layoutUI.controls, {key:opt.key});
             //console.log(control);
             if(!control.parents) {

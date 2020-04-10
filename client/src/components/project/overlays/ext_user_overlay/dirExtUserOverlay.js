@@ -124,7 +124,8 @@ function($timeout, $rootScope, dataGraph, graphSelectionService, AttrInfoService
 
 
             //may not need
-            scope.beginOverlayAnim = true;
+            if($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') $scope.beginOverlayRightPanel= true;
+            else $scope.beginOverlayAnim = true;
             //finally show the node
             scope.showFocusNode = true;
 

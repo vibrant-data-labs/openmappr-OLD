@@ -10,7 +10,7 @@
 		//- .clearfix
 		//- .square-btn.small-btn.panel-btn.text-center(ng-if="panelUI.filterPanelOpen")
 		//- 	i.fa.fa-chevron-down
-	.accordion.height-100.flex-vert-container
+	#mainFilterPanel.accordion.height-100.flex-vert-container
 		.accordion-panel.info-panel.flex-transclude.flex-fill(ng-show="panelUI.infoPanelOpen" ng-controller="InfoPanelCtrl", ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/infoPanel.html" ')
 		.accordion-panel.panel-container.flex-transclude.flex-fill(ng-show="panelUI.summaryPanelOpen" ng-controller="DataPresentationCtrl" ng-include=' "#{server_prefix}#{view_path}/player/playerSummary.html" ')
 		// change ng-style to ng-class and work on data-dir-virtual-scroll rendering

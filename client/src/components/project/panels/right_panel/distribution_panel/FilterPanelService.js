@@ -3,8 +3,8 @@
  * This service builds intelligence about an attribute in the dataset
  */
 angular.module('common')
-    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService',
-        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService) {
+    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService', 'constSteps',
+        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService, constSteps) {
             "use strict";
 
             /*************************************
@@ -98,6 +98,7 @@ angular.module('common')
             };
 
 
+            this.getFilterIntroOptions = getFilterIntroOptions;
 
 
             /*************************************
@@ -324,5 +325,53 @@ angular.module('common')
                 return panelColor;
             }
 
+            function addKeywordStepIfExists(steps) {
+                var element = $('dir-tag-cloud').closest('.filter-item');
+                if (element.length) {
+                    steps.push({
+                        element: element[0],
+                        intro: constSteps.keyword
+                    });
+                }
+
+                return steps;
+            }
+
+            function addCategoryStepIfExists(steps) {
+                var element = $('dir-category-list').closest('.filter-item');
+                if (element.length) {
+                    steps.push({
+                        element: element[0],
+                        intro: constSteps.category
+                    });
+                }
+
+                return steps;
+            }
+
+            function getFilterIntroOptions() {
+                var steps = [
+                    {
+                        element: '#mainFilterPanel',
+                        intro: constSteps.main
+                    },
+                ];
+                steps = addKeywordStepIfExists(steps);
+                steps = addCategoryStepIfExists(steps);
+
+                return {
+                    steps: steps,
+                    disableInteraction: true,
+                    exitOnOverlayClick: false,
+                    showBullets: false,
+                    scrollToElement: false,
+                    keyboardNavigation: false,
+                    exitOnEsc: false,
+                    showStepNumbers: false,
+                    tooltipPosition: 'right'
+                };
+            }
+
         }
     ]);
+    angular.$inject = ['constSteps'];  

@@ -190,11 +190,14 @@ angular.module('common')
                     }, 10);
                 };
 
-                scope.outCat = function() {
+                scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-                        renderCtrl.unHoverNodes();
-                    }, 10);
+
+                        if (!catData.isChecked) {
+                            renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
+                        }
+                    }, 100);
                 };
 
 
@@ -211,7 +214,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    hoverSelectedNodes(event);
+                    if (catData.isChecked) {
+                        hoverSelectedNodes(event);
+                    } else {
+                        unhoverSelectedNodes(event);
+                    }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -224,9 +231,13 @@ angular.module('common')
                 }
 
                 function hoverSelectedNodes(event) {
-                    renderCtrl.unHoverNodes();
                     var selectedValues = getSelectedValues() || [];
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
+                }
+
+                function unhoverSelectedNodes(event) {
+                    var selectedValues = getSelectedValues() || [];
+                    renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
                 /// filter stuff

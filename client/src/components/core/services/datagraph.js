@@ -37,6 +37,7 @@ angular.module('common')
                 getAllNodes: function getAllNodes() { return _rawData.nodes; },
                 getNodeById: function getNodeById(nid) { return _rawData.nodeIndex[nid]; },
                 getAllEdges: function getAllEdges(){ return _rawData.edges; },
+                getData: function getData() { return _rawData; },
 
                 getNodeEdges: getNodeEdges,
 

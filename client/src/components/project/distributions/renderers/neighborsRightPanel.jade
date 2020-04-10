@@ -1,0 +1,7 @@
+.user(ng-repeat="link in links | neighborsFilter")
+    .img-user 
+        img(src="https://image.flaticon.com/icons/svg/236/236831.svg")
+    .info-user  
+        p 
+            strong {{link.name}}
+        p {{nodeRightInfo.nameDescription}}

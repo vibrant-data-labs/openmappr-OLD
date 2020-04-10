@@ -1,0 +1,139 @@
+//
+// Node Right Panel Styling
+// Style for right panel in app and player
+
+.node-rigth-panel-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 2px;
+    overflow: auto;
+    height: 100%;
+
+    .node-rigth-panel-container {
+        @include transition(all .5s linear);
+        opacity: 1;
+        width: 800px;
+        height: 100%;
+
+        .node-rigth-panel {
+            @include transition(bottom .5s ease-out);
+            @include user-select(text);
+            position: absolute;
+            background: $panel-background;
+            border: 1px solid $horiz-line-color;
+            color: $panel-text-dark;
+            right: 2px;
+            top: 40px;
+            width: 330px;
+            height: 100%;
+            z-index: 999;
+        
+            .section {
+                border-top: 10px solid $trans-ten-black;
+                padding: 10px 20px;
+              
+                .title {
+                    padding:2px;
+                }
+              
+                .socialMedia {
+                    .left {
+                        width: 60%;
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+        
+                    .right {
+                        width: 30%;
+                        display: inline-block;
+                        vertical-align: middle;
+                        text-align:right;
+                        img {
+                            width:20px;
+                            border-radius: 50%;
+                            background-color: white;
+                        }
+                    }
+                }
+                
+                .user {
+                    display: flex;
+                    align-items: center;
+                    padding: 5px 0;
+        
+                    .img-user {
+                        width:30px;
+                    }
+        
+                    .info-user {
+                        margin: 0 5px;
+                        padding: 0 10px;
+        
+                        p {
+                            margin:2px 0;
+                        }
+                    }
+                }
+        
+                .tab {
+                    margin: -10px -20px;
+                    background-color: $trans-ten-black;
+                    overflow: hidden;
+        
+                    button {
+                        background-color: $color-border-grey;
+                        border: 2px solid $color-border-grey;
+                        float: left;
+                        cursor: pointer;
+                        padding: 2px 15px;
+                        transition: 0.3s;
+                        border-radius: 10px 10px 0 0;
+                        margin: 0 1px;
+        
+                        &:hover {
+                            background-color: #ddd;
+                        }
+                    }
+                    
+                    button.active {
+                        border: 2px solid $panel-background;
+                        background-color: $panel-background;
+                        color: $color-dark-grey;
+                    }
+                }
+        
+                .tabcontent {
+                    padding-top: 20px;
+                }
+        
+                .publications-container {
+                    .publication {
+                        padding: 5px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        p {
+                            margin:2px 0;
+                            text-transform: capitalize;
+                        }
+                    }
+                }
+              
+                .events-container {
+                    .event {
+                        .left, .right {
+                            width: 45%;
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                        .left {
+                            font-weight: bold;
+                        }
+                    }
+                }
+              
+            }
+        }
+    }
+}
+

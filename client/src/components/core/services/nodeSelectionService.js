@@ -15,6 +15,8 @@ angular.module('common')
 
             this.hoverNodesByAttrib       = hoverNodesByAttrib;
             this.hoverNodesByAttributes   = hoverNodesByAttributes;
+            this.unhoverNodesByAttributes = unhoverNodesByAttributes;
+            this.unhoverNodesByAttrib = unhoverNodesByAttrib;
             this.hoverNodesByAttribRange  = hoverNodesByAttribRange;
             this.hoverNodeIdList          = hoverNodeIdList;
             this.hoverNodeNeighborIdList  = hoverNodeNeighborIdList;
@@ -69,6 +71,14 @@ angular.module('common')
 
             function hoverNodesByAttributes(attr, values, $event, fivePct) {
                 _hoverHelper(values.length ? dataGraph.getNodesByAttributes(attr, values, fivePct) : []);
+            }
+
+            function unhoverNodesByAttributes(attr, values, $event, fivePct) {
+                _unhoverHelper(values.length ? dataGraph.getNodesByAttributes(attr, values, fivePct) : []);
+            }
+
+            function unhoverNodesByAttrib(attr, values, $event, fivePct) {
+                _unhoverHelper(values.length ? dataGraph.getNodesByAttrib(attr, values, fivePct) : []);
             }
 
             function hoverNodesByAttribRange(attr, min, max) {
@@ -229,6 +239,13 @@ angular.module('common')
                     graphHoverService.clearHovers(true);
                 } else {
                     graphHoverService.hoverByIds(ids, degree, false);
+                }
+            }
+
+            function _unhoverHelper(ids, degree) {
+                degree = degree || 0;
+                if (ids && ids.length) {
+                    graphHoverService.unhoverByIds(ids, degree, false);
                 }
             }
 

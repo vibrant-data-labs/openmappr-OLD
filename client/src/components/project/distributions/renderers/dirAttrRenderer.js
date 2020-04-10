@@ -52,6 +52,8 @@ angular.module('common')
             var debSelectByAttrRange = _.debounce(nodeSelectionService.selectNodesByAttribRange, delay);
             var debHoverIdList = _.debounce(nodeSelectionService.hoverNodeIdList, delay);
             var debSelectIdList = _.debounce(nodeSelectionService.selectNodeIdList, delay);
+            var debUnHoverByAttributes = _.debounce(nodeSelectionService.unhoverNodesByAttributes, 10);
+            var debUnHoverByAttrib = _.debounce(nodeSelectionService.unhoverNodesByAttrib, 10);
 
             var isFPScrollActive = FilterPanelService.getFPScrollStatus; //Function ref
 
@@ -72,6 +74,8 @@ angular.module('common')
                 // Graph interaction functions to be used by child directives
                 this.hoverNodesByAttrib = hoverNodesByAttrib;
                 this.hoverNodesByAttributes = hoverNodesByAttributes;
+                this.unhoverNodesByAttrib = unhoverNodesByAttrib;
+                this.unhoverNodesByAttributes = unhoverNodesByAttributes;
                 this.hoverNodesByAttribRange = hoverNodesByAttribRange;
                 this.hoverNodeIdList = hoverNodeIdList;
                 this.unHoverNodes = unHoverNodes;
@@ -243,6 +247,14 @@ angular.module('common')
 
             function hoverNodesByAttributes(id, values, ev) {
                 !isFPScrollActive() && debHoverByAttributes(id, values, ev, true);
+            }
+
+            function unhoverNodesByAttributes(id, values, ev) {
+                !isFPScrollActive() && debUnHoverByAttributes(id, values, ev, true);
+            }
+
+            function unhoverNodesByAttrib(id, values, ev) {
+                !isFPScrollActive() && debUnHoverByAttrib(id, values, ev, true);
             }
 
             function hoverNodesByAttribRange(id, min, max, ev) {
