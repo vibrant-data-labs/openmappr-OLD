@@ -1,4 +1,7 @@
 #!/bin/bash
+# 
+# This script assumes you have nothing installed. It will skip over anything you don't need.
+# 
 
 echo installing homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
