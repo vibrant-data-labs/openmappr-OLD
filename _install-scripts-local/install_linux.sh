@@ -41,7 +41,7 @@ echo "Cloning openmappr repo"
 git clone https://github.com/selfhostedofficial/openmappr
 cd openmappr
 
-
+>>>> stopped here
 
 
 
