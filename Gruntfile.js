@@ -6,9 +6,9 @@ module.exports = function(grunt) {
 
 	// secrets
 	var aws = {
-		accessKeyId: 'AKIAYRX73XY266KUGYNR',
-		secretAccessKey: '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',
-		region: 'us-west-2'
+		accessKeyId: '',
+		secretAccessKey: '',
+		region: ''
 	}
 
 	var atatus = {
