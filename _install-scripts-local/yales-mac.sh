@@ -9,11 +9,14 @@ echo installing homebrew
 echo installing docker
 brew install docker 
 
+echo installing dependencies
+brew install git curl
+
 echo cloning openmappr repo
 git clone https://github.com/selfhostedofficial/openmappr
 cd openmappr
 
-echo Running docker Compose scripts
+echo Running docker-compose scripts
 
 docker-compose -f docker-compose-local.yml up -d
 docker-compose -f docker-compose-local.yml ps
@@ -30,7 +33,7 @@ gem install compass
 
 clear
 
-echo installing dependencies
+echo installing bower and grunt 
 
 sudo npm install -g yo bower grunt-cli
 npm install
@@ -44,3 +47,7 @@ grunt
 
 echo running server at PORT: http://localhost:8080
 ./run_local_mode.sh
+
+# Open a browser window
+echo opening https://localhost:8080
+open https://localhost:8080
