@@ -496,7 +496,7 @@ angular.module('common')
 
             function isEvent(attr){
                 const { attrType, renderType, id } = attr;
-                return attrType === 'liststring' && renderType === 'tag-cloud' && id === 'Event';
+                return attrType === 'string' && renderType === 'tag-cloud' && id === 'Event';
             }
 
             function isYouTube(attr){
