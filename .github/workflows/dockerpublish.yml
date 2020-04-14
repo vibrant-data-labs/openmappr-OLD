@@ -22,16 +22,18 @@ jobs:
       - uses: actions/checkout@v2
 
 #
-      - name: Scan for secrets (1/2) • Yelp/detect-secrets 
-        uses: evanextreme/detect-secrets-action@1.0.0
-
-      - name: Scan for secrets (2/2) • Trufflehog
-        uses: edplato/trufflehog-actions-scan@v0.9i-beta
-        with:
-          # GitHub Token to access a private repository.
-          # githubToken: ${{ secrets.SCANS_TRUFFLEHOG_TOKEN }}
-          # Argument options for scan.
-          scanArguments: " " # optional
+#       The scans below work, will go back to later.
+#
+#      - name: Scan for secrets (1/2) • Yelp/detect-secrets 
+#        uses: evanextreme/detect-secrets-action@1.0.0
+#
+#      - name: Scan for secrets (2/2) • Trufflehog
+#        uses: edplato/trufflehog-actions-scan@v0.9i-beta
+#        with:
+#          # GitHub Token to access a private repository.
+#          # githubToken: ${{ secrets.SCANS_TRUFFLEHOG_TOKEN }}
+#          # Argument options for scan.
+#          scanArguments: " " # optional
 
 
 
