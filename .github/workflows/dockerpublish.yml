@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+#
+      - name: Scan for secrets
+        uses: evanextreme/detect-secrets-action@1.0.0
+#
       - name: Check docker build openmappr_web
         run: docker build . --file Dockerfile --tag openmapprimages/openmappr_web --build-arg script_file='run_docker_mode'
 
