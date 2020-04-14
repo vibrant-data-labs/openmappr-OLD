@@ -21,27 +21,42 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check docker build
-        run: docker build . --file Dockerfile --tag openmappr_build --build-arg script_file='run_docker_mode'
+      - name: Check docker build openmappr_web
+        run: docker build . --file Dockerfile --tag openmapprimages/openmappr_web --build-arg script_file='run_docker_mode'
 
-      - name: Log into Github Package registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-
-      - name: Push openmappr image to Github Packages
+      - name: Check docker build openmappr_athena
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          cd ./athena
+          docker build . --file Dockerfile --tag openmappr_athena --build-arg script_file='run_docker_mode'
 
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+      - name: Log into Dockerhub Container Registry
+        run: docker login -u ${{ secrets.DOCKERHUB_EMAIL }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+#        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+      - name: Publish to Dockerhub Container Registry
+        run: docker push openmapprimages/openmappr_web:latest
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          docker tag openmappr_build $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+#      - name: Push openmappr_athena image to Github Packages
+#        run: |
+#          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+#          VERSION=athena
+#
+#          # Change all uppercase to lowercase
+#          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+#
+#          # Strip git ref prefix from version
+#          # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+#
+#          # Use Docker `latest` tag convention
+#          # [ "$VERSION" == "master" ] && VERSION=latest
+#
+#          echo IMAGE_ID=$IMAGE_ID
+#          echo VERSION=$VERSION
+#
+#          docker tag openmappr_athena $IMAGE_ID:$VERSION
+#          docker push $IMAGE_ID:$VERSION
+#      - name: Deploy to staging
+#        run: |
+#          cat ~/.ssh/id_rsa.pub
+#          export REMOTE_SERVER=167.172.255.74
+#          ssh root@$REMOTE_SERVER git clone git@github.com:selfhostedofficial/openmappr.git && cd openmappr && docker-compose -f docker-compose.do.yml up
