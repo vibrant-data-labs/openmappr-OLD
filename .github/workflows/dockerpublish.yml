@@ -29,9 +29,9 @@ jobs:
         uses: edplato/trufflehog-actions-scan@v0.9i-beta
         with:
           # GitHub Token to access a private repository.
-         githubToken: ${{ secrets.SCANS_TRUFFLEHOG_TOKEN }}
+          githubToken: ${{ secrets.SCANS_TRUFFLEHOG_TOKEN }}
           # Argument options for scan.
-          scanArguments: # optional
+          scanArguments: " " # optional
 
 
 
