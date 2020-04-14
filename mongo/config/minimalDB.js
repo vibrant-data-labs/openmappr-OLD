@@ -8,10 +8,10 @@ var _    = require('lodash'),
     bcrypt   = require('bcrypt'),
     Promise  = require("bluebird");
 
-var db  = require("../server/schemas"),
-    orgModel     = require("../server/org/org_model.js"),
-    userModel    = require("../server/user/user_model.js"),
-    projModel    = require("../server/project/proj_model.js");
+var db  = require("../../server/schemas"),
+    orgModel     = require("../../server/org/org_model.js"),
+    userModel    = require("../../server/user/user_model.js"),
+    projModel    = require("../../server/project/proj_model.js");
 
 /////
 /// Test Entities manages entities used in the test sutie.
