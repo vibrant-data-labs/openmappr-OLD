@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-domains=(app.openmappr.org) # Specify domains here or use the -d argument
+domains=(openmappr.com) # Specify domains here or use the -d argument
 data_path="./data/certbot" # Specify data path here or use the --data-path argument
-email="abhimediratta@gmail.com" # Specify email here or use the --email argument
+email="yale@openmappr.com" # Specify email here or use the --email argument
 staging=0 # Set to 1 here or use the --staging argument
 rsa_key_size=4096
 
