@@ -1,4 +1,4 @@
-name: Docker build and push to Github Packages
+name: Docker build and push
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 
   pull_request:
     branches:
-      - master
       - staging
 
 env:
@@ -39,7 +38,7 @@ jobs:
 
 #
       - name: Check docker build openmappr_web
-        run: docker build . --file Dockerfile --tag openmapprimages/openmappr_web --build-arg script_file='run_docker_mode'
+        run: docker build . --file Dockerfile --tag openmappr_web --build-arg script_file='run_docker_mode'
 
       - name: Check docker build openmappr_athena
         run: |
@@ -47,11 +46,28 @@ jobs:
           docker build . --file Dockerfile --tag openmappr_athena --build-arg script_file='run_docker_mode'
 
       - name: Log into Dockerhub Container Registry
-        run: docker login -u ${{ secrets.DOCKERHUB_EMAIL }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_EMAIL }} --password-stdin
+#        docker login -u ${{ secrets.DOCKERHUB_EMAIL }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
 #        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Publish to Dockerhub Container Registry
-        run: docker push openmapprimages/openmappr_web:latest
+      - name: Publish openmappr_web image to Dockerhub Registry
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [ "$VERSION" == "master" ] && VERSION=latest
+          [ "$VERSION" == "staging" ] && VERSION=staging
+          echo VERSION=$VERSION
+          docker tag openmappr_web openmapprimages/openmappr_web:$VERSION
+          docker push openmapprimages/openmappr_web:$VERSION
+
+      - name: Publish openmappr_athena image to Dockerhub Registry
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [ "$VERSION" == "master" ] && VERSION=latest
+          [ "$VERSION" == "staging" ] && VERSION=staging
+          echo VERSION=$VERSION
+          docker tag openmappr_athena openmapprimages/openmappr_athena:$VERSION
+          docker push openmapprimages/openmappr_athena:$VERSION
+
 
 #      - name: Push openmappr_athena image to Github Packages
 #        run: |
