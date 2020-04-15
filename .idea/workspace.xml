@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7e1e6d4b-0d6b-421b-aa6a-08ac3ee89105" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feature/OMAP-11" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../sync_repos/openmappr_openmappr_origin" />
+    <option name="UPDATE_TYPE" value="MERGE" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/OMAP-7" />
+                    <option name="lastUsedInstant" value="1586392029" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="feature/OMAP-11" />
+                    <option name="lastUsedInstant" value="1586300986" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="into.js" />
+                    <option name="lastUsedInstant" value="1586189426" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1586189425" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ZXMBsgI5s2VO5K4LxdvKyxuxaa" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js.linters.configure.manually.selectedeslint" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="$USER_HOME$/.nvm/versions/node/v8.12.0/bin/node" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7e1e6d4b-0d6b-421b-aa6a-08ac3ee89105" name="Default Changelist" comment="" />
+      <created>1584980852261</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584980852261</updated>
+      <workItem from="1584980862493" duration="2192000" />
+      <workItem from="1584987702525" duration="1540000" />
+      <workItem from="1585002584624" duration="2422000" />
+      <workItem from="1585067094136" duration="1764000" />
+      <workItem from="1585088911778" duration="814000" />
+      <workItem from="1585155686310" duration="988000" />
+      <workItem from="1585160095091" duration="392000" />
+      <workItem from="1585275527396" duration="453000" />
+      <workItem from="1586193358693" duration="169000" />
+      <workItem from="1586193565160" duration="2139000" />
+      <workItem from="1586211975868" duration="502000" />
+      <workItem from="1586265921311" duration="7801000" />
+      <workItem from="1586287624812" duration="1514000" />
+      <workItem from="1586300866349" duration="19750000" />
+      <workItem from="1586392009060" duration="3745000" />
+      <workItem from="1586568519063" duration="433000" />
+    </task>
+    <task id="LOCAL-00001" summary="added grunt contrib compasss script at grunt file in order to get the gems from compass&#10;added sh file to install application on mac">
+      <created>1585007814631</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1585007814631</updated>
+    </task>
+    <task id="LOCAL-00002" summary="changes on maps">
+      <created>1586353305730</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1586353305730</updated>
+    </task>
+    <task id="LOCAL-00003" summary="finish helper function">
+      <created>1586354897591</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1586354897591</updated>
+    </task>
+    <task id="LOCAL-00004" summary="finish details">
+      <created>1586481754283</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1586481754283</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added grunt contrib compasss script at grunt file in order to get the gems from compass&#10;added sh file to install application on mac" />
+    <MESSAGE value="changes on maps" />
+    <MESSAGE value="finish helper function" />
+    <MESSAGE value="finish details" />
+    <option name="LAST_COMMIT_MESSAGE" value="finish details" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="-940" y="637" key="#ESLint" timestamp="1586304910301">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-940" y="637" key="#ESLint/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586304910301" />
+    <state x="-940" y="637" key="#Plugins" timestamp="1586193525300">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-940" y="637" key="#Plugins/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586193525300" />
+    <state x="6" y="353" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586393757674">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="-1076" y="633" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586310111126" />
+    <state x="6" y="353" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586393757674" />
+    <state x="6" y="353" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1586352367362" />
+    <state x="61" y="80" key="CommitChangelistDialog2" timestamp="1586481754067">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="-1041" y="476" key="CommitChangelistDialog2/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586310716310" />
+    <state x="61" y="80" key="CommitChangelistDialog2/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586394054863" />
+    <state x="61" y="80" key="CommitChangelistDialog2/0.23.1680.1027@0.23.1680.1027" timestamp="1586481754067" />
+    <state x="156" y="77" width="1369" height="919" key="DiffContextDialog" timestamp="1586481191567">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="-980" y="123" width="880" height="1697" key="DiffContextDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586315862081" />
+    <state x="156" y="77" width="1369" height="919" key="DiffContextDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1586481191567" />
+    <state x="615" y="169" key="RollbackChangesDialog" timestamp="1586392814209">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="615" y="169" key="RollbackChangesDialog/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586392814209" />
+    <state x="-1050" y="625" key="SettingsEditor" timestamp="1586193232262">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-1050" y="625" key="SettingsEditor/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586193232262" />
+    <state x="440" y="258" key="Vcs.Push.Dialog.v2" timestamp="1586481756293">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="440" y="258" key="Vcs.Push.Dialog.v2/0.23.1680.1027@0.23.1680.1027" timestamp="1586481756293" />
+    <state x="-980" y="123" width="880" height="1697" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1586275579329">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-980" y="123" width="880" height="1697" key="com.intellij.history.integration.ui.views.FileHistoryDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586275579329" />
+    <state x="-885" y="593" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1586308281509">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-885" y="593" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586308281509" />
+    <state x="-737" y="890" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586392015004">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-737" y="890" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586392015004" />
+    <state x="534" y="492" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586307456375" />
+    <state x="628" y="23" width="817" height="1008" key="dock-window-1" timestamp="1586351354307">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="628" y="23" width="817" height="1008" key="dock-window-1/0.23.1680.1027@0.23.1680.1027" timestamp="1586351354307" />
+    <state x="661" y="169" width="839" height="775" key="find.popup" timestamp="1586481277376">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="-870" y="571" width="659" height="777" key="find.popup/-1080.0.1080.1920/0.0.1680.1050@-1080.0.1080.1920" timestamp="1586196504479" />
+    <state x="-870" y="587" width="659" height="768" key="find.popup/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586317440423" />
+    <state x="239" y="60" width="1261" height="884" key="find.popup/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586395685270" />
+    <state x="661" y="169" width="839" height="775" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1586481277376" />
+    <state x="-768" y="841" width="547" height="279" key="org.intellij.images.editor.actions.BackgroundImageDialog" timestamp="1586190238448">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-768" y="841" width="547" height="279" key="org.intellij.images.editor.actions.BackgroundImageDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586190238448" />
+    <state x="-875" y="468" width="670" height="676" key="search.everywhere.popup" timestamp="1586568678270">
+      <screen x="-1080" y="23" width="1080" height="1897" />
+    </state>
+    <state x="-875" y="450" width="670" height="685" key="search.everywhere.popup/-1080.0.1080.1920/0.0.1680.1050@-1080.0.1080.1920" timestamp="1586194218203" />
+    <state x="-875" y="468" width="670" height="676" key="search.everywhere.popup/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586568678270" />
+    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586392679032" />
+    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1586481680333" />
+  </component>
+</project>

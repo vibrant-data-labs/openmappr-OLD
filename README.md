@@ -1,36 +1,5 @@
 # openMappr - a network analysis and visualization platform
 
-# Repo is being cleaned
-
-See readmev1 folder
-
-# macOS
-> issues testing with hypervisor
-
-1. Run `curl -sSL https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-mac-local-environment.sh | bash`
-
-
-# Ubuntu Linux (Dev) 
-
-### Ubuntu 18 LTS first install
-1. Install cURL with `sudo apt install curl -y`
-2. This script needs to be run as a root with root privileges `curl -sSL https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-ubuntu-local-environment.sh | sudo bash`
-3. After it installs, go to https://localhost:8080 to view
-
-
-### Ubuntu Linux run
-1. Navigate to the `/openmappr/` directory
-2. Switch to a root shell with `sudo su`
-3. Run `docker-compose -f docker-compose-local.yml up -d`
-4. Run `./run_local_mode.sh`
-5. In a new window run `grunt; grunt watch`
-6. Go to http://localhost:80
-
-
-
-
-
-<<<<<<< right-node
 *openMappr* allows you to visualize and interactively explore relationship data as a network. You save multiple layouts and views as 'snapshots' and publish/share them with others as a 'player' (an interactive, read-only version of map).
 
 There are 2 modes for using it:
@@ -472,7 +441,7 @@ Code is divided into top level modules, each with routes, controllers, models an
 * recipe          - Recipe Engine module. each individual stage has its own file.
 * schemas         - all schemas are here. This is because I feel they might be shared across multiple projects
 * scriptStore     - contains script runner to run generic scripts on data. depreciated
-* services        - common services needed by all modulesa
+* services        - common services needed by all modules
 * snapshot        - Snapshot module.
 * survey          - Survey module
 * user            - User management module
@@ -535,7 +504,7 @@ Sass and Compass need to be installed in order for sass to compile to css.
 gem install sass
 ```
 
-[Sass install](http://sass-lang.com/instal
+[Sass install](http://sass-lang.com/install)
 
 * install __compass__
 
@@ -552,28 +521,3 @@ gem install compass
 3. Go into the `openmappr` directory
 4. Run `nohup ./rebuild-prod-web.sh > output.log 2>&1 &`
 5. To check status of the build process, run `tail -f output.log`. It usually takes around 10-15 mins, it sped up when I increased the server disk space from 100GB to 200GB.
-=======
-See readmev1 folder
-
-# macOS
-> issues testing with hypervisor
-
-1. Run `curl -sSL https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-mac-local-environment.sh | bash`
-
-
-# Ubuntu Linux (Dev) 
-
-### Ubuntu 18 LTS first install
-1. Install cURL with `sudo apt install curl -y`
-2. This script needs to be run as a root with root privileges `curl -sSL https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-ubuntu-local-environment.sh | sudo bash`
-3. After it installs, go to https://localhost:8080 to view
-
-
-### Ubuntu Linux run
-1. Navigate to the `/openmappr/` directory
-2. Switch to a root shell with `sudo su`
-3. Run `docker-compose -f docker-compose-local.yml up -d`
-4. Run `./run_local_mode.sh`
-5. In a new window run `grunt; grunt watch`
-6. Go to http://localhost:80
->>>>>>> master

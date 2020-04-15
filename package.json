@@ -79,7 +79,7 @@
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-imagemin": "^1.0.0",
     "grunt-contrib-jade": "^0.15.0",
-    "grunt-contrib-uglify": "gruntjs/grunt-contrib-uglify#harmony",
+    "grunt-contrib-uglify": "~2.0.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-http-upload": "^0.2.0",
     "grunt-include-source": "^0.7.1",
