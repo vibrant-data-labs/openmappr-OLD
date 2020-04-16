@@ -34,19 +34,9 @@ angular.module('common')
                 },
                 // Unsafe if the data does not exist??
                 getRawDataUnsafe: function getRawDataUnsafe() { return _rawData; },
-                getAllNodes: function getAllNodes() { return _rawData.subsettedNodes; },
+                getAllNodes: function getAllNodes() { return _rawData.nodes; },
                 getNodeById: function getNodeById(nid) { return _rawData.nodeIndex[nid]; },
                 getAllEdges: function getAllEdges(){ return _rawData.edges; },
-                setSubsettedNodes: function setSubsettedNodes(nodes, reset) {
-                    if (reset && !nodes.length) {
-                        this.resetSubsettedNodes();
-                    } else {
-                        _rawData.subsettedNodes = nodes;
-                    }
-                },
-                resetSubsettedNodes: function resetSubsettedNodes() {
-                    _rawData.subsettedNodes = angular.copy(_rawData.nodes);
-                },
                 getData: function getData() { return _rawData; },
 
                 getNodeEdges: getNodeEdges,
@@ -114,7 +104,6 @@ angular.module('common')
             function RawData (nodes, edges, nodeAttrs, edgeAttrs) {
                 this.id = _.uniqueId('raw-data');
                 this.nodes = nodes;
-                this.subsettedNodes = angular.copy(nodes);
                 this.edges = edges;
                 this.nodeAttrs = nodeAttrs;
                 this.edgeAttrs = edgeAttrs;
@@ -583,7 +572,7 @@ angular.module('common')
                 return nEdges;
             }
 
-            function getNodesByAttrib(attr, value, fivePct, fromNodes, getNode) {
+            function getNodesByAttrib(attr, value, fivePct) {
 
                 if(attr == undefined) {
                     console.log('getNodesByAttrib ----------------------');
@@ -591,7 +580,7 @@ angular.module('common')
                 }
                 console.log('Getting nodes by value: %s for attr: %s', value, attr);
                 var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(attr);
-                var nodes = fromNodes || API.getAllNodes();
+                var nodes = API.getAllNodes();
                 if(!attrInfo) {
                     console.warn('Unable to find attrInfo for Attribute:' + attr);
                     return [];
@@ -619,7 +608,7 @@ angular.module('common')
                     // find all nodes with the value within the bracket (val >= low && val <= high)
                     selectedNodeIds = _.reduce(nodes, function(chosenOnes, node) {
                         if(node.attr[attr] != null && node.attr[attr] >= valLow && node.attr[attr] <= valHigh) {
-                            chosenOnes.push(_pushNode(getNode, node));
+                            chosenOnes.push(node.id);
                         }
                         return chosenOnes;
                     },[]);
@@ -649,11 +638,9 @@ angular.module('common')
                         // if all tags are there on this node, then choose it
                         if(!notFoundFlag) {
                             if(onlyTagMode) {
-                                if(tags.length === nodeTags.length) {
-                                    chosenOnes.push(_pushNode(getNode, node));
-                                }
+                                if(tags.length === nodeTags.length) { chosenOnes.push(node.id); }
                             } else {
-                                chosenOnes.push(_pushNode(getNode, node));
+                                chosenOnes.push(node.id);
                             }
                         }
                         return chosenOnes;
@@ -661,44 +648,24 @@ angular.module('common')
                 } else {
                     // find all nodes with the (categorical) value
                     selectedNodeIds = _.reduce(nodes, function(chosenOnes, node) {
-                        try {
-                            if(node.attr[attr] === value) {
-                                chosenOnes.push(_pushNode(getNode, node));
-                            }
-                        } catch(e) {
-                            debugger; //eslint-disable-line
+                        if(node.attr[attr] === value) {
+                            chosenOnes.push(node.id);
                         }
-
                         return chosenOnes;
                     },[]);
                 }
                 //
                 // From these nodes, remove ones which are invalid
                 var rg = API.getRenderableGraph();
-
-                if (getNode) {
-                    return _.filter(selectedNodeIds, function(node) { return rg.getNodeById(node.id); });
-                }
-
                 return _.filter(selectedNodeIds, function(nodeId) { return rg.getNodeById(nodeId); });
             }
 
-            function _pushNode(getNode, node) {
-                if (!getNode) {
-                    return node.id;
-                }
-
-                return node;
-            }
-
-            function getNodesByAttributes(attr, values, fivePct, fromNodes, getNode) {
+            function getNodesByAttributes(attr, values, fivePct) {
                 var allNodes = [];
-
                 values.forEach(function (value) {
-                    var nodes = value != null ? getNodesByAttrib(attr, value, fivePct, fromNodes, getNode) : [];
+                    var nodes = value != null ? getNodesByAttrib(attr, value, fivePct) : [];
                     allNodes = allNodes.concat(nodes);
                 });
-
                 return allNodes;
             }
 

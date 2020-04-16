@@ -1,11 +1,11 @@
 angular.module('common')
-    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService',
-        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService) {
+    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService',
+        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService) {
             'use strict';
 
             /*************************************
-    ************ Local Data **************
-    **************************************/
+            ************ Local Data **************
+            **************************************/
             var logPrefix = '[ctrlNodeOverlay: ] ';
 
             var snapData;
@@ -33,7 +33,7 @@ angular.module('common')
                     /**
             *  Scope data
             */
-            $scope.mockData = true;
+            $scope.mockData = false;
             $scope.beginOverlayAnim = false;
             $scope.beginOverlayRightPanel= false;
             $scope.showOverlayFocusNode = false;
@@ -47,6 +47,7 @@ angular.module('common')
             }
             $scope.nodeRightInfo= {
                 name: undefined,
+                LastName: undefined,
                 nameDescription: undefined,
                 description: undefined,
                 keywords: [],
@@ -57,12 +58,14 @@ angular.module('common')
                 socialMedia:{
                     youtube: undefined,
                     linkedIn: undefined,
-                }
+                },
+                colorStr: undefined
             };
 
             if ($scope.mockData)
                 $scope.nodeRightInfo= {
                     name: 'Diane Kelly',
+                    LastName: 'Kelly',
                     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc erat urna, placerat ut tortor et, tincidunt gravida neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi mattis enim eu nisi dictum, nec porta',
                     youtube: 'https://www.youtube.com/embed/Fu1Zi1PYqos',
                     keywords: ['cars', 'industrial desing', 'trasportation', 'invertion', 'art'],
@@ -92,7 +95,8 @@ angular.module('common')
                     socialMedia:{
                         youtube: undefined,
                         linkedIn: undefined,
-                    }
+                    },
+                    colorStr: undefined
                 };
             
 
@@ -174,12 +178,12 @@ angular.module('common')
             });
 
             /*************************************
-    ********* Initialise *****************
-    **************************************/
+            ********* Initialise *****************
+            **************************************/
 
-            /*************************************
-    ********* Core Functions *************
-    **************************************/
+                    /*************************************
+            ********* Core Functions *************
+            **************************************/
 
             function onNodesSelect(e, data) {
                 // TODO: correct this bug
@@ -353,9 +357,12 @@ angular.module('common')
                 // Initialise attrs
                 _buildNodeAttrsList();
 
+                // console.log('zoomToOffsetPosition', $scope.focusNode);
+                // console.log('zoomToOffsetPosition', getCenterPoint());
+                
                 if(!isGrid) {
                     //get ratio to zoom based on current size of node pop and final size of node pop
-                    var relRatio = 50/$scope.focusNode[camPrefix + 'size'];
+                    var relRatio = (($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') ? 20 : 50)/$scope.focusNode[camPrefix + 'size'];
 
                     //get amount to move graph based on node position and where it needs to end up
                     var pos = {
@@ -437,11 +444,11 @@ angular.module('common')
                 if($scope.mapprSettings.nodeFocusRenderTemplate == 'content') {
                     $scope.finishAnimation();
                 }else if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'){
+                    $scope.nodeRightInfo.colorStr = $scope.focusNode.colorStr;
                     mapRightPanel($scope.nodeInfoAttrs);
-                    console.log('testNodeRightPanel', $scope.nodeInfoAttrs);
-                    console.log('testNodeRightPanel', $scope.nodeRightInfo);
-                    console.log('testNodeRightPanel', $scope.mapprSettings);
-                    console.log('testNodeRightPanel', $scope.nodeAttrs);
+                    // console.log('testNodeRightPanel', $scope.nodeRightInfo);
+                    // console.log('testNodeRightPanel', $scope.mapprSettings);
+                    // console.log('testNodeRightPanel', $scope.nodeAttrs);
                 }
 
             }
@@ -451,10 +458,11 @@ angular.module('common')
              **************************************/
 
             function mapRightPanel(attrArray){
-                $scope.nodeRightInfo.name = '';
+                $scope.nodeRightInfo.name = '';                
                 attrArray.map( (attr) =>{
 
                     if (isName(attr)) $scope.nodeRightInfo.name += attr.principalVal;
+                    if (isLastName(attr)) $scope.nodeRightInfo.LastName = attr.principalVal;
                     if (isTag(attr)) $scope.nodeRightInfo.keywords.push(attr.principalVal);
                     if (isDescription(attr)) $scope.nodeRightInfo.description = attr.principalVal;
                     if (isKeyboardList(attr)) $scope.nodeRightInfo.keyboards.push(attr.principalVal);
@@ -472,6 +480,11 @@ angular.module('common')
             function isName(attr){
                 const { attrType, renderType, id } = attr;
                 return attrType === 'string' && renderType === 'text' && id.toLowerCase().includes('name');
+            }
+
+            function isLastName(attr){
+                const { attrType, renderType, id } = attr;
+                return attrType === 'string' && renderType === 'text' && id === 'Last Name';
             }
 
             function isTag(attr){
@@ -508,9 +521,6 @@ angular.module('common')
                 const { principalVal } = attr;
                 return principalVal != undefined && principalVal.toLowerCase().includes('linkedin');
             }
-
-            
-
 
             //for drawing div line
             function drawLink(x1, y1, x2, y2, color1, color2, height){
@@ -608,6 +618,29 @@ angular.module('common')
 
             function activeTabs(tab, active){                
                 $scope.active[tab] = active;
+            }
+
+            //pending
+
+            function getCenterPoint(){
+                var neighbor = getNeihbors();
+                neighbor.forEach((e) => {
+                    console.log('getCenterPoint', e);
+                });
+            }
+
+            function getNeihbors(){
+                var  hasLinks, incomingEdgesIndex, outgoingEdgesIndex;
+                var node = $scope.focusNode;
+                var dataset = dataGraph.getRawDataUnsafe();
+                incomingEdgesIndex = dataset.edgeInIndex[node.id];
+                outgoingEdgesIndex = dataset.edgeOutIndex[node.id];
+                hasLinks = $scope.hasLinks = _.size(incomingEdgesIndex) + _.size(outgoingEdgesIndex) > 0;
+                if (hasLinks || $scope.extLinkedNodes) {
+                   return linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, $scope.mapprSettings.labelAttr, $scope.mapprSettings.nodeImageAttr);; 
+                } else {
+                    console.log('dirNeighbors', "Node has no links to other nodes");
+                }
             }
         }
     ]);

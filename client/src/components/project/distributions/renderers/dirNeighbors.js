@@ -47,11 +47,28 @@ function ($timeout, dataGraph, linkService) {
                 scope.numLinks = links.length;
             }
 
-            scope.links = links
-            console.log('dirNeighbors', scope.links);
+            scope.links = filterLinks(links);
             
         } else {
             console.log('dirNeighbors', "Node has no links to other nodes");
+        }
+
+        function filterLinks(links){
+            var newLinks = [];
+            for (var i = 0; i < links.length; i++) {
+                if (i == 4) break;                
+                newLinks.push({
+                    linkNode: links[i].linkNode,
+                    attr: links[i].linkNode.attr,
+                    name: getName(links[i].linkNode.attr),
+                    lastName: links[i].linkNode.attr['Last Name'],
+                    colorStr: links[i].linkNode.colorStr,
+                    color: links[i].linkNode.color,
+                    linkNodeLabel : links[i].linkNodeLabel,
+                    linkNodeImage : links[i].linkNodeImage,
+                });
+            }
+            return newLinks;
         }
 
         //if coming from outside source and not actually linked
@@ -62,19 +79,35 @@ function ($timeout, dataGraph, linkService) {
                 var linkNodeLabel = linkNode.attr[scope.mapprSettings.labelAttr] || linkNode.label || 'missing label';
                 var linkNodeImage = linkNode.attr[scope.mapprSettings.nodeImageAttr] || linkNode.attr[scope.mapprSettings.nodePopImageAttr] || linkNode.image || '';
                 links.push({
-                    isIncoming: true,
-                    isOutgoing: false,
-                    sourceId: linkNode.id,
-                    targetId: 0,
-                    linkNode: linkNode,
-                    linkNodeLabel: linkNodeLabel,
-                    linkNodeImage: linkNodeImage,
-                    edgeInfo: null,
-                    id: null
+                    attr: linkNode.attr,
+                    name: getName(linkNode.attr),
+                    lastName: linkNode.attr['Last Name'],
+                    colorStr: linkNode.colorStr,
+                    color: linkNode.color,
+                    linkNodeLabel,
+                    linkNodeImage,
                 });
             });
+            
             return links;
-        }       
+        }
+
+        //click (calls parent method. Maybe should move to attribute of this directive)
+        scope.beginNeighborSwitch = function (linkNode, $event) {
+            console.log('beginNeighborSwitch', linkNode);
+            $($event.currentTarget).css({
+                opacity: 0
+            });
+            scope.switchToNeighbor(linkNode, $event);
+        };
+
+        function getName(attrs){
+            var name = '';
+            var attrsArray = Object.keys(attrs);
+            var attrsName = attrsArray.map( (attr) => attr.toLowerCase().includes('name') ? attr : null);
+            attrsName.filter(Boolean).forEach((attrName) => name+= `${attrs[attrName]} `);
+            return name;
+        }
     }
     return dirDefn;
 }

@@ -689,6 +689,26 @@ textarea {
 
 //for more precise resizing of icons
 i {
+    &.fa-2x {
+        font-size: 2em;
+    }
+
+    &.fa-1-9x {
+        font-size: 1.9em;
+    }
+
+    &.fa-1-8x {
+        font-size: 1.8em;
+    }
+
+    &.fa-1-7x {
+        font-size: 1.7em;
+    }
+
+    &.fa-1-6x {
+        font-size: 1.6em;
+    }
+
     &.fa-1-5x {
         font-size: 1.5em;
     }

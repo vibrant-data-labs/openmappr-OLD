@@ -5,6 +5,6 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        # grunt_env: 'release'
+        grunt_env: 'release'
         script_file: 'run_prod_mode'
     command: ./run_prod_mode.sh

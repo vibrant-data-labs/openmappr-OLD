@@ -55,7 +55,6 @@
 }
 
 
-
 //animate down opening
 @include keyframes(open-down-enter) {
     0% {
@@ -191,6 +190,16 @@
     100% {
         opacity:0;
     }
+}
+
+
+.animate-node-right,
+.animate-node-right.ng-enter {
+    @include animation(2s slideInLeft);
+}
+.animate-node-right.ng-leave,
+.animate-node-right.ng-hide-add {
+    display: none;
 }
 
 .animate-to-left,

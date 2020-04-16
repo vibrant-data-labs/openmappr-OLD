@@ -186,6 +186,8 @@ angular.module('common')
 
                 //click (calls parent method. Maybe should move to attribute of this directive)
                 scope.beginNeighborSwitch = function (linkNode, $event) {
+                    console.log('beginNeighborSwitch', linkNode);
+                    
                     $($event.currentTarget).css({
                         opacity: 0
                     });

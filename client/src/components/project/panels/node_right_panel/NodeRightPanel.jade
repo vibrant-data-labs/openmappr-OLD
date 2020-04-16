@@ -1,14 +1,12 @@
 .focus-overlay(ng-show="beginOverlayRightPanel")
-    .animate-fade(ng-if="showOverlay")
-        .back-btn.row.vert-align.toggle-icon(ng-click='cancelOverlay(); triggerInteraction();')
-            h6.no-margin Close
-        .node-rigth-panel-overlay(ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'" )
-            dir-scroll-overlay-anchors(color-str="{{focusNode.colorStr}}", scroll-container="#detailbox-scroll" scroll-data-id="data-attr-id" show-neighbors="{{mapprSettings.nodeFocusNeighborsButton}}")
-            .focusnode-label(ng-hide="hideContent" style="color:{{focusNode.colorStr}};")
-                h4 {{focusNode.attr[mapprSettings.labelAttr]}}
+    .node-rigth-panel-overlay
+        .animate-node-right(ng-if="showOverlay")
             .node-rigth-panel-container(ng-class="{transparent: hideContent}" style="padding-top:{{scrollPaddingTop}}px" dir-kill-tooltip-on-scroll)
-                .node-rigth-panel
+                .node-rigth-panel(ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'" )
                     .section
+                        .close-button
+                            button(ng-click='cancelOverlay(); triggerInteraction();')
+                                i.fa.fa-times-circle-o.fa-1-8x
                         .socialMedia
                             .left.title Selected Node
                             .right
@@ -16,14 +14,14 @@
                                 img(ng-if="nodeRightInfo.socialMedia.linkedIn", src="https://image.flaticon.com/icons/svg/2111/2111532.svg")
                         .user(ng-if="nodeRightInfo.name")
                             .img-user 
-                                img(src="https://image.flaticon.com/icons/svg/236/236831.svg")
+                                img(src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{nodeRightInfo.name}}+{{nodeRightInfo.LastName}}&background={{nodeRightInfo.colorStr}}")
                             .info-user  
                                 p 
                                     strong {{nodeRightInfo.name}}
                                 p {{nodeRightInfo.nameDescription}}
                     .section(ng-if="nodeRightInfo.description || nodeRightInfo.youtube")
                         .tab
-                            button(ng-if="nodeRightInfo.description", ng-class="{active: active.tabs1=='description'}", ng-click="activeTabs('tabs1', 'description')") Descrition
+                            button(ng-if="nodeRightInfo.description", ng-class="{active: active.tabs1=='description'}", ng-click="activeTabs('tabs1', 'description')") Description
                             button(ng-if="nodeRightInfo.youtube", ng-class="{active: active.tabs1=='youtube'}", ng-click="activeTabs('tabs1', 'youtube')")  Youtube
                         #description.tabcontent(ng-if="active.tabs1=='description'")
                             p {{nodeRightInfo.description}}
@@ -41,14 +39,11 @@
                                 .tooltip-positioner(tooltip-placement="right" tooltip-append-to-body="true" tooltip-is-open="openTooltip")
                                 .cat-info
                                 .cat-list.tag-cloud
-                                    .cat-item(ng-repeat="keyword in nodeRightInfo.keywords")
+                                    .cat-item(ng-repeat="keyword in nodeRightInfo.keywords" style="cursor: default;")
                                         .cat-highlight(style="opacity: 0;")
-                                        .vert-align.cat-text-container.tag-checkbox-container 
-                                            .tag-checkbox
-                                                input(id="checkbox-{{keyword.replace(' ', '_')}}" type="checkbox")
-                                                label(for="checkbox-{{keyword.replace(' ', '_')}}")
+                                        .vert-align.cat-text-container(style="cursor: default;")
                                             div
-                                                .cat-text.no-margin.truncate  {{keyword}}
+                                                .cat-text.no-margin.truncate {{keyword}}
                         #additional.tabcontent(ng-if="active.tabs2=='additional'")
                             p {{nodeRightInfo.additional}}
                     .section(ng-if="nodeRightInfo.publications.length")
@@ -65,5 +60,5 @@
                     .section
                         .title Nearest Neightbors
                         div(dir-neighbors ng-include=' "#{server_prefix}#{view_path}/components/project/distributions/renderers/neighborsRightPanel.html" ')
-    dir-focus-node(ng-show="!appUi.openExtUserOverlay" ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate != 'content'" node="focusNode" img-attr="nodeImageAttr" start="nodeStartData" end="nodeEndData" duration="500" ease="" finish="finishAnimation()")
+    dir-focus-node(ng-show="false" ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate != 'content'" node="focusNode" img-attr="nodeImageAttr" start="nodeStartData" end="nodeEndData" duration="500" ease="" finish="finishAnimation()")
     dir-focus-node(ng-if="showNeighborNode" node="neighborNode" img-attr="nodeImageAttr" start="neighborNodeStartData" end="neighborNodeEndData" duration="600" ease="" finish="finishNeighborAnimation()")

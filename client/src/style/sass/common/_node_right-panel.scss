@@ -1,7 +1,6 @@
 //
 // Node Right Panel Styling
 // Style for right panel in app and player
-
 .node-rigth-panel-overlay {
     position: fixed;
     top: 0;
@@ -10,15 +9,14 @@
     overflow: auto;
     height: 100%;
 
-    .node-rigth-panel-container {
-        @include transition(all .5s linear);
+    .node-rigth-panel-container { 
         opacity: 1;
         width: 800px;
         height: 100%;
 
         .node-rigth-panel {
-            @include transition(bottom .5s ease-out);
-            @include user-select(text);
+            animation-duration: 10s;
+            animation-name: slidein;
             position: absolute;
             background: $panel-background;
             border: 1px solid $horiz-line-color;
@@ -36,8 +34,15 @@
                 .title {
                     padding:2px;
                 }
+
+                .close-button{
+                    margin: -7px -22px;
+                    float: right;
+                    color: $color-border-grey
+                }
               
                 .socialMedia {
+                    margin-top: 5px;
                     .left {
                         width: 60%;
                         display: inline-block;
@@ -61,11 +66,6 @@
                     display: flex;
                     align-items: center;
                     padding: 5px 0;
-        
-                    .img-user {
-                        width:30px;
-                    }
-        
                     .info-user {
                         margin: 0 5px;
                         padding: 0 10px;

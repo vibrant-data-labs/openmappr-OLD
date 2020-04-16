@@ -1,7 +1,6 @@
-.user(ng-repeat="link in links | neighborsFilter")
-    .img-user 
-        img(src="https://image.flaticon.com/icons/svg/236/236831.svg")
+.user(ng-repeat="link in links")
+    .img-user
+        img(style="cursor:pointer;" ng-click="beginNeighborSwitch(link.linkNode, $event);" src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{link.name}}+{{link.lastName}}&background={{link.colorStr}}")
     .info-user  
         p 
-            strong {{link.name}}
-        p {{nodeRightInfo.nameDescription}}
+            strong.truncate {{link.name}}
