@@ -19,7 +19,7 @@ var elasticSearchService = require('../services/elasticsearch'),
 //   1) Change on client side(AttrInfoService.js) and athena(entities.py) as well on updation
 //   2) Each attr type gets first render type as default
 var attrRenderTypesMap = {
-    'string': ['tag-cloud', 'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+    'string': ['categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
     'json': ['medialist'],
     'twitter': ['twitterfeed'],
     'instagram': ['instagramfeed'],

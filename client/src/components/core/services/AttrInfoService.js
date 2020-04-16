@@ -7,8 +7,8 @@ angular.module('common')
             "use strict";
 
             /*************************************
-            *************** API ******************
-            **************************************/
+    *************** API ******************
+    **************************************/
             this.getNodeAttrInfoForNetwork = getNodeAttrInfoForNetwork;
             this.getLinkAttrInfoForNetwork = getLinkAttrInfoForNetwork;
             // if these variables are null, then the system returns AttrInfo for the current network
@@ -38,8 +38,8 @@ angular.module('common')
 
 
             /*************************************
-            ********* Local Data *****************
-            **************************************/
+    ********* Local Data *****************
+    **************************************/
             var logPrefix = "[AttrInfoService] ";
 
             // Render types for individual attr type
@@ -47,7 +47,7 @@ angular.module('common')
             //   1) Change on server side(datasys/datasys_model.js) and athena(entities.py) as well on updation
             //   2) Each attr type gets first render type as default
             var attrRenderTypesMap = {
-                'string': ['tag-cloud', 'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+                'string': ['categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
                 'json': ['medialist'],
                 'twitter': ['twitterfeed'],
                 'instagram': ['instagramfeed'],
@@ -82,8 +82,8 @@ angular.module('common')
 
 
             /*************************************
-            ********* Core Functions *************
-            **************************************/
+    ********* Core Functions *************
+    **************************************/
             //
             // classes
 
@@ -96,12 +96,17 @@ angular.module('common')
                 this.name = name;
                 this.entity_type =entity_type;
             }
-            AttrInfo.prototype.getForId = function(attrId) {
+            AttrInfo.prototype.getForId = function(attrId, refreshForce, entities) {
                 var val = this.__cache[attrId];
                 if(!val) { // attrInfo does not exist
                     throw new Error("AttrInfo not found for this attr:" + attrId);
                 }
-                if( _.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
+
+                if (refreshForce && entities && entities.length) {
+                    this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, entities);
+                }
+
+                if(_.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
                     this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, val.entities);
                     this.__cache[attrId].__refresh__ = false;
                 }
