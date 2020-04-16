@@ -2,6 +2,7 @@
 
 ### Install Openmappr on a Remote Server.
 
+```
 # Get updates and upgrades
 sudo apt update -y
 sudo apt upgrade -y
@@ -44,3 +45,4 @@ docker-compose -f docker-compose.do_staging.yml up
 
 # Start Docker on Production
 docker-compose -f docker-compose.do_production.yml up
+```
