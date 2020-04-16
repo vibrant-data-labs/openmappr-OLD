@@ -3,7 +3,7 @@ set -e
 
 domains=(openmappr.com www.openmappr.com staging.openmappr.com openmappr.org www.openmappr.org staging.openmappr.org) # Specify domains here or use the -d argument
 data_path="./data/certbot" # Specify data path here or use the --data-path argument
-email="yale@openmappr.com" # Specify email here or use the --email argument
+email="yale@openmappr.org" # Specify email here or use the --email argument
 staging=0 # Set to 1 here or use the --staging argument
 rsa_key_size=4096
 
