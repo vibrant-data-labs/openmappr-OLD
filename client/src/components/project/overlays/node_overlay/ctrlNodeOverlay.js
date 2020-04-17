@@ -33,7 +33,7 @@ angular.module('common')
                     /**
             *  Scope data
             */
-            $scope.mockData = false;
+            $scope.mockData = true;
             $scope.beginOverlayAnim = false;
             $scope.beginOverlayRightPanel= false;
             $scope.showOverlayFocusNode = false;
@@ -98,7 +98,7 @@ angular.module('common')
                     },
                     colorStr: undefined
                 };
-            
+
 
             /**
             * Scope methods
@@ -359,7 +359,7 @@ angular.module('common')
 
                 // console.log('zoomToOffsetPosition', $scope.focusNode);
                 // console.log('zoomToOffsetPosition', getCenterPoint());
-                
+
                 if(!isGrid) {
                     //get ratio to zoom based on current size of node pop and final size of node pop
                     var relRatio = (($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') ? 20 : 50)/$scope.focusNode[camPrefix + 'size'];
@@ -390,7 +390,7 @@ angular.module('common')
                     //animate graph to position
                     zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
 
-                }               
+                }
 
                 //update attr display data
                 _buildAttrsPrincipalVal();
@@ -445,7 +445,19 @@ angular.module('common')
                     $scope.finishAnimation();
                 }else if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'){
                     $scope.nodeRightInfo.colorStr = $scope.focusNode.colorStr;
-                    mapRightPanel($scope.nodeInfoAttrs);
+                    var selNodes = graphSelectionService.getSelectedNodes();
+                    var nodesa = selNodes[0];
+                    // var dpAttrs =  $scope.dpAttrs
+
+                    var nodeAttrsObj = dataGraph.getNodeAttrs();
+
+                    const filteredAttr = nodeAttrsObj.filter(attr => {
+                        return attr.visible && nodesa.attr[attr.title]
+                    });
+
+                    console.log({nodesa, nodeAttrsObj, filteredAttr}, 777);
+
+                    mapRightPanel(filteredAttr, nodesa.attr);
                     // console.log('testNodeRightPanel', $scope.nodeRightInfo);
                     // console.log('testNodeRightPanel', $scope.mapprSettings);
                     // console.log('testNodeRightPanel', $scope.nodeAttrs);
@@ -457,25 +469,58 @@ angular.module('common')
              ********* Helper functions for the attr map *************
              **************************************/
 
-            function mapRightPanel(attrArray){
-                $scope.nodeRightInfo.name = '';                
-                attrArray.map( (attr) =>{
-
-                    if (isName(attr)) $scope.nodeRightInfo.name += attr.principalVal;
-                    if (isLastName(attr)) $scope.nodeRightInfo.LastName = attr.principalVal;
-                    if (isTag(attr)) $scope.nodeRightInfo.keywords.push(attr.principalVal);
-                    if (isDescription(attr)) $scope.nodeRightInfo.description = attr.principalVal;
-                    if (isKeyboardList(attr)) $scope.nodeRightInfo.keyboards.push(attr.principalVal);
-                    if (isVideo(attr)) $scope.nodeRightInfo.video = attr.principalVal;
-                    if (isEvent(attr)) $scope.nodeRightInfo.events.push(attr.principalVal);
-                    if (isYouTube(attr)) $scope.nodeRightInfo.socialMedia.youtube = attr.principalVal;
-                    if (isLinkedIn(attr)) $scope.nodeRightInfo.socialMedia.linkedIn = attr.principalVal;
-                })                
+            function mapRightPanel(attrArray, values){
+                $scope.nodeRightInfo = {
+                    keywords: [],
+                    keyboards: [],
+                    events: [],
+                    publications: [{}]
+                };
+                $scope.nodeRightInfo.name = '';
+                attrArray.map( (attr) => {
+                    if (isName(attr)) $scope.nodeRightInfo.name += values[attr.title] + ' ';
+                    if (isLastName(attr)) $scope.nodeRightInfo.LastName = values[attr.title];
+                    if (isDescription(attr)) $scope.nodeRightInfo.description = values[attr.title];
+                    if (isVideo(attr)) $scope.nodeRightInfo.video = values[attr.title];
+                    if (isTag(attr)){
+                        const { title } = attr;
+                        $scope.nodeRightInfo.keywords.push(values[title] instanceof Array ? values[title][0] : values[title]);
+                    }
+                    if(isPublication(attr)){
+                        const { title } = attr;
+                        $scope.nodeRightInfo.publications[0][title] = Number(values[title]).toFixed(2);
+                    }
+                    // if (isKeyboardList(attr)){
+                    //     const { title } = attr;
+                    //     console.log({attr});
+                    //     $scope.nodeRightInfo.keyboards.push(values[title] instanceof Array ? values[title][0] : values[title]);
+                    // }
+                    if (isEvent(attr)) {
+                        const {title} = attr;
+                        $scope.nodeRightInfo.publications[0][title] = values[title];
+                    }
+                    if (isYouTube(attr)) $scope.nodeRightInfo.socialMedia.youtube = values[attr.title];
+                    if (isLinkedIn(attr)) $scope.nodeRightInfo.socialMedia.linkedIn = values[attr.title];
+                });
+                console.log($scope.nodeRightInfo, 777);
             }
 
             /*************************************
              ********* Helper functions for the attr map *************
              **************************************/
+
+
+            function removeFrac(num){
+                return Number(num).toFixed(2);
+            }
+
+            function toM(num){
+                return (num / 1000000).toFixed(2).toString() + 'M'
+            }
+
+            function parseToCommas(num){
+                return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+            }
 
             function isName(attr){
                 const { attrType, renderType, id } = attr;
@@ -489,27 +534,30 @@ angular.module('common')
 
             function isTag(attr){
                 const { attrType, renderType } = attr;
-                return attrType === 'listString' && renderType === 'tag-cloud';
+                return attrType === 'liststring' && renderType === 'tag-cloud';
             }
 
             function isDescription(attr){
                 const { attrType, renderType, id } = attr;
-                return attrType === 'string' && renderType === 'text' && id === 'description';
+                return attrType === 'string' && renderType === 'text' && id === 'description' || id === 'Short Bio';
             }
+            function isPublication(attr){
+                const { attrType, renderType } = attr;
+                return renderType === 'histogram' &&
+                   ( attrType === 'string'
+                    || attrType === 'float'
+                    || attrType === 'year'
+                    || attrType === 'timestamp' )
 
-            function isKeyboardList(attr){
-                const { attrType, renderType, id } = attr;
-                return attrType === 'string' && renderType === 'text' && id === 'Keyboard List';
             }
-
             function isVideo(attr) {
                 const { attrType, renderType, id } = attr;
                 return attrType === 'video' && renderType === 'default' && id === 'video';
             }
 
             function isEvent(attr){
-                const { attrType, renderType, id } = attr;
-                return attrType === 'string' && renderType === 'tag-cloud' && id === 'Event';
+                const { attrType, renderType } = attr;
+                return attrType === 'string' && renderType === 'tag-cloud';
             }
 
             function isYouTube(attr){
@@ -521,6 +569,7 @@ angular.module('common')
                 const { principalVal } = attr;
                 return principalVal != undefined && principalVal.toLowerCase().includes('linkedin');
             }
+
 
             //for drawing div line
             function drawLink(x1, y1, x2, y2, color1, color2, height){
@@ -616,7 +665,7 @@ angular.module('common')
                 });
             }
 
-            function activeTabs(tab, active){                
+            function activeTabs(tab, active){
                 $scope.active[tab] = active;
             }
 
@@ -637,7 +686,7 @@ angular.module('common')
                 outgoingEdgesIndex = dataset.edgeOutIndex[node.id];
                 hasLinks = $scope.hasLinks = _.size(incomingEdgesIndex) + _.size(outgoingEdgesIndex) > 0;
                 if (hasLinks || $scope.extLinkedNodes) {
-                   return linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, $scope.mapprSettings.labelAttr, $scope.mapprSettings.nodeImageAttr);; 
+                   return linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, $scope.mapprSettings.labelAttr, $scope.mapprSettings.nodeImageAttr);;
                 } else {
                     console.log('dirNeighbors', "Node has no links to other nodes");
                 }
