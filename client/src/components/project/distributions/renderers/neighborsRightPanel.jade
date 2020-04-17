@@ -1,6 +1,6 @@
 .user(ng-repeat="link in links")
     .img-user
-        img(style="cursor:pointer;" ng-click="beginNeighborSwitch(link.linkNode, $event);" src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{link.name}}+{{link.lastName}}&background={{link.colorStr}}")
-    .info-user  
-        p 
-            strong.truncate {{link.name}}
+        img(style="cursor:pointer;" ng-click="beginNeighborSwitch(link.linkNode, $event);" src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{link.name.substr(0, 1) + link.lastName.substr(0,1)}}&background={{link.colorStr}}")
+    .info-user
+        p(uib-tooltip="{{link.name}}" tooltip-placement="top")
+            strong {{link.name.substr(0, 50) + '...'}}

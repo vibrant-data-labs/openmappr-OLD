@@ -13,10 +13,9 @@
                                 img(ng-if="nodeRightInfo.socialMedia.youtube", src="https://image.flaticon.com/icons/svg/455/455691.svg")
                                 img(ng-if="nodeRightInfo.socialMedia.linkedIn", src="https://image.flaticon.com/icons/svg/2111/2111532.svg")
                         .user(ng-if="nodeRightInfo.name")
-                            .img-user 
-                                img(src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{nodeRightInfo.name}}+{{nodeRightInfo.LastName}}&background={{nodeRightInfo.colorStr}}")
-                            .info-user  
-                                p 
+                            .img-user
+                                img(src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{(nodeRightInfo.name).substr(0,1)}}&background={{nodeRightInfo.colorStr}}")
+                            .info-user
                                     strong {{nodeRightInfo.name}}
                                 p {{nodeRightInfo.nameDescription}}
                     .section(ng-if="nodeRightInfo.description || nodeRightInfo.youtube")

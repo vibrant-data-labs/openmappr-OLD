@@ -444,7 +444,6 @@ angular.module('common')
                 if($scope.mapprSettings.nodeFocusRenderTemplate == 'content') {
                     $scope.finishAnimation();
                 }else if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'){
-                    $scope.nodeRightInfo.colorStr = $scope.focusNode.colorStr;
                     var selNodes = graphSelectionService.getSelectedNodes();
                     var nodesa = selNodes[0];
                     // var dpAttrs =  $scope.dpAttrs
@@ -471,6 +470,7 @@ angular.module('common')
 
             function mapRightPanel(attrArray, values){
                 $scope.nodeRightInfo = {
+                    colorStr: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd',
                     keywords: [],
                     keyboards: [],
                     events: [],
