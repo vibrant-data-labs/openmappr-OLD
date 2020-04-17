@@ -47,7 +47,7 @@ function ($timeout, $q, networkService, dataService) {
     //   1) Change on server side(datasys/datasys_model.js) and athena(entities.py) as well on updation
     //   2) Each attr type gets first render type as default
     var attrRenderTypesMap = {
-        'string': ['categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+        'string': ['tag-cloud' ,'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
         'json': ['medialist'],
         'twitter': ['twitterfeed'],
         'instagram': ['instagramfeed'],
