@@ -1,5 +1,5 @@
 angular.module('common')
-    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES', 'graphHoverService',
+    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES',
         function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, dataGraph, AttrInfoService, graphSelectionService, layoutService, nodeSelectionService, uiService, attrUIService, renderGraphfactory, networkService, BROADCAST_MESSAGES){
             'use strict';
 
@@ -105,6 +105,7 @@ angular.module('common')
                     .flatten()
                     .value();
                 updateNodeColorStr();
+                console.log(7773)
                 // Set 'sortType' for tag attrs
                 setSortForTags($scope.nodeDistrAttrs, !_.isEmpty(newSelection));
                 $scope.currentSelection = FilterPanelService.getCurrentSelection();
@@ -114,6 +115,8 @@ angular.module('common')
             }
 
             function onNodeSelect(ev, data) {
+                console.log('onFilterSubset', $scope.nodeDistrAttrs);
+
                 if(!data.newSelection) {
                     console.warn(logPrefix + 'ignoring selection reset for intermediate selection');
                     return;
@@ -145,6 +148,7 @@ angular.module('common')
                 FilterPanelService.updateInitialSelection(newSelection);
                 $scope.currentSelection = FilterPanelService.getCurrentSelection();
                 updateNodeColorStr();
+                console.log(7772)
                 if(_.isArray(nodes) && nodes.length === 1) {
                     _.each($scope.nodeDistrAttrs, function (attr) {
                         attr.disableFilter = true;
@@ -163,37 +167,33 @@ angular.module('common')
             }
 
             function onFilterSubset(ev) {
+                console.log('onFilterSubset onFilterSubset', ev);
+
                 var filterGetLastState = FilterPanelService.getFilterMapAfterSubset();
+
+                console.log('onFilterSubset filterGetLastState', filterGetLastState);
                 FilterPanelService.applyFilters();
                 _selectNodes(ev);
                 FilterPanelService.setFilterMapAfterSubset(FilterPanelService.getAttrFilterConfigMap());
+                console.log('onFilterSubset getAttrFilterConfigMap', FilterPanelService.getAttrFilterConfigMap());
                 var undoRedoResultObject = FilterPanelService.appendToSelectionHistory(filterGetLastState);
-
+                
                 console.log('onFilterSubset undoRedoResultObject', undoRedoResultObject);
-
-//TODO: check 777
-                nodeSelectionService.clearSelectedNodes();
-                graphHoverService.clearHovers(true);
+                
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
             }
 
             function onFilterUndo() {
                 var undoRedoResultObject = FilterPanelService.undoFilterFromSelectionHistory();
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
-                _selectNodes({});
 
-                graphHoverService.clearHovers(true);
-                nodeSelectionService.clearSelectedNodes();
                 _selectNodes({}, true);
             }
 
             function onFilterRedo() {
                 var undoRedoResultObject = FilterPanelService.redoFilterFromSelectionHistory();
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
-                _selectNodes({});
 
-                graphHoverService.clearHovers(true);
-                nodeSelectionService.clearSelectedNodes();
                 _selectNodes({}, true);
             }
 
@@ -201,17 +201,17 @@ angular.module('common')
                 FilterPanelService.resetFilters();
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.reset);
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.reset);
-                nodeSelectionService.clearSelectedNodes();
                 updateSelAndGraph(window.event);
-                $rootScope.$broadcast(BROADCAST_MESSAGES.fp.filter.reset);
             }
 
             function updateNodeColorStr () {
                 var layout = layoutService.getCurrentIfExists();
                 if(layout) {
                     $scope.nodeColorStr = FilterPanelService.genColorString(layout.setting('nodeColorAttr'));
+                    console.log(777, $scope.nodeColorStr);
                 } else {
                     $scope.nodeColorStr = FilterPanelService.getColorString();
+                    console.log(777, $scope.nodeColorStr);
                 }
             }
 
@@ -224,7 +224,6 @@ angular.module('common')
                     $scope.nodeCountInGraph = dataGraph.getAllNodes().length;
                 }
                 $scope.ui.activeFilterCount = FilterPanelService.getActiveFilterCount();
-                $scope.ui.resetButtonEnable = selection.length > 0;
 
                 var infoObj = AttrInfoService.getNodeAttrInfoForRG();
                 if(selection.length === 1) {
@@ -269,11 +268,11 @@ angular.module('common')
             }
 
             function updateSelAndGraph(ev, useFilterState) {
+                console.log(7771)
                 var currentSelection = FilterPanelService.getCurrentSelection(),
                     renderer = renderGraphfactory.getRenderer();
 
                 $scope.currentSelection = currentSelection;
-
                 if(!currentSelection || (_.isArray(currentSelection) && currentSelection.length === 0)) {
                     if(FilterPanelService.getActiveFilterCount() > 0) {
                         graphSelectionService.clearSelections();
@@ -294,8 +293,7 @@ angular.module('common')
                     updateNodeColorStr();
                 }
 
-                updateInfoData(currentSelection);
-                dataGraph.setSubsettedNodes(currentSelection, !currentSelection || currentSelection.length == 0);
+                updateInfoData($scope.currentSelection);
                 $rootScope.$broadcast(BROADCAST_MESSAGES.fp.currentSelection.changed, {nodes: currentSelection});
 
                 if (useFilterState) {

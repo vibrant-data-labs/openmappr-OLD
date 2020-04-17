@@ -2,20 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e1e6d4b-0d6b-421b-aa6a-08ac3ee89105" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-22-17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-26-40.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-30-58.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-31-44.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-47-26.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/2020-03-15-18-58-48.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/core/services/graphSelectionService.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/core/services/graphSelectionService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/FilterPanelService.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/FilterPanelService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/ctrlFilterPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/ctrlFilterPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/filterPanel.jade" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/distribution_panel/filterPanel.jade" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/info_panel/ctrlInfoPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/panels/right_panel/info_panel/ctrlInfoPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/products/player/ctrlApp.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/products/player/ctrlApp.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/install_Fedora.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/install_mac.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/project/distributions/renderers/dirNeighbors.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/distributions/renderers/dirNeighbors.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/project/distributions/renderers/neighborsRightPanel.jade" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/distributions/renderers/neighborsRightPanel.jade" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/project/overlays/node_overlay/ctrlNodeOverlay.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/overlays/node_overlay/ctrlNodeOverlay.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/components/project/panels/node_right_panel/NodeRightPanel.jade" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/components/project/panels/node_right_panel/NodeRightPanel.jade" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +155,14 @@
       <option name="project" value="LOCAL" />
       <updated>1586569012073</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="correct with eric comments on section 5 and 2">
+      <created>1587152436486</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1587152436486</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,12 +214,16 @@
     <state x="-1076" y="633" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586310111126" />
     <state x="6" y="353" key="#com.intellij.execution.impl.EditConfigurationsDialog/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586393757674" />
     <state x="6" y="353" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1586352367362" />
-    <state x="-1041" y="476" key="CommitChangelistDialog2" timestamp="1586569011863">
-      <screen x="-1080" y="23" width="1080" height="1897" />
+    <state x="552" y="336" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1587150549055">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="552" y="336" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1680.1027@0.23.1680.1027" timestamp="1587150549055" />
+    <state x="61" y="80" key="CommitChangelistDialog2" timestamp="1587152435741">
+      <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="-1041" y="476" key="CommitChangelistDialog2/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586569011863" />
     <state x="61" y="80" key="CommitChangelistDialog2/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586394054863" />
-    <state x="61" y="80" key="CommitChangelistDialog2/0.23.1680.1027@0.23.1680.1027" timestamp="1586481754067" />
+    <state x="61" y="80" key="CommitChangelistDialog2/0.23.1680.1027@0.23.1680.1027" timestamp="1587152435741" />
     <state x="156" y="77" width="1369" height="919" key="DiffContextDialog" timestamp="1586481191567">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
@@ -235,11 +237,11 @@
       <screen x="-1080" y="23" width="1080" height="1897" />
     </state>
     <state x="-1050" y="625" key="SettingsEditor/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586193232262" />
-    <state x="-800" y="457" key="Vcs.Push.Dialog.v2" timestamp="1586569013897">
-      <screen x="-1080" y="23" width="1080" height="1897" />
+    <state x="440" y="258" key="Vcs.Push.Dialog.v2" timestamp="1587152438110">
+      <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="-800" y="457" key="Vcs.Push.Dialog.v2/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586569013897" />
-    <state x="440" y="258" key="Vcs.Push.Dialog.v2/0.23.1680.1027@0.23.1680.1027" timestamp="1586481756293" />
+    <state x="440" y="258" key="Vcs.Push.Dialog.v2/0.23.1680.1027@0.23.1680.1027" timestamp="1587152438110" />
     <state x="-980" y="123" width="880" height="1697" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1586275579329">
       <screen x="-1080" y="23" width="1080" height="1897" />
     </state>
@@ -248,33 +250,38 @@
       <screen x="-1080" y="23" width="1080" height="1897" />
     </state>
     <state x="-885" y="593" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586308281509" />
-    <state x="1894" y="837" width="399" height="180" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587133637047">
-      <screen x="1080" y="179" width="2560" height="1440" />
+    <state x="534" y="492" width="436" height="162" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1587151573385">
+      <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="-737" y="890" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586392015004" />
     <state x="534" y="492" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586821945441" />
+    <state x="534" y="492" width="436" height="162" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1587151573385" />
     <state x="1894" y="837" width="399" height="180" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/1080.179.2560.1440/0.30.1080.1890@1080.179.2560.1440" timestamp="1587133637047" />
     <state x="628" y="23" width="817" height="1008" key="dock-window-1" timestamp="1586351354307">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="628" y="23" width="817" height="1008" key="dock-window-1/0.23.1680.1027@0.23.1680.1027" timestamp="1586351354307" />
-    <state x="661" y="169" width="839" height="775" key="find.popup" timestamp="1587138146792">
+    <state x="661" y="169" width="839" height="775" key="find.popup" timestamp="1587152957054">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="-870" y="571" width="659" height="777" key="find.popup/-1080.0.1080.1920/0.0.1680.1050@-1080.0.1080.1920" timestamp="1586196504479" />
     <state x="-870" y="587" width="659" height="768" key="find.popup/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586317440423" />
     <state x="239" y="60" width="1261" height="884" key="find.popup/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586816770220" />
-    <state x="661" y="169" width="839" height="775" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1587138146792" />
+    <state x="661" y="169" width="839" height="775" key="find.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1587152957054" />
     <state x="-768" y="841" width="547" height="279" key="org.intellij.images.editor.actions.BackgroundImageDialog" timestamp="1586190238448">
       <screen x="-1080" y="23" width="1080" height="1897" />
     </state>
     <state x="-768" y="841" width="547" height="279" key="org.intellij.images.editor.actions.BackgroundImageDialog/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586190238448" />
-    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup" timestamp="1587138545829">
+    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup" timestamp="1587152942241">
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="-875" y="450" width="670" height="685" key="search.everywhere.popup/-1080.0.1080.1920/0.0.1680.1050@-1080.0.1080.1920" timestamp="1586194218203" />
     <state x="-875" y="468" width="670" height="676" key="search.everywhere.popup/-1080.23.1080.1897/0.23.1680.1027@-1080.23.1080.1897" timestamp="1586568678270" />
     <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup/-1080.23.1080.1897/0.23.1680.1027@0.23.1680.1027" timestamp="1586816512363" />
-    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1587138545829" />
+    <state x="319" y="264" width="1043" height="366" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1587152942241" />
+    <state x="570" y="375" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1587151102098">
+      <screen x="0" y="23" width="1680" height="1027" />
+    </state>
+    <state x="570" y="375" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1587151102098" />
   </component>
 </project>

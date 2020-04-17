@@ -481,19 +481,19 @@ angular.module('common')
                 var nodesInPop = _.noop;
                 //console.log('shiftkey Status: %s', event.shiftKey);
 
-        // toss out click if click is on a non-popped node when selected node is popped
-        if( event.type == 'clickNodes') {
-            nodesInPop = function(nodes) {
-                var inPop = false;
-                _.each(nodes, function(n) {
-                    inPop = inPop | n.inPop;
-                });
-                return inPop;
-            };
-            if(selectionInPop() && !nodesInPop(event.data.nodes)) {
-                return;
-            }
-        }
+                // toss out click if click is on a non-popped node when selected node is popped
+                if( event.type == 'clickNodes') {
+                    nodesInPop = function(nodes) {
+                        var inPop = false;
+                        _.each(nodes, function(n) {
+                            inPop = inPop | n.inPop;
+                        });
+                        return inPop;
+                    };
+                    if(selectionInPop() && !nodesInPop(event.data.nodes)) {
+                        return;
+                    }
+                }
 
                 var extendingSelection = true;
                 if( !extendFn(event) && !(window.event && extendFn(window.event))) {
