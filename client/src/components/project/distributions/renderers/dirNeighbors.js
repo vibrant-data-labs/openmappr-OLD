@@ -86,9 +86,12 @@ function ($timeout, dataGraph, linkService) {
                     color: linkNode.color,
                     linkNodeLabel,
                     linkNodeImage,
+                    // truncName: getName(linkNode.attr).substr(0, 15),
                 });
             });
-            
+
+            console.log({links});
+
             return links;
         }
 
@@ -103,9 +106,10 @@ function ($timeout, dataGraph, linkService) {
 
         function getName(attrs){
             var name = '';
-            var attrsArray = Object.keys(attrs);
+            var attrsArray = Object.keys({...attrs});
             var attrsName = attrsArray.map( (attr) => attr.toLowerCase().includes('name') ? attr : null);
-            attrsName.filter(Boolean).forEach((attrName) => name+= `${attrs[attrName]} `);
+            attrsName.filter(Boolean).forEach((attrName) => name += `${attrs[attrName]}`.slice(0, 15));
+            console.log({name});
             return name;
         }
     }
