@@ -42,31 +42,31 @@ angular.module('common')
     **************************************/
             var logPrefix = "[AttrInfoService] ";
 
-    // Render types for individual attr type
-    // Note:-
-    //   1) Change on server side(datasys/datasys_model.js) and athena(entities.py) as well on updation
-    //   2) Each attr type gets first render type as default
-    var attrRenderTypesMap = {
-        'string': ['tag-cloud' ,'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
-        'json': ['medialist'],
-        'twitter': ['twitterfeed'],
-        'instagram': ['instagramfeed'],
-        'liststring': ['tag-cloud', 'tags'],
-        'boolean': ['categorybar', 'piechart', 'histogram'],
-        'color': ['categorybar', 'piechart', 'histogram'],
-        'integer': ['histogram', 'densitybar'],
-        'float': ['histogram', 'densitybar'],
-        'year': ['histogram', 'densitybar'],
-        'picture': ['default'],
-        'profile': ['default'],
-        'audio_stream': ['default'],
-        'video_stream': ['default'],
-        'media_link': ['default'],
-        'video': ['default'],
-        'html': ['default'],
-        'url': ['default'],
-        'timestamp' : ['histogram', 'default']
-    };
+            // Render types for individual attr type
+            // Note:-
+            //   1) Change on server side(datasys/datasys_model.js) and athena(entities.py) as well on updation
+            //   2) Each attr type gets first render type as default
+            var attrRenderTypesMap = {
+                'string': ['tag-cloud' ,'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+                'json': ['medialist'],
+                'twitter': ['twitterfeed'],
+                'instagram': ['instagramfeed'],
+                'liststring': ['tag-cloud', 'tags'],
+                'boolean': ['categorybar', 'piechart', 'histogram'],
+                'color': ['categorybar', 'piechart', 'histogram'],
+                'integer': ['histogram', 'densitybar'],
+                'float': ['histogram', 'densitybar'],
+                'year': ['histogram', 'densitybar'],
+                'picture': ['default'],
+                'profile': ['default'],
+                'audio_stream': ['default'],
+                'video_stream': ['default'],
+                'media_link': ['default'],
+                'video': ['default'],
+                'html': ['default'],
+                'url': ['default'],
+                'timestamp' : ['histogram', 'default']
+            };
 
             var mediaAttrTypes = ['json', 'twitter', 'instagram', 'picture', 'audio_stream', 'media_link', 'video_stream', 'video', 'html', 'url'];
             var renderableTypes = ['email', 'text', 'media'];
@@ -96,12 +96,18 @@ angular.module('common')
                 this.name = name;
                 this.entity_type =entity_type;
             }
-            AttrInfo.prototype.getForId = function(attrId) {
+
+            AttrInfo.prototype.getForId = function(attrId, refreshForce, entities) {
                 var val = this.__cache[attrId];
                 if(!val) { // attrInfo does not exist
                     throw new Error("AttrInfo not found for this attr:" + attrId);
                 }
-                if( _.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
+
+                if (refreshForce && entities && entities.length) {
+                    this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, entities);
+                }
+
+                if(_.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
                     this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, val.entities);
                     this.__cache[attrId].__refresh__ = false;
                 }
