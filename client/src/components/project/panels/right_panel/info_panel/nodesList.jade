@@ -22,7 +22,7 @@
 					a.more-text.h6.pull-right(ng-show="numShowGroups !== 0" ng-click='viewLess(); $event.stopPropagation();')
 						em
 							u less
-		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="node in nodes | filter: filterNode | limitTo: viewLimit track by node.id" ng-click="selectNode(node, $event)" ng-mouseenter="hoverNode(node, $event)" ng-mouseleave="unHoverNode(node, $event)")
+		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="node in nodes | filter: filterNode | limitTo: viewLimit track by node.id" ng-click="selectNode(node.id, $event)" ng-mouseenter="hoverNode(node.id, $event)" ng-mouseleave="unHoverNode(node.id, $event)")
 			.row.vert-align.truncate(uib-tooltip-html="getNodeTooltipHtml(node)" tooltip-placement="right" tooltip-append-to-body="true") {{node.attr[labelAttr]}}
 				.col-xs-2
 					.big-circle(style="background: {{::getNodeColor(node)}};")

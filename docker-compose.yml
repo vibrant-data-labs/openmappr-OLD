@@ -1,7 +1,12 @@
 version: '3'
 services:
   web:
-    image: openmapprimages/openmappr_web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        grunt_env: ''
+        script_file: 'run_docker_mode'
     command: ./run_docker_mode.sh
     restart: unless-stopped
     depends_on:
@@ -11,13 +16,15 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+      # - "./client:/usr/src/mappr/client"
     logging:
       driver: "json-file"
       options:
         max-size: "100k"
         max-file: "10"
+
   athena:
-    image: openmapprimages/openmappr_athena:latest
+    build: ./athena
     command: ./run_docker_mode.sh
     restart: unless-stopped
     environment:
@@ -28,24 +35,44 @@ services:
   beanstalk:
     image: kusmierz/beanstalkd
     restart: unless-stopped
-    ports:
-      - "11300:11300"
+    # ports:
+    #   - "11300:11300"
   mongo:
-    image: mongo:3.2
+    build: ./mongo
     restart: unless-stopped
-    ports:
-      - "27017:27017"
+    # ports:
+    #   - "27017:27017"
     volumes:
       - ./mongo/data:/data/db
-      - ./mongo/config:/mongo
-    command: "/bin/sh -c 'cd /mongo && chmod 777 mongo.sh && ./mongo.sh'"
   elasticsearch:
     image: elasticsearch:2.4
     restart: unless-stopped
+    #image: docker.elastic.co/elasticsearch/elasticsearch:5.6.6
     environment:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
       - "action.auto_create_index=true"
+    # ports:
+    #   - "9200:9200"
+    #   - "9300:9300"
+  nginx:
+    build: ./nginx
+    restart: unless-stopped
+    depends_on:
+      - "web"
+    links:
+      - web
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
