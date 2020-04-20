@@ -255,22 +255,22 @@ angular.module('player')
 
                     //MODAL
                     //if($scope.player.settings.showModal){
-                        $scope.hasModal = true;
-                        $scope.panelUI.openPanel('modal');
-                        if(!$window.localStorage.modal)
-                            $timeout(function () {
-                                ngIntroService.setOptions(
-                                    {
-                                        steps:[
-                                            {
-                                                element: '#firstLoad',
-                                                intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
-                                            }
-                                        ]
-                                    }
-                                );
-                                ngIntroService.start();
-                            }, 100);
+                    $scope.hasModal = true;
+                    $scope.panelUI.openPanel('modal');
+                    if(!$window.localStorage.modal)
+                        $timeout(function () {
+                            ngIntroService.setOptions(
+                                {
+                                    steps:[
+                                        {
+                                            element: '#firstLoad',
+                                            intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
+                                        }
+                                    ]
+                                }
+                            );
+                            ngIntroService.start();
+                        }, 100);
                     //}
 
                     //info btn triggering event in parent
