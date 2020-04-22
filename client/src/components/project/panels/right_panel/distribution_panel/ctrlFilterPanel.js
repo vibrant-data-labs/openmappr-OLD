@@ -176,9 +176,9 @@ angular.module('common')
                 FilterPanelService.setFilterMapAfterSubset(FilterPanelService.getAttrFilterConfigMap());
                 console.log('onFilterSubset getAttrFilterConfigMap', FilterPanelService.getAttrFilterConfigMap());
                 var undoRedoResultObject = FilterPanelService.appendToSelectionHistory(filterGetLastState);
-
                 console.log('onFilterSubset undoRedoResultObject', undoRedoResultObject);
-
+                //nodeSelectionService.clearSelectedNodes();
+                //graphHoverService.clearHovers(true);
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
             }
 
