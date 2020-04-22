@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService',
-function ($timeout, dataGraph, linkService) {
+.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 
+function ($timeout, dataGraph, linkService, zoomService) {
     'use strict';
 
     /*************************************
@@ -97,11 +97,14 @@ function ($timeout, dataGraph, linkService) {
 
         //click (calls parent method. Maybe should move to attribute of this directive)
         scope.beginNeighborSwitch = function (linkNode, $event) {
-            console.log('beginNeighborSwitch', linkNode);
+            zoomService.restoreCamera();
             $($event.currentTarget).css({
                 opacity: 0
             });
-            scope.switchToNeighbor(linkNode, $event);
+            setTimeout(function(){ 
+                scope.switchToNeighbor(linkNode, $event); 
+            }, 1000);
+            
         };
 
         function getName(attrs){
@@ -112,6 +115,7 @@ function ($timeout, dataGraph, linkService) {
             console.log({name});
             return name;
         }
+
     }
     return dirDefn;
 }

@@ -196,11 +196,10 @@ angular.module('common')
                 };
 
                 scope.outCat = function(catData, event) {
-                    // $timeout(function() {
-                    scope.openTooltip = false;
-                    renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
-                    // renderCtrl.unHoverNodes();
-                    // }, 100);
+                    $timeout(function() {
+                        scope.openTooltip = false;
+                        hoverSelectedNodes(event);
+                    }, 100);
                 };
 
 
@@ -217,11 +216,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    if (catData.isChecked) {
-                        hoverSelectedNodes(event);
-                    } else {
-                        unhoverSelectedNodes([catData.id], event);
-                    }
+                    // if (catData.isChecked) {
+                    hoverSelectedNodes(event);
+                    // } else {
+                    //     unhoverSelectedNodes(event);
+                    // }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -235,17 +234,15 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
-
-                    var subsettedValues = _.map(_.filter(scope.catListData.data, function filterSubsettedValues(catData) {
-                        return catData.isSubsetted;
-                    }), 'id');
-
-                    renderCtrl.highlightNodesByAttributes(attrId, selectedValues, event, subsettedValues);
+                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
+                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
-                function unhoverSelectedNodes(values, event) {
-                    renderCtrl.unhighlightNodesByAttributes(attrId, values, event);
-                }
+                // function unhoverSelectedNodes(event) {
+                //     var selectedValues = getSelectedValues() || [];
+                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
+                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
+                // }
 
 
                 /// filter stuff
@@ -346,7 +343,8 @@ angular.module('common')
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
                             'cat-checkbox-disable' : false
-                        }
+                        },
+                        inSelectionMode: false
                     };
                 });
 
@@ -365,6 +363,7 @@ angular.module('common')
                 var currSelFreqs = getCurrSelFreqsObj(currentSel, attrInfo.attr.id);
 
                 var inFilteringMode = filteringCatVals.length > 0;
+                var inSelectionMode = !_.isEmpty(currentSel);
 
                 _.each(catListData.data, function(catData) {
                     var selTagFreq = currSelFreqs[catData.id] || 0;
@@ -378,6 +377,7 @@ angular.module('common')
                 catListData.highlightedCats = _.map(_.filter(catListData.data, function(c) {return c.selPercent > 0;}), 'id');
                 catListData.currSelFreqs = currSelFreqs;
                 catListData.inFilteringMode = inFilteringMode;
+                catListData.inSelectionMode = inSelectionMode;
             }
 
             // tag importance as a function of tag frequency in local selection and global tag frequency

@@ -19,7 +19,7 @@
         <entry key="$PROJECT_DIR$" value="feature/OMAP-11" />
       </map>
     </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../sync_repos/openmappr_openmappr_origin" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
   </component>
   <component name="GitToolBoxStore">
