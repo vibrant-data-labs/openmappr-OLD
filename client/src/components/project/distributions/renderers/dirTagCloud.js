@@ -196,11 +196,10 @@ angular.module('common')
                 };
 
                 scope.outCat = function(catData, event) {
-                    // $timeout(function() {
-                    scope.openTooltip = false;
-                    renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
-                    // renderCtrl.unHoverNodes();
-                    // }, 100);
+                    $timeout(function() {
+                        scope.openTooltip = false;
+                        hoverSelectedNodes(event);
+                    }, 100);
                 };
 
 
@@ -217,11 +216,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    if (catData.isChecked) {
-                        hoverSelectedNodes(event);
-                    } else {
-                        unhoverSelectedNodes([catData.id], event);
-                    }
+                    // if (catData.isChecked) {
+                    hoverSelectedNodes(event);
+                    // } else {
+                    //     unhoverSelectedNodes(event);
+                    // }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -235,17 +234,15 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
-
-                    var subsettedValues = _.map(_.filter(scope.catListData.data, function filterSubsettedValues(catData) {
-                        return catData.isSubsetted;
-                    }), 'id');
-
-                    renderCtrl.highlightNodesByAttributes(attrId, selectedValues, event, subsettedValues);
+                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
+                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
-                function unhoverSelectedNodes(values, event) {
-                    renderCtrl.unhighlightNodesByAttributes(attrId, values, event);
-                }
+                // function unhoverSelectedNodes(event) {
+                //     var selectedValues = getSelectedValues() || [];
+                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
+                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
+                // }
 
 
                 /// filter stuff
