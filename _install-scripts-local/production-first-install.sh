@@ -28,3 +28,7 @@ echo
 echo "Bring up all the docker services."
 echo
 docker-compose up -d
+
+
+
+When they run the script it should say "do you want to run, production, staging or development"
