@@ -346,7 +346,8 @@ angular.module('common')
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
                             'cat-checkbox-disable' : false
-                        }
+                        },
+                        inSelectionMode: false
                     };
                 });
 
@@ -365,6 +366,7 @@ angular.module('common')
                 var currSelFreqs = getCurrSelFreqsObj(currentSel, attrInfo.attr.id);
 
                 var inFilteringMode = filteringCatVals.length > 0;
+                var inSelectionMode = !_.isEmpty(currentSel);
 
                 _.each(catListData.data, function(catData) {
                     var selTagFreq = currSelFreqs[catData.id] || 0;
@@ -378,6 +380,7 @@ angular.module('common')
                 catListData.highlightedCats = _.map(_.filter(catListData.data, function(c) {return c.selPercent > 0;}), 'id');
                 catListData.currSelFreqs = currSelFreqs;
                 catListData.inFilteringMode = inFilteringMode;
+                catListData.inSelectionMode = inSelectionMode;
             }
 
             // tag importance as a function of tag frequency in local selection and global tag frequency

@@ -1,3 +1,4 @@
+
 .flex-container-end
 	.cat-search.flex-container.vert-align(ng-if="distrData.numShownCats < catListData.data.length")
 		input.animate-open-right.h6.no-margin(ng-show="showSearch" type="text" ng-model="distrData.searchQuery" ng-model-options="{debounce: 300}" placeholder="search categories...")
@@ -13,12 +14,7 @@
 		.h6 more
 	.clearfix
 .cat-list.h6
-	.cat-item(
-		uib-tooltip="{{tooltipText}}" tooltip-placement="right" tooltip-append-to-body="true" tooltip-is-open="openTooltip" ng-class="{'filter':showFilter}" ng-repeat="catData in catListData.data | filter:{text: distrData.searchQuery} | limitTo: distrData.numShownCats track by catData.id"
-		ng-mouseleave="outCat(catData, $event)",
-	 	ng-mouseover="onCatMouseover(catData, $event)", 
-	 	ng-click="onCatClick(catData);")
-		.cat-checkbox-background(ng-class="{'cat-item-subsetted': catData.isSubsetted }")
+	.cat-item(ng-mouseover="onCatMouseover(catData, $event);" ng-mouseleave="onCatMouseleave($event);" uib-tooltip="{{tooltipText}}" tooltip-placement="right" tooltip-append-to-body="true" tooltip-is-open="openTooltip" ng-class="{'filter':showFilter}" ng-repeat="catData in catListData.data | filter:{text: distrData.searchQuery} | limitTo: distrData.numShownCats track by catData.id" ng-if="(catListData.inSelectionMode && catData.selFreq.toFixed(0) || catData.globalFreq.toFixed(0)) > 0")
 		.cat-bar-container
 			.cat-global-bar.transition(ng-if="!catData.principalNodeBar" style="width:{{(catData.globalpercent).toFixed(2)}}%")
 			div(ng-if="catData.principalNodeBar")
