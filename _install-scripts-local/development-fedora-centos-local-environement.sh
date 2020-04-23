@@ -2,26 +2,45 @@
 #
 #
 #		       This script sets up a local environment on
-#	                   Ubuntu Desktop 18.04 LTS
+#	                   Fedora Desktop 31
+#
 #                    You need to install cURL with
-#                      `sudo apt install curl -y`
+#                      `sudo dnf install curl -y
 #
 #               Script must be run with root privileges
+#							`sudo su`
 #
 #
 # Get updates
-apt update -y
+dnf upgrade -y
 # Remove old versions of docker dependencies
-apt remove docker docker-engine docker.io containerd runc -y
-apt upgrade -y
-apt autoremove -y
+dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine -y
+
+
 # Install dependencies
-apt install nodejs npm build-essential ruby-full git python -y
+# removed: build-essential
+# https://developer.fedoraproject.org/tech/languages/ruby/ruby-installation.html
+
+dnf install nodejs npm ruby-devel git-all python -y
+
+dnf install ruby ruby-devel rubygems gcc -y 
+
+# ruby
+dnf install @development-tools -y
+
 # Install gems
+sudo dnf install rubygem-sass -y
+
+sudo dnf install rubygem-compass -y
+
+sudo dnf install ruby-devel
+
 gem install sass compass
 # Install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
+
+
 # Install docker-compose
 curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
