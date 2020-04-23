@@ -44,9 +44,6 @@ jobs:
         run: |
           cd ./athena
           docker build . --file Dockerfile --tag openmappr_athena --build-arg script_file='run_docker_mode'
-
-# Log in to dockerhub
-
       - name: Log into Dockerhub Container Registry
               run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_EMAIL }} --password-stdin
 
