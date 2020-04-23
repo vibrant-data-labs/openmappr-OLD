@@ -1,40 +1,40 @@
 angular.module('common')
-    .directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService', 'nodeSelectionService',
-        function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService, nodeSelectionService) {
-            'use strict';
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
+    'use strict';
 
-            /*************************************
+    /*************************************
     ******** Directive description *******
     **************************************/
-            var dirDefn = {
-                restrict: 'AE',
-                require: '?^dirSelectionInfo',
-                scope: {
-                    nodes: '=',
-                    labelAttr: '=',
-                    nodeColorAttr: '=',
-                    panelMode: '=',
-                    selectedGroups: '=',
-                    sortTypes: '=',
-                    sortInfo: '=',
-                },
-                templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
-                link: postLinkFn
-            };
+    var dirDefn = {
+        restrict: 'AE',
+        require: '?^dirSelectionInfo',
+        scope: {
+            nodes: '=',
+            labelAttr: '=',
+            nodeColorAttr: '=',
+            panelMode: '=',
+            selectedGroups: '=',
+            sortTypes: '=',
+            sortInfo: '=',
+        },
+        templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
+        link: postLinkFn
+    };
 
-            /*************************************
+    /*************************************
     ************ Local Data **************
     **************************************/
-            // var logPrefix = 'dirNodesList: ';
-            var ITEMS_TO_SHOW = 100;
-            var ITEMS_TO_SHOW_INITIALLY = 20;
+    // var logPrefix = 'dirNodesList: ';
+    var ITEMS_TO_SHOW = 100;
+    var ITEMS_TO_SHOW_INITIALLY = 20;
 
 
-            /*************************************
+    /*************************************
     ******** Controller Function *********
     **************************************/
 
-            /*************************************
+    /*************************************
     ******** Post Link Function *********
     **************************************/
     function postLinkFn(scope, elem, attrs, parCtrl) {
@@ -70,11 +70,7 @@ angular.module('common')
             if(scope.panelMode == 'selection') {
                 parCtrl.openNodeBrowserInSelMode();
             }
-            parCtrl.replaceSelection();
-            graphHoverService.clearHovers($event);
-            graphSelectionService.selectByIds([nodeId] ,1);
-            FilterPanelService.rememberSelection(false);
-
+            selectNodes([nodeId], $event);
         };
 
         scope.hoverNode = function(nodeId) {
@@ -136,30 +132,27 @@ angular.module('common')
         function selectNodes(nodeIds, ev) {
             parCtrl.replaceSelection();
             graphHoverService.clearHovers(ev);
-
-            scope.selectedGroup = nodeIds;
-            graphHoverService.hoverByIds(nodeIds, 0, false);
-
-
+            graphSelectionService.selectByIds(nodeIds ,1);
             FilterPanelService.rememberSelection(false);
         }
 
         function hoverNodes(nodeIds) {
             parCtrl.persistSelection();
-            graphHoverService.hoverByIds(nodeIds, 0, false);
+            graphHoverService.hoverByIds(nodeIds, 1, false);
         }
 
         function unHoverNodes(nodeIds) {
             graphHoverService.unhoverByIds(nodeIds);
-            if (scope.selectedGroup != undefined) hoverNodes(scope.selectedGroup);
         }
     }
 
-            /*************************************
+
+
+    /*************************************
     ************ Local Functions *********
     **************************************/
 
 
-            return dirDefn;
-        }
-    ]);
+    return dirDefn;
+}
+]);

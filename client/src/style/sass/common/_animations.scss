@@ -195,7 +195,7 @@
 
 .animate-node-right,
 .animate-node-right.ng-enter {
-    @include animation(225ms slideInLeft);
+    @include animation(2s slideInLeft);
 }
 .animate-node-right.ng-leave,
 .animate-node-right.ng-hide-add {

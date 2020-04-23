@@ -85,7 +85,7 @@ function ($scope, $q, $timeout, eventBridgeFactory, leafletData, layoutService, 
     });
 
     $scope.$on(BROADCAST_MESSAGES.project.changeTheme, function(e, data) {
-        if(data.theme !== undefined) changeProjectTheme(data.theme);
+        changeProjectTheme(data.theme);
     });
 
     // Switch to light theme on exiting project

@@ -56,7 +56,6 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     $scope.hoverNodesByAttrib = _.debounce(hoverNodesByAttrib, 100);
     $scope.selectEdgesByAttrib = _.debounce(selectEdgesByAttrib, 100);
 
-    $scope.clearSelections = _.throttle(clearSelections, 100);
     $scope.updateClusterInfo = updateClusterInfo;
     $scope.discardClusterInfoUpdates = discardClusterInfoUpdates;
     $scope.changeColor = changeColor;
@@ -77,7 +76,7 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     };
 
     $scope.vm.nodeSizeAttr = _.find($scope.nodeSizeAttrs, 'id', $scope.mapprSettings.nodeSizeAttr);
-    $scope.selectedNodes = [];
+
 
     $scope.colorByAttrUpdate = function colorByAttrUpdate(colorAttr){
         console.log(logPrefix + 'colorBy: ', $scope.dataGroupsInfo.colorNodesBy.id);
@@ -461,14 +460,9 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     function selectNodesByAttrib(value, $event) {
         console.log('window.event: ', window.event);
         var attrId = getCurrAttrId();
-        $scope.selectedNodes = value;
-        nodeSelectionService.hoverNodesByAttrib(attrId, value, $event);
-    }
-
-    function clearSelections() {
-        console.log('window.event: ', window.event);
         nodeSelectionService.clearSelections();
-        $rootScope.$broadcast(BROADCAST_MESSAGES.cleanStage);
+        nodeSelectionService.selectNodesByAttrib(attrId, value, $event, true);
+        FilterPanelService.rememberSelection(false);
     }
 
     function hoverNodesByAttrib(value, $event) {

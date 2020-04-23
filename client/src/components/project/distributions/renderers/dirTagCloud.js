@@ -52,7 +52,6 @@ angular.module('common')
                 scope.catListData = [];
                 scope.colorStr = FilterPanelService.getColorString();
                 scope.selNodesCount = 0;
-                scope.totalNodes = '';
 
                 // prepares the data which is put into scope
                 function draw() {
@@ -60,11 +59,10 @@ angular.module('common')
                         defColorStr = FilterPanelService.getColorString();
 
                     var cs       = FilterPanelService.getCurrentSelection(),
-                        attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id, true, nodes),
+                        attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id),
                         valColorMap  = genValColorMap(attrId, nodes);
 
                     scope.selNodesCount = cs.length;
-                    scope.totalNodes = nodes.length;
 
                     // Hack for compare view(Cluster attr)
                     if(isCompareView) {
@@ -86,13 +84,11 @@ angular.module('common')
                     var nodes = dataGraph.getRenderableGraph().graph.nodes,
                         defColorStr = FilterPanelService.getColorString();
 
-
                     var cs       = FilterPanelService.getCurrentSelection(),
-                        attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id, true, cs),
+                        attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id),
                         valColorMap  = genValColorMap(attrId, nodes);
 
                     scope.selNodesCount = cs.length;
-                    scope.totalNodes = scope.selNodesCount;
                     updateTagListData(cs, attrInfo, filteringCatVals, defColorStr, valColorMap, scope.catListData);
                     setupFilterClasses(scope.catListData, !scope.showFilter);
                 }
@@ -113,13 +109,12 @@ angular.module('common')
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
                 });
-
                 // on current selection change, update highlights
                 scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                     try {
                         update();
                     } catch(e) {
-                        console.error(dirPrefix + "update() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
+                        console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
                 });
 
@@ -165,40 +160,43 @@ angular.module('common')
                 });
 
                 scope.overCat = function(catData, event) {
-                    // $timeout(function() {
-                    var curTarget = $(event.currentTarget);
-                    var pos = curTarget.position();
-                    // console.log('off: ', off);
-                    // console.log('catData: ', catData);
-                    if(catData.curSelLength === 1) {
-                        if(catData.globalTagFreq == 1) {
-                            scope.tooltipText = catData.text + " is unique to this";
+                    $timeout(function() {
+                        var curTarget = $(event.currentTarget);
+                        var pos = curTarget.position();
+                        // console.log('off: ', off);
+                        // console.log('catData: ', catData);
+                        if(catData.curSelLength === 1) {
+                            if(catData.globalTagFreq == 1) {
+                                scope.tooltipText = catData.text + " is unique to this";
+                            } else {
+                                scope.tooltipText = Number(catData.globalTagFreq - 1) + " others are also tagged as " + catData.text;
+                            }
+                        } else if(catData.curSelLength == 0) {
+                            // var verb = catData.globalTagFreq == 1 ? 'is' : 'are';
+                            scope.tooltipText = catData.globalTagFreq + " of " + catData.totalNodes + " tagged as " + catData.text;
                         } else {
-                            scope.tooltipText = Number(catData.globalTagFreq - 1) + " others are also tagged as " + catData.text;
+                            // var verb = catData.selTagFreq == 1 ? 'is' : 'are';
+                            scope.tooltipText = catData.selTagFreq + " of " + catData.curSelLength + " tagged as " + catData.text;
                         }
-                    } else if(catData.curSelLength == 0) {
-                        // var verb = catData.globalTagFreq == 1 ? 'is' : 'are';
-                        scope.tooltipText = (catData.selTagFreq || catData.globalTagFreq) + " of " + scope.totalNodes + " tagged as " + catData.text;
-                    } else {
-                        // var verb = catData.selTagFreq == 1 ? 'is' : 'are';
-                        scope.tooltipText = catData.selTagFreq + " of " + catData.curSelLength + " tagged as " + catData.text;
-                    }
-                    element.find('.tooltip-positioner').css({
-                        top : pos.top - 5,
-                        left : pos.left + curTarget.width()
-                    });
-                    scope.openTooltip = true;
+                        element.find('.tooltip-positioner').css({
+                            top : pos.top - 5,
+                            left : pos.left + curTarget.width()
+                        });
+                        scope.openTooltip = true;
 
-                    // hover nodes
-                    renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
+                        // hover nodes
+                        renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
 
-                    // }, 10);
+                    }, 10);
                 };
 
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-                        hoverSelectedNodes(event);
+
+                        if (!catData.isChecked) {
+                            renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
+                        }
                     }, 100);
                 };
 
@@ -216,11 +214,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    // if (catData.isChecked) {
-                    hoverSelectedNodes(event);
-                    // } else {
-                    //     unhoverSelectedNodes(event);
-                    // }
+                    if (catData.isChecked) {
+                        hoverSelectedNodes(event);
+                    } else {
+                        unhoverSelectedNodes(event);
+                    }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -234,16 +232,13 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
-                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
-                // function unhoverSelectedNodes(event) {
-                //     var selectedValues = getSelectedValues() || [];
-                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
-                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
-                // }
-
+                function unhoverSelectedNodes(event) {
+                    var selectedValues = getSelectedValues() || [];
+                    renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
+                }
 
                 /// filter stuff
                 function setupFilterClasses (catListData, isfilterDisabled) {
@@ -260,9 +255,7 @@ angular.module('common')
                 /// New behaviour: The filter is just selected, its applied after the user presses the Subset button
                 function selectFilter () {
                     var filterConfig = FilterPanelService.getFilterForId(attrId);
-                    filteringCatVals = _.map(_.filter(scope.catListData.data, function (catData) {
-                        return catData.isChecked && !catData.isSubsetted;
-                    }), 'id');
+                    filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
 
                     filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
                     filterConfig.state.selectedVals = _.clone(filteringCatVals);
@@ -343,8 +336,7 @@ angular.module('common')
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
                             'cat-checkbox-disable' : false
-                        },
-                        inSelectionMode: false
+                        }
                     };
                 });
 
@@ -363,7 +355,6 @@ angular.module('common')
                 var currSelFreqs = getCurrSelFreqsObj(currentSel, attrInfo.attr.id);
 
                 var inFilteringMode = filteringCatVals.length > 0;
-                var inSelectionMode = !_.isEmpty(currentSel);
 
                 _.each(catListData.data, function(catData) {
                     var selTagFreq = currSelFreqs[catData.id] || 0;
@@ -371,13 +362,11 @@ angular.module('common')
                     catData.colorStr = valColorMap[catData.id] && _.isArray(valColorMap[catData.id]) ? valColorMap[catData.id][0] : defColorStr;
                     catData.selPercent = selTagFreq > 0 ? Math.max(0.1, selTagFreq / totalNodes * 100) : 0;
                     catData.isCurrent = selTagFreq > 0;
-                    catData.selTagFreq = selTagFreq;
                 });
 
                 catListData.highlightedCats = _.map(_.filter(catListData.data, function(c) {return c.selPercent > 0;}), 'id');
                 catListData.currSelFreqs = currSelFreqs;
                 catListData.inFilteringMode = inFilteringMode;
-                catListData.inSelectionMode = inSelectionMode;
             }
 
             // tag importance as a function of tag frequency in local selection and global tag frequency

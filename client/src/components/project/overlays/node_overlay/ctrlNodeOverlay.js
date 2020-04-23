@@ -191,8 +191,9 @@ angular.module('common')
                 // else if(($scope.mapprSettings.nodeFocusShow || showNodeDetailOnLoad === true)
                 // TODO: restore validation
                 if(!$scope.mapprSettings) return;
-                else if($scope.mapprSettings.nodeFocusShow && data.newSelection
-                        && $scope.nodeOverlayProps.enabled && $scope.layout.plotType !== 'grid') {
+                else if($scope.mapprSettings.nodeFocusShow
+          && data.newSelection
+          && $scope.nodeOverlayProps.enabled && $scope.layout.plotType !== 'grid') {
                     if(_.isArray(data.nodes) && data.nodes.length === 1) {
                         //reset so only shows on snapshot load
                         showNodeDetailOnLoad = false;
@@ -290,8 +291,6 @@ angular.module('common')
 
                 //objects to pass to dirNodeFocus
                 //start position and size
-                console.log('finishNeighborNode', pos,window);
-                
                 $scope.neighborNodeStartData = {
                     x: pos.left-390,
                     y: top,
@@ -299,30 +298,12 @@ angular.module('common')
                 };
                 //end position and size
                 $scope.neighborNodeEndData = {
-                    x: window.innerWidth/2 - ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel' ? 375 : 415),
-                    y: window.innerHeight/2 + ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel' ? 25 : 0),
+                    x: window.innerWidth/2-415,
+                    y: window.innerHeight/2,
                     size: 150
                 };
-                
                 //finally show the node
                 $scope.showNeighborNode = true;
-                zoomPosition($scope.neighborNode, 10 / $scope.focusNode[camPrefix + 'size']);
-                
-            }
-
-            function zoomPosition (node, rel= false){
-                var relDefault = 10 / node[camPrefix + 'size'];                
-                var pos = {
-                    x: node.x,
-                    y: node.y
-                };
-
-                var offset = {
-                    x: 246,
-                    y: 25
-                };
-
-                zoomService.zoomToOffsetPosition(pos, rel ? rel : relDefault, offset, Array(node));
             }
 
             function drawNeighborLine(node, similarity, $event) {
@@ -381,7 +362,7 @@ angular.module('common')
 
                 if(!isGrid) {
                     //get ratio to zoom based on current size of node pop and final size of node pop
-                    var relRatio = (($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') ? 10 : 50)/$scope.focusNode[camPrefix + 'size'];
+                    var relRatio = (($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') ? 20 : 50)/$scope.focusNode[camPrefix + 'size'];
 
                     //get amount to move graph based on node position and where it needs to end up
                     var pos = {

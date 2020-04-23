@@ -152,10 +152,6 @@ angular.module('common')
                 updateSelCount();
             });
 
-            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
-                updateSelCount();
-            });
-
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                 updateSelCount();
             });
@@ -172,7 +168,7 @@ angular.module('common')
              ********* Core Functions *************
              **************************************/
 
-            function updateSelCount() {                
+            function updateSelCount() {
                 $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
             }
 
