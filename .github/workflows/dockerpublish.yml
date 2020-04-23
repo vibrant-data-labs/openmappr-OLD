@@ -44,7 +44,10 @@ jobs:
         run: |
           cd ./athena
           docker build . --file Dockerfile --tag openmappr_athena --build-arg script_file='run_docker_mode'
-      - name: Log into Dockerhub Container Registry
+
+# Publish images to Dockerhub
+
+- name: Log into Dockerhub Container Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_EMAIL }} --password-stdin
 
       - name: Publish openmappr_web image to Dockerhub Registry
@@ -53,6 +56,7 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           [ "$VERSION" == "staging" ] && VERSION=staging
           [ "$VERSION" == "development" ] && VERSION=development
+          [ "$VERSION" == "blackstone" ] && VERSION=blackstone
           echo VERSION=$VERSION
           docker tag openmappr_web openmapprimages/openmappr_web:$VERSION
           docker push openmapprimages/openmappr_web:$VERSION
