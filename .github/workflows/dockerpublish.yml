@@ -10,6 +10,7 @@ on:
       - master
       - staging
       - development
+      - blackstone
 
   pull_request:
     branches:
