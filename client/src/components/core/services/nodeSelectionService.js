@@ -83,8 +83,8 @@ angular.module('common')
                 var nodes = (value != null ? dataGraph.getNodesByAttrib(attr, value, fivePct, subsettedNodes, true) : []);
                 // add 750 ms delay to _hoverHighlightHelper
                 //setTimeout(function() { _hoverHighlightHelper(nodes)}, 750);
-                _hoverHelper(_.map(nodes, 'id'));
-                // _hoverHighlightHelper(nodes);
+                // _hoverHelper(_.map(nodes, 'id'));
+                _hoverHighlightHelper(nodes);
             }
             //
 
