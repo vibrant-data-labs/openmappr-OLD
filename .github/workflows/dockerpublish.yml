@@ -62,6 +62,7 @@ jobs:
           docker push openmapprimages/openmappr_web:$VERSION
 
 # Add a label for each container
+# The list of images to publish on Dockerhub
 
       - name: Publish openmappr_athena image to Dockerhub Registry
         run: |
@@ -71,9 +72,6 @@ jobs:
           [ "$VERSION" == "development" ] && VERSION=development
           [ "$VERSION" == "blackstone" ] && VERSION=blackstone
           echo VERSION=$VERSION
-
-# The list of images to publish on Dockerhub
-
           docker tag openmappr_athena openmapprimages/openmappr_athena:$VERSION
           docker push openmapprimages/openmappr_athena:$VERSION
 
