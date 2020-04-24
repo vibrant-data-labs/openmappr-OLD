@@ -3,8 +3,6 @@
 #
 #		       This script sets up a local environment on
 #	                   Ubuntu Desktop 20 LTS
-#                    You need to install cURL with
-#                      `sudo apt install curl -y`
 #
 #               Script must be run with root privileges
 #
@@ -12,7 +10,7 @@
 # Get updates
 apt update -y
 # Remove old versions of docker dependencies
-apt remove docker docker-engine docker.io containerd runc -y
+apt remove docker docker.io containerd runc -y
 apt upgrade -y
 apt autoremove -y
 # Install dependencies
