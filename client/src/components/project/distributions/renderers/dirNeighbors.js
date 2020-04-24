@@ -108,16 +108,12 @@ function ($timeout, dataGraph, linkService, zoomService) {
         };
 
         function getName(attrs){
-            var completeName = attrs.Name;
-            
-            var names = completeName.split(':');
-                if (names.length == 2){
-                    return {
-                        name : names[0],
-                        description: names[1]
-                    }
-                }
-                return { name: completeName };
+            var name = '';
+            var attrsArray = Object.keys({...attrs});
+            var attrsName = attrsArray.map( (attr) => attr.toLowerCase().includes('name') ? attr : null);
+            attrsName.filter(Boolean).forEach((attrName) => name += `${attrs[attrName]}`.slice(0, 15));
+            console.log({name});
+            return name;
         }
 
     }
