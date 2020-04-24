@@ -11,7 +11,7 @@ on:
       - staging
       - development
       - blackstone
-      - theOgroup
+      - theogroup
 
   pull_request:
     branches:
@@ -19,7 +19,7 @@ on:
       - staging
       - development
       - blackstone
-      - theOgroup
+      - theogroup
 
 env:
   IMAGE_NAME: openmappr
@@ -58,8 +58,8 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           [ "$VERSION" == "staging" ] && VERSION=staging
           [ "$VERSION" == "development" ] && VERSION=development
-          [ "$VERSION" == "blackstone" ] && VERSION=blackstone
-          [ "$VERSION" == "theOgroup" ] && VERSION=theOgroup          
+          [ "$VERSION" == "blackstone" ] && VERSION=blackstone    
+          [ "$VERSION" == "theogroup" ] && VERSION=theogroup
           echo VERSION=$VERSION
           docker tag openmappr_web openmapprimages/openmappr_web:$VERSION
           docker push openmapprimages/openmappr_web:$VERSION
@@ -74,7 +74,7 @@ jobs:
           [ "$VERSION" == "staging" ] && VERSION=staging
           [ "$VERSION" == "development" ] && VERSION=development
           [ "$VERSION" == "blackstone" ] && VERSION=blackstone
-          [ "$VERSION" == "theOgroup" ] && VERSION=theOgroup
+          [ "$VERSION" == "theogroup" ] && VERSION=theogroup
           echo VERSION=$VERSION
           docker tag openmappr_athena openmapprimages/openmappr_athena:$VERSION
           docker push openmapprimages/openmappr_athena:$VERSION
