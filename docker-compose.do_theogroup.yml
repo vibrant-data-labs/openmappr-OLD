@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: openmapprimages/openmappr_web:theogroup
+    image: openmapprimages/openmappr_web:theOgroup
     command: ./run_docker_mode.sh
     restart: unless-stopped
     depends_on:
@@ -17,7 +17,7 @@ services:
         max-size: "100k"
         max-file: "10"
   athena:
-    image: openmapprimages/openmappr_athena:theogroup
+    image: openmapprimages/openmappr_athena:theOgroup
     command: ./run_docker_mode.sh
     restart: unless-stopped
     environment:
