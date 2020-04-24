@@ -20,7 +20,7 @@ apt install nodejs npm build-essential ruby-full git python -y
 # Install gems
 gem install sass compass
 # Install docker
-apt install docker.io
+apt install docker.io -y
 sudo systemctl enable --now docker
 # Install docker-compose
 apt install docker-compose
