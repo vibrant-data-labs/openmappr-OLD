@@ -1,0 +1,45 @@
+@import 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap';
+
+body {
+  font-family: $fontPoppins;
+}
+
+.page-signin {
+  background: #449BB9 url(../img/bg.png) 50% no-repeat;
+  background-size: cover;
+  height: 100%;
+
+  &__title {
+    margin: 30px 0 16px;
+    font-size: 13px;
+    line-height: 20px;
+    font-family: $fontPoppins;
+  }
+
+  .modal-dialog {
+    @media(min-width: 768px) {
+      margin-top: 120px;
+    }
+  }
+
+  .modal-dialog__note {
+    color: #fff;
+  }
+
+  .panel-profile {
+    max-width: 480px;
+    margin: 0 auto 20px;
+    padding: 20px;
+    border: 0;
+    border-radius: 6px;
+    box-shadow: 0 0 18px rgba($color: #000000, $alpha: .06);
+  }
+
+  .panel-heading {
+    padding: 0;
+  }
+
+  .panel-body {
+    padding: 0;
+  }
+}
