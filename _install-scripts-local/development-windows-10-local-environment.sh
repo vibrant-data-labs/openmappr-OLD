@@ -18,6 +18,20 @@ open /Applications/Docker.app
 echo "Installing dependencies"
 choco install git curl -y 
 
+# Install ruby
+choco install ruby -y
+
+# Install Ruby Dev-Kit
+choco install ruby.devkit
+
+
+^^^ Above works
+
+# Install the compass Gem
+echo "installing compass gem"
+gem install compass
+gem install sass
+
 
 # Install NodeJS 8.12 and switch to it
 echo "Installing NodeJS v8.12.0 (openmappr dependency)"
@@ -36,13 +50,8 @@ echo "Cloning openmappr repo"
 git clone https://github.com/selfhostedofficial/openmappr
 cd openmappr
 
-# Install ruby
-choco install ruby -y
 
-# Install the compass Gem
-echo "installing compass gem"
-gem install compass
-gem install sass
+
 
 # npm install -g sass
 

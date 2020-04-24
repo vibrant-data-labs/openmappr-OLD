@@ -24,7 +24,7 @@ lib-cov
 # Block any unnecessary .gzip, .zip or .gz files from being uploaded.
 # In the /mongo/ directory the TED Map database is stored as a .gzip
 # /mongo/
-#*.gz
+*.gz
 
 pids
 logs
