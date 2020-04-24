@@ -36,12 +36,12 @@ jobs:
       - name: Scan for secrets (1/2) • Yelp/detect-secrets 
         uses: evanextreme/detect-secrets-action@1.0.0
 
-# Check to see that the openmappr_web image builds succesfully
+# Check to see that the openmappr_web image builds successfully
 
       - name: Check docker build openmappr_web
         run: docker build . --file Dockerfile --tag openmappr_web --build-arg script_file='run_docker_mode'
 
-# Check to see that the openmappr_athena image builds succesfully
+# Check to see that the openmappr_athena image builds successfully
 
       - name: Check docker build openmappr_athena
         run: |

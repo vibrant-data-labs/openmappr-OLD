@@ -1,0 +1,51 @@
+version: '3'
+services:
+  web:
+    image: openmapprimages/openmappr_web:blackstone
+    command: ./run_docker_mode.sh
+    restart: unless-stopped
+    depends_on:
+      - "athena"
+      - "elasticsearch"
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./server:/usr/src/mappr/server"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100k"
+        max-file: "10"
+  athena:
+    image: openmapprimages/openmappr_athena:blackstone
+    command: ./run_docker_mode.sh
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - "mongo"
+      - "beanstalk"
+  beanstalk:
+    image: kusmierz/beanstalkd
+    restart: unless-stopped
+    ports:
+      - "11300:11300"
+  mongo:
+    image: mongo:3.2
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo/data:/data/db
+      - ./mongo/config:/mongo
+    command: "/bin/sh -c 'cd /mongo && chmod 777 mongo.sh && ./mongo.sh'"
+  elasticsearch:
+    image: elasticsearch:2.4
+    restart: unless-stopped
+    environment:
+      - "discovery.type=single-node"
+      - "xpack.security.enabled=false"
+      - "action.auto_create_index=true"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
