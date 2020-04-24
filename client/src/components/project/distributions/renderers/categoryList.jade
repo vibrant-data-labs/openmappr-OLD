@@ -21,7 +21,7 @@
 				.cat-selfreq-bar.transition(style="width:{{(catData.globalpercent).toFixed(2)}}%; background-color:{{colorStr}}")
 				.cat-global-bar(style="width:{{catData.selPercent.toFixed(2)}}%;")
 			.transition(ng-class="{'cat-selfreq-bar': !catData.singleNodeSel, 'cat-global-bar': catData.singleNodeSel}" style="width:{{catData.selPercent.toFixed(2)}}%; background-color:{{colorStr}}")
-		.row.vert-align.m-0.tag-checkbox-container(ng-click="onCatClick(catData);")
+		.row.vert-align.m-0.tag-checkbox-container()
 			div.transition.p-0(ng-class="{'col-xs-2':showFilter, 'col-xs-1':!showFilter, 'disableFilter': disableFilter}")
 				.tag-checkbox(ng-if="showFilter" ng-class="{{catData.checkboxClass}}")
 					input(id="checkbox-{{$index}}-{{attrId}}" type="checkbox", ng-model="catData.isChecked", ng-disabled="catData.checkboxClass == 'cat-checkbox-disable'")

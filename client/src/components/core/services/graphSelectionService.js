@@ -485,12 +485,15 @@ angular.module('common')
                 if( event.type == 'clickNodes') {
                     nodesInPop = function(nodes) {
                         var inPop = false;
+
                         _.each(nodes, function(n) {
                             inPop = inPop | n.inPop;
                         });
+
                         return inPop;
                     };
-                    if(selectionInPop() && !nodesInPop(event.data.nodes)) {
+
+                    if (selectionInPop() && !nodesInPop(event.data.nodes)) {
                         return;
                     }
                 }

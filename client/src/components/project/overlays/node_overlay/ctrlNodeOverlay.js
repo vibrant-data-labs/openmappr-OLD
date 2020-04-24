@@ -491,13 +491,14 @@ angular.module('common')
                 $scope.nodeRightInfo = {
                     colorStr: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd',
                     keywords: [],
-                    keyboards: [],
-                    events: [],
-                    publications: [{}]
+                    tedtags: [],
+                    events: {},
+                    publications: {}
                 };
-                $scope.nodeRightInfo.name = '';
                 attrArray.map( (attr) => {
-                    if (isName(attr)) $scope.nodeRightInfo.name += values[attr.title] + ' ';
+                    //console.log(attr, values, 888);
+                    
+                    if (isName(attr)) $scope.nodeRightInfo.name = getName(values[attr.title]);
                     if (isLastName(attr)) $scope.nodeRightInfo.LastName = values[attr.title];
                     if (isDescription(attr)) $scope.nodeRightInfo.description = values[attr.title];
                     if (isVideo(attr)) $scope.nodeRightInfo.video = values[attr.title];
@@ -505,18 +506,17 @@ angular.module('common')
                         const { title } = attr;
                         $scope.nodeRightInfo.keywords.push(values[title] instanceof Array ? values[title][0] : values[title]);
                     }
+                    if (isTedTag(attr)){
+                        const { title } = attr;
+                        $scope.nodeRightInfo.tedtags.push(values[title] instanceof Array ? values[title][0] : values[title]);
+                    }
                     if(isPublication(attr)){
                         const { title } = attr;
-                        $scope.nodeRightInfo.publications[0][title] = Number(values[title]).toFixed(2);
+                        $scope.nodeRightInfo.publications[title] = isDate(attr) ? formatDate(values[title]) : numberFormat(values[title]);
                     }
-                    // if (isKeyboardList(attr)){
-                    //     const { title } = attr;
-                    //     console.log({attr});
-                    //     $scope.nodeRightInfo.keyboards.push(values[title] instanceof Array ? values[title][0] : values[title]);
-                    // }
                     if (isEvent(attr)) {
                         const {title} = attr;
-                        $scope.nodeRightInfo.publications[0][title] = values[title];
+                        $scope.nodeRightInfo.events[title] = values[title];
                     }
                     if (isYouTube(attr)) $scope.nodeRightInfo.socialMedia.youtube = values[attr.title];
                     if (isLinkedIn(attr)) $scope.nodeRightInfo.socialMedia.linkedIn = values[attr.title];
@@ -528,9 +528,28 @@ angular.module('common')
              ********* Helper functions for the attr map *************
              **************************************/
 
+            function getName(completeName) {
+                var names = completeName.split(':');
+                if (names.length == 2){
+                    return {
+                        name : names[0],
+                        description: names[1]
+                    }
+                }
+                return { name: completeName };
+            }
 
-            function removeFrac(num){
-                return Number(num).toFixed(2);
+            function formatDate(num){
+                var date =  new Date(num);
+                var day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+                var month = (date.getMonth() +1) < 10 ? `0${(date.getMonth() +1)}` : (date.getMonth() +1) ;
+                var year = date.getFullYear();
+                
+                return day + "/" + month + "/" + year;
+            }
+
+            function numberFormat(number){
+                return new Intl.NumberFormat().format(number);;
             }
 
             function toM(num){
@@ -552,26 +571,38 @@ angular.module('common')
             }
 
             function isTag(attr){
-                const { attrType, renderType } = attr;
-                return attrType === 'liststring' && renderType === 'tag-cloud';
+                const { attrType, renderType, id } = attr;
+                return attrType === 'liststring' && renderType === 'tag-cloud' && id !== 'TED tags';
+            }
+
+            function isTedTag(attr){
+                const { attrType, renderType, id } = attr;
+                return attrType === 'liststring' && renderType === 'tag-cloud' && id === 'TED tags';
             }
 
             function isDescription(attr){
                 const { attrType, renderType, id } = attr;
-                return attrType === 'string' && renderType === 'text' && id === 'description' || id === 'Short Bio';
+                return attrType === 'string' && renderType === 'text' && id.toLowerCase() === 'description' || id === 'Short Bio';
             }
             function isPublication(attr){
                 const { attrType, renderType } = attr;
                 return renderType === 'histogram' &&
                    ( attrType === 'string'
-                    || attrType === 'float'
+                    || attrType === 'integer'
                     || attrType === 'year'
                     || attrType === 'timestamp' )
 
             }
+
+            function isDate(attr){
+                const { attrType, renderType } = attr;
+                return renderType === 'histogram' && ( attrType === 'string' || attrType === 'timestamp' )
+
+            }
+
             function isVideo(attr) {
                 const { attrType, renderType, id } = attr;
-                return attrType === 'video' && renderType === 'default' && id === 'video';
+                return attrType === 'video' && renderType === 'default' && id.toLowerCase() === 'video';
             }
 
             function isEvent(attr){
