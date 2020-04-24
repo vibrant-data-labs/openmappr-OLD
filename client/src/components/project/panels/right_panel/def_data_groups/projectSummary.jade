@@ -11,10 +11,9 @@
 								span(ng-if="vm.nodeSizeAttr.metadata.descr" uib-tooltip="{{vm.nodeSizeAttr.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
 									| &nbsp;&nbsp;&nbsp;
 									i.fa.fa-info-circle
-
-		
-
-
+				//- .col-xs-4
+				//- 	span
+				//- 		button.square-btn.small-btn.panel-btn(type="button", ng-click="clearSelections();") Reset
 		div.row.vert-align.main(ng-click="$event.stopPropagation()" ng-if="!isNodeColorNumeric")
 			.col-xs-12
 				h6.title.text-uppercase.truncate.vert-align
@@ -87,7 +86,7 @@
 			ul.panel-list.list-unstyled.over-hidden(ng-if="mapprSettings.nodeColorStrat != 'select'")
 				// Ordinal Legend display
 				li.panel-item.pointable-cursor.animate-repeat(ng-if="!isNodeColorNumeric", ng-class="{'highlighted' : l.highlightOnNodeHover}", ng-repeat="l in dataGroupVMs | limitTo: ui.dataGroupsViewCount track by l.originalTitle", uib-tooltip="{{::l.name}}", tooltip-append-to-body="true" tooltip-placement="right")
-					.flex-container.pointable-cursor(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700); !ui.editEnabled && (l.showClusterEdit = true);', ng-mouseleave='hoverNodesByAttrib(undefined, $event); !l.editClusterName && (l.showClusterEdit = false);', uib-tooltip="{{l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
+					.flex-container.pointable-cursor(ng-click='selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700); !ui.editEnabled && (l.showClusterEdit = true);', ng-mouseleave='hoverNodesByAttrib(selectedNodes, $event); !l.editClusterName && (l.showClusterEdit = false);', uib-tooltip="{{l.descr}}", tooltip-placement='left', tooltip-append-to-body="true")
 						.legend-icon(ng-if="!l.editClusterName", ng-style='l.color')
 						div.animate-fade(ng-if="(l.archetypes.length > 0 || l.bridgers.length > 0) && ui.summaryToggleOpen")
 							.legend-line-down(style="border-color: {{l.colorval}}" ng-class="{'only-one':(l.bridgers.length == 0 || l.archetypes.length == 0)}")

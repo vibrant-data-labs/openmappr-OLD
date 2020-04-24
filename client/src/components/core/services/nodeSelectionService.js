@@ -225,6 +225,7 @@ angular.module('common')
             }
 
             function clearSelections() {
+                graphSelectionService.clearSelections(true);
                 BreadCrumbService.newBreadCrumb(); // clear out the breadcrumbs
             }
 
