@@ -6,12 +6,12 @@ angular.module('common')
         function($q, $sce, graphSelectionService, zoomService, dataGraph, graphHoverService, BreadCrumbService, SelectorService, AttrInfoService) {
             'use strict';
             /*
-            * Nodes Selection
-            */
+     * Nodes Selection
+     */
 
             /*************************************
-            *************** API ******************
-            **************************************/
+    *************** API ******************
+    **************************************/
 
             this.hoverNodesByAttrib       = hoverNodesByAttrib;
             this.hoverNodesByAttributes   = hoverNodesByAttributes;
@@ -62,8 +62,8 @@ angular.module('common')
 
 
             /*************************************
-            ********* Core Functions *************
-            **************************************/
+    ********* Core Functions *************
+    **************************************/
 
             function setSelectedNodes(data) {
                 console.error("######## setSelectedNodes Called!");
@@ -79,19 +79,11 @@ angular.module('common')
             // attr - by which node Attr
             // value - hover nodes for which the value of above mentioned attr is 'value'
             function hoverNodesByAttrib(attr, value, $event, fivePct) {
-                var subsettedNodes = dataGraph.getAllNodes();
-                var nodes = (value != null ? dataGraph.getNodesByAttrib(attr, value, fivePct, subsettedNodes, true) : []);
-
-                // _hoverHelper(_.map(nodes, 'id'));
-                _hoverHighlightHelper(nodes);
+                _hoverHelper(value != null ? dataGraph.getNodesByAttrib(attr, value, fivePct) : []);
             }
-            //
 
             function hoverNodesByAttributes(attr, values, $event, fivePct) {
-                var selectedNodes = _getSelectedNodes(true) || [];
-                var nodes = [...selectedNodes, ...(values.length ? dataGraph.getNodesByAttributes(attr, values, fivePct) : [])];
-
-                _hoverHelper(nodes);
+                _hoverHelper(values.length ? dataGraph.getNodesByAttributes(attr, values, fivePct) : []);
             }
 
             function unhoverNodesByAttributes(attr, values, $event, fivePct) {
@@ -99,12 +91,7 @@ angular.module('common')
             }
 
             function unhoverNodesByAttrib(attr, values, $event, fivePct) {
-                // _unhoverHelper(values.length ? dataGraph.getNodesByAttrib(attr, values, fivePct) : []);
-                _unhoverHighlightHelper(values.length ? dataGraph.getNodesByAttrib(attr, values, fivePct, null, true) : []);
-            }
-
-            function unhoverNodesByAttributes(attr, values, $event, fivePct) {
-                _unhoverHelper(values.length ? dataGraph.getNodesByAttributes(attr, values, fivePct) : []);
+                _unhoverHelper(values.length ? dataGraph.getNodesByAttrib(attr, values, fivePct) : []);
             }
 
             function hoverNodesByAttribRange(attr, min, max) {
@@ -113,7 +100,7 @@ angular.module('common')
             }
 
             function hoverNodeIdList(nodeIds) {
-                _hoverHelper(_filterSubsettedNodeIds(nodeIds));;
+                _hoverHelper(nodeIds);
             }
 
             function hoverNodeNeighborIdList(nodeIds) {
@@ -384,46 +371,8 @@ angular.module('common')
 
 
             /*************************************
-            ********* Local Functions ************
-            **************************************/
-           function _filterSubsettedNodeIds(nodeIds) {
-                var ids = _.map(dataGraph.getAllNodes(), 'id');
-
-                return _.filter(nodeIds, function filterNodeIds(id) {
-                    return ids.indexOf(id) > -1;
-                });
-           }
-
-            function _filterSubsettedNodes(nodes) {
-                var ids = _.map(dataGraph.getAllNodes(), 'id');
-
-                return _.filter(nodes, function filterNodeIds(node) {
-                    return ids.indexOf(node.id) > -1;
-                });
-            }
-
-            function _getSelectedNodes(getNode, tempSelectedInfo) {
-                var nodes = [];
-
-                _.forEach(tempSelectedInfo, function (attrValues, attr) {
-                   var localNodes = attrValues.length ? dataGraph.getNodesByAttributes(attr, attrValues, true, null, getNode) : [];
-
-                   nodes = [...localNodes];
-                });
-
-                return nodes;
-            }
-
-            function _hoverHighlightHelper(nodes) {
-                addNodesToTempHighlightedNodes(nodes);
-                highlightAllSelected(true);
-            }
-
-            function _unhoverHighlightHelper(nodes) {
-                removeNodesFromTempHighlightedNodes(nodes);
-                highlightAllSelected(true);
-            }
-
+    ********* Local Functions ************
+    **************************************/
             function _hoverHelper(ids, degree) {
                 degree = degree || 0;
                 if (ids.length === 0) {

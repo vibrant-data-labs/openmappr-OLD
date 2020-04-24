@@ -1,6 +1,6 @@
 angular.module('common')
-    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'dataGraph',
-        function($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES, dataGraph) {
+    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES',
+        function($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES) {
             'use strict';
 
             /*************************************
@@ -169,11 +169,10 @@ angular.module('common')
                             updateSelectionBars(histoBars, payload.nodes, attrInfo, histoData, mappTheme, false);
                         }
                         else {
-                            // if(_.isEmpty(payload.nodes)) {
-                            //     updateSelectionBars(histoBars, payload.nodes, attrInfo, histoData, mappTheme, false);
-                            // }
-                            updateSelectionBars(histoBars, payload.nodes, attrInfo, histoData, mappTheme, false);
-                            // updateFiltSelBars(histoBars, payload.nodes, attrInfo, histoData);
+                            if(_.isEmpty(payload.nodes)) {
+                                updateSelectionBars(histoBars, payload.nodes, attrInfo, histoData, mappTheme, false);
+                            }
+                            updateFiltSelBars(histoBars, payload.nodes, attrInfo, histoData);
                         }
                     } catch(e) {
                         console.error(logPrefix + "highlighting selection difference throws error", e.stack, e);
@@ -187,9 +186,9 @@ angular.module('common')
 
                     if(!_.isEmpty(initialSelection)) {
                         updateSelectionBars(histoBars, initialSelection, attrInfo, histoData, mappTheme, initialSelection.length === 1);
-                        // if(initialSelection.length > 1) {
-                        //     updateFiltSelBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData);
-                        // }
+                        if(initialSelection.length > 1) {
+                            updateFiltSelBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData);
+                        }
                     }
                     else {
                         updateSelectionBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData, mappTheme, false);
@@ -708,140 +707,21 @@ angular.module('common')
                     if((targetElem.attr('data-selection') == 'true' && targetElem.attr('height') > 0)
                         || (targetElem.attr('data-filt-selection') == 'true' && targetElem.attr('height') > 0)
                     ) {
-                        renderCtrl.addNodeIdsToSelected(histoData.selectionCountsList[i].nodeIds);
-                        renderCtrl.hoverNodeIdList(histoData.selectionCountsList[i].nodeIds, window.event);
+                        renderCtrl.selectNodeIdList(histoData.selectionCountsList[i].nodeIds, window.event);
                     }
                     else {
                         setColor.call(this, opts.clickColor);
                         if(isOrdinal) {
-                            // renderCtrl.selectNodesByAttrib(attrInfo.attr.id, segment.label, window.event);
-                            _hoverSelectedNodes(event, attrInfo.attr.id, renderCtrl);
+                            renderCtrl.selectNodesByAttrib(attrInfo.attr.id, segment.label, window.event);
                         }
                         else {
-                            // renderCtrl.selectNodesByAttribRange(attrInfo.attr.id, segment.x, _.last(segment), window.event);
-                            var nodeIds = renderCtrl.highlightNodesByAttrRange(attrInfo.attr.id, segment.x, _.last(segment), window.event);
-                            updateSelectionActionBars(bar, _.map(nodeIds, function (id) {
-                                return dataGraph.getNodeById(id);
-                            }), attrInfo, histoData, 'light', false);
+                            renderCtrl.selectNodesByAttribRange(attrInfo.attr.id, segment.x, _.last(segment), window.event);
                         }
                     }
 
                 }
 
                 return bar;
-            }
-
-            function updateSelectionActionBars(bar, selectedNodes, attrInfo, histoData, mappTheme, showClusterNodes) {
-
-                _log(logPrefix + 'rebuilding selections');
-                var principalNode = null;
-                var binType = histoData.binType;
-
-                // if(showClusterNodes) {
-                //     principalNode = selectedNodes[0];
-                //     selectedNodes = FilterPanelService.getNodesForSNCluster();
-                // }
-
-                var opts = histoData.opts;
-                var selectionValuesMap = getSelectionValuesMap(selectedNodes, attrInfo.attr.id);
-                var selectionCountsList = histoData.selectionCountsList = mapSelectionToBars(selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
-                _log(logPrefix + 'selection values map data: ', selectionValuesMap);
-                _log(logPrefix + 'selection counts list: ', selectionCountsList);
-                var selectionColor = getSelectionColor(selectedNodes, opts);
-
-                bar.each(function(d, i) {
-                    var barElem = d3.select(this);
-                    var globalBar = barElem.selectAll('[data-main-bar="true"]');
-                    var selectionBars = barElem.selectAll('[data-selection="true"]');
-                    // var filteredSelBars = barElem.selectAll('[data-filt-selection="true"]');
-
-                    // barElem.selectAll('[data-mask-bar="true"]').remove();
-                    globalBar.attr('opacity', 1);
-                    var globalBarFillColor = opts.barColor; // TODO: test this
-
-                    globalBar.style({
-                        fill: globalBarFillColor,
-                        'shape-rendering': 'crispEdges'
-                    });
-
-
-                    // // 2) Shrink filtered selection bars
-                    // filteredSelBars.attr('height', 0);
-
-                    // 3) Update selection bars
-                    var opacity = 1;
-                    var valInRange = false;
-                    var nodeVal;
-                    // if(principalNode) {
-                    //     opacity = 0.4;
-                    //     nodeVal = principalNode.attr[attrInfo.attr.id];
-                    //     valInRange = _.inRange(nodeVal, selectionCountsList[i].min, selectionCountsList[i].max);
-
-                    //     if(i === 0) {
-                    //         // First bar
-                    //         if(nodeVal >= 0 && nodeVal < selectionCountsList[i].min) {
-                    //             valInRange = true;
-                    //         }
-                    //     }
-                    //     else if(i === bar[0].length - 1) {
-                    //         // Last bar
-                    //         if(nodeVal > 0 && nodeVal >= selectionCountsList[i].max) {
-                    //             valInRange = true;
-                    //         }
-                    //     }
-
-                    //     if(valInRange) {
-                    //         barElem.insert("rect", '[data-selection="true"]')
-                    //             .attr("x", function() { return getBarXPosn(d, i, binType, histoData.barWidth); })
-                    //             .attr("y", 1)
-                    //             .attr("data-mask-bar", "true")
-                    //             .attr("width", histoData.barWidth)
-                    //             .attr("height", 0)
-                    //             .attr('fill', opts.barColor);
-                    //         // opacity = 1;
-                    //         // globalBar.attr('opacity', 0.7);
-                    //         globalBar.style({
-                    //             fill: selectionColor
-                    //         });
-                    //     }
-                    // }
-                    selectionBars.attr('opacity', opacity);
-
-                    var newBarHeight;
-                    var selY = sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
-                    if(selectionCountsList[i].selectionCount >= 1) {
-                        newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
-
-                        selectionBars
-                            .attr("x", function() { return getBarXPosn(d, i, binType, histoData.barWidth); });
-                        // .style({
-                        //     fill: selectionColor
-                        //     // fill: getSelectionColor(selectedNodes, selectionCountsList[i].nodeIds)
-                        // });
-                    }
-                    else {
-                        newBarHeight = 0;
-                    }
-
-                    // if(principalNode && valInRange) {
-                    //     barElem.selectAll('[data-mask-bar="true"]')
-                    //         .attr("y", selY)
-                    //         .attr("height", newBarHeight);
-                    // }
-                    if (newBarHeight > 0) {
-                        selectionBars.attr('style', 'display: block;');
-                    }
-
-                    if(newBarHeight != selectionBars.attr('height')) {
-                        selectionBars
-                            .transition()
-                            .duration(1000)
-                            .attr("height", newBarHeight)
-                            .attr("y", selY);
-                    }
-
-                });
-
             }
 
             function updateSelectionBars(bar, selectedNodes, attrInfo, histoData, mappTheme, showClusterNodes) {
@@ -922,23 +802,19 @@ angular.module('common')
                     selectionBars.attr('opacity', opacity);
 
                     var newBarHeight;
-                    var globarBarHeight;
-                    var resetHeight = false;
                     var selY = sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
                     if(selectionCountsList[i].selectionCount >= 1) {
                         newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
-                        globarBarHeight = newBarHeight;
-                        // selectionBars
-                        //     .attr("x", function() { return getBarXPosn(d, i, binType, histoData.barWidth); })
-                        //     .style({
-                        //         fill: globalBarFillColor
-                        //         // fill: getSelectionColor(selectedNodes, selectionCountsList[i].nodeIds)
-                        //     });
+
+                        selectionBars
+                            .attr("x", function() { return getBarXPosn(d, i, binType, histoData.barWidth); })
+                            .style({
+                                fill: selectionColor
+                                // fill: getSelectionColor(selectedNodes, selectionCountsList[i].nodeIds)
+                            });
                     }
                     else {
                         newBarHeight = 0;
-                        globarBarHeight = 0;
-                        // globarBarHeight = histoData.height;
                     }
 
                     if(principalNode && valInRange) {
@@ -947,89 +823,59 @@ angular.module('common')
                             .attr("height", newBarHeight);
                     }
 
-                    selectionBars.attr('style', 'display: none;');
-
-                    if (selectedNodes.length === 0) {
-                        globarBarHeight = histoData.height;
-                        resetHeight = true;
-                    }
-
-                    if(newBarHeight != selectionBars.attr('height') || globarBarHeight != globalBar.attr('height')) {
+                    if(newBarHeight != selectionBars.attr('height')) {
                         selectionBars
                             .transition()
                             .duration(1000)
                             .attr("height", newBarHeight)
                             .attr("y", selY);
-
-                        globalBar
-                            .transition()
-                            .duration(1000)
-                            .attr("height", function(d) {
-                                return resetHeight ? globarBarHeight - histoData.yScaleFunc(d.y) : globarBarHeight;
-                                // return newBarHeight ? globarBarHeight : globarBarHeight - histoData.yScaleFunc(d.y);
-                            })
-                            .attr("y", function (d) {
-                                return resetHeight ? histoData.yScaleFunc(d.y) : selY;
-                                // return newBarHeight ? selY : histoData.yScaleFunc(d.y);
-                            });
                     }
 
                 });
 
             }
 
-            // function updateFiltSelBars(bar, selectedNodes, attrInfo, histoData) {
-            //     _log(logPrefix + 'rebuilding selections');
-            //     var opts = histoData.opts;
-            //     var selectionValuesMap = getSelectionValuesMap(selectedNodes, attrInfo.attr.id);
-            //     var filtSelectionCountsList = mapSelectionToBars(selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
-            //     _log(logPrefix + 'filtered selection values map data: ', selectionValuesMap);
-            //     _log(logPrefix + 'filtered selection counts list: ', filtSelectionCountsList);
-            //     var selectionColor = getSelectionColor(selectedNodes, opts);
+            function updateFiltSelBars(bar, selectedNodes, attrInfo, histoData) {
+                _log(logPrefix + 'rebuilding selections');
+                var opts = histoData.opts;
+                var selectionValuesMap = getSelectionValuesMap(selectedNodes, attrInfo.attr.id);
+                var filtSelectionCountsList = mapSelectionToBars(selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
+                _log(logPrefix + 'filtered selection values map data: ', selectionValuesMap);
+                _log(logPrefix + 'filtered selection counts list: ', filtSelectionCountsList);
+                var selectionColor = getSelectionColor(selectedNodes, opts);
 
-            //     bar.each(function(d, i) {
-            //         var barElem = d3.select(this);
-            //         var globalBar = barElem.selectAll('[data-main-bar="true"]');
-            //         var selectionBars = barElem.selectAll('[data-selection="true"]');
-            //         var filteredSelBars = barElem.selectAll('[data-filt-selection="true"]');
+                bar.each(function(d, i) {
+                    var barElem = d3.select(this);
+                    var selectionBars = barElem.selectAll('[data-selection="true"]');
+                    var filteredSelBars = barElem.selectAll('[data-filt-selection="true"]');
 
-            //         selectionBars.attr('opacity', 0.3);
+                    selectionBars.attr('opacity', 0.3);
 
-            //         var newBarHeight;
-            //         var filtY = sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
-            //         if(filtSelectionCountsList[i].selectionCount > 0) {
-            //             newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
-            //             // filteredSelBars
-            //             //     .style({
-            //             //         fill: selectionColor
-            //             //     })
-            //             //     .attr("width", histoData.barWidth);
-            //         }
-            //         else {
-            //             newBarHeight = 0;
-            //             filteredSelBars.attr("height", 0);
-            //         }
+                    var newBarHeight;
+                    var filtY = sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
+                    if(filtSelectionCountsList[i].selectionCount > 0) {
+                        newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
+                        filteredSelBars
+                            .style({
+                                fill: selectionColor
+                            })
+                            .attr("width", histoData.barWidth);
+                    }
+                    else {
+                        newBarHeight = 0;
+                        filteredSelBars.attr("height", 0);
+                    }
 
-            //         if(newBarHeight != filteredSelBars.attr('height')) {
-            //             filteredSelBars
-            //                 .transition()
-            //                 .duration(1000)
-            //                 .attr("height", newBarHeight)
-            //                 .attr("y", filtY);
-            //         }
+                    if(newBarHeight != filteredSelBars.attr('height')) {
+                        filteredSelBars
+                            .transition()
+                            .duration(1000)
+                            .attr("height", newBarHeight)
+                            .attr("y", filtY);
+                    }
 
-            //     });
+                });
 
-            // }
-
-            function _hoverSelectedNodes(event, attrId, renderCtrl) {
-                var selectedValues = _getSelectedValues() || [];
-                renderCtrl.highlightNodesByAttributes(attrId, selectedValues, event);
-            }
-
-            function _getSelectedValues(attrId) {
-                var filterConfig = FilterPanelService.getFilterForId(attrId);
-                return filterConfig.state.selectedVals;
             }
 
             return dirDefn;

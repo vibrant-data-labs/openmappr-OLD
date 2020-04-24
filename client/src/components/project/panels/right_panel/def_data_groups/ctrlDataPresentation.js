@@ -53,6 +53,7 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     $scope.selectNodeNeighborByIds = _.debounce(selectNodeNeighborByIds, 100);
     //needed to correctly fire window.event for shift clicking in grid and list
     $scope.selectNodesByAttrib = _.throttle(selectNodesByAttrib, 100);
+    $scope.unhoverNodes = _.debounce(unhoverNodes, 100);
     $scope.hoverNodesByAttrib = _.debounce(hoverNodesByAttrib, 100);
     $scope.selectEdgesByAttrib = _.debounce(selectEdgesByAttrib, 100);
 
@@ -461,8 +462,17 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     function selectNodesByAttrib(value, $event) {
         console.log('window.event: ', window.event);
         var attrId = getCurrAttrId();
-        $scope.selectedNodes = value;
-        nodeSelectionService.hoverNodesByAttrib(attrId, value, $event);
+        
+        var found = $scope.selectedNodes.findIndex(attrib => attrib  === value);
+        if (found < 0)
+            $scope.selectedNodes.push(value);
+        else {
+            console.log(found, 8887);
+            
+            $scope.selectedNodes.splice(found, 1);
+        }
+        console.log($scope.selectedNodes, 888);
+        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
     }
 
     function clearSelections() {
@@ -475,6 +485,11 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
         outLegendCategories();
         var attrId = getCurrAttrId();
         nodeSelectionService.hoverNodesByAttrib(attrId, value, $event);
+    }
+
+    function unhoverNodes($event) {
+        var attrId = getCurrAttrId();
+        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
     }
 
     function selectEdgesByAttrib(value, $event) {
