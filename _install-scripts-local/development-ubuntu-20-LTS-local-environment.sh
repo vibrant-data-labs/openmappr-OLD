@@ -23,7 +23,7 @@ gem install sass compass
 apt install docker.io -y
 sudo systemctl enable --now docker
 # Install docker-compose
-apt install docker-compose
+apt install docker-compose -y
 # Download Node Version Manager
 echo "Downloading Node Version Manager"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
