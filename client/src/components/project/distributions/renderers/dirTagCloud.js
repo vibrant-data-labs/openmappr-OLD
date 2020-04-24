@@ -209,6 +209,8 @@ angular.module('common')
 
                 // mousr stuff
                 scope.onCatClick = function(catData, event) {
+                    console.log('dirTagCloud', event);
+                    
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
                     // if (catData.isChecked) {

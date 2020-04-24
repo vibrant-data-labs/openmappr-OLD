@@ -3,7 +3,6 @@
 #
 #		       This script sets up a local environment on
 #	                   Ubuntu Desktop 18.04 LTS
-#
 #                    You need to install cURL with
 #                      `sudo apt install curl -y`
 #

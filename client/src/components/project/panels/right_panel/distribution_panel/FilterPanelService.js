@@ -3,8 +3,8 @@
  * This service builds intelligence about an attribute in the dataset
  */
 angular.module('common')
-    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService', 'constSteps', 'nodeSelectionService',
-        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService, constSteps, nodeSelectionService) {
+    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService', 'constSteps',
+        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService, constSteps) {
             "use strict";
 
             /*************************************
@@ -71,15 +71,7 @@ angular.module('common')
             this.shouldReplaceNewSel = function() { return replaceNewSel; };
             this.rememberSelection = function(val) { replaceNewSel = !val; };
 
-            this.getCurrentSelection = function() {
-                var histogramNodeIds = nodeSelectionService.getHistogramRangeNodeIds() || [],
-                    histogramNodes = _.map(histogramNodeIds, function (id) {
-                        return dataGraph.getNodeById(id);
-                    }),
-                    miscellaneousNodes = nodeSelectionService.getSelectedActionNodes() || [];
-
-                return currentSelection.concat(histogramNodes).concat(miscellaneousNodes);
-            };
+            this.getCurrentSelection = function() { return currentSelection; };
             this.getCurrSel = this.getCurrentSelection;
 
             this.getAttrFilterConfigMap = function() { return angular.copy(attrFilterConfigMap); };
@@ -208,8 +200,6 @@ angular.module('common')
                     return filterCfg.filter(acc);
                 }, initialSelection.length > 0 ? initialSelection : null);
                 currentSelection = cs || [];
-
-                // dataGraph.setSubsettedNodes(currentSelection, !cs);
 
                 return currentSelection;
             }
@@ -384,4 +374,4 @@ angular.module('common')
 
         }
     ]);
-angular.$inject = ['constSteps'];
+    angular.$inject = ['constSteps'];  

@@ -76,13 +76,9 @@ angular.module('common')
                 this.hoverNodesByAttributes = hoverNodesByAttributes;
                 this.unhoverNodesByAttrib = unhoverNodesByAttrib;
                 this.unhoverNodesByAttributes = unhoverNodesByAttributes;
-                this.highlightNodesByAttributes = highlightNodesByAttributes;
-                this.unhighlightNodesByAttributes = unhighlightNodesByAttributes;
                 this.hoverNodesByAttribRange = hoverNodesByAttribRange;
                 this.hoverNodeIdList = hoverNodeIdList;
                 this.unHoverNodes = unHoverNodes;
-                this.addNodeIdsToSelected = addNodeIdsToSelected;
-                this.highlightNodesByAttrRange = highlightNodesByAttrRange;
 
                 //if in overlay, then close it before selecting new nodes
                 //debounce doesn't work becuse this directive disappears before
@@ -242,28 +238,15 @@ angular.module('common')
 
 
             /*************************************
-            ************ Local Functions *********
-            **************************************/
+    ************ Local Functions *********
+    **************************************/
 
             function hoverNodesByAttrib(id, val, ev) {
-                // !isFPScrollActive() && debHoverByAttr(id, val, ev, true);
-                !isFPScrollActive() && nodeSelectionService.hoverNodesByAttrib(id, val, ev, true);
+                !isFPScrollActive() && debHoverByAttr(id, val, ev, true);
             }
 
             function hoverNodesByAttributes(id, values, ev) {
                 !isFPScrollActive() && debHoverByAttributes(id, values, ev, true);
-            }
-
-            function highlightNodesByAttributes(id, values, ev, subsettedValues) {
-                !isFPScrollActive() && nodeSelectionService.selectionActionByAttributes(id, values, subsettedValues);
-            }
-
-            function unhighlightNodesByAttributes(id, values, ev) {
-                !isFPScrollActive() && nodeSelectionService.unselectActionByAttributes(id, values);
-            }
-
-            function highlightNodesByAttrRange(id, min, max) {
-                return !isFPScrollActive() && nodeSelectionService.selectionActionByAttribRange(id, min, max);
             }
 
             function unhoverNodesByAttributes(id, values, ev) {
@@ -271,8 +254,7 @@ angular.module('common')
             }
 
             function unhoverNodesByAttrib(id, values, ev) {
-                // !isFPScrollActive() && debUnHoverByAttrib(id, values, ev, true);
-                nodeSelectionService.unhoverNodesByAttrib(id, values, ev, true);
+                !isFPScrollActive() && debUnHoverByAttrib(id, values, ev, true);
             }
 
             function hoverNodesByAttribRange(id, min, max, ev) {
@@ -308,11 +290,6 @@ angular.module('common')
                 debSelectIdList.cancel();
                 debSelectByAttrRange.cancel();
                 graphHoverService.clearHovers(true);
-                nodeSelectionService.highlightAllSelected(true);
-            }
-
-            function addNodeIdsToSelected(nodeIds) {
-                nodeSelectionService.addNodeIdsToSelected(nodeIds);
             }
 
             function getSelectedNodes() {

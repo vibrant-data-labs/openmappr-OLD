@@ -74,7 +74,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             graphHoverService.clearHovers($event);
             graphSelectionService.selectByIds([nodeId] ,1);
             FilterPanelService.rememberSelection(false);
-
+            
         };
 
         scope.hoverNode = function(nodeId) {
@@ -139,8 +139,8 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
 
             scope.selectedGroup = nodeIds;
             graphHoverService.hoverByIds(nodeIds, 0, false);
-
-
+            
+            
             FilterPanelService.rememberSelection(false);
         }
 
