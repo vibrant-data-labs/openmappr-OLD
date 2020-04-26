@@ -130,6 +130,7 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
+                    draw();
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
                         if (cat.isChecked) {
                             cat.isSubsetted = cat.isChecked;
