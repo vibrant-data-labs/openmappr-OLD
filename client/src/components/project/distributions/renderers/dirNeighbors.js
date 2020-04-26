@@ -46,8 +46,8 @@ function ($timeout, dataGraph, linkService, zoomService) {
                 links = linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, scope.mapprSettings.labelAttr, scope.mapprSettings.nodeImageAttr);
                 scope.numLinks = links.length;
             }
-
-            scope.links = filterLinks(links);
+            const onlySourceLink = links.filter(link => link.targetId !== node.id);
+            scope.links = filterLinks(onlySourceLink);
             
         } else {
             console.log('dirNeighbors', "Node has no links to other nodes");
