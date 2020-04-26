@@ -9,14 +9,11 @@ echo "Installing Homebrew"
 
 # Installing Node Version Manager
 echo "Installing Node Version Manager (NVM)"
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-
-# Detecting shell
-CURRENT_SHELL=$(echo $SHELL)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | ${SHELL}
 
 # Reload system environment
 echo "Reloading system environment"
-case ${CURRENT_SHELL} in
+case ${SHELL} in
 
   "/bin/bash" )
     source ~/.bash_profile
@@ -70,10 +67,11 @@ brew install ruby
 
 # Install Ruby Gem Sass
 echo "Installing Ruby Gem: Sass"
+sudo gem install sass
 
 # Install Ruby Gem Sass
 echo "Installing Ruby Gem: Compass"
-sudo gem install sass compass
+sudo gem install compass
 
 # Installing Bower & Grunt
 echo "Installing bower and grunt"
