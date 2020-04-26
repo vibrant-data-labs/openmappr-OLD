@@ -1,63 +1,67 @@
-.focus-overlay(ng-show="beginOverlayRightPanel")
+.focus-rigth-panel(ng-click="cancelOverlay();", ng-show="beginOverlayRightPanel")
     .node-rigth-panel-overlay
         .animate-node-right(ng-if="showOverlay")
             .node-rigth-panel-container(ng-class="{transparent: hideContent}" style="padding-top:{{scrollPaddingTop}}px" dir-kill-tooltip-on-scroll)
-                .node-rigth-panel(ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'" )
+                .animate-fade.node-rigth-panel(ng-click="$event.stopPropagation();", ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'" )
+                    .blackSection(ng-if="nodeRightInfo.section1.length" style="background-color: #cccccc; padding-top: 20px")
+                        .section
+                            .section-container(style="padding: 10px; display: flex; flex-wrap: wrap;")
+                                .header
+                                    p Selected Node
+                                    .icons
+                                        .right(ng-repeat="link in nodeRightInfo.section1" ng-if="link.type == 'link'")
+                                            a(href="{{link.value}}")
+                                                img(alt="{{link.value}}" src="{{link.icon}}")
+                                        .right
+                                            button(ng-click='cancelOverlay(); triggerInteraction();')
+                                                i.fa.fa-times.fa-1-8x
+                                .nameContainer(ng-repeat="info in nodeRightInfo.section1" ng-if="info.type == 'name'")
+                                    .img-user
+                                        img(src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{info.initials}}&background={{info.color}}")
+                                    .nameSubcontainer
+                                        p {{info.name}}
+                                        p {{info.description}}
                     .section
-                        .close-button
-                            button(ng-click='cancelOverlay(); triggerInteraction();')
-                                i.fa.fa-times-circle-o.fa-1-8x
-                        .socialMedia
-                            .left.title Selected Node
-                            .right
-                                img(ng-if="nodeRightInfo.socialMedia.youtube", src="https://image.flaticon.com/icons/svg/455/455691.svg")
-                                img(ng-if="nodeRightInfo.socialMedia.linkedIn", src="https://image.flaticon.com/icons/svg/2111/2111532.svg")
-                        .user(ng-if="nodeRightInfo.name")
-                            .img-user
-                                img(src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{(nodeRightInfo.name).substr(0,1)}}&background={{nodeRightInfo.colorStr}}")
-                            .info-user
-                                    strong {{nodeRightInfo.name}}
-                                p {{nodeRightInfo.nameDescription}}
-                    .section(ng-if="nodeRightInfo.description || nodeRightInfo.youtube")
-                        .tab
-                            button(ng-if="nodeRightInfo.description", ng-class="{active: active.tabs1=='description'}", ng-click="activeTabs('tabs1', 'description')") Description
-                            button(ng-if="nodeRightInfo.youtube", ng-class="{active: active.tabs1=='youtube'}", ng-click="activeTabs('tabs1', 'youtube')")  Youtube
-                        #description.tabcontent(ng-if="active.tabs1=='description'")
-                            p {{nodeRightInfo.description}}
-                        #youtube.tabcontent(ng-if="active.tabs1=='youtube'")
-                            p {{nodeRightInfo.youtube}}
-                    .section(ng-if="nodeRightInfo.tags || nodeRightInfo.keywords.length || nodeRightInfo.additional")
-                        .tab
-                            button(ng-if="nodeRightInfo.tags", ng-class="{active: active.tabs2=='tags'}", ng-click="activeTabs('tabs2', 'tags')") TED Tags
-                            button(ng-if="nodeRightInfo.keywords.length", ng-class="{active: active.tabs2=='keywords'}", ng-click="activeTabs('tabs2', 'keywords')") Keywords
-                            button(ng-if="nodeRightInfo.additional", ng-class="{active: active.tabs2=='additional'}", ng-click="activeTabs('tabs2', 'additional')") Additional
-                        #tags.tabcontent(ng-if="active.tabs2=='tags'")
-                            p {{nodeRightInfo.tags}}
-                        #keywords.tabcontent(ng-if="active.tabs2=='keywords'")
-                            .attr-renderers
-                                .tooltip-positioner(tooltip-placement="right" tooltip-append-to-body="true" tooltip-is-open="openTooltip")
-                                .cat-info
-                                .cat-list.tag-cloud
-                                    .cat-item(ng-repeat="keyword in nodeRightInfo.keywords" style="cursor: default;")
-                                        .cat-highlight(style="opacity: 0;")
-                                        .vert-align.cat-text-container(style="cursor: default;")
-                                            div
-                                                .cat-text.no-margin.truncate {{keyword}}
-                        #additional.tabcontent(ng-if="active.tabs2=='additional'")
-                            p {{nodeRightInfo.additional}}
-                    .section(ng-if="nodeRightInfo.publications.length")
-                        .publications-container(ng-repeat="publication in nodeRightInfo.publications" )
-                            .publication(ng-repeat="prop in Utils.keys(publication)" )
-                                p {{prop}}
-                                p
-                                    strong {{publication[prop]}}
-                    .section(ng-if="nodeRightInfo.events.length")
-                        .events-container(ng-repeat="event in nodeRightInfo.events" )
-                            .event(ng-repeat="prop in Utils.keys(event)" )
-                                .left {{prop}}
-                                .right {{event[prop]}}
-                    .section
-                        .title Nearest Neightbors
-                        div(dir-neighbors ng-include=' "#{server_prefix}#{view_path}/components/project/distributions/renderers/neighborsRightPanel.html" ')
-    dir-focus-node(ng-show="false" ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate != 'content'" node="focusNode" img-attr="nodeImageAttr" start="nodeStartData" end="nodeEndData" duration="500" ease="" finish="finishAnimation()")
-    dir-focus-node(ng-if="showNeighborNode" node="neighborNode" img-attr="nodeImageAttr" start="neighborNodeStartData" end="neighborNodeEndData" duration="600" ease="" finish="finishNeighborAnimation()")
+                        .tabContainer
+                            .tabVisible
+                                .tab(ng-repeat="tab in nodeRightInfo.section2")
+                                    button(ng-class="{active: sectionActive2==$index}", ng-click="activeTabs2($index)") {{tab.key}}
+                        #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2")
+                            iframe(ng-if="tab.value.includes('http') && sectionActive2==$index" ng-src="{{ tab.value | trustUrl }}", id='iframe001', width="100%", height="200px" frameborder="0", webkitallowfullscreen, mozallowfullscreen, allowfullscreen)
+                            p(ng-if="!tab.value.includes('http') && sectionActive2==$index") {{tab.value}}
+                    .section(ng-if="nodeRightInfo.section3.length")
+                        .tabContainer
+                            .tabVisible
+                                .tab(ng-repeat="tab in nodeRightInfo.section3")
+                                    button(ng-class="{active: sectionActive3==$index}", ng-click="activeTabs3($index)") {{tab.key}}
+                        .section-container(style="padding: 10px")
+                            #tedtags.tabcontent(ng-repeat="sections in nodeRightInfo.section3")
+                                .attr-renderers(ng-repeat="tag in sections.value" ng-if="sectionActive3==$index")
+                                    .tooltip-positioner(tooltip-placement="right" tooltip-append-to-body="true" tooltip-is-open="openTooltip")
+                                    .cat-info
+                                    .cat-list.tag-cloud
+                                        .cat-item(style="cursor: default;")
+                                            .cat-highlight(style="opacity: 0;")
+                                            .vert-align.cat-text-container(style="cursor: default;")
+                                                div
+                                                    .cat-text.no-margin.truncate {{tag}}
+                    .blackSection(ng-if="nodeRightInfo.section4.length" style="background-color: #cccccc; padding-top: 20px")
+                        .section(style="flex-flow: row wrap; ")
+                            .section-container(style="padding: 10px; flex-wrap: wrap;")
+                                #numberAndDates.tabcontent(ng-repeat="number in nodeRightInfo.section4" style="margin: 5px 10px")
+                                    .number
+                                        p {{number.key}}
+                                        p {{number.value}}
+                    .blackSection(ng-if="nodeRightInfo.section5.length" style="background-color: #cccccc; padding-top: 20px")
+                        .section(style="flex-flow: row wrap; ")
+                            .section-container(style="padding: 10px; flex-wrap: wrap; width: 100%")
+                                #information.tabcontent(ng-repeat="number in nodeRightInfo.section5" style="margin: 5px 10px; width: 100%;")
+                                    .information
+                                        p {{number.key}}
+                                        p {{number.value}}
+                    .blackSection(style="background-color: #cccccc; padding: 20px 0")
+                        .section(style="background-color: #efefef; padding: 20px")
+                            .title(style="font-size: 16px; margin-bottom: 10px") Nearest Neightbors
+                            div(dir-neighbors ng-include=' "#{server_prefix}#{view_path}/components/project/distributions/renderers/neighborsRightPanel.html" ')
+    dir-focus-node(ng-show="false" ng-if="showFocusNode && mapprSettings.nodeFocusRenderTemplate != 'content'" node="focusNode" img-attr="nodeImageAttr" start="nodeStartData" end="nodeEndData" duration="175" ease="" finish="finishAnimation()")
+    dir-focus-node(ng-if="showNeighborNode" node="neighborNode" img-attr="nodeImageAttr" start="neighborNodeStartData" end="neighborNodeEndData" duration="175" ease="" finish="finishNeighborAnimation()")

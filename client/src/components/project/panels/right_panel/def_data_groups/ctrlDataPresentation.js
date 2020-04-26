@@ -53,9 +53,11 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     $scope.selectNodeNeighborByIds = _.debounce(selectNodeNeighborByIds, 100);
     //needed to correctly fire window.event for shift clicking in grid and list
     $scope.selectNodesByAttrib = _.throttle(selectNodesByAttrib, 100);
+    $scope.unhoverNodes = _.debounce(unhoverNodes, 100);
     $scope.hoverNodesByAttrib = _.debounce(hoverNodesByAttrib, 100);
     $scope.selectEdgesByAttrib = _.debounce(selectEdgesByAttrib, 100);
 
+    $scope.clearSelections = _.throttle(clearSelections, 100);
     $scope.updateClusterInfo = updateClusterInfo;
     $scope.discardClusterInfoUpdates = discardClusterInfoUpdates;
     $scope.changeColor = changeColor;
@@ -76,7 +78,7 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     };
 
     $scope.vm.nodeSizeAttr = _.find($scope.nodeSizeAttrs, 'id', $scope.mapprSettings.nodeSizeAttr);
-
+    $scope.selectedNodes = [];
 
     $scope.colorByAttrUpdate = function colorByAttrUpdate(colorAttr){
         console.log(logPrefix + 'colorBy: ', $scope.dataGroupsInfo.colorNodesBy.id);
@@ -460,15 +462,34 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     function selectNodesByAttrib(value, $event) {
         console.log('window.event: ', window.event);
         var attrId = getCurrAttrId();
+        
+        var found = $scope.selectedNodes.findIndex(attrib => attrib  === value);
+        if (found < 0)
+            $scope.selectedNodes.push(value);
+        else {
+            console.log(found, 8887);
+            
+            $scope.selectedNodes.splice(found, 1);
+        }
+        console.log($scope.selectedNodes, 888);
+        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
+    }
+
+    function clearSelections() {
+        console.log('window.event: ', window.event);
         nodeSelectionService.clearSelections();
-        nodeSelectionService.selectNodesByAttrib(attrId, value, $event, true);
-        FilterPanelService.rememberSelection(false);
+        $rootScope.$broadcast(BROADCAST_MESSAGES.cleanStage);
     }
 
     function hoverNodesByAttrib(value, $event) {
         outLegendCategories();
         var attrId = getCurrAttrId();
         nodeSelectionService.hoverNodesByAttrib(attrId, value, $event);
+    }
+
+    function unhoverNodes($event) {
+        var attrId = getCurrAttrId();
+        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
     }
 
     function selectEdgesByAttrib(value, $event) {

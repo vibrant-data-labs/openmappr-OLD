@@ -12,7 +12,9 @@
 									span.subtitle(ng-if="vm.nodeSizeAttr.metadata.descr" uib-tooltip="{{vm.nodeSizeAttr.metadata.descr}}" tooltip-append-to-body="true" tooltip-placement="bottom-left")
 										| &nbsp;&nbsp;&nbsp;
 										i.fa.fa-info-circle
-
+				//- .col-xs-4
+				//- 	span
+				//- 		button.square-btn.small-btn.panel-btn(type="button", ng-click="clearSelections();") Reset
 			.row.vert-align.main
 				.col-xs-12
 					h6.title.text-uppercase.pointable-cursor.vert-align
@@ -50,7 +52,7 @@
 			.panel-scroll(ng-if="!ui.showingLinks && mapprSettings.nodeColorStrat != 'select' && mapprSettings.nodeColorStrat != 'fixed'", dir-kill-tooltip-on-scroll)
 				.panel-list(ng-if="!isNodeColorNumeric" ng-class="{'highlighted': ui.highlightingNodes}")
 					.panel-item.pointable-cursor(ng-repeat="l in dataGroupVMs | filter:searchText:false | limitTo: ui.dataGroupsViewCount", ng-class="{'highlighted' : l.highlightOnNodeHover}", uib-tooltip="{{::l.name}}", tooltip-placement="right", tooltip-append-to-body="true")
-						.flex-container(ng-click='hoverNodesByAttrib(undefined, $event); selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 700)', ng-mouseleave='hoverNodesByAttrib(undefined, $event)')
+						.flex-container(ng-click='selectNodesByAttrib(l.originalTitle, $event)', ng-mouseenter='hoverNodesByAttrib(l.originalTitle, $event, 0)', ng-mouseleave='unhoverNodes($event)')
 							.legend-icon(ng-style='l.color')
 							div(ng-if="ui.summaryToggleOpen && (l.archetypes.length > 0 || l.bridgers.length > 0)")
 								.legend-line-down.animate-fade(style="border-color: {{l.colorval}}" ng-class="{'only-one':(l.bridgers.length == 0 || l.archetypes.length == 0)}")

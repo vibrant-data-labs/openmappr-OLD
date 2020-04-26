@@ -1,140 +1,365 @@
 //
 // Node Right Panel Styling
 // Style for right panel in app and player
-.node-rigth-panel-overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 2px;
-    overflow: auto;
-    height: 100%;
 
-    .node-rigth-panel-container { 
-        opacity: 1;
-        width: 800px;
+.focus-rigth-panel{
+    bottom: 0;
+    left: 390px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    overflow: hidden;
+
+    .focus-node {
+          .circle {
+              height: 25px;
+              width: 25px;
+          }
+      }
+
+    .node-rigth-panel-overlay {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 2px;
         height: 100%;
 
-        .node-rigth-panel {
-            animation-duration: 10s;
-            animation-name: slidein;
-            position: absolute;
-            background: $panel-background;
-            border: 1px solid $horiz-line-color;
-            color: $panel-text-dark;
-            right: 2px;
-            top: 40px;
-            width: 330px;
+        .node-rigth-panel-container {
+            font-weight: normal;
+            opacity: 1;
+            width: 350px;
             height: 100%;
-            z-index: 999;
-            overflow: scroll;
-        
-            .section {
-                border-top: 10px solid $trans-ten-black;
-                padding: 10px 20px;
-              
-                .title {
-                    padding:2px;
-                }
 
-                .close-button{
-                    margin: -7px -22px;
-                    float: right;
-                    color: $color-border-grey
-                }
-              
-                .socialMedia {
-                    margin-top: 5px;
-                    .left {
-                        width: 60%;
-                        display: inline-block;
-                        vertical-align: middle;
+            .node-rigth-panel {
+                position: absolute;
+                background: $panel-background;
+                border: 1px solid $horiz-line-color;
+                color: $color-black-text;
+                right: 2px;
+                top: 40px;
+                width: 345px;
+                height: 100%;
+                z-index: 999;
+                overflow-y: scroll;
+
+                .section {
+                    width: 100%;
+                    height: auto;
+                    background-color: #cccccc;
+
+                    .title {
+                        padding:2px;
+                        font-weight: lighter;
                     }
-        
-                    .right {
-                        width: 30%;
-                        display: inline-block;
-                        vertical-align: middle;
-                        text-align:right;
-                        img {
-                            width:20px;
-                            border-radius: 50%;
-                            background-color: white;
-                        }
+
+                    h6 {
+                        font-size: 15px;
+                        padding: 0;
+                        margin: 0;
                     }
-                }
-                
-                .user {
-                    display: flex;
-                    align-items: center;
-                    padding: 5px 0;
-                    .info-user {
-                        margin: 0 5px;
-                        padding: 0 10px;
-        
-                        p {
-                            margin:2px 0;
-                        }
+
+                    .close-button{
+                        margin: -5px -15px;
+                        float: right;
+                        color: $color-black-text;
+                        background-color: white;
+                        border-radius: 15px;
+                        width: 30px;
+                        height: 30px;
+                        padding-top: 2px;
                     }
-                }
-        
-                .tab {
-                    margin: -10px -20px;
-                    background-color: $trans-ten-black;
-                    overflow: hidden;
-        
-                    button {
-                        background-color: $color-border-grey;
-                        border: 2px solid $color-border-grey;
-                        float: left;
-                        cursor: pointer;
-                        padding: 2px 15px;
-                        transition: 0.3s;
-                        border-radius: 10px 10px 0 0;
-                        margin: 0 1px;
-        
-                        &:hover {
-                            background-color: #ddd;
-                        }
-                    }
-                    
-                    button.active {
-                        border: 2px solid $panel-background;
-                        background-color: $panel-background;
-                        color: $color-dark-grey;
-                    }
-                }
-        
-                .tabcontent {
-                    padding-top: 20px;
-                }
-        
-                .publications-container {
-                    .publication {
-                        padding: 5px;
-                        display: inline-block;
-                        vertical-align: middle;
-                        p {
-                            margin:2px 0;
-                            text-transform: capitalize;
-                        }
-                    }
-                }
-              
-                .events-container {
-                    .event {
-                        .left, .right {
-                            width: 45%;
+
+                    .socialMedia {
+                        margin-top: 5px;
+                        .left {
+                            width: 60%;
                             display: inline-block;
                             vertical-align: middle;
                         }
-                        .left {
-                            font-weight: bold;
+
+                        .right {
+                            width: 30%;
+                            display: inline-block;
+                            vertical-align: middle;
+                            text-align:right;
+                            img {
+                                width:20px;
+                                border-radius: 50%;
+                                background-color: white;
+                            }
                         }
                     }
+
+                    .user {
+                        display: flex;
+                        align-items: center;
+                        padding: 5px 0;
+                        .info-user {
+                            margin: 0 5px;
+                            padding: 0 10px;
+
+                            p {
+                                margin:2px 0;
+                                color: #a7a7a7;
+                            }
+                        }
+                    }
+                    .tabContainer {
+                        width: 100%;
+                        height: auto;
+                        display: flex;
+
+                        .tabVisible{
+                            height: 56px;
+                            display: flex;
+                            width: 100%;
+                            overflow-x: auto;
+                            overflow-y: hidden;
+
+                            ::-webkit-scrollbar {
+                                background-color: #efefef;
+                            }
+
+                            ::-webkit-scrollbar-track{
+                                background-color: #efefef;
+                            }
+
+                            ::-webkit-scrollbar-thumb{
+                                border-radius: 10px;
+                                background-color: #efefef;
+                            }
+
+                            ::-webkit-scrollbar-thumb:hover{
+                                border-radius: 10px;
+                                background-color: #efefef;
+                            }
+                        }
+                        .moveTabs{
+                            width: 10%;
+                            height: 25px;
+                            align-self: flex-end;
+                            background-color: #8e8e8e;
+                            border: 2px solid #8e8e8e;
+                            float: left;
+                            cursor: pointer;
+                            padding: 2px 15px;
+                            transition: 0.3s;
+                            border-radius: 10px 10px 0 0;
+                            margin: 0 1px;
+                            line-height: 1.3;
+                            color: #767676;
+                            font-weight: normal;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            &:hover {
+                                background-color: $panel-background;
+                                border: 2px solid $panel-background;
+                            }
+                        }
+
+                        .moveTabs.active {
+                            border: 2px solid $panel-background;
+                            background-color: #efefef;
+                        }
+                    }
+
+                    .tab {
+
+                        button {
+                            margin-top: 15px;
+                            background-color: #8e8e8e;
+                            border: 2px solid #8e8e8e;
+                            float: left;
+                            cursor: pointer;
+                            padding: 2px 15px;
+                            transition: 0.3s;
+                            border-radius: 10px 10px 0 0;
+                            line-height: 1.3;
+                            color: #767676;
+                            font-weight: normal;
+                            width: 97px;
+
+                            &:hover {
+                                background-color: $panel-background;
+                                border: 2px solid #efefef;
+                            }
+                        }
+
+                        button.active {
+                            border: 2px solid $panel-background;
+                            background-color: #efefef;
+                        }
+                    }
+
+                    .information {
+                        width: 100%;
+                        display: flex;
+                        flex-flow: row;
+                        justify-content: center;
+
+                        p:nth-child(2) {
+                            width: 50%;
+                            margin: 0;
+                            margin-bottom: 3px;
+                            font-weight: 300;
+                            padding: 0;
+                        }
+                        p:nth-child(1) {
+                            width: 50%;
+                            margin: 0;
+                            font-weight: 700;
+                            padding: 0;
+                        }
+                    }
+
+                    .number{
+                        display: flex;
+                        flex-flow: column;
+                        justify-content: center;
+
+                        p:nth-child(1) {
+                            margin: 0;
+                            margin-bottom: 3px;
+                            font-weight: 300;
+                            padding: 0;
+                        }
+                        p:nth-child(2) {
+                            margin: 0;
+                            font-weight: 700;
+                            padding: 0;
+                        }
+                    }
+
+                    .section-container {
+                        display: flex;
+                        background-color: #efefef;
+
+                        .nameContainer {
+                          display: flex;
+                          justify-content: flex-start;
+
+                            .img-user {
+                                margin-right: 20px;
+                            }
+
+                            .nameSubcontainer {
+                                display: flex;
+                                flex-flow: column;
+
+                                p:nth-child(1) {
+                                    margin-bottom: 1px;
+                                }
+                                p:nth-child(1) {
+                                    margin-bottom: 0;
+                                }
+                            }
+
+
+
+                        }
+
+                        .header{
+                            display: flex;
+                            width: 100%;
+                            justify-content: space-between;
+
+                            p {
+                                font-size: 16px;
+                            }
+
+                          .icons{
+                            width: 50%;
+                            display: flex;
+                            justify-content: flex-end;
+
+                              .right{
+                                  width: 20px;
+                                  background-color: white;
+                                  border-radius: 50%;
+                                  height: 20px;
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: center;
+                                  margin-left: 6px;
+
+                                  a{
+                                      width: 60%;
+                                      display: flex;
+                                      height: auto;
+                                      justify-content: center;
+                                      align-items: center;
+
+                                      img{
+                                          width: 80%;
+                                      }
+                                  }
+
+
+                              }
+
+                          }
+                        }
+                    }
+
+                    .tabcontent {
+                        color: #767676;
+                        background-color: #efefef;
+                        .attr-renderers{
+                            font-weight: lighter;
+                        }
+                        iframe{
+                            padding: 20px;
+                        }
+                        p{
+                            padding: 20px;
+                            margin: 0;
+                        }
+                    }
+
+                    .publications-container {
+                        .publication {
+                            padding: 5px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            p {
+                                margin: 2px 0;
+                                font-size: 13px;
+                                font-weight: lighter;
+                                text-transform: capitalize;
+                            }
+
+                            h6{
+                                font-size: 12px;
+                            }
+                        }
+                    }
+
+                    .events-container {
+                        .event {
+                            padding: 2px 0px;
+                            font-size: 12px;
+                            .right {
+                                width: 49%;
+                                display: inline-block;
+                                font-weight: lighter;
+                                vertical-align: middle;
+                            }
+                            .left {
+                                width: 49%;
+                                display: inline-block;
+                                vertical-align: middle;
+                                font-weight: 500;
+                                line-height: 1.3;
+                                color: inherit;
+                            }
+                        }
+                    }
+
                 }
-              
             }
         }
     }
 }
-
