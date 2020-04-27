@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES',
-        function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, dataGraph, AttrInfoService, graphSelectionService, layoutService, nodeSelectionService, uiService, attrUIService, renderGraphfactory, networkService, BROADCAST_MESSAGES){
+    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES', 'selectService',
+        function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, dataGraph, AttrInfoService, graphSelectionService, layoutService, nodeSelectionService, uiService, attrUIService, renderGraphfactory, networkService, BROADCAST_MESSAGES, selectService){
             'use strict';
 
             /*************************************
@@ -69,6 +69,7 @@ angular.module('common')
 
                 // Initialise bases on panel state
                 if(clearServiceState) {
+                    selectService.init();
                     FilterPanelService.init();
                 }
                 if(FilterPanelService.shouldReplaceNewSel()) {

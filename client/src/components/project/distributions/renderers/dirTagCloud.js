@@ -1,7 +1,7 @@
 /*globals d3,$  */
 angular.module('common')
-    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService',
-        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService) {
+    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService',
+        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService, selectService) {
             'use strict';
 
             /*************************************
@@ -185,18 +185,20 @@ angular.module('common')
                         });
                         scope.openTooltip = true;
 
-                        // hover nodes
-                        hoverService.hoverNodes({ attr: attrId, value: catData.id });
+                        
                         //renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
 
                     }, 10);
+                    // hover nodes
+                    hoverService.hoverNodes({ attr: attrId, value: catData.id });
                 };
 
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-                        hoverService.unhover();
                     }, 100);
+                    hoverService.unhover();
+
                 };
 
 
@@ -249,12 +251,14 @@ angular.module('common')
                 ///                 When the current selection is refreshed, the tagList gets sorted depending upon the importance in the CS
                 /// New behaviour: The filter is just selected, its applied after the user presses the Subset button
                 function selectFilter () {
-                    var filterConfig = FilterPanelService.getFilterForId(attrId);
+                    var filterConfig = selectService.getFilterForId(attrId);
                     filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
 
                     filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
                     filterConfig.state.selectedVals = _.clone(filteringCatVals);
                     filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
+
+                    selectService.selectNodes({ filters: true});
                 }
 
                 function genSelector (selectedVals) {

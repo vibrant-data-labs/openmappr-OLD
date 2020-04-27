@@ -2,8 +2,8 @@
 * Handles Graph Hover ops
 */
 angular.module('common')
-    .service('hoverService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES',
-        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES) {
+    .service('hoverService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'selectService',
+        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, selectService) {
 
             "use strict";
 
@@ -13,9 +13,6 @@ angular.module('common')
             this.hoverNodes = hoverNodes;
             this.unhover = unhover;
             this.sigBinds = sigBinds;
-            //
-            // If a node hovers over an aggregation, then all the nodes in the aggr will enter hover state.
-            //
 
 
             /*************************************
@@ -23,12 +20,14 @@ angular.module('common')
             **************************************/
             this.hoveredNodes = [];
             var findNodeWithId;
+            // reset to selected values only
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, unhover.bind(this));
             /*************************************
             ********* Core Functions *************
             **************************************/
 
             /**
-             * Hover the nodes by passing data
+             * Hover the nodes
              * @param {Object} hoverData - The hover descriptor
              * @param {string} hoverData.attr - The attribute
              * @param {string} hoverData.value - the attribute value
@@ -57,6 +56,8 @@ angular.module('common')
 
                 degree = degree || 0;
                 this.hoveredNodes.splice(0, this.hoveredNodes.length);
+
+                this.hoveredNodes = _.clone(selectService.selectedNodes || []);
                 draw(this.hoveredNodes);
             }
 
@@ -141,6 +142,10 @@ angular.module('common')
                     inSelMode: false, //graphSelectionService.isAnySelected(),
                     inHoverMode: true
                 });
+
+                if (nodeIds.length == 1) {
+                    withNeighbors = true;
+                }
 
                 var neighbourFn = 'getNodeNeighbours';
                 var graph;

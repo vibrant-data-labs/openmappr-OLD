@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService',
-        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService) {
+    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService', 'hoverService',
+        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService, hoverService) {
             'use strict';
 
             /*************************************
@@ -46,6 +46,9 @@ angular.module('common')
             $scope.finishAnimation = finishAnimation; //for when finished (show overlay)
             $scope.activeTabs2 = activeTabs2;
             $scope.activeTabs3 = activeTabs3;
+
+            $scope.onSection3Hover = onSection3Hover;
+            $scope.onSection3Leave = onSection3Leave;
 
             $scope.removeNeighborLine = function() {
                 //kill line
@@ -407,7 +410,7 @@ angular.module('common')
                     var nodeAttrsObj = dataGraph.getNodeAttrs();
 
                     const filteredAttr = nodeAttrsObj.filter(attr => {
-                        return attr.visible && nodesa.attr[attr.title]
+                        return attr.visible && nodesa.attr[attr.title];
                     });
 
                     console.log({nodesa, nodeAttrsObj, filteredAttr});
@@ -451,6 +454,14 @@ angular.module('common')
                     const initials = first[0] + last[0];
                     return ({ type: 'name', name, description, initials, color: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd' })
                 }
+            }
+
+            function onSection3Hover(sections, tag) {
+                hoverService.hoverNodes({ attr: sections.key, value: tag});
+            }
+
+            function onSection3Leave() {
+                hoverService.unhover();
             }
 
             /*************************************

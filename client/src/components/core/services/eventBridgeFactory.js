@@ -1,6 +1,6 @@
 angular.module('common')
-.service('eventBridgeFactory', ['$q','$timeout', 'renderGraphfactory', 'inputMgmtService', 'graphHoverService','graphSelectionService', 'hoverService',
-function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService, graphSelectionService, hoverService) {
+.service('eventBridgeFactory', ['$q','$timeout', 'renderGraphfactory', 'inputMgmtService', 'graphHoverService','graphSelectionService', 'hoverService', 'selectService',
+function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService, graphSelectionService, hoverService, selectService) {
 
     "use strict";
 
@@ -100,9 +100,9 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
                 event.shiftKey = true;
                 settings('isShiftKey', false);
             }
-            graphSelectionService.clickNodesHander(name, event, inputMgmtService.inputMapping().clickNode);
+            selectService.selectNodes({ ids: _.pluck(event.data.node, 'id')});
         } else {
-            graphSelectionService.clickStageHander(name, event, inputMgmtService.inputMapping().clickStage);
+            selectService.selectNodes({ ids: _.pluck(event.data.node, 'id')});
             hoverService.unhover();
         }
     }
