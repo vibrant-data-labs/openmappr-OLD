@@ -10,11 +10,16 @@ on:
       - master
       - staging
       - development
+      - blackstone
+      - theogroup
 
   pull_request:
     branches:
+      # The master branch does not need to rebuild here
       - staging
       - development
+      - blackstone
+      - theogroup
 
 env:
   IMAGE_NAME: openmappr
@@ -44,6 +49,8 @@ jobs:
           docker build . --file Dockerfile --tag openmappr_athena --build-arg script_file='run_docker_mode'
       - name: Log into Dockerhub Container Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_EMAIL }} --password-stdin
+      
+# Add a label for each container
 
       - name: Publish openmappr_web image to Dockerhub Registry
         run: |
@@ -51,19 +58,32 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           [ "$VERSION" == "staging" ] && VERSION=staging
           [ "$VERSION" == "development" ] && VERSION=development
+          [ "$VERSION" == "blackstone" ] && VERSION=blackstone    
+          [ "$VERSION" == "theogroup" ] && VERSION=theogroup
           echo VERSION=$VERSION
           docker tag openmappr_web openmapprimages/openmappr_web:$VERSION
           docker push openmapprimages/openmappr_web:$VERSION
+
+# Add a label for each container
+# The list of images to publish on Dockerhub
+
       - name: Publish openmappr_athena image to Dockerhub Registry
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           [ "$VERSION" == "master" ] && VERSION=latest
           [ "$VERSION" == "staging" ] && VERSION=staging
           [ "$VERSION" == "development" ] && VERSION=development
+          [ "$VERSION" == "blackstone" ] && VERSION=blackstone
+          [ "$VERSION" == "theogroup" ] && VERSION=theogroup
           echo VERSION=$VERSION
           docker tag openmappr_athena openmapprimages/openmappr_athena:$VERSION
           docker push openmapprimages/openmappr_athena:$VERSION
 
-          
-# Tell cloudflare to flush the cache.          
+#           Tell Cloudflare to purge their cache
+# ➜  I leave this off until we hit a formal development cycle
 
+#      - name: Purge cache from Cloudflare
+#        uses: jakejarvis/cloudflare-purge-action@master
+#        env:
+#          CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+#          CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}     

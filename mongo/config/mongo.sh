@@ -25,12 +25,10 @@ done
 if [[ $(mongo localhost:27017 --eval 'db.getMongo().getDBNames().indexOf("MAPPRDB")' --quiet) -lt 0 ]]; then
     echo "MAPPRDB does not exist, restoring from DB dump"
     # Restore from dump created via: mongodump --db MAPPRDB --gzip --archive=mongolocal_MAPPRDB_base.gzip
-    # mongorestore --db MAPPRDB --gzip --noIndexRestore --archive=mongolocal_MAPPRDB_base.gzip
-      mongorestore --db MAPPRDB --gzip --noIndexRestore --archive=mongo-openmappr-starter-database.gz
+    mongorestore --db MAPPRDB --gzip --archive=mongo-openmappr-starter-database.gz
 else
     echo "MAPPRDB exists."
 fi
 
 # Keep container running
 tail -f /dev/null
-

@@ -46,8 +46,8 @@ function ($timeout, dataGraph, linkService, zoomService) {
                 links = linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, scope.mapprSettings.labelAttr, scope.mapprSettings.nodeImageAttr);
                 scope.numLinks = links.length;
             }
-
-            scope.links = filterLinks(links);
+            const onlySourceLink = links.filter(link => link.targetId !== node.id);
+            scope.links = filterLinks(onlySourceLink);
             
         } else {
             console.log('dirNeighbors', "Node has no links to other nodes");
@@ -108,12 +108,16 @@ function ($timeout, dataGraph, linkService, zoomService) {
         };
 
         function getName(attrs){
-            var name = '';
-            var attrsArray = Object.keys({...attrs});
-            var attrsName = attrsArray.map( (attr) => attr.toLowerCase().includes('name') ? attr : null);
-            attrsName.filter(Boolean).forEach((attrName) => name += `${attrs[attrName]}`.slice(0, 15));
-            console.log({name});
-            return name;
+            var completeName = attrs.Name;
+            
+            var names = completeName.split(':');
+                if (names.length == 2){
+                    return {
+                        name : names[0],
+                        description: names[1]
+                    }
+                }
+                return { name: completeName };
         }
 
     }

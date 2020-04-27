@@ -1,40 +1,40 @@
 angular.module('common')
-    .directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService', 'nodeSelectionService',
-        function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService, nodeSelectionService) {
-            'use strict';
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
+    'use strict';
 
-            /*************************************
+    /*************************************
     ******** Directive description *******
     **************************************/
-            var dirDefn = {
-                restrict: 'AE',
-                require: '?^dirSelectionInfo',
-                scope: {
-                    nodes: '=',
-                    labelAttr: '=',
-                    nodeColorAttr: '=',
-                    panelMode: '=',
-                    selectedGroups: '=',
-                    sortTypes: '=',
-                    sortInfo: '=',
-                },
-                templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
-                link: postLinkFn
-            };
+    var dirDefn = {
+        restrict: 'AE',
+        require: '?^dirSelectionInfo',
+        scope: {
+            nodes: '=',
+            labelAttr: '=',
+            nodeColorAttr: '=',
+            panelMode: '=',
+            selectedGroups: '=',
+            sortTypes: '=',
+            sortInfo: '=',
+        },
+        templateUrl: '#{server_prefix}#{view_path}/components/project/panels/right_panel/info_panel/nodesList.html',
+        link: postLinkFn
+    };
 
-            /*************************************
+    /*************************************
     ************ Local Data **************
     **************************************/
-            // var logPrefix = 'dirNodesList: ';
-            var ITEMS_TO_SHOW = 100;
-            var ITEMS_TO_SHOW_INITIALLY = 20;
+    // var logPrefix = 'dirNodesList: ';
+    var ITEMS_TO_SHOW = 100;
+    var ITEMS_TO_SHOW_INITIALLY = 20;
 
 
-            /*************************************
+    /*************************************
     ******** Controller Function *********
     **************************************/
 
-            /*************************************
+    /*************************************
     ******** Post Link Function *********
     **************************************/
     function postLinkFn(scope, elem, attrs, parCtrl) {
@@ -155,11 +155,13 @@ angular.module('common')
         }
     }
 
-            /*************************************
+
+
+    /*************************************
     ************ Local Functions *********
     **************************************/
 
 
-            return dirDefn;
-        }
-    ]);
+    return dirDefn;
+}
+]);
