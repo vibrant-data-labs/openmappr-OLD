@@ -1,6 +1,6 @@
 angular.module('common')
-    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES',
-        function($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES) {
+    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'hoverService',
+        function($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES, hoverService) {
             'use strict';
 
             /*************************************
@@ -678,14 +678,14 @@ angular.module('common')
                     }
                     if((targetElem.attr('data-selection') == 'true' && targetElem.attr('height') > 0)
                 || (targetElem.attr('data-filt-selection') == 'true' && targetElem.attr('height') > 0)) {
-                        renderCtrl.hoverNodeIdList(histoData.selectionCountsList[i].nodeIds, window.event);
+                        hoverService.hoverNodes({ ids: histoData.selectionCountsList[i].nodeIds});
                     }
                     else {
                         if(isOrdinal) {
-                            renderCtrl.hoverNodesByAttrib(attrInfo.attr.id, segment.label, window.event);
+                            hoverService.hoverNodes({ attr: attrInfo.attr.id, value:segment.label });
                         }
                         else {
-                            renderCtrl.hoverNodesByAttribRange(attrInfo.attr.id, segment.x, _.last(segment), window.event);
+                            hoverService.hoverNodes({ attr: attrInfo.attr.id, min:segment.x, max: _.last(segment) });
                         }
                     }
                     // showTooltip.call(this, tooltip, segment, barWidth, yAxisWidth, isOrdinal, histoData.isNodeFocus, i);
@@ -695,7 +695,7 @@ angular.module('common')
                 function onBarUnHover(segment) {
                     _log(segment);
                     // hideTooltip(tooltip);
-                    renderCtrl.unHoverNodes();
+                    hoverService.unhover();
                 }
 
                 function onBarClick(segment, i) {

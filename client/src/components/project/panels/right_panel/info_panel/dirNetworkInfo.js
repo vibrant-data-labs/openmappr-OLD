@@ -2,7 +2,7 @@ angular.module('common')
 .directive('dirNetworkInfo', [
     '$rootScope',
     'graphSelectionService',
-    'graphHoverService',
+    'hoverService',
     'FilterPanelService',
     'infoPanelService',
     'projFactory',
@@ -11,7 +11,7 @@ angular.module('common')
     function(
         $rootScope,
         graphSelectionService,
-        graphHoverService,
+        hoverService,
         FilterPanelService,
         infoPanelService,
         projFactory,
@@ -103,15 +103,15 @@ angular.module('common')
         scope.sizeByAttrUpdate = sizeByAttrUpdate;
 
         scope.hoverNodes = function(nodes) {
-            graphHoverService.hoverByIds(_.map(nodes, 'id'), 0, false);
+            hoverService.hoverNodes( { ids: _.map(nodes, 'id') });
         };
 
         scope.unHoverNodes = function(nodes) {
-            graphHoverService.unhoverByIds(_.map(nodes, 'id'));
+            hoverService.unhover()
         };
 
         scope.selectNodes = function(nodes, $event) {
-            graphHoverService.clearHovers($event);
+            hoverService.unhover();
             graphSelectionService.selectByIds(_.map(nodes, 'id') , 0);
             FilterPanelService.rememberSelection(false);
         };

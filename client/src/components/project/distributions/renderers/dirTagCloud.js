@@ -1,7 +1,7 @@
 /*globals d3,$  */
 angular.module('common')
-    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES',
-        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES) {
+    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService',
+        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService) {
             'use strict';
 
             /*************************************
@@ -180,13 +180,14 @@ angular.module('common')
                             scope.tooltipText = catData.selTagFreq + " of " + catData.curSelLength + " tagged as " + catData.text;
                         }
                         element.find('.tooltip-positioner').css({
-                            top : pos.top - 5,
+                            top : pos.top + curTarget.height() / 2,
                             left : pos.left + curTarget.width()
                         });
                         scope.openTooltip = true;
 
                         // hover nodes
-                        renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
+                        hoverService.hoverNodes({ attr: attrId, value: catData.id });
+                        //renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
 
                     }, 10);
                 };
@@ -194,7 +195,7 @@ angular.module('common')
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-                        hoverSelectedNodes(event);
+                        hoverService.unhover();
                     }, 100);
                 };
 
@@ -233,12 +234,6 @@ angular.module('common')
                     console.log('dirTagCloud hoverSelectedNodes', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
-
-                // function unhoverSelectedNodes(event) {
-                //     var selectedValues = getSelectedValues() || [];
-                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
-                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
-                // }
 
                 /// filter stuff
                 function setupFilterClasses (catListData, isfilterDisabled) {
