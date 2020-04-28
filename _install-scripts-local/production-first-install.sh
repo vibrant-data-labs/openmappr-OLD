@@ -34,6 +34,7 @@ sudo apt update -y &&
 sudo apt install nginx -y
 # Enable and Start NGINX
 sudo systemctl start nginx && sudo systemctl enable nginx
+read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
 # Set NGNX self-signed certificates
 ### CHANGE --- old part --- TO BE DELETED ### openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout \
 ### CHANGE --- old part --- TO BE DELETED ### /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
@@ -75,7 +76,8 @@ EOT
 sudo mkdir -p /etc/nginx/sites-available/
 ### CHANGE --- no need because we will create this file with EOF ### sudo touch /etc/nginx/sites-available/openmappr.conf
 # Prompt for Domain
-read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
+### CHANGE --- prompt (below) for domain moved before setting thee conf
+#read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
 # check the domain is valid!
 ### CHANGE #### to be remooved ### PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
 PATTERN="^((\*)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((\*\.)?([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,63}?))$"
