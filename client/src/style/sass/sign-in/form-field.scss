@@ -3,13 +3,13 @@
     width: 100%;
     display: block;
     padding: 11px 12px;
-    border-radius: $inputBorderRadius;
-    border: 2px solid $inputBorderColor;
+    border-radius: 4px;
+    border: 2px solid #EBEFF2;
     transition: border-color .2s;
     font-size: 15px;
 
     &:hover {
-      border-color: darken($color:$inputBorderColor, $amount: 8);
+      border-color: darken($color: #EBEFF2, $amount: 8);
     }
 
     &:focus,
