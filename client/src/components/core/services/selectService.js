@@ -16,7 +16,11 @@ angular.module('common')
             this.selectedNodes = [];
             this.getActiveFilterCount = getActiveFilterCount;
             this.getFilterForId = getFilterForId;
+            this.getSelectedNodes = getSelectedNodes;
+            this.hasAttrId = hasAttrId;
             this.init = init;
+            this.filters = null;
+            this.attrs = null;
             /*************************************
     ********* Local Data *****************
     **************************************/
@@ -80,8 +84,10 @@ angular.module('common')
                 if (selectData.ids && selectData.ids.length) {
                     this.selectedNodes = selectData.ids;
                 } else if (selectData.min || selectData.max) {
+                    this.attrs = { attr: selectData.attr, min: selectData.min, max: selectData.max };
                     this.selectedNodes = dataGraph.getNodesByAttribRange(selectData.attr, selectData.min, selectData.max);
                 } else if (selectData.filters) {
+                    this.filters = attrFilters;
                     var cs = this.selectedNodes = _.reduce(_.values(attrFilters), function (acc, filterCfg) {
                         return filterCfg.filter(acc);
                     }, null); // TODO: add subset
@@ -89,25 +95,47 @@ angular.module('common')
                     this.selectedNodes = _.pluck(cs, 'id');
                 }
                 else {
+                    this.attrs = { attr: selectData.attr, value: selectData.value };
                     this.selectedNodes = selectData.value != null ? dataGraph.getNodesByAttrib(selectData.attr, selectData.value, selectData.fivePct) : [];
                 }
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
                     filtersCount: getActiveFilterCount(),
-                    selectionCount: this.selectedNodes.length
+                    selectionCount: this.selectedNodes.length,
+                    nodes: this.getSelectedNodes(),
                 });
             }
 
             function unselect() {
                 if (!this.selectedNodes || this.selectedNodes.length == 0) return;
 
-                degree = degree || 0;
                 this.selectedNodes.splice(0, this.selectedNodes.length);
+                this.attrs = null;
+                this.filters = null;
+
+                $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                    filtersCount: getActiveFilterCount(),
+                    selectionCount: this.selectedNodes.length,
+                    nodes: this.getSelectedNodes(),
+                });
             }
 
             function getFilterForId(id) {
                 return attrFilters && attrFilters[id];
             };
+
+            function getSelectedNodes() {
+                return _.map(this.selectedNodes, findNodeWithId);
+            }
+
+            function hasAttrId(attrId, value) {
+                if (this.attrs && this.attrs.attr === attrId)
+                    return this.attrs.value && this.attrs.value === value;
+                if (this.filters && this.filters[attrId] && this.filters[attrId].isEnabled)
+                    return this.filters[attrId].state.selectedVals.indexOf(value) > -1;
+
+                return false;
+            }
             //
             // Bind to the render graph and the define the above functions
             //

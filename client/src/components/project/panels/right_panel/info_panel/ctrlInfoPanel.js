@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService',
-        function($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService) {
+    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService',
+        function($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService) {
             'use strict';
 
             /*************************************
@@ -146,6 +146,10 @@ angular.module('common')
             });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function(e, data) {
+                refreshSelectionInfo(data.nodes);
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 refreshSelectionInfo(data.nodes);
             });
 

@@ -148,7 +148,7 @@ angular.module('common')
                 updateSelCount();
             });
 
-            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(data) {
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
                 $scope.selNodesCount = data.selectionCount;
             });
 

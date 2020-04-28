@@ -6,8 +6,8 @@
 */
 
 angular.module('common')
-    .directive('dirSelectionInfo', ['dataGraph', '$rootScope', 'graphSelectionService', 'infoPanelService', 'AttrInfoService', 'linkService', 'graphHoverService', 'BROADCAST_MESSAGES',
-        function(dataGraph, $rootScope, graphSelectionService, infoPanelService, AttrInfoService, linkService, graphHoverService, BROADCAST_MESSAGES) {
+    .directive('dirSelectionInfo', ['dataGraph', '$rootScope', 'graphSelectionService', 'infoPanelService', 'AttrInfoService', 'linkService', 'graphHoverService', 'BROADCAST_MESSAGES', 'selectService',
+        function(dataGraph, $rootScope, graphSelectionService, infoPanelService, AttrInfoService, linkService, graphHoverService, BROADCAST_MESSAGES, selectService) {
             'use strict';
 
             /*************************************
@@ -75,24 +75,41 @@ angular.module('common')
 
                 $scope.$watch('selInfo.sortInfo', sortNodesInSelection, true);
 
-                $scope.$on(BROADCAST_MESSAGES.overNodes, function(e, data) {
-                    if(!$scope.selInfo.refreshSelInfo) {
-                        return console.warn(logPrefix + 'Selection in place, not refreshing info');
-                    }
-                    $scope.selInfo.interactionType = 'hover';
-                    refresh(_.get(data, 'nodes', []));
-                });
+                // $scope.$on(BROADCAST_MESSAGES.overNodes, function(e, data) {
+                //     if(!$scope.selInfo.refreshSelInfo) {
+                //         return console.warn(logPrefix + 'Selection in place, not refreshing info');
+                //     }
+                //     $scope.selInfo.interactionType = 'hover';
+                //     refresh(_.get(data, 'nodes', []));
+                // });
 
-                $scope.$on(BROADCAST_MESSAGES.outNodes, function() {
-                    if(!$scope.selInfo.refreshSelInfo) {
-                        console.warn(logPrefix + 'Selection in place, not refreshing info');
-                        return;
-                    }
-                    // Fix for removing selection on hover out
-                    refresh(dataGraph.getAllNodes());
-                });
+                // $scope.$on(BROADCAST_MESSAGES.outNodes, function() {
+                //     if(!$scope.selInfo.refreshSelInfo) {
+                //         console.warn(logPrefix + 'Selection in place, not refreshing info');
+                //         return;
+                //     }
+                //     // Fix for removing selection on hover out
+                //     refresh(dataGraph.getAllNodes());
+                // });
 
-                $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
+                // $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
+                //     if( data.nodes.length > 0 ) {
+                //         $scope.selInfo.refreshSelInfo = false;
+                //     }
+                //     $scope.selInfo.interactionType = 'select';
+                //     if($scope.selInfo.selectionBrowsing) {
+                //         $scope.selInfo.panelMode = 'node';
+                //         var principalNodeIdx = _.findIndex($scope.selInfo.genericSelNodes, 'id', _.get(data, 'nodes[0].id'));
+                //         if(principalNodeIdx < 0) { throw new Error('principal Node not found in selected nodes list'); }
+                //         $scope.selInfo.principalNode = $scope.selInfo.genericSelNodes[principalNodeIdx];
+                //         $scope.selInfo.nodeNeighbors = getNodeNeighbors([$scope.selInfo.principalNode]);
+                //         initialise();
+                //         return;
+                //     }
+                //     refresh(_.get(data, 'nodes', []));
+                // });
+
+                $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                     if( data.nodes.length > 0 ) {
                         $scope.selInfo.refreshSelInfo = false;
                     }
@@ -127,7 +144,7 @@ angular.module('common')
                 });
 
                 function initialise() {
-                    var selNodes = graphSelectionService.getSelectedNodes();
+                    var selNodes = selectService.getSelectedNodes();
                     // CHECKPOINT
                     if (!selNodes.length) selNodes = dataGraph.getAllNodes();
                     $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);

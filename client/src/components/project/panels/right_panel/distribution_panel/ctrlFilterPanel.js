@@ -46,6 +46,10 @@ angular.module('common')
                 $scope.ui.renderDistr = false;
             });
 
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
+                $scope.ui.activeFilterCount = data.filtersCount;
+            });
+
 
             /*************************************
     ********* Initialise *****************
@@ -197,10 +201,7 @@ angular.module('common')
             }
 
             function resetFilters() {
-                FilterPanelService.resetFilters();
-                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.reset);
-                $scope.$emit(BROADCAST_MESSAGES.fp.filter.reset);
-                updateSelAndGraph(window.event);
+                selectService.unselect();
             }
 
             function updateNodeColorStr () {
@@ -222,7 +223,7 @@ angular.module('common')
                 else {
                     $scope.nodeCountInGraph = dataGraph.getAllNodes().length;
                 }
-                $scope.ui.activeFilterCount = FilterPanelService.getActiveFilterCount();
+                $scope.ui.activeFilterCount = selectService.getActiveFilterCount();
 
                 var infoObj = AttrInfoService.getNodeAttrInfoForRG();
                 if(selection.length === 1) {
@@ -272,14 +273,14 @@ angular.module('common')
 
                 $scope.currentSelection = currentSelection;
                 if(!currentSelection || (_.isArray(currentSelection) && currentSelection.length === 0)) {
-                    if(FilterPanelService.getActiveFilterCount() > 0) {
-                        graphSelectionService.clearSelections();
+                    if(selectService.getActiveFilterCount() > 0) {
+                        selectService.unselect();
                         //Hack to show graph darkened state
                         renderer.render({drawLabels: false});
                         renderer.greyout(true, 'select');
                     }
                     else {
-                        graphSelectionService.clearSelections(true);
+                        selectService.unselect();
                     }
 
                     // UI SERVICE not available in player ,removing this for now

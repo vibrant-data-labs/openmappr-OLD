@@ -139,6 +139,14 @@ angular.module('common')
                         return cat;
                     });
                 });
+
+                scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
+                        cat.isChecked = selectService.hasAttrId(scope.attrToRender.id, cat.id);
+
+                        return cat;
+                    });
+                });
                 /**
          * watch filters being enabled disabled
          */
@@ -215,11 +223,8 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    // if (catData.isChecked) {
-                    hoverSelectedNodes(event);
-                    // } else {
-                    //     unhoverSelectedNodes(event);
-                    // }
+                    
+                    hoverService.unhover();
                 };
 
                 scope.onFilterUpdate = function() {

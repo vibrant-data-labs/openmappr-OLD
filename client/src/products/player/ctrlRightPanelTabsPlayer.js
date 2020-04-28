@@ -1,7 +1,7 @@
 angular.module('common')
     .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
-        '$timeout', '$window',
-        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window) {
+        '$timeout', '$window', 'selectService',
+        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService) {
             'use strict';
 
             /*************************************
@@ -144,28 +144,32 @@ angular.module('common')
              ****** Event Listeners/Watches *******
              **************************************/
 
-            $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function() {
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.selectNodes, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.selectNodes, function() {
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
+            //     updateSelCount();
+            // });
 
-            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
-                updateSelCount();
-            });
+            // $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
+            //     updateSelCount();
+            // });
 
-            $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
-                updateSelCount();
+            // $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
+            //     updateSelCount();
+            // });
+
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                $scope.selNodesCount = data.selectionCount;
             });
 
             /*************************************
@@ -176,9 +180,9 @@ angular.module('common')
              ********* Core Functions *************
              **************************************/
 
-            function updateSelCount() {                
-                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
-            }
+            // function updateSelCount() {                
+            //     $scope.selNodesCount = selectService.selectedNodes.length;
+            // }
 
         }
     ]);

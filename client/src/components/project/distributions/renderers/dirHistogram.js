@@ -179,6 +179,11 @@ angular.module('common')
                     }
                 });
 
+                scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, payload) {
+                    updateSelectionBars(histoBars, payload.nodes, attrInfo, histoData, mappTheme, false);
+                    updateFiltSelBars(histoBars, payload.nodes, attrInfo, histoData);
+                });
+
                 // Create global distributions & selection bars
                 try {
                     var initialSelection = FilterPanelService.getInitialSelection();

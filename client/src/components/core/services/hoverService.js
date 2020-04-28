@@ -48,6 +48,7 @@ angular.module('common')
                 {
                     this.hoveredNodes = hoverData.value != null ? dataGraph.getNodesByAttrib(hoverData.attr, hoverData.value, hoverData.fivePct) : [];
                 }
+
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
             }
 
