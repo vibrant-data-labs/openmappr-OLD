@@ -5,8 +5,8 @@
      Will need change if 'false' use-case is required.
 */
 angular.module('common')
-    .directive('dirAttrRenderer', ['$timeout', 'FilterPanelService', 'nodeSelectionService', 'graphHoverService', 'graphSelectionService', 'layoutService', 'AttrInfoService', 'projFactory', 'networkService', 'BROADCAST_MESSAGES',
-        function($timeout, FilterPanelService, nodeSelectionService, graphHoverService, graphSelectionService, layoutService, AttrInfoService, projFactory, networkService, BROADCAST_MESSAGES) {
+    .directive('dirAttrRenderer', ['$timeout', 'FilterPanelService', 'nodeSelectionService', 'hoverService', 'graphSelectionService', 'layoutService', 'AttrInfoService', 'projFactory', 'networkService', 'BROADCAST_MESSAGES',
+        function($timeout, FilterPanelService, nodeSelectionService, hoverService, graphSelectionService, layoutService, AttrInfoService, projFactory, networkService, BROADCAST_MESSAGES) {
             'use strict';
 
             /*************************************
@@ -307,7 +307,7 @@ angular.module('common')
                 debSelectByAttr.cancel();
                 debSelectIdList.cancel();
                 debSelectByAttrRange.cancel();
-                graphHoverService.clearHovers(true);
+                hoverService.unhover();
                 nodeSelectionService.highlightAllSelected(true);
             }
 

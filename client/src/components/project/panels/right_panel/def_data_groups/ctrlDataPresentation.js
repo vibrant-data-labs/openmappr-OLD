@@ -1,6 +1,6 @@
 angular.module('common')
-.controller('DataPresentationCtrl', ['$scope', '$rootScope','$timeout', '$q', 'uiService', 'AttrInfoService' ,'layoutService', 'snapshotService', 'networkService', 'nodeSelectionService','projFactory', 'renderGraphfactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'dataGraph',
-function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutService, snapshotService, networkService, nodeSelectionService, projFactory, renderGraphfactory, FilterPanelService, BROADCAST_MESSAGES, dataGraph) {
+.controller('DataPresentationCtrl', ['$scope', '$rootScope','$timeout', '$q', 'uiService', 'AttrInfoService' ,'layoutService', 'snapshotService', 'networkService', 'nodeSelectionService','projFactory', 'renderGraphfactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'dataGraph', 'hoverService', 'selectService',
+function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutService, snapshotService, networkService, nodeSelectionService, projFactory, renderGraphfactory, FilterPanelService, BROADCAST_MESSAGES, dataGraph, hoverService, selectService) {
     'use strict';
 
     /*************************************
@@ -443,20 +443,21 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
     }
 
     function hoverNodesByIds(nodeIds, $event) {
-        nodeSelectionService.hoverNodeIdList(nodeIds, $event);
+        hoverService.hoverNodes({ids: nodeIds});
     }
 
     function selectNodesByIds(nodeIds, $event) {
-        nodeSelectionService.selectNodeIdList(nodeIds, $event);
+        selectService.selectNodes({ ids: nodeIds });
         FilterPanelService.rememberSelection(false);
     }
 
     function hoverNodeNeighborByIds(nodeIds, $event) {
-        nodeSelectionService.hoverNodeNeighborIdList(nodeIds, $event);
+        hoverService.hoverNodes({ids: nodeIds, withNeighbors: true});
     }
 
     function selectNodeNeighborByIds(nodeIds, $event) {
-        nodeSelectionService.selectNodeNeighborIdList(nodeIds, $event);
+        selectService.selectNodes({ ids: nodeIds });
+        //nodeSelectionService.selectNodeNeighborIdList(nodeIds, $event);
     }
 
     function selectNodesByAttrib(value, $event) {
@@ -472,24 +473,23 @@ function($scope, $rootScope, $timeout, $q, uiService, AttrInfoService, layoutSer
             $scope.selectedNodes.splice(found, 1);
         }
         console.log($scope.selectedNodes, 888);
-        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
+        selectService.selectNodes({ attr: attrId, value: value });
     }
 
     function clearSelections() {
         console.log('window.event: ', window.event);
-        nodeSelectionService.clearSelections();
-        $rootScope.$broadcast(BROADCAST_MESSAGES.cleanStage);
+        
+        selectService.unselect();
     }
 
     function hoverNodesByAttrib(value, $event) {
         outLegendCategories();
         var attrId = getCurrAttrId();
-        nodeSelectionService.hoverNodesByAttrib(attrId, value, $event);
+        hoverService.hoverNodes({attr: attrId, value: value});
     }
 
     function unhoverNodes($event) {
-        var attrId = getCurrAttrId();
-        nodeSelectionService.hoverNodesByAttributes(attrId, $scope.selectedNodes, $event);
+        hoverService.unhover();
     }
 
     function selectEdgesByAttrib(value, $event) {

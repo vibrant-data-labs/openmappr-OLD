@@ -1,7 +1,7 @@
 /*globals d3,$  */
 angular.module('common')
-    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES',
-        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES) {
+    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService',
+        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService, selectService) {
             'use strict';
 
             /*************************************
@@ -139,6 +139,14 @@ angular.module('common')
                         return cat;
                     });
                 });
+
+                scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
+                        cat.isChecked = selectService.hasAttrId(scope.attrToRender.id, cat.id);
+
+                        return cat;
+                    });
+                });
                 /**
          * watch filters being enabled disabled
          */
@@ -180,22 +188,25 @@ angular.module('common')
                             scope.tooltipText = catData.selTagFreq + " of " + catData.curSelLength + " tagged as " + catData.text;
                         }
                         element.find('.tooltip-positioner').css({
-                            top : pos.top - 5,
+                            top : pos.top + curTarget.height() / 2,
                             left : pos.left + curTarget.width()
                         });
                         scope.openTooltip = true;
 
-                        // hover nodes
-                        renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
+                        
+                        //renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
 
                     }, 10);
+                    // hover nodes
+                    hoverService.hoverNodes({ attr: attrId, value: catData.id });
                 };
 
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-                        hoverSelectedNodes(event);
                     }, 100);
+                    hoverService.unhover();
+
                 };
 
 
@@ -212,11 +223,8 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    // if (catData.isChecked) {
-                    hoverSelectedNodes(event);
-                    // } else {
-                    //     unhoverSelectedNodes(event);
-                    // }
+                    
+                    hoverService.unhover();
                 };
 
                 scope.onFilterUpdate = function() {
@@ -234,12 +242,6 @@ angular.module('common')
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
-                // function unhoverSelectedNodes(event) {
-                //     var selectedValues = getSelectedValues() || [];
-                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
-                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
-                // }
-
                 /// filter stuff
                 function setupFilterClasses (catListData, isfilterDisabled) {
                     var inFilteringMode = filteringCatVals.length > 0;
@@ -254,12 +256,14 @@ angular.module('common')
                 ///                 When the current selection is refreshed, the tagList gets sorted depending upon the importance in the CS
                 /// New behaviour: The filter is just selected, its applied after the user presses the Subset button
                 function selectFilter () {
-                    var filterConfig = FilterPanelService.getFilterForId(attrId);
+                    var filterConfig = selectService.getFilterForId(attrId);
                     filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
 
                     filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
                     filterConfig.state.selectedVals = _.clone(filteringCatVals);
                     filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
+
+                    selectService.selectNodes({ filters: true});
                 }
 
                 function genSelector (selectedVals) {

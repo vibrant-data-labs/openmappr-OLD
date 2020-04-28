@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 
-function ($timeout, dataGraph, linkService, zoomService) {
+.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 'hoverService',
+function ($timeout, dataGraph, linkService, zoomService, hoverService) {
     'use strict';
 
     /*************************************
@@ -52,6 +52,14 @@ function ($timeout, dataGraph, linkService, zoomService) {
         } else {
             console.log('dirNeighbors', "Node has no links to other nodes");
         }
+
+        scope.onHover = function(link) {
+            hoverService.hoverNodes({ ids: [link.linkNode.id]});
+        };
+
+        scope.onHoverOut = function() {
+            hoverService.hoverNodes({ ids: [node.id]});
+        };
 
         function filterLinks(links){
             var newLinks = [];

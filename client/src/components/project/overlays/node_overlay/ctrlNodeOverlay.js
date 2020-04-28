@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService',
-        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService) {
+    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService', 'hoverService', 'selectService',
+        function($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService, hoverService, selectService) {
             'use strict';
 
             /*************************************
@@ -47,6 +47,9 @@ angular.module('common')
             $scope.activeTabs2 = activeTabs2;
             $scope.activeTabs3 = activeTabs3;
 
+            $scope.onSection3Hover = onSection3Hover;
+            $scope.onSection3Leave = onSection3Leave;
+
             $scope.removeNeighborLine = function() {
                 //kill line
                 $scope.showNeighborLine = false;
@@ -71,7 +74,7 @@ angular.module('common')
             ****** Event Listeners/Watches *******
             **************************************/
             $(window).on('resize', onWindowResize); //on resize, move node to correct position
-            $scope.$on(BROADCAST_MESSAGES.selectNodes, onNodesSelect);
+            $scope.$on(BROADCAST_MESSAGES.hss.select, onNodesSelect);
             $scope.$on(BROADCAST_MESSAGES.grid.clickNode, onClickNode); //if in grid
             $scope.$on(BROADCAST_MESSAGES.list.clickNode, onClickNode); //if in list
 
@@ -129,7 +132,7 @@ angular.module('common')
                 // else if(($scope.mapprSettings.nodeFocusShow || showNodeDetailOnLoad === true)
                 // TODO: restore validation
                 if(!$scope.mapprSettings) return;
-                else if($scope.mapprSettings.nodeFocusShow && data.newSelection
+                else if($scope.mapprSettings.nodeFocusShow 
                         && $scope.nodeOverlayProps.enabled && $scope.layout.plotType !== 'grid') {
                     if(_.isArray(data.nodes) && data.nodes.length === 1) {
                         //reset so only shows on snapshot load
@@ -203,7 +206,7 @@ angular.module('common')
                         initOverlayNodeData.node = null;
                     }
                     // remove selection from filter service panel
-                    FilterPanelService.updateInitialSelection([]);
+                    selectService.unselect();
                     // restore camera
                     zoomService.restoreCamera();
                     // graphSelectionService.clearSelections();
@@ -401,13 +404,13 @@ angular.module('common')
                 if($scope.mapprSettings.nodeFocusRenderTemplate == 'content') {
                     $scope.finishAnimation();
                 }else if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel'){
-                    var selNodes = graphSelectionService.getSelectedNodes();
+                    var selNodes = selectService.getSelectedNodes();
                     var nodesa = selNodes[0];
 
                     var nodeAttrsObj = dataGraph.getNodeAttrs();
 
                     const filteredAttr = nodeAttrsObj.filter(attr => {
-                        return attr.visible && nodesa.attr[attr.title]
+                        return attr.visible && nodesa.attr[attr.title];
                     });
 
                     console.log({nodesa, nodeAttrsObj, filteredAttr});
@@ -451,6 +454,14 @@ angular.module('common')
                     const initials = first[0] + last[0];
                     return ({ type: 'name', name, description, initials, color: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd' })
                 }
+            }
+
+            function onSection3Hover(sections, tag) {
+                hoverService.hoverNodes({ attr: sections.key, value: tag});
+            }
+
+            function onSection3Leave() {
+                hoverService.unhover();
             }
 
             /*************************************
