@@ -157,6 +157,10 @@
             hss: {
                 hover: 'hss:hover',
                 select: 'hss:select',
+                subset: {
+                    init: 'hss:subset:init',
+                    changed: 'hss:subset:changed'
+                }
             },
 
             // Filter Panel related
