@@ -35,8 +35,10 @@ sudo apt install nginx -y
 # Enable and Start NGINX
 sudo systemctl start nginx && sudo systemctl enable nginx
 # Set NGNX self-signed certificates
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout \
-/etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+### CHANGE --- old part --- TO BE DELETED ### openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout \
+### CHANGE --- old part --- TO BE DELETED ### /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+### CHANGE --- below is the (openssl) slef-signed cert NO PROMPT script
+openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=US/ST=SelfSigned/L=Springfield/O=Dis/CN=self-signed.xyz" -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt 
 # Generate a strong key
 openssl dhparam -out /etc/nginx/dhparam.pem 4096
 # Create Params file with
@@ -93,8 +95,8 @@ listen  [::]:443 ssl http2;
 server_name @@@nginx_conf_domain@@@;
 # ssl configuration
 ssl on;
-ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
-ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+ssl_certificate /etc/nginx/nginx-selfsigned.crt; 
+ssl_certificate_key /etc/nginx/nginx-selfsigned.key;
 include snippets/ssl-params.conf;
 access_log /var/log/nginx/openmappr-access.log;
 error_log /var/log/nginx/openmappr-error.log warn;
