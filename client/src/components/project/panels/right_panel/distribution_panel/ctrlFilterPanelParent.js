@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('FilterPanelParentCtrl', ['$scope', 'FilterPanelService', 'AttrInfoService', 'BROADCAST_MESSAGES',
-        function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES) {
+    .controller('FilterPanelParentCtrl', ['$scope', 'FilterPanelService', 'AttrInfoService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
+        function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -43,10 +43,10 @@ angular.module('common')
             };
 
             /**
-     * This applies/subsets the `selected` filters
-     */
+             * This applies/subsets the `selected` filters
+             */
             $scope.subsetFilters = function subsetFilters() {
-                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.changed);
+                subsetService.subset();
             };
 
             $scope.undoFilters = function undoFilters() {
@@ -63,8 +63,7 @@ angular.module('common')
     **************************************/
             $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
                 $scope.$evalAsync(function() {
-                    FilterPanelService.resetFilters();
-                    FilterPanelService.rememberSelection(false);
+                    selectService.unselect();
                 });
             });
 

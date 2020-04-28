@@ -2,8 +2,8 @@
 * Handles Graph Selection ops
 */
 angular.module('common')
-    .service('selectService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES',
-        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES) {
+    .service('selectService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'SelectorService', 'subsetService',
+        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, SelectorService, subsetService) {
 
             "use strict";
 
@@ -21,6 +21,9 @@ angular.module('common')
             this.init = init;
             this.filters = null;
             this.attrs = null;
+            this.copyFilters = function () {
+                return angular.copy(this.filters);
+            };
             /*************************************
     ********* Local Data *****************
     **************************************/
@@ -68,6 +71,12 @@ angular.module('common')
     **************************************/
             function init() {
                 attrFilters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');
+                this.filters = attrFilters;
+                (function (service) {
+                    $rootScope.$on(BROADCAST_MESSAGES.hss.subset.init, function (ev) {
+                        subsetService.subsetSelection(service.getSelectedNodes());
+                    });
+                })(this);
             }
             /**
              * Select the nodes
@@ -81,22 +90,23 @@ angular.module('common')
              * @param {boolean} selectData.filters - whether apply current filters
              */
             function selectNodes(selectData) {
+                var currentSubset = subsetService.currentSubset();
                 if (selectData.ids && selectData.ids.length) {
                     this.selectedNodes = selectData.ids;
-                } else if (selectData.min || selectData.max) {
-                    this.attrs = { attr: selectData.attr, min: selectData.min, max: selectData.max };
-                    this.selectedNodes = dataGraph.getNodesByAttribRange(selectData.attr, selectData.min, selectData.max);
-                } else if (selectData.filters) {
-                    this.filters = attrFilters;
-                    var cs = this.selectedNodes = _.reduce(_.values(attrFilters), function (acc, filterCfg) {
-                        return filterCfg.filter(acc);
-                    }, null); // TODO: add subset
-
+                }  
+                else {
+                    var cs = filter(selectData, subsetService.subsetNodes);
                     this.selectedNodes = _.pluck(cs, 'id');
                 }
-                else {
-                    this.attrs = { attr: selectData.attr, value: selectData.value };
-                    this.selectedNodes = selectData.value != null ? dataGraph.getNodesByAttrib(selectData.attr, selectData.value, selectData.fivePct) : [];
+
+                if (currentSubset.length > 0) {
+                    this.selectedNodes = this.selectedNodes.filter(function (x) {
+                        return currentSubset.indexOf(x) > -1;
+                    });
+                }
+
+                if (this.selectedNodes.length == 0) {
+                    this.selectedNodes = currentSubset;
                 }
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
@@ -106,12 +116,47 @@ angular.module('common')
                 });
             }
 
+            function filter(data, subset) {
+                if (data.attr) {
+                    if (data.min || data.max) {
+                        createMinMaxFilter(data.attr, data.min, data.max);
+                    } else {
+                        createMultipleFilter(data.attr, data.value);
+                    }
+                }
+
+                return _.reduce(_.values(attrFilters), function (acc, filterCfg) {
+                    return filterCfg.filter(acc);
+                }, subset.length > 0 ? subset : null);
+            }
+
+            function createMultipleFilter(attrId, vals) {
+                var filterConfig = getFilterForId(attrId);
+                filterConfig.isEnabled = true;
+                var newVal = _.isArray(vals) ? vals : [vals];
+                var filterVal = _.filter(_.flatten([filterConfig.state.selectedVals, _.clone(newVal)]), _.identity);
+                filterConfig.state.selectedVals = filterVal;
+
+                filterConfig.selector = SelectorService.newSelector().ofMultipleAttrValues(attrId, filterVal, true);
+
+                return filterConfig;
+            }
+
+            function createMinMaxFilter(attrId, min, max) {
+                var filterConfig = getFilterForId(attrId);
+                filterConfig.isEnabled = true;
+                filterConfig.selector = SelectorService.newSelector().ofAttrRange(attrId, min, max);
+
+                return filterConfig;
+            }
+
             function unselect() {
                 if (!this.selectedNodes || this.selectedNodes.length == 0) return;
 
-                this.selectedNodes.splice(0, this.selectedNodes.length);
                 this.attrs = null;
-                this.filters = null;
+                this.filters = attrFilters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');;
+
+                this.selectedNodes = subsetService.currentSubset();
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
                     filtersCount: getActiveFilterCount(),

@@ -2,8 +2,8 @@
 * Handles Graph Hover ops
 */
 angular.module('common')
-    .service('hoverService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'selectService',
-        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, selectService) {
+    .service('hoverService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService', 'SelectorService',
+        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, selectService, subsetService, SelectorService) {
 
             "use strict";
 
@@ -40,21 +40,63 @@ angular.module('common')
              */
             function hoverNodes(hoverData) {
                 this.unhover();
+                var currentSubset = subsetService.currentSubset();
+                var isFiltered = false;
+
                 if (hoverData.ids && hoverData.ids.length) {
                     this.hoveredNodes = hoverData.ids;
-                } else if (hoverData.min || hoverData.max) {
-                    this.hoveredNodes = dataGraph.getNodesByAttribRange(hoverData.attr, hoverData.min, hoverData.max);
-                } else
-                {
-                    this.hoveredNodes = hoverData.value != null ? dataGraph.getNodesByAttrib(hoverData.attr, hoverData.value, hoverData.fivePct) : [];
+                } else {
+                    var cs = filter(hoverData, subsetService.subsetNodes)
+
+                    this.hoveredNodes = _.pluck(cs, 'id');
+                    isFiltered = true;
                 }
 
+                if (!isFiltered && currentSubset.length > 0) {
+                    this.hoveredNodes = this.hoveredNodes.filter(function (x) {
+                        return currentSubset.indexOf(x) > -1;
+                    });
+                }
+
+                // when user hovers on the single node which is not in the subset - do nothing
+                if (currentSubset.length > 0 && this.hoveredNodes.length == 0) return;
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
             }
 
-            function unhover(degree) {
-                if (!this.hoveredNodes || this.hoveredNodes.length == 0) return;
+            function filter(data, subset) {
+                var filters = selectService.copyFilters();
+                if (data.min || data.max) {
+                    createMinMaxFilter(filters, data.attr, data.min, data.max);
+                } else {
+                    createMultipleFilter(filters, data.attr, data.value);
+                }
 
+                return _.reduce(_.values(filters), function (acc, filterCfg) {
+                    return filterCfg.filter(acc);
+                }, subset.length > 0 ? subset : null);
+            }
+
+            function createMultipleFilter(filters, attrId, vals) {
+                var filterConfig = filters[attrId];
+                filterConfig.isEnabled = true;
+                var newVal = _.isArray(vals) ? vals : [vals];
+                var filterVal = _.filter(_.flatten([filterConfig.state.selectedVals, _.clone(newVal)]), _.identity);
+                filterConfig.state.selectedVals = filterVal;
+
+                filterConfig.selector = SelectorService.newSelector().ofMultipleAttrValues(attrId, filterVal, true);
+
+                return filterConfig;
+            }
+
+            function createMinMaxFilter(filters, attrId, min, max) {
+                var filterConfig = filters[attrId];
+                filterConfig.isEnabled = true;
+                filterConfig.selector = SelectorService.newSelector().ofAttrRange(attrId, min, max);
+
+                return filterConfig;
+            }
+
+            function unhover(degree) {
                 degree = degree || 0;
                 this.hoveredNodes.splice(0, this.hoveredNodes.length);
 
@@ -64,11 +106,7 @@ angular.module('common')
 
             function _hoverHelper(ids, degree, withNeighbors) {
                 degree = degree || 0;
-                if (ids.length === 0) {
-                    //graphHoverService.clearHovers(true);
-                } else {
-                    hoverByIds(ids, degree, false, withNeighbors);
-                }
+                hoverByIds(ids, degree, false, withNeighbors);
             }
 
             /** 
@@ -106,14 +144,6 @@ angular.module('common')
 
             // clears current hovers, and sets the event.data.nodes to hover state
             function hoverHandler(eventName, event, inputMap, degree) {
-                function nodesInPop(nodes) {
-                    var inPop = false;
-                    _.each(nodes, function (n) {
-                        inPop = inPop || n.inPop !== undefined;
-                    });
-                    return inPop;
-                }
-
                 var nodes;
                 var hoverTiggeredFromGraph = _.isObject(event.data) && event.data.graphHover != null ? event.data.graphHover : true;
                 if (event.data.allNodes != undefined) {
@@ -123,15 +153,8 @@ angular.module('common')
                     nodes = event.data.nodes;
                 }
                 console.log("[hoverService] hoverHandler hovering over " + nodes.length + " nodes");
-                //setHoverState(nodes, inputMap, degree);
+
                 draw(nodes, event.data.withNeighbors);
-                // if (eventEnabled) {
-                //     $rootScope.$broadcast(BROADCAST_MESSAGES.overNodes, {
-                //         nodes: _.values(hoveredNodes),
-                //         neighbours: _.values(hoveredNodeNeighbors),
-                //         graphHover: hoverTiggeredFromGraph
-                //     });
-                // }
             }
 
             function draw(nodeIds, withNeighbors) {
@@ -166,9 +189,9 @@ angular.module('common')
                     var node = findNodeWithId(nodeId, sigRender.sig);
                     node.inHover = true;
 
-                    if(withNeighbors) {
+                    if (withNeighbors) {
                         var neighNodes = [];
-                        _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId){
+                        _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId) {
                             node.inHoverNeighbor = true;
                             //hoveredNodeNeighbors[targetId] = node;
                             _.forEach(edgeInfo, function addConnEdge(edge, edgeId) {
