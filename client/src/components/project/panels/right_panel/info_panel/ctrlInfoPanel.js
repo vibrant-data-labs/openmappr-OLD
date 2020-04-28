@@ -66,7 +66,7 @@ angular.module('common')
                 selNodeIdx: 0
             };
 
-
+            $scope.selectedGroup;
 
             /**
     * Scope methods
@@ -83,6 +83,14 @@ angular.module('common')
             };
 
 
+            $scope.clearSelections = function() {
+                graphSelectionService.clearSelections(true);
+                $rootScope.$broadcast(BROADCAST_MESSAGES.cleanStage);
+                $scope.$broadcast(BROADCAST_MESSAGES.renderGraph.changed);
+                $scope.zoomInfo.zoomExtents();
+                $scope.cancelOverlay(true);
+                $scope.selectedGroup = undefined;
+            };
 
 
             /*************************************

@@ -9,7 +9,8 @@ angular.module('common')
         'ngIntroService',
         '$timeout',
         'FilterPanelService',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService) {
+        'selectService',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService) {
             'use strict';
 
             /*************************************
@@ -134,6 +135,10 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
                 updateSelCount();
             });
+            
+            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+                updateSelCount();
+            });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                 updateSelCount();
@@ -141,6 +146,10 @@ angular.module('common')
 
             $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
                 updateSelCount();
+            });
+
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(data) {
+                $scope.selNodesCount = data.selectionCount;
             });
 
             function openNetworkDataModal() {
@@ -179,7 +188,7 @@ angular.module('common')
              **************************************/
 
             function updateSelCount() {
-                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
+                $scope.selNodesCount = selectService.selectedNodes.length;
             }
 
 

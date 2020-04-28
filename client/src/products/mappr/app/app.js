@@ -281,6 +281,11 @@
                 loaded: 'org:loaded'
             },
 
+            // Hover select subset features
+            hss: {
+                hover: 'hss:hover',
+                select: 'hss:select',
+            },
             // Filter Panel related
             fp: {
                 initialSelection: {

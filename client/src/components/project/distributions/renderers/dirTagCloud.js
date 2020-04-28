@@ -1,7 +1,7 @@
 /*globals d3,$  */
 angular.module('common')
-    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES',
-        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES) {
+    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService',
+        function($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService, selectService) {
             'use strict';
 
             /*************************************
@@ -130,6 +130,7 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
+                    draw();
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
                         if (cat.isChecked) {
                             cat.isSubsetted = cat.isChecked;
@@ -179,25 +180,25 @@ angular.module('common')
                             scope.tooltipText = catData.selTagFreq + " of " + catData.curSelLength + " tagged as " + catData.text;
                         }
                         element.find('.tooltip-positioner').css({
-                            top : pos.top - 5,
+                            top : pos.top + curTarget.height() / 2,
                             left : pos.left + curTarget.width()
                         });
                         scope.openTooltip = true;
 
-                        // hover nodes
-                        renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
+                        
+                        //renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
 
                     }, 10);
+                    // hover nodes
+                    hoverService.hoverNodes({ attr: attrId, value: catData.id });
                 };
 
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-
-                        if (!catData.isChecked) {
-                            renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
-                        }
                     }, 100);
+                    hoverService.unhover();
+
                 };
 
 
@@ -214,11 +215,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    if (catData.isChecked) {
-                        hoverSelectedNodes(event);
-                    } else {
-                        unhoverSelectedNodes(event);
-                    }
+                    // if (catData.isChecked) {
+                    hoverSelectedNodes(event);
+                    // } else {
+                    //     unhoverSelectedNodes(event);
+                    // }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -232,12 +233,8 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
+                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
-                }
-
-                function unhoverSelectedNodes(event) {
-                    var selectedValues = getSelectedValues() || [];
-                    renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
                 /// filter stuff
@@ -254,12 +251,14 @@ angular.module('common')
                 ///                 When the current selection is refreshed, the tagList gets sorted depending upon the importance in the CS
                 /// New behaviour: The filter is just selected, its applied after the user presses the Subset button
                 function selectFilter () {
-                    var filterConfig = FilterPanelService.getFilterForId(attrId);
+                    var filterConfig = selectService.getFilterForId(attrId);
                     filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
 
                     filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
                     filterConfig.state.selectedVals = _.clone(filteringCatVals);
                     filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
+
+                    selectService.selectNodes({ filters: true});
                 }
 
                 function genSelector (selectedVals) {
@@ -336,7 +335,8 @@ angular.module('common')
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
                             'cat-checkbox-disable' : false
-                        }
+                        },
+                        inSelectionMode: false
                     };
                 });
 
@@ -355,6 +355,7 @@ angular.module('common')
                 var currSelFreqs = getCurrSelFreqsObj(currentSel, attrInfo.attr.id);
 
                 var inFilteringMode = filteringCatVals.length > 0;
+                var inSelectionMode = !_.isEmpty(currentSel);
 
                 _.each(catListData.data, function(catData) {
                     var selTagFreq = currSelFreqs[catData.id] || 0;
@@ -362,11 +363,13 @@ angular.module('common')
                     catData.colorStr = valColorMap[catData.id] && _.isArray(valColorMap[catData.id]) ? valColorMap[catData.id][0] : defColorStr;
                     catData.selPercent = selTagFreq > 0 ? Math.max(0.1, selTagFreq / totalNodes * 100) : 0;
                     catData.isCurrent = selTagFreq > 0;
+                    catData.selTagFreq = selTagFreq;
                 });
 
                 catListData.highlightedCats = _.map(_.filter(catListData.data, function(c) {return c.selPercent > 0;}), 'id');
                 catListData.currSelFreqs = currSelFreqs;
                 catListData.inFilteringMode = inFilteringMode;
+                catListData.inSelectionMode = inSelectionMode;
             }
 
             // tag importance as a function of tag frequency in local selection and global tag frequency

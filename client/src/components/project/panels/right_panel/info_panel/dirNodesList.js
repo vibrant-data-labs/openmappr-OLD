@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
-function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, hoverService, graphSelectionService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -70,7 +70,11 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             if(scope.panelMode == 'selection') {
                 parCtrl.openNodeBrowserInSelMode();
             }
-            selectNodes([nodeId], $event);
+            parCtrl.replaceSelection();
+            hoverService.unhover();
+            graphSelectionService.selectByIds([nodeId] ,1);
+            FilterPanelService.rememberSelection(false);
+
         };
 
         scope.hoverNode = function(nodeId) {
@@ -131,18 +135,23 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
 
         function selectNodes(nodeIds, ev) {
             parCtrl.replaceSelection();
-            graphHoverService.clearHovers(ev);
-            graphSelectionService.selectByIds(nodeIds ,1);
+            hoverService.unhover()
+
+            scope.selectedGroup = nodeIds;
+            hoverService.hoverNodes({ ids: nodeIds });
+
+
             FilterPanelService.rememberSelection(false);
         }
 
         function hoverNodes(nodeIds) {
             parCtrl.persistSelection();
-            graphHoverService.hoverByIds(nodeIds, 1, false);
+            hoverService.hoverNodes({ ids: nodeIds });
         }
 
         function unHoverNodes(nodeIds) {
-            graphHoverService.unhoverByIds(nodeIds);
+            hoverService.unhover();
+            if (scope.selectedGroup != undefined) hoverNodes(scope.selectedGroup);
         }
     }
 

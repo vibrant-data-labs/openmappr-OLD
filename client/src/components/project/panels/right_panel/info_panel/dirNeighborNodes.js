@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighborNodes', ['graphSelectionService', 'graphHoverService', 'linkService', 'dataGraph', 'zoomService', 'FilterPanelService',
-function(graphSelectionService, graphHoverService, linkService, dataGraph, zoomService, FilterPanelService) {
+.directive('dirNeighborNodes', ['graphSelectionService', 'hoverService', 'linkService', 'dataGraph', 'zoomService', 'FilterPanelService',
+function(graphSelectionService, hoverService, linkService, dataGraph, zoomService, FilterPanelService) {
     'use strict';
 
     /*************************************
@@ -82,11 +82,11 @@ function(graphSelectionService, graphHoverService, linkService, dataGraph, zoomS
         };
 
         scope.hoverNode = function(nodeId) {
-            graphHoverService.hoverByIds([nodeId], 1, false);
+            hoverService.hoverNodes({ ids: [nodeId] });
         };
 
         scope.unHoverNode = function(nodeId) {
-            graphHoverService.unhoverByIds([nodeId]);
+            hoverService.unhover()
         };
 
         scope.getNeighborInfoHtml = function(neighbor) {
