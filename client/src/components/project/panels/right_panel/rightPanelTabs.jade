@@ -1,10 +1,62 @@
-.right-panel__tabs
-  ul.list-unstyled
-    li.vert-align(ng-repeat="tab in rightPanelTabs" ng-click="tab.cmd()" ng-class="{'active': tab.panel === panelUI.currentPanelOpen}")
-      span.badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
-      span.inline.width-100(ng-class="{'highlighted': tab.highlighted}" data-toggle="tooltip" title="{{tab.tooltipTitle}}")
-        i(class='{{tab.iconClass}}')
-        br
-        h6 {{tab.title}}
-  img(src="/img/vibrantdata-logo.png" alt="Vibrant Logo")
+.right-panel__tabs.side-menu
+  .side-menu__logo
+    .logo
+      img.logo__image(src="/img/logo_horizontal.svg" alt="Vibrant Logo")/
 
+  .side-menu__body
+    ul.tabs-menu
+      li.tabs-menu__item(
+        ng-repeat="tab in rightPanelTabs" ng-click="tab.cmd()"
+        ng-class="{'tabs-menu__item_active': tab.panel === panelUI.currentPanelOpen}"
+        )
+        span.badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
+
+
+        span.tabs-menu__link(ng-class="{'highlighted': tab.highlighted}" data-toggle="tooltip" title="{{tab" +
+        ".tooltipTitle}}" class='tabs-menu__link_{{tab.iconClass}}')
+          span.tabs-menu__text {{tab.title}}
+
+    .right-panel__divider
+
+    ul.tabs-menu
+      li.tabs-menu__item
+        span.tabs-menu__link.knowledge-base
+          span.tabs-menu__text Knowledge base
+
+      li.tabs-menu__item
+        span.tabs-menu__link.settings
+          span.tabs-menu__text Settings
+
+
+  .side-menu__footer
+    ul.tabs-menu
+      li.tabs-menu__item
+        span.tabs-menu__link.report
+          span.tabs-menu__text Report a data issue
+
+      li.tabs-menu__item
+        span.tabs-menu__link.bug
+          span.tabs-menu__text Report a bug
+
+      li.tabs-menu__item
+        span.tabs-menu__link.support
+          span.tabs-menu__text Speak a human
+
+      li.tabs-menu__item(ng-click="togglePanel()")
+        span.tabs-menu__link.toggle
+          span.tabs-menu__text Toggle sidebar
+
+
+  //.right-panel__tabs
+    //  img(src="/img/logo_horizontal.svg" alt="Vibrant Logo222")/
+    //
+    //  ul.tabs-menu
+    //    li.tabs-menu__item(ng-repeat="tab in rightPanelTabs" ng-click="tab.cmd()" ng-class="{'active': tab.panel === panelUI .currentPanelOpen}")
+    //      span.badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
+    //
+    //      span.tabs-menu__link.tabs-menu__link_'{{tab.iconClass}}'(ng-class="{'highlighted': tab.highlighted}"
+    //      data-toggle="tooltip"
+    //        title="{{tab.tooltipTitle}}")
+    //        i(class='{{tab.iconClass}}')
+    //        br
+    //        h6 {{tab.title}}

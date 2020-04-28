@@ -34,6 +34,16 @@ angular.module('common')
             this.getSelectionInfo         = getSelectionInfo;
             this.setSelectionInfo         = setSelectionInfo;
             this.clearSelections          = clearSelections;
+            this.selectionActionByAttributes = selectionActionByAttributes;
+            this.unselectActionByAttributes = unselectActionByAttributes;
+            this.highlightAllSelected = highlightAllSelected;
+            this.clearSelectedNodes = clearSelectedNodes;
+            this.addNodesToSelected = addNodesToSelected;
+            this.addNodesToTempHighlightedNodes = addNodesToTempHighlightedNodes;
+            this.removeNodesFromTempHighlightedNodes = removeNodesFromTempHighlightedNodes;
+            this.selectionActionByAttribRange = selectionActionByAttribRange;
+            this.getHistogramRangeNodeIds = getHistogramRangeNodeIds;
+            this.getSelectedActionNodes = getSelectedActionNodes;
 
 
 
@@ -46,6 +56,9 @@ angular.module('common')
 
             var selectedNodesData = null;
             var selectionInfo = {};
+            var selectedActionNodes = [];
+            var histogramRanges = {};
+            var tempHighlightNodes = [];
 
 
             /*************************************
@@ -83,6 +96,7 @@ angular.module('common')
 
             function hoverNodesByAttribRange(attr, min, max) {
                 _hoverHelper(dataGraph.getNodesByAttribRange(attr, min, max));
+                // highlightAllSelected(true);
             }
 
             function hoverNodeIdList(nodeIds) {
@@ -93,6 +107,107 @@ angular.module('common')
                 _hoverHelper(nodeIds, 1);
             }
 
+            function getHistogramRangeNodeIds() {
+                var nodesIds = [];
+
+                _.forEach(histogramRanges, function (attrRange, attribute) {
+                    if (attrRange && attribute) {
+                        var selector = SelectorService.newSelector()
+                            .ofAttrRange(attribute, attrRange.min, attrRange.max);
+                        selector.selectfromDataGraph();
+                        var ids = selector.nodeIds;
+                        nodesIds = _.uniq(nodesIds.concat(ids));
+                    }
+                });
+
+                return _filterSubsettedNodeIds(nodesIds);
+            }
+
+            // Select action - START
+            function selectionActionByAttributes(attr, values, subsettedValues) {
+                if (!values || !values.length) {
+                    return;
+                }
+
+                subsettedValues = subsettedValues || [];
+
+                _.remove(values, function (value) {
+                   return subsettedValues.indexOf(value) > -1;
+                });
+
+                selectionInfo[attr] = selectionInfo[attr] || [];
+                selectionInfo[attr] = [...selectionInfo[attr], ...values];
+
+                selectionInfo[attr] = _.uniq(selectionInfo[attr]);
+
+                highlightAllSelected(true);
+            }
+
+            function unselectActionByAttributes(attr, values) {
+                _.remove(selectionInfo[attr], function (value) {
+                    return values.indexOf(value) > -1;
+                });
+
+                if (selectionInfo[attr] && !selectionInfo[attr].length) {
+                    delete selectionInfo[attr];
+                }
+
+                highlightAllSelected(true);
+            }
+
+            function selectionActionByAttribRange(attr, min, max) {
+                var selector = SelectorService.newSelector()
+                    .ofAttrRange(attr, min, max);
+
+                histogramRanges[attr] = {
+                    min: min,
+                    max: max
+                };
+
+                selector.selectfromDataGraph();
+                var ids = selector.nodeIds;
+                var filteredIds = _filterSubsettedNodeIds(ids);
+
+                _hoverHelper(filteredIds);
+
+                return filteredIds;
+            }
+
+            function highlightAllSelected(fivePct) {
+                graphHoverService.clearHovers(true);
+                var subsettedNodes = dataGraph.getAllNodes();
+                var nodes = [];
+
+                _.forEach(selectionInfo, function (attrValues, attribute) {
+                    if (attrValues && attrValues.length) {
+                        nodes = attrValues.length ? dataGraph.getNodesByAttributes(attribute, attrValues, fivePct, nodes.length ? nodes : (subsettedNodes || []), true) : [];                   
+                    }
+                });
+
+                var nodesIds = _.map(nodes, 'id');
+
+                _.forEach(histogramRanges, function (attrRange, attribute) {
+                    if (attrRange && attribute) {
+                        var selector = SelectorService.newSelector()
+                            .ofAttrRange(attribute, attrRange.min, attrRange.max);
+                        selector.selectfromDataGraph();
+                        var ids = selector.nodeIds;
+                        nodesIds = _.uniq(nodesIds.concat(ids));
+                    }
+                });
+
+                nodesIds = nodesIds.concat(_.map(selectedActionNodes, 'id'));
+
+                nodesIds = nodesIds.concat(_.map(tempHighlightNodes, 'id'));
+
+                _hoverHelper(nodesIds);
+            }
+
+            function getSelectedActionNodes() {
+                return selectedActionNodes;
+            }
+
+            // Select action - END
             function selectBySelector(selector, $event, raiseEvents) {
                 console.debug('select by Selector------------------------', selector);
                 _selectHelper(selector, raiseEvents, $event);
@@ -162,6 +277,13 @@ angular.module('common')
             }
 
 
+            function clearSelectedNodes() {
+                selectionInfo = {};
+                selectedActionNodes = [];
+                histogramRanges = {};
+            }
+
+
             // attrObj -> a node's Attr Obj
             // Note:- Function should loop over attrsObj's attrs instead of datagraph's attrs, since attributes
             //  with empty values are deleted during parsing for that node. But that feature exists right now
@@ -225,7 +347,25 @@ angular.module('common')
             }
 
             function clearSelections() {
+                graphSelectionService.clearSelections(true);
                 BreadCrumbService.newBreadCrumb(); // clear out the breadcrumbs
+            }
+
+            function addNodesToSelected(nodes) {
+                selectedActionNodes = selectedActionNodes.concat(_filterSubsettedNodes(nodes));
+                selectedActionNodes = _.uniq(selectedActionNodes, 'id');
+            }
+
+            function addNodesToTempHighlightedNodes(nodes) {
+                tempHighlightNodes = [];
+                tempHighlightNodes = tempHighlightNodes.concat(_filterSubsettedNodes(nodes));
+            }
+
+            function removeNodesFromTempHighlightedNodes(nodes) {
+                var nodeIds = _.map(nodes, 'id');
+                _.remove(tempHighlightNodes, function filterNodes(node) {
+                   return nodeIds.indexOf(node.id) > -1;
+                });
             }
 
 

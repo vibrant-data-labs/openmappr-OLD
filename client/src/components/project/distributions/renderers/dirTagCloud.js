@@ -130,6 +130,7 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.changed, function applyBgToSelectedFilters() {
+                    draw();
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
                         if (cat.isChecked) {
                             cat.isSubsetted = cat.isChecked;
@@ -193,10 +194,7 @@ angular.module('common')
                 scope.outCat = function(catData, event) {
                     $timeout(function() {
                         scope.openTooltip = false;
-
-                        if (!catData.isChecked) {
-                            renderCtrl.unhoverNodesByAttrib(attrId, catData.id, event);
-                        }
+                        hoverSelectedNodes(event);
                     }, 100);
                 };
 
@@ -214,11 +212,11 @@ angular.module('common')
                 scope.onCatClick = function(catData, event) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    if (catData.isChecked) {
-                        hoverSelectedNodes(event);
-                    } else {
-                        unhoverSelectedNodes(event);
-                    }
+                    // if (catData.isChecked) {
+                    hoverSelectedNodes(event);
+                    // } else {
+                    //     unhoverSelectedNodes(event);
+                    // }
                 };
 
                 scope.onFilterUpdate = function() {
@@ -232,13 +230,15 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
+                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 
-                function unhoverSelectedNodes(event) {
-                    var selectedValues = getSelectedValues() || [];
-                    renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
-                }
+                // function unhoverSelectedNodes(event) {
+                //     var selectedValues = getSelectedValues() || [];
+                //     console.log('dirTagCloud unhoverSelectedNodes', selectedValues);
+                //     renderCtrl.unhoverNodesByAttributes(attrId, selectedValues, event);
+                // }
 
                 /// filter stuff
                 function setupFilterClasses (catListData, isfilterDisabled) {
@@ -336,7 +336,8 @@ angular.module('common')
                             'cat-checkbox-on' : inFilteringMode && isChecked,
                             'cat-checkbox-off' : inFilteringMode && !isChecked,
                             'cat-checkbox-disable' : false
-                        }
+                        },
+                        inSelectionMode: false
                     };
                 });
 
@@ -355,6 +356,7 @@ angular.module('common')
                 var currSelFreqs = getCurrSelFreqsObj(currentSel, attrInfo.attr.id);
 
                 var inFilteringMode = filteringCatVals.length > 0;
+                var inSelectionMode = !_.isEmpty(currentSel);
 
                 _.each(catListData.data, function(catData) {
                     var selTagFreq = currSelFreqs[catData.id] || 0;
@@ -362,11 +364,13 @@ angular.module('common')
                     catData.colorStr = valColorMap[catData.id] && _.isArray(valColorMap[catData.id]) ? valColorMap[catData.id][0] : defColorStr;
                     catData.selPercent = selTagFreq > 0 ? Math.max(0.1, selTagFreq / totalNodes * 100) : 0;
                     catData.isCurrent = selTagFreq > 0;
+                    catData.selTagFreq = selTagFreq;
                 });
 
                 catListData.highlightedCats = _.map(_.filter(catListData.data, function(c) {return c.selPercent > 0;}), 'id');
                 catListData.currSelFreqs = currSelFreqs;
                 catListData.inFilteringMode = inFilteringMode;
+                catListData.inSelectionMode = inSelectionMode;
             }
 
             // tag importance as a function of tag frequency in local selection and global tag frequency

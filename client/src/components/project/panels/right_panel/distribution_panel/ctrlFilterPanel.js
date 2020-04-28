@@ -105,7 +105,6 @@ angular.module('common')
                     .flatten()
                     .value();
                 updateNodeColorStr();
-                console.log(7773)
                 // Set 'sortType' for tag attrs
                 setSortForTags($scope.nodeDistrAttrs, !_.isEmpty(newSelection));
                 $scope.currentSelection = FilterPanelService.getCurrentSelection();
@@ -148,7 +147,6 @@ angular.module('common')
                 FilterPanelService.updateInitialSelection(newSelection);
                 $scope.currentSelection = FilterPanelService.getCurrentSelection();
                 updateNodeColorStr();
-                console.log(7772)
                 if(_.isArray(nodes) && nodes.length === 1) {
                     _.each($scope.nodeDistrAttrs, function (attr) {
                         attr.disableFilter = true;
@@ -177,9 +175,9 @@ angular.module('common')
                 FilterPanelService.setFilterMapAfterSubset(FilterPanelService.getAttrFilterConfigMap());
                 console.log('onFilterSubset getAttrFilterConfigMap', FilterPanelService.getAttrFilterConfigMap());
                 var undoRedoResultObject = FilterPanelService.appendToSelectionHistory(filterGetLastState);
-                
+
                 console.log('onFilterSubset undoRedoResultObject', undoRedoResultObject);
-                
+
                 $scope.$emit(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, undoRedoResultObject);
             }
 
@@ -268,7 +266,6 @@ angular.module('common')
             }
 
             function updateSelAndGraph(ev, useFilterState) {
-                console.log(7771)
                 var currentSelection = FilterPanelService.getCurrentSelection(),
                     renderer = renderGraphfactory.getRenderer();
 

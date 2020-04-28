@@ -134,6 +134,10 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
                 updateSelCount();
             });
+            
+            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+                updateSelCount();
+            });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                 updateSelCount();

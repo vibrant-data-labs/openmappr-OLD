@@ -37,6 +37,10 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.togglePanel = function() {
+                document.body.classList.toggle('side-menu-compressed')
+            }
+
             $scope.rightPanelTabs = [
                 {
                     iconClass: 'fa fa-fw fa-2x fa-info-circle',
@@ -60,7 +64,7 @@ angular.module('common')
                                 );
                                 ngIntroService.start();
                             }, 100);
-                    }
+                    },
                 },
                 {
                     iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
@@ -152,6 +156,10 @@ angular.module('common')
                 updateSelCount();
             });
 
+            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+                updateSelCount();
+            });
+
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                 updateSelCount();
             });
@@ -168,7 +176,7 @@ angular.module('common')
              ********* Core Functions *************
              **************************************/
 
-            function updateSelCount() {
+            function updateSelCount() {                
                 $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
             }
 

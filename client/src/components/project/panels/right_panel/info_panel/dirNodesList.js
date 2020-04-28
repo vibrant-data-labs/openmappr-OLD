@@ -70,7 +70,11 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             if(scope.panelMode == 'selection') {
                 parCtrl.openNodeBrowserInSelMode();
             }
-            selectNodes([nodeId], $event);
+            parCtrl.replaceSelection();
+            graphHoverService.clearHovers($event);
+            graphSelectionService.selectByIds([nodeId] ,1);
+            FilterPanelService.rememberSelection(false);
+
         };
 
         scope.hoverNode = function(nodeId) {
@@ -132,17 +136,22 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         function selectNodes(nodeIds, ev) {
             parCtrl.replaceSelection();
             graphHoverService.clearHovers(ev);
-            graphSelectionService.selectByIds(nodeIds ,1);
+
+            scope.selectedGroup = nodeIds;
+            graphHoverService.hoverByIds(nodeIds, 0, false);
+
+
             FilterPanelService.rememberSelection(false);
         }
 
         function hoverNodes(nodeIds) {
             parCtrl.persistSelection();
-            graphHoverService.hoverByIds(nodeIds, 1, false);
+            graphHoverService.hoverByIds(nodeIds, 0, false);
         }
 
         function unHoverNodes(nodeIds) {
             graphHoverService.unhoverByIds(nodeIds);
+            if (scope.selectedGroup != undefined) hoverNodes(scope.selectedGroup);
         }
     }
 
