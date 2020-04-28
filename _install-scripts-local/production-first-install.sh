@@ -48,9 +48,11 @@ sudo touch /etc/nginx/snippets/ssl-params.conf
 # Create Params file with
 # Create directory, -p 
 sudo mkdir -p /etc/nginx/snippets/
-sudo touch /etc/nginx/snippets/ssl-params.conf
+### CHANGE --- No ned it since we will create with with 'cat 'EOF' later
+#sudo touch /etc/nginx/snippets/ssl-params.conf
 # Add in Parameters
-cat <<EOT >> /etc/nginx/snippets/ssl-params.conf
+### CHANGE --- made >> to > since will be new file
+cat <<EOT > /etc/nginx/snippets/ssl-params.conf
 ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers on;
 ssl_dhparam /etc/nginx/dhparam.pem;
@@ -75,7 +77,8 @@ sudo mkdir -p /etc/nginx/sites-available/
 # Prompt for Domain
 read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
 # check the domain is valid!
-PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
+### CHANGE #### to be remooved ### PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
+PATTERN="^((\*)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((\*\.)?([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,63}?))$"
 if [[ "$nginx_conf_domain" =~ $PATTERN ]]; then
 	nginx_conf_domain=`echo $nginx_conf_domain | tr '[A-Z]' '[a-z]'`
 ### CHANGE --- I've edited the EOT as EOF as more common and also templated it as @@@nginx_conf_domain@@@ and added sed to replace the nginx_conf_domain with the value it should be
@@ -94,7 +97,8 @@ listen 443 ssl http2;
 listen  [::]:443 ssl http2;
 server_name @@@nginx_conf_domain@@@;
 # ssl configuration
-ssl on;
+### CHANGE --- remove "ssl on;"
+#ssl on;
 ssl_certificate /etc/nginx/nginx-selfsigned.crt; 
 ssl_certificate_key /etc/nginx/nginx-selfsigned.key;
 include snippets/ssl-params.conf;
