@@ -12,10 +12,11 @@
     font-weight: 300;
     overflow: hidden;
     position: absolute;
-    left: 70px;
+    left: 192px;
     top: 0;
     width: 320px;
     z-index: 999;
+    transition: left .1s;
 
     .tab-content {
         @include flex-vert-container;
@@ -724,6 +725,11 @@
         .panel-scroll--bottom {
           z-index: 0;
         }
+    }
+
+    &__divider {
+        border-top: 1px solid #EBEFF2;
+        margin-top: 10px;
     }
 }
 

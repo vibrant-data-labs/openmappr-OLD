@@ -2,11 +2,11 @@
 	.page-signin.width-100(data-ng-controller='LoginCtrl')
 		.modal-dialog
 			.panel.panel-profile
-				.panel-heading(style="padding:0;text-align: center;")
-					a.profile(href="/")
-						img(class="logo" alt="Vibrant Data Logo" src="img/vdat_logonew.png" width="390")
+				.panel-heading
+					a.logo.logo_type_sign-in(href="/")
+						img.logo__image(alt="Vibrant Data Logo" src="img/logo.svg" width="98")/
 					.clearfix
-					h4.pull-left(style="padding-left: 92px;") {{ui.showPswdResetPanel && 'Reset Password' || 'Sign in to Openmappr'}}
+					h4.page-signin__title {{ui.showPswdResetPanel && 'Reset Password' || 'Sign in to Openmappr'}}
 				.panel-body
 					//- Hiding from UI to restrict free logins
 					//- section.text-center
@@ -20,36 +20,44 @@
 						form.form-horizontal(ng-if="!ui.showPswdResetPanel")
 							.form-group
 								.col-sm-12
-									.input-group.input-group-lg
-										span.input-group-addon
-											span.fa.fa-envelope-o.fa-fw
-										input.form-control(ng-model='credentials.email', type='email', placeholder='email', name="email" dir-select-all)
+									.form-field
+										.form-field__content
+											input.form-field__input(ng-model='credentials.email', type='email', placeholder='email', name="email" dir-select-all)/
+
 							.form-group
 								.col-sm-12
-									.input-group.input-group-lg
-										span.input-group-addon
-											span.fa.fa-key.fa-fw
-										input.form-control(ng-model='credentials.password', type='password', placeholder='password', name="password" dir-select-all)
+									.form-field
+										.form-field__content
+											input.form-field__input(ng-model='credentials.password', type='password', placeholder='password', name="password" dir-select-all)/
+
 							h5.text-danger.text-center {{message}}
 							p.text-center.text-muted.text-small
-							.divider
-							.text-center
-							input.power-btn.width-100.big(type="submit" ng-click='auth.login()', value="Sign in")
+
+							//input.power-btn.width-100.big(type="submit" ng-click='auth.login()', value="Sign in")
+
+							button.button.button_type_primary.button_wide(type="submit", ng-click='auth.login()')
+								span.button__text Sign in
+
 							.divider
 							.row
 								.col-xs-12
-									h6.text-center
-										button.power-btn.secondary-btn.error-btn(ng-click="ui.showPswdResetPanel = true;") Forgot Password?
+									button.button.button_type_ghost.button_wide(ng-click="ui.showPswdResetPanel = true;")
+										span.button__text Forgot Password?
+
+									//button.power-btn.secondary-btn.error-btn(ng-click="ui.showPswdResetPanel = true;") Forgot Password?
+
 						form.form-horizontal(ng-if="ui.showPswdResetPanel")
 							.form-group
 								.col-sm-12
-									.input-group.input-group-lg
-										span.input-group-addon
-											span.fa.fa-envelope-o.fa-fw
-										input.form-control(ng-model='reset.email', type='email', placeholder='email', name="email" dir-select-all)
+									.form-field
+										.form-field__content
+											input.form-field__input(ng-model='reset.email', type='email', placeholder='email', name="email" dir-select-all)/
+
 							p.text-center.text-muted.text-small
 							.divider
-							input.power-btn.width-100.big(type="submit" ng-click='auth.resetPassword()', value="Reset Password")
+							button.button.button_type_primary.button_wide(type="submit" ng-click='auth.resetPassword()')
+								span.button__text Reset Password
+
 							h5.text-danger.text-center {{message}}
 					//- Hiding from UI to restrict free signups
 					//- section
@@ -57,5 +65,5 @@
 					//- 	p.text-center.text-muted.text-small
 					//- 		| Dont have an account?
 					//- 		a(href='#', ng-click='auth.regViaLocal()') Sign up!
-			.text-center.text-small
+			.text-center.text-small.modal-dialog__note
 				p Vibrant Data, Inc. All Rights Reserved.

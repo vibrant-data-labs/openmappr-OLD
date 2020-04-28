@@ -7,7 +7,7 @@
     background-size: cover;
     background-position: center;
     bottom: 0;
-    left: 70px;
+    left: 192px;
     position: fixed;
     right: 0;
     top: 0;
@@ -15,6 +15,7 @@
     z-index: 1001;
     color: $text-color;
     pointer-events: auto;
+    transition: left .2s;
 
     .hero {
         background-color: rgba(1, 31, 42, 1);

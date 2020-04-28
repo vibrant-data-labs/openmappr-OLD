@@ -37,6 +37,10 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.togglePanel = function() {
+                document.body.classList.toggle('side-menu-compressed')
+            }
+
             $scope.rightPanelTabs = [
                 {
                     iconClass: 'fa fa-fw fa-2x fa-info-circle',
@@ -60,7 +64,7 @@ angular.module('common')
                                 );
                                 ngIntroService.start();
                             }, 100);
-                    }
+                    },
                 },
                 {
                     iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
