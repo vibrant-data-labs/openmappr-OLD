@@ -1,7 +1,7 @@
 @import 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap';
 
 body {
-  font-family: $fontPoppins;
+  font-family: 'Poppins', sans-serif;
 }
 
 .page-signin {
@@ -13,7 +13,7 @@ body {
     margin: 30px 0 16px;
     font-size: 13px;
     line-height: 20px;
-    font-family: $fontPoppins;
+    font-family: 'Poppins', sans-serif;
   }
 
   .modal-dialog {
