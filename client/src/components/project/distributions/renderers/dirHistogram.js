@@ -689,19 +689,12 @@ angular.module('common')
                     resetAllBarsColor(bar.selectAll('rect').filter(function () {
                         return d3.select(this).attr('data-selection') != 'true';
                     }), opts);
-                    if ((targetElem.attr('data-selection') == 'true' && targetElem.attr('height') > 0)
-                        || (targetElem.attr('data-filt-selection') == 'true' && targetElem.attr('height') > 0)
-                    ) {
-                        selectService.selectNodes({ ids: histoData.selectionCountsList[i].nodeIds });
+                    setColor.call(this, opts.clickColor);
+                    if (isOrdinal) {
+                        selectService.selectNodes({ attr: attrInfo.attr.id, value: segment.label });
                     }
                     else {
-                        setColor.call(this, opts.clickColor);
-                        if (isOrdinal) {
-                            selectService.selectNodes({ attr: attrInfo.attr.id, value: segment.label });
-                        }
-                        else {
-                            selectService.selectNodes({ attr: attrInfo.attr.id, min: segment.x, max: _.last(segment) });
-                        }
+                        selectService.selectNodes({ attr: attrInfo.attr.id, min: segment.x, max: _.last(segment) });
                     }
 
                 }

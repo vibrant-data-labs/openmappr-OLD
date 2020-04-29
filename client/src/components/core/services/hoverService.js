@@ -20,8 +20,10 @@ angular.module('common')
             **************************************/
             this.hoveredNodes = [];
             var findNodeWithId;
+
             // reset to selected values only
             $rootScope.$on(BROADCAST_MESSAGES.hss.select, unhover.bind(this));
+
             /*************************************
             ********* Core Functions *************
             **************************************/
@@ -58,8 +60,6 @@ angular.module('common')
                     });
                 }
 
-                // when user hovers on the single node which is not in the subset - do nothing
-                if (currentSubset.length > 0 && this.hoveredNodes.length == 0) return;
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
             }
 
@@ -78,12 +78,12 @@ angular.module('common')
 
             function createMultipleFilter(filters, attrId, vals) {
                 var filterConfig = filters[attrId];
-                filterConfig.isEnabled = true;
                 var newVal = _.isArray(vals) ? vals : [vals];
                 var filterVal = _.filter(_.flatten([filterConfig.state.selectedVals, _.clone(newVal)]), _.identity);
                 filterConfig.state.selectedVals = filterVal;
 
                 filterConfig.selector = SelectorService.newSelector().ofMultipleAttrValues(attrId, filterVal, true);
+                filterConfig.isEnabled = filterVal && filterVal.length > 0;
 
                 return filterConfig;
             }
@@ -120,7 +120,7 @@ angular.module('common')
                 if (!_.isArray(nodeIds) || !_.isObject(nodeIds))
                     nodeIds = [nodeIds];
                 if (!rd) {
-                    console.warn('[graphHoverService] hoverByIds called before dataGraph has been loaded!');
+                    console.warn('[hoverService] hoverByIds called before dataGraph has been loaded!');
                 } else {
                     _.each(nodeIds, function (n) {
                         if (!rd.hasNode(n))
@@ -211,19 +211,6 @@ angular.module('common')
 
                 var nodeId = window.mappr.utils.nodeId;
 
-                if (withNeighbors) {
-
-                }
-                // _.forEach(renderGraphfactory.sig().graph[neighbourFn](n.id), function addTargetNode(edgeInfo, targetId) {
-                //     var node = graph.getNodeWithId(targetId);
-                //     node.state = inputMap.nodeNeighbour;
-                //     node.inHoverNeighbor = true;
-                //     hoveredNodeNeighbors[targetId] = node;
-                //     _.forEach(edgeInfo, function addConnEdge(edge, edgeId) {
-                //         edges[edgeId] = edge;
-                //     });
-                // });
-
                 contexts.hovers.canvas.width = contexts.hovers.canvas.width;    // clear canvas
                 sigRender.greyout(_.keys(nodes).length > 1, 'hover');    // only grey out if there are neighbors to show
                 if (settings('enableHovering')) {
@@ -253,32 +240,13 @@ angular.module('common')
                             nodeRenderer.d3NodeHighlightCreate(node, d3.select(this), settings);
                             nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
                         });
-                    // sort nodes by size and by selection/hover state
-                    // mainSel.sort(function (n1, n2) {
-                    //     var order1 = selectOrder(n1), order2 = selectOrder(n2);
-                    //     if (order1 == order2) {
-                    //         // sort by size
-                    //         return n2.idx - n1.idx;
-                    //     } else {
-                    //         return order1 - order2;
-                    //     }
-                    // });
-                    // render
-                    // mainSel
-                    //     .each(function hnr(node) {
-                    //         nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
-                    //     });
 
-                    // Render node labels in hover state. Remove aggregations
-                    // if (renderLabel) {
-                    //     // defined in hover service
                     sigma.d3.labels.hover(
                         _.reject(nodes, 'isAggregation'),
                         [],
                         sigRender.d3Sel.labels(),
                         settings
                     );
-                    // }
                 }
             }
 
@@ -289,8 +257,9 @@ angular.module('common')
             function sigBinds(sig) {
                 console.log('Binding handlers');
                 var renderer = sig.renderers.graph;
+                var _this = this;
                 renderer.bind('render', function () {
-                    draw(false);
+                    _this.unhover();
                 });
 
                 // The function to find out which node to hover for the given id. If the node is under a cluster,

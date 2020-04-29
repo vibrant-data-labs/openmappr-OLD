@@ -127,7 +127,7 @@ angular.module('common')
 
                 scope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
                     scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
-                        cat.isChecked = selectService.hasAttrId(scope.attrToRender.id, cat.id);
+                        cat.isChecked = cat.isSubsetted || !cat.isSubsetted && selectService.hasAttrId(scope.attrToRender.id, cat.id);
 
                         return cat;
                     });
@@ -140,8 +140,15 @@ angular.module('common')
                     }));
                     scope.catListData = genTagListData(data.nodes,
                         AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id), filteringCatVals, FilterPanelService.getColorString(), genValColorMap(scope.attrToRender.id, data.nodes), sortType, sortOrder);
-
                     filterTags(data.nodes, scope.catListData);
+
+                    scope.catListData.data = scope.catListData.data.map(function mapData(cat) {
+                        cat.isSubsetted = cat.selPercentOfSel == 100;
+                        cat.isChecked = cat.isSubsetted;
+
+                        return cat;
+                    });
+                    setupFilterClasses(scope.catListData, false);
                     scope.selNodesCount = data.nodes.length;
 
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
@@ -211,14 +218,12 @@ angular.module('common')
 
                 // mousr stuff
                 scope.onCatClick = function (catData, event) {
-                    catData.isChecked = !catData.isChecked;
-                    selectFilter();
+                    if (catData.isSubsetted) return;
+
+                    //catData.isChecked = !catData.isChecked;
+                    selectFilter(catData);
 
                     hoverService.unhover();
-                };
-
-                scope.onFilterUpdate = function () {
-                    selectFilter();
                 };
 
                 function getSelectedValues() {
@@ -236,34 +241,17 @@ angular.module('common')
                 function setupFilterClasses(catListData, isfilterDisabled) {
                     var inFilteringMode = filteringCatVals.length > 0;
                     _.each(catListData.data, function (catData) {
-                        catData.checkboxClass['cat-checkbox-on'] = !isfilterDisabled && inFilteringMode && catData.isChecked;
-                        catData.checkboxClass['cat-checkbox-off'] = !isfilterDisabled && inFilteringMode && !catData.isChecked;
-                        catData.checkboxClass['cat-checkbox-disable'] = isfilterDisabled;
+                        catData.checkboxClass['cat-checkbox-on'] = !catData.isSubsetted;
+                        catData.checkboxClass['cat-checkbox-off'] = catData.isSubsetted;
+                        catData.checkboxClass['cat-checkbox-disable'] = catData.isSubsetted;
                     });
                 }
 
-                /// The filter is just selected, its applied after the user presses the Subset button
-                function selectFilter() {
-                    var filterConfig = selectService.getFilterForId(attrId);
-                    filteringCatVals = _.map(_.filter(scope.catListData.data, 'isChecked'), 'id');
-
-                    filterConfig.isEnabled = filteringCatVals.length > 0 && scope.showFilter;
-                    filterConfig.state.selectedVals = _.clone(filteringCatVals);
-                    filterConfig.selector = filterConfig.isEnabled ? genSelector(filteringCatVals) : null;
-
-                    selectService.selectNodes({ filters: true });
-                }
-
-                function genSelector(selectedVals) {
-                    var selector = SelectorService.newSelector();
-                    selector.ofMultipleAttrValues(attrId, selectedVals, true);
-                    return selector;
+                /// Select nodes by filter
+                function selectFilter(catData) {
+                    selectService.selectNodes({ attr: attrId, value: catData.id });
                 }
             }
-
-
-
-
 
 
             /*************************************
@@ -291,7 +279,7 @@ angular.module('common')
 
                 var inFilteringMode = filteringCatVals.length > 0;
                 var highlightedCats = [];
-                
+
                 var catData = _.map(attrInfo.values, function genCatData(catVal) {
                     var globalFreq = attrInfo.valuesCount[catVal],
                         selTagFreq = currSelFreqs[catVal] || 0;
@@ -324,7 +312,6 @@ angular.module('common')
                         isChecked: isChecked,
                         isCurrent: selTagFreq > 0,
                         importance: importance,
-                        isSubsetted: isChecked,
                         checkboxClass: {
                             'cat-checkbox-on': inFilteringMode && isChecked,
                             'cat-checkbox-off': inFilteringMode && !isChecked,
@@ -375,7 +362,7 @@ angular.module('common')
                 return _.reduce(currentSel, function (acc, node) {
                     var val = node.attr[attr.id];
                     if (val != null) {
-                        if( _.isArray(val)) {
+                        if (_.isArray(val)) {
                             for (var i = val.length - 1; i >= 0; i--) {
                                 acc[val[i]] = acc[val[i]] + 1 || 1;
                             }
