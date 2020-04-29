@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
-function(BROADCAST_MESSAGES, hoverService, graphSelectionService, FilterPanelService, layoutService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'selectService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -67,14 +67,8 @@ function(BROADCAST_MESSAGES, hoverService, graphSelectionService, FilterPanelSer
         };
 
         scope.selectNode = function(nodeId, $event) {
-            if(scope.panelMode == 'selection') {
-                parCtrl.openNodeBrowserInSelMode();
-            }
-            parCtrl.replaceSelection();
             hoverService.unhover();
-            graphSelectionService.selectByIds([nodeId] ,1);
-            FilterPanelService.rememberSelection(false);
-
+            selectService.selectNodes({ ids: [nodeId]});
         };
 
         scope.hoverNode = function(nodeId) {
@@ -86,7 +80,7 @@ function(BROADCAST_MESSAGES, hoverService, graphSelectionService, FilterPanelSer
         };
 
         scope.selectGroup = function(group) {
-            selectNodes(_.map(group.nodes, 'id'));
+            selectService.selectNodes({ attr: group.attr, value: group.name});
         };
 
         scope.hoverGroup = function(group) {
@@ -131,17 +125,6 @@ function(BROADCAST_MESSAGES, hoverService, graphSelectionService, FilterPanelSer
 
         function getFunctionColor(cluster) {
             return d3.rgb(scope.layout.scalers.color(cluster)).toString();
-        }
-
-        function selectNodes(nodeIds, ev) {
-            parCtrl.replaceSelection();
-            hoverService.unhover()
-
-            scope.selectedGroup = nodeIds;
-            hoverService.hoverNodes({ ids: nodeIds });
-
-
-            FilterPanelService.rememberSelection(false);
         }
 
         function hoverNodes(nodeIds) {

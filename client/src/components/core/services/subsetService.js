@@ -55,7 +55,7 @@ angular.module('common')
 
             function unsubset() {
                 currentSubsetIndex = -1;
-                this.subsetHistory.splice(0, this.subsetHistory.length);
+                this.subsetHistory = [];
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.subset.changed, {
                     subsetCount: 0,

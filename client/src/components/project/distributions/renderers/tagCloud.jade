@@ -24,7 +24,7 @@
 		//- 	.cat-selfreq-bar.transition(style="width:{{catData.selPercent}}%; background-color:{{catData.colorStr}}")
 		.vert-align.cat-text-container.tag-checkbox-container(ng-click="onCatClick(catData, $event);")
 			.tag-checkbox(ng-if="showFilter" ng-class="{{catData.checkboxClass}}")
-				input(id="checkbox-{{$index}}-{{attrId}}" type="checkbox", ng-model="catData.isChecked", ng-disabled="catData.checkboxClass == 'cat-checkbox-disable'")
+				input(id="checkbox-{{$index}}-{{attrId}}" type="checkbox", ng-model="catData.isChecked", ng-disabled="true")
 				label(for="checkbox-{{$index}}-{{attrId}}")
 			div
 				.cat-text.h6.no-margin.truncate {{::catData.text}}

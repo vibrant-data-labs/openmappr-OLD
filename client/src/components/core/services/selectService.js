@@ -2,8 +2,8 @@
 * Handles Graph Selection ops
 */
 angular.module('common')
-    .service('selectService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'SelectorService', 'subsetService',
-        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, SelectorService, subsetService) {
+    .service('selectService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'SelectorService', 'subsetService', 'graphSelectionService',
+        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, SelectorService, subsetService, graphSelectionService) {
 
             "use strict";
 
@@ -134,7 +134,7 @@ angular.module('common')
                 var newVal = _.isArray(vals) ? vals : [vals];
                 var filterVal;
                 if (filterConfig.state.selectedVals && filterConfig.state.selectedVals.indexOf(vals) > -1) {
-                    filterVal = _.filter(_.filter(filterConfig.state.selectedVals, function(v) { return newVal.indexOf(v) == -1 }), _.identity);
+                    filterVal = _.filter(_.filter(filterConfig.state.selectedVals, function (v) { return newVal.indexOf(v) == -1 }), _.identity);
                 }
                 else {
                     filterVal = _.filter(_.flatten([filterConfig.state.selectedVals, _.clone(newVal)]), _.identity);
@@ -149,17 +149,26 @@ angular.module('common')
 
             function createMinMaxFilter(attrId, min, max) {
                 var filterConfig = this.getFilterForId(attrId);
-                filterConfig.isEnabled = true;
-                filterConfig.selector = SelectorService.newSelector().ofAttrRange(attrId, min, max);
+                if (!filterConfig.isEnabled) {
+                    filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min, max }]);
+                } else {
+                    var item = _.find(filterConfig.selector.attrRanges, function(r) { return r.min == min && r.max == max});
+                    if (item) {
+                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function(r) {
+                            return r.min != min || r.max != max; 
+                         });
+                    } else {
+                        filterConfig.selector.attrRanges.push({ min, max});
+                    }
+                }
+
+                filterConfig.isEnabled = filterConfig.selector.attrRanges.length > 0;
 
                 return filterConfig;
             }
 
             function unselect() {
-                if (!this.selectedNodes || this.selectedNodes.length == 0) return;
-
                 this.attrs = null;
-                this.filters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');;
 
                 var currentSubset = subsetService.currentSubset();
                 this.selectedNodes = currentSubset;

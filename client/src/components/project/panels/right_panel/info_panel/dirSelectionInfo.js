@@ -111,7 +111,7 @@ angular.module('common')
 
                 $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                     if( data.nodes.length > 0 ) {
-                        $scope.selInfo.refreshSelInfo = false;
+                        refresh(_.get(data, 'nodes', []));
                     }
                     $scope.selInfo.interactionType = 'select';
                     if($scope.selInfo.selectionBrowsing) {
@@ -123,7 +123,10 @@ angular.module('common')
                         initialise();
                         return;
                     }
-                    refresh(_.get(data, 'nodes', []));
+
+                    if (!data.nodes.length) {
+                        initialise();
+                    }
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
@@ -132,11 +135,6 @@ angular.module('common')
                     // CHECKPOINT
                     var selNodes = dataGraph.getAllNodes();
                     refresh(selNodes);
-                });
-
-                $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function(e, data) {
-                    $scope.selInfo.interactionType = 'select';
-                    refresh(_.get(data, 'nodes', []));
                 });
 
                 $rootScope.$on(BROADCAST_MESSAGES.fp.filter.reset, function () {
@@ -203,6 +201,7 @@ angular.module('common')
                     _.each(groupsIdx, function(groupNodes, groupName) {
                         var group = {
                             name: groupName,
+                            attr: nodeColorAttr,
                             nodes: _.sortBy(groupNodes, 'attr.ClusterArchetype'),
                             colorStr: groupNodes[0].colorStr,
                             nodesCount: groupNodes.length
