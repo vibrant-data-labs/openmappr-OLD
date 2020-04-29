@@ -22,7 +22,7 @@ angular.module('common')
             var findNodeWithId;
 
             // reset to selected values only
-            $rootScope.$on(BROADCAST_MESSAGES.hss.select, unhover.bind(this));
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, unhover.bind(this, true));
 
             /*************************************
             ********* Core Functions *************
@@ -78,6 +78,7 @@ angular.module('common')
 
             function createMultipleFilter(filters, attrId, vals) {
                 var filterConfig = filters[attrId];
+                if (!filterConfig) return;
                 var newVal = _.isArray(vals) ? vals : [vals];
                 var filterVal = _.filter(_.flatten([filterConfig.state.selectedVals, _.clone(newVal)]), _.identity);
                 filterConfig.state.selectedVals = filterVal;
@@ -90,18 +91,30 @@ angular.module('common')
 
             function createMinMaxFilter(filters, attrId, min, max) {
                 var filterConfig = filters[attrId];
-                filterConfig.isEnabled = true;
-                filterConfig.selector = SelectorService.newSelector().ofAttrRange(attrId, min, max);
+                if (!filterConfig) return;
+                
+                if (!filterConfig.isEnabled) {
+                    filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min: min, max: max }]);
+                } else {
+                    var item = _.find(filterConfig.selector.attrRanges, function(r) { return r.min == min && r.max == max});
+                    if (item) {
+                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function(r) {
+                            return r.min != min || r.max != max; 
+                         });
+                    } else {
+                        filterConfig.selector.attrRanges.push({ min: min, max: max });
+                    }
+                }
 
+                filterConfig.isEnabled = filterConfig.selector.attrRanges.length > 0;
                 return filterConfig;
             }
 
-            function unhover(degree) {
-                degree = degree || 0;
+            function unhover(forceRender) {
                 this.hoveredNodes.splice(0, this.hoveredNodes.length);
 
                 this.hoveredNodes = _.clone(selectService.selectedNodes || []);
-                draw(this.hoveredNodes);
+                draw(this.hoveredNodes, false, forceRender);
             }
 
             function _hoverHelper(ids, degree, withNeighbors) {
@@ -157,15 +170,20 @@ angular.module('common')
                 draw(nodes, event.data.withNeighbors);
             }
 
-            function draw(nodeIds, withNeighbors) {
+            function draw(nodeIds, withNeighbors, forceRender) {
+                var subsetNodes = subsetService.subsetNodes;
                 var sigRender = renderGraphfactory.getRenderer();
                 var contexts = sigRender.contexts;
                 var d3sel = sigRender.d3Sel.hovers();
                 var settings = sigRender.settings.embedObjects({
                     prefix: sigRender.options.prefix,
-                    inSelMode: false, //graphSelectionService.isAnySelected(),
+                    inSelMode: false,
                     inHoverMode: true
                 });
+
+                if (nodeIds.length == 0 && subsetNodes.length == 0) {
+                    sigRender.greyout(false);
+                }
 
                 if (nodeIds.length == 1) {
                     withNeighbors = true;
@@ -212,7 +230,7 @@ angular.module('common')
                 var nodeId = window.mappr.utils.nodeId;
 
                 contexts.hovers.canvas.width = contexts.hovers.canvas.width;    // clear canvas
-                sigRender.greyout(_.keys(nodes).length > 1, 'hover');    // only grey out if there are neighbors to show
+                sigRender.greyout(_.keys(nodes).length > 1, subsetNodes.length > 0 ? 'select' : 'hover');    // only grey out if there are neighbors to show
                 if (settings('enableHovering')) {
                     // var prefix = settings('prefix');
 
@@ -241,6 +259,7 @@ angular.module('common')
                             nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
                         });
 
+                    //sigRender.greyout(_.keys(nodes).length > 1, 'hover');
                     sigma.d3.labels.hover(
                         _.reject(nodes, 'isAggregation'),
                         [],

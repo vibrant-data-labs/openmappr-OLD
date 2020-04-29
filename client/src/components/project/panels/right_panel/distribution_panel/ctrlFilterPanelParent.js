@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('FilterPanelParentCtrl', ['$scope', 'FilterPanelService', 'AttrInfoService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
-        function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES, selectService, subsetService) {
+    .controller('FilterPanelParentCtrl', ['$scope', 'FilterPanelService', 'AttrInfoService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService',
+        function($scope, FilterPanelService, AttrInfoService, BROADCAST_MESSAGES, hoverService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -88,6 +88,10 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function handleReset() {
                 $scope.enableUndo = false;
                 $scope.enableRedo = false;
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(e, data) {
+                hoverService.unhover();
             });
 
             /*************************************

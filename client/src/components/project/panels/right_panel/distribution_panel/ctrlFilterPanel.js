@@ -48,8 +48,8 @@ angular.module('common')
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0);
+                $scope.ui.subsetEnabled = data.selectionCount > 0;
             });
-
 
             /*************************************
     ********* Initialise *****************
@@ -136,7 +136,7 @@ angular.module('common')
                 var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function() {
                     x();
                     if(data.snapshot && data.snapshot.processSelection) {
-                        resetInitialSelection(graphSelectionService.getSelectedNodes());
+                        resetInitialSelection(selectService.getSelectedNodes());
                     }
                     else {
                         console.warn(logPrefix + 'carrying over previous selection on snapshot change, so not resetting initial selection for filter panel.');
@@ -161,10 +161,10 @@ angular.module('common')
                 setSortForTags($scope.nodeDistrAttrs, newSelection.length > 0);
 
                 if (!nodes || nodes.length < 1) {
-                    graphSelectionService.clearSelections(true);
+                    //graphSelectionService.clearSelections(true);
                 }
 
-                $rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+                //$rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
 
                 updateInfoData($scope.currentSelection);
             }
