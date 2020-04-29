@@ -100,6 +100,7 @@ listen  [::]:443 ssl http2;
 server_name @@@nginx_conf_domain@@@;
 # ssl configuration
 ### CHANGE --- remove "ssl on;"
+client_max_body_size 100M;
 #ssl on;
 ssl_certificate /etc/nginx/nginx-selfsigned.crt; 
 ssl_certificate_key /etc/nginx/nginx-selfsigned.key;
