@@ -102,7 +102,7 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
             }
             selectService.selectNodes({ ids: _.pluck(event.data.node, 'id')});
         } else {
-            selectService.selectNodes({ ids: _.pluck(event.data.node, 'id')});
+            selectService.unselect();
             hoverService.unhover();
         }
     }
