@@ -12,9 +12,9 @@
   font-weight: 300;
   overflow: hidden;
   position: absolute;
-  left: 192px;
+  left: $side-menu-width;
   top: 0;
-  width: 320px;
+  width: $right-panel-width;
   z-index: 999;
   transition: left .1s;
 
