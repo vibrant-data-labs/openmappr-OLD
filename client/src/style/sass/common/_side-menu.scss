@@ -28,8 +28,12 @@
   }
 
   .graph-container,
-  .header.simple{
+  .header.simple {
     left: $side-menu-compressed + $right-panel-width;
+  }
+
+  .publish-panel {
+    left: $side-menu-compressed + $right-panel-width + 20px;
   }
 
   .side-menu__logo {
