@@ -43,7 +43,7 @@ angular.module('common')
 
             $scope.rightPanelTabs = [
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-info-circle',
+                    iconClass: 'info',
                     title: 'Info',
                     tooltipTitle: 'See project information',
                     panel: 'modal',
@@ -67,7 +67,7 @@ angular.module('common')
                     },
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
+                    iconClass: 'slides',
                     title: 'Slides',
                     panel: 'slides',
                     tooltipTitle: 'See slide information and change views if there are more than one',
@@ -102,7 +102,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-filter',
+                    iconClass: 'filter',
                     title: 'Filters',
                     panel: 'filter',
                     tooltipTitle: 'Filter data by one or more attributes',
@@ -116,7 +116,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-map',
+                    iconClass: 'legend',
                     title: 'Legend',
                     panel: 'summary',
                     tooltipTitle: 'See color and sizing information',
@@ -125,7 +125,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
+                    iconClass: 'list',
                     title: 'List',
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',

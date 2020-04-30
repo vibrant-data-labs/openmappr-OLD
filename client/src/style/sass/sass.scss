@@ -56,6 +56,7 @@ $btnPrimaryBg: #BA3665;
 $inputBorderColor: #EBEFF2;
 $inputBorderRadius: 4px;
 
+@import 'common/side-menu';
 @import 'sign-in/sign-in.scss';
 @import 'sign-in/logo.scss';
 @import 'sign-in/form-field.scss';

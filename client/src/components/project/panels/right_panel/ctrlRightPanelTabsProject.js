@@ -24,6 +24,10 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.togglePanel = function() {
+                document.body.classList.toggle('side-menu-compressed')
+            }
+
             $scope.rightPanelTabs = [
             //   {
             //     iconClass: 'fa-info-circle',
@@ -34,7 +38,7 @@ angular.module('common')
             //     }
             // },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-filter',
+                    iconClass: 'filter',
                     title: 'Filters',
                     tooltipTitle: 'Filter data by one or more attributes',
                     panel: 'filter',
@@ -58,7 +62,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-map',
+                    iconClass: 'legend',
                     title: 'Legend',
                     tooltipTitle: 'See color and sizing information',
                     panel: 'summary',
@@ -67,7 +71,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
+                    iconClass: 'list',
                     title: 'List',
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
@@ -77,7 +81,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
+                    iconClass: 'player',
                     title: 'Player',
                     panel: 'player',
                     tooltipTitle: 'Publish shareable map and add project information',
@@ -86,7 +90,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-heart',
+                    iconClass: 'groups',
                     title: 'Groups',
                     tooltipTitle: 'Save customer selections',
                     panel: 'selection',
@@ -95,7 +99,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-paint-brush',
+                    iconClass: 'style',
                     title: 'Style',
                     panel: 'style',
                     tooltipTitle: 'Edit styling for nodes, links, and labels',
@@ -104,7 +108,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-database',
+                    iconClass: 'database',
                     title: 'Edit data',
                     panel: 'style',
                     tooltipTitle: 'Edit Data',

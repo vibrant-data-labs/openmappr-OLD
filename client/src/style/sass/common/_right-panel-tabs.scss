@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0;
   width: 192px;
-  background: #fff;
+  background: #296571;
   z-index: 1002;
   box-shadow: 0 0 18px rgba(#000, .06);
 }
@@ -17,83 +17,29 @@
 
   &__item {
     cursor: pointer;
+    transition: background-color .2s;
 
     &:not(:last-child) {
       margin-bottom: 4px;
     }
 
+    &:hover {
+      .tabs-menu__link {
+        opacity: 1;
+      }
+    }
+
     &_active {
-      background: linear-gradient(135deg, #BA3665 0%, #94408D 100%);
+      background: rgba(245, 246, 248, .15);
       border-radius: 0 4px 4px 0;
 
       .tabs-menu__link {
-        color: #fff;
+        opacity: 1;
+      }
 
-        &.fa-info-circle {
-          &::before {
-            background-image: url('/img/tabs-menu/fa-info-circle_white.svg');
-          }
-        }
-
-        &.fa-play-circle-o {
-          &::before {
-            background-image: url('/img/tabs-menu/fa-play-circle-o_white.svg');
-          }
-        }
-
-        &.fa-filter {
-          &::before {
-            background-image: url('/img/tabs-menu/fa-filter_white.svg');
-          }
-        }
-
-        &.fa-map {
-          &::before {
-            background-image: url('/img/tabs-menu/fa-map_white.svg');
-          }
-        }
-
-        &.fa-list-ul {
-          &::before {
-            background-image: url('/img/tabs-menu/fa-list-ul_white.svg');
-          }
-        }
-
-        &.knowledge-base {
-          &::before {
-            background-image: url('/img/tabs-menu/knowledge-base_white.svg');
-          }
-        }
-
-        &.settings {
-          &::before {
-            background-image: url('/img/tabs-menu/settings_white.svg');
-          }
-        }
-
-        &.report {
-          &::before {
-            background-image: url('/img/tabs-menu/report_white.svg');
-          }
-        }
-
-        &.bug {
-          &::before {
-            background-image: url('/img/tabs-menu/bug_white.svg');
-          }
-        }
-
-        &.support {
-          &::before {
-            background-image: url('/img/tabs-menu/support_white.svg');
-          }
-        }
-
-        &.toggle {
-          &::before {
-            background-image: url('/img/tabs-menu/toggle_white.svg');
-          }
-        }
+      .tabs-menu__badge {
+        background: #C2CFE1;
+        color: #333;
       }
     }
   }
@@ -106,14 +52,28 @@
     text-overflow: ellipsis;
   }
 
+  &__badge {
+    position: absolute;
+    left: 30px;
+    padding: 0 5px;
+    min-width: 15px;
+    background: #ba3665;
+    color: #fff;
+    line-height: 15px;
+    font-size: 10px;
+    border-radius: 20px;
+    top: 5px;
+  }
+
   &__link {
     display: block;
     position: relative;
     font-size: 13px;
     line-height: 20px;
     padding: 10px 10px 10px 55px;
-    color: #334D6E;
-
+    color: #fff;
+    opacity: .8;
+    transition: opacity .2s;
 
     &::before {
       content: '';
@@ -127,63 +87,87 @@
       background-repeat: no-repeat;
     }
 
-    &.fa-info-circle {
+    &_info {
       &::before {
-        background-image: url('/img/tabs-menu/fa-info-circle_blue.svg');
+        background-image: url('/img/tabs-menu/fa-info-circle_white.svg');
       }
     }
 
-    &.fa-play-circle-o {
+    &_slides {
       &::before {
-        background-image: url('/img/tabs-menu/fa-play-circle-o_blue.svg');
+        background-image: url('/img/tabs-menu/fa-play-circle-o_white.svg');
       }
     }
 
-    &.fa-filter {
+    &_filter {
       &::before {
-        background-image: url('/img/tabs-menu/fa-filter_blue.svg');
+        background-image: url('/img/tabs-menu/fa-filter_white.svg');
       }
     }
 
-    &.fa-map {
+    &_legend {
       &::before {
-        background-image: url('/img/tabs-menu/fa-map_blue.svg');
+        background-image: url('/img/tabs-menu/fa-map_white.svg');
       }
     }
 
-    &.fa-list-ul {
+    &_list {
       &::before {
-        background-image: url('/img/tabs-menu/fa-list-ul_blue.svg');
+        background-image: url('/img/tabs-menu/fa-list-ul_white.svg');
       }
     }
 
-    &.knowledge-base {
+    &_knowledge-base {
       &::before {
-        background-image: url('/img/tabs-menu/knowledge-base_blue.svg');
+        background-image: url('/img/tabs-menu/knowledge-base_white.svg');
       }
     }
 
-    &.settings {
+    &_settings {
       &::before {
-        background-image: url('/img/tabs-menu/settings_blue.svg');
+        background-image: url('/img/tabs-menu/settings_white.svg');
       }
     }
 
-    &.report {
+    &_report {
       &::before {
-        background-image: url('/img/tabs-menu/report_blue.svg');
+        background-image: url('/img/tabs-menu/report_white.svg');
       }
     }
 
-    &.bug {
+    &_bug {
       &::before {
-        background-image: url('/img/tabs-menu/bug_blue.svg');
+        background-image: url('/img/tabs-menu/bug_white.svg');
       }
     }
 
-    &.support {
+    &_support {
       &::before {
-        background-image: url('/img/tabs-menu/support_blue.svg');
+        background-image: url('/img/tabs-menu/support_white.svg');
+      }
+    }
+
+    &_groups {
+      &::before {
+        background-image: url('/img/tabs-menu/groups_white.svg');
+      }
+    }
+
+    &_style {
+      &::before {
+        background-image: url('/img/tabs-menu/style_white.svg');
+      }
+    }
+
+    &_database {
+      &::before {
+        background-image: url('/img/tabs-menu/database_white.svg');
+      }
+    }
+
+    &_player {
+      &::before {
+        background-image: url('/img/tabs-menu/player_white.svg');
       }
     }
 
@@ -194,7 +178,7 @@
       margin: 50px 0 10px;
 
       &::before {
-        background-image: url('/img/tabs-menu/toggle_blue.svg');
+        background-image: url('/img/tabs-menu/toggle_white.svg');
       }
     }
   }
