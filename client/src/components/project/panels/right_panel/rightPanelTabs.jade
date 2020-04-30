@@ -9,12 +9,11 @@
         ng-repeat="tab in rightPanelTabs" ng-click="tab.cmd()"
         ng-class="{'tabs-menu__item_active': tab.panel === panelUI.currentPanelOpen}"
         )
-        span.badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
-
 
         span.tabs-menu__link(ng-class="{'highlighted': tab.highlighted}" data-toggle="tooltip" title="{{tab" +
         ".tooltipTitle}}" class='tabs-menu__link_{{tab.iconClass}}')
           span.tabs-menu__text {{tab.title}}
+          span.tabs-menu__badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
 
     .right-panel__divider
 
