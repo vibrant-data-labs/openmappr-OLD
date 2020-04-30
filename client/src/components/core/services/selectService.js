@@ -12,6 +12,8 @@ angular.module('common')
     **************************************/
             this.sigBinds = sigBinds;
             this.selectNodes = selectNodes;
+            this.selectSingleNode = selectSingleNode;
+            this.singleNode = null;
             this.unselect = unselect;
             this.selectedNodes = [];
             this.getActiveFilterCount = getActiveFilterCount;
@@ -90,6 +92,7 @@ angular.module('common')
              * @param {string} selectData.fivePct - fivePct
              * @param {array}  selectData.ids - nodeIds
              * @param {boolean} selectData.filters - whether apply current filters
+             * @param {boolean} selectData.force - whether replace value of current filter
              */
             function selectNodes(selectData) {
                 var currentSubset = subsetService.currentSubset();
@@ -115,10 +118,24 @@ angular.module('common')
                 });
             }
 
+            function selectSingleNode(id) {
+                var node = findNodeWithId(id);
+                this.singleNode = node;
+                var currentSubset = subsetService.currentSubset();
+
+                var nodes = [node];
+                $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                    filtersCount: this.getActiveFilterCount(),
+                    selectionCount: this.selectedNodes.length,
+                    isSubsetted: currentSubset.length > 0,
+                    nodes: nodes,
+                });
+            }
+
             function filter(data, subset) {
                 if (data.attr) {
                     if (data.min || data.max) {
-                        this.createMinMaxFilter(data.attr, data.min, data.max);
+                        this.createMinMaxFilter(data.attr, data.min, data.max, data.force);
                     } else {
                         this.createMultipleFilter(data.attr, data.value);
                     }
@@ -147,9 +164,9 @@ angular.module('common')
                 return filterConfig;
             }
 
-            function createMinMaxFilter(attrId, min, max) {
+            function createMinMaxFilter(attrId, min, max, force) {
                 var filterConfig = this.getFilterForId(attrId);
-                if (!filterConfig.isEnabled) {
+                if (force || !filterConfig.isEnabled) {
                     filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min, max }]);
                 } else {
                     var item = _.find(filterConfig.selector.attrRanges, function(r) { return r.min == min && r.max == max});
@@ -168,9 +185,22 @@ angular.module('common')
             }
 
             function unselect() {
+                var currentSubset = subsetService.currentSubset();
+
+                if (this.singleNode) {
+                    this.singleNode = null;
+                }
+
                 this.attrs = null;
 
-                var currentSubset = subsetService.currentSubset();
+                for(var f of _.values(this.filters)) {
+                    if (f.isEnabled) {
+                        f.isEnabled = false;
+                        f.selector = null;
+                        f.state = {};
+                    }
+                }
+
                 this.selectedNodes = currentSubset;
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
@@ -179,6 +209,10 @@ angular.module('common')
                     isSubsetted: currentSubset.length > 0,
                     nodes: this.getSelectedNodes(),
                 });
+
+                if (!currentSubset.length && !this.selectedNodes.length) {
+                    renderGraphfactory.getRenderer().render();
+                }
             }
 
             function getFilterForId(id) {

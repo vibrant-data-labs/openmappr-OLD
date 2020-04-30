@@ -68,7 +68,7 @@ function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, la
 
         scope.selectNode = function(nodeId, $event) {
             hoverService.unhover();
-            selectService.selectNodes({ ids: [nodeId]});
+            selectService.selectSingleNode(nodeId);
         };
 
         scope.hoverNode = function(nodeId) {

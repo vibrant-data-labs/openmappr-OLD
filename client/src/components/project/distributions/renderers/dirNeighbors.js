@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 'hoverService',
-function ($timeout, dataGraph, linkService, zoomService, hoverService) {
+.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 'hoverService', 'selectService',
+function ($timeout, dataGraph, linkService, zoomService, hoverService, selectService) {
     'use strict';
 
     /*************************************
@@ -58,13 +58,26 @@ function ($timeout, dataGraph, linkService, zoomService, hoverService) {
         };
 
         scope.onHoverOut = function() {
-            hoverService.hoverNodes({ ids: [node.id]});
+            hoverService.unhover();
         };
+
+        scope.onNeighborClick = function(link) {
+            selectService.selectSingleNode(link.linkNode.id);
+            
+            var dataset = dataGraph.getRawDataUnsafe();
+            var links = linkService.constructLinkInfo(link.linkNode, 
+                dataset.edgeInIndex[link.linkNode.id], 
+                dataset.edgeOutIndex[link.linkNode.id], 
+                scope.mapprSettings.labelAttr, 
+                scope.mapprSettings.nodeImageAttr);
+            const onlySourceLink = links.filter(link => link.targetId !== link.linkNode.id);
+            scope.links = filterLinks(onlySourceLink);
+        }
 
         function filterLinks(links){
             var newLinks = [];
             for (var i = 0; i < links.length; i++) {
-                if (i == 4) break;                
+                if (i == 4) break;
                 newLinks.push({
                     linkNode: links[i].linkNode,
                     attr: links[i].linkNode.attr,

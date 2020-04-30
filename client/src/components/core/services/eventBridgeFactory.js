@@ -100,7 +100,8 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
                 event.shiftKey = true;
                 settings('isShiftKey', false);
             }
-            selectService.selectNodes({ ids: _.pluck(event.data.node, 'id')});
+            
+            selectService.selectSingleNode(_getTopNode(event.data.node).id);
         } else {
             selectService.unselect();
             hoverService.unhover();

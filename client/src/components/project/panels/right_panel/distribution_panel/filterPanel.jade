@@ -17,10 +17,11 @@
 						//- span(ng-if="activeFilterCount == 1") FILTER&nbsp;&nbsp;
 						//- span(ng-if="activeFilterCount != 1") FILTERS&nbsp;&nbsp;
 				div.col-xs-6.flex-container-end.vert-align.m-r-5
-					button.btn.btn-sm.m-r-5(title="Undo" ng-click="undoFilters();" ng-disabled="!enableUndo" ng-class="{'btn-info': enableUndo, 'btn-default': !enableUndo}")
-						i.fa.fa-undo
-					button.btn.btn-sm.m-r-5(title="Redo" ng-click="redoFilters();" ng-disabled="!enableRedo" ng-class="{'btn-info': enableRedo, 'btn-default': !enableRedo}")
-						i.fa.fa-repeat
+					//- TODO: Uncomment when undo-redo will be implemented
+					//- button.btn.btn-sm.m-r-5(title="Undo" ng-click="undoFilters();" ng-disabled="!enableUndo" ng-class="{'btn-info': enableUndo, 'btn-default': !enableUndo}")
+					//- 	i.fa.fa-undo
+					//- button.btn.btn-sm.m-r-5(title="Redo" ng-click="redoFilters();" ng-disabled="!enableRedo" ng-class="{'btn-info': enableRedo, 'btn-default': !enableRedo}")
+					//- 	i.fa.fa-repeat
 					button.btn.btn-sm.btn-primary.m-r-5(ng-click="subsetFilters();", ng-disabled="!(ui.subsetEnabled)") Subset
 					button.btn.btn-sm.btn-info(ng-if="panelUI.filterPanelOpen" ng-disabled="!(ui.activeFilterCount > 0)" ng-click="resetFilters();$event.stopPropagation();" uib-tooltip="Clear {{ui.activeFilterCount}} Filters" tooltip-placement="bottom-left" tooltip-append-to-body="true") Reset
 			.hidden-btns(ng-click="$event.stopPropagation()")

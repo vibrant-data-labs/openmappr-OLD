@@ -110,8 +110,8 @@ angular.module('common')
                 // });
 
                 $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
-                    if( data.nodes.length > 0 ) {
-                        refresh(_.get(data, 'nodes', []));
+                    if (data.selectionCount > 0) {
+                        refresh(selectService.getSelectedNodes());
                     }
                     $scope.selInfo.interactionType = 'select';
                     if($scope.selInfo.selectionBrowsing) {
@@ -124,18 +124,18 @@ angular.module('common')
                         return;
                     }
 
-                    if (!data.nodes.length) {
+                    if (!data.selectionCount) {
                         initialise();
                     }
                 });
 
-                $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
-                    $scope.selInfo.refreshSelInfo = true;
-                    $scope.selInfo.selectionBrowsing = false;
-                    // CHECKPOINT
-                    var selNodes = dataGraph.getAllNodes();
-                    refresh(selNodes);
-                });
+                // $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
+                //     $scope.selInfo.refreshSelInfo = true;
+                //     $scope.selInfo.selectionBrowsing = false;
+                //     // CHECKPOINT
+                //     var selNodes = dataGraph.getAllNodes();
+                //     refresh(selNodes);
+                // });
 
                 $rootScope.$on(BROADCAST_MESSAGES.fp.filter.reset, function () {
                     initialise();

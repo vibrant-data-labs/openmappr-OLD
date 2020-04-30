@@ -157,6 +157,7 @@
             hss: {
                 hover: 'hss:hover',
                 select: 'hss:select',
+                selectSingleNode: 'hss:selectSingleNode',
                 subset: {
                     init: 'hss:subset:init',
                     changed: 'hss:subset:changed'

@@ -113,7 +113,12 @@ angular.module('common')
             function unhover(forceRender) {
                 this.hoveredNodes.splice(0, this.hoveredNodes.length);
 
-                this.hoveredNodes = _.clone(selectService.selectedNodes || []);
+                if (selectService.singleNode) {
+                    this.hoveredNodes = [selectService.singleNode.id];
+                } else {
+                    this.hoveredNodes = _.clone(selectService.selectedNodes || []);
+                }
+
                 draw(this.hoveredNodes, false, forceRender);
             }
 
@@ -259,7 +264,6 @@ angular.module('common')
                             nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
                         });
 
-                    //sigRender.greyout(_.keys(nodes).length > 1, 'hover');
                     sigma.d3.labels.hover(
                         _.reject(nodes, 'isAggregation'),
                         [],
