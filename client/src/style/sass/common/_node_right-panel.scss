@@ -250,10 +250,13 @@
                                 flex-flow: column;
 
                                 p:nth-child(1) {
-                                    margin-bottom: 1px;
+                                    font-size: 15px;
+                                    padding: 0px;
+                                    margin: 0px;
                                 }
-                                p:nth-child(1) {
-                                    margin-bottom: 0;
+                                p:nth-child(2) {
+                                    margin: 2px 0px;
+                                    color: rgb(167, 167, 167);
                                 }
                             }
 

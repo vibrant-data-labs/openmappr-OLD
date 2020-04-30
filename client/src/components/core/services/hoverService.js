@@ -39,6 +39,7 @@ angular.module('common')
              * @param {string} hoverData.degree - degree
              * @param {array}  hoverData.ids - nodeIds
              * @param {boolean} hoverData.withNeighbors - whether highlight neighbors or not
+             * @param {boolean} hoverData.force - whether hover the data, even if it not in subset
              */
             function hoverNodes(hoverData) {
                 this.unhover();
@@ -54,7 +55,7 @@ angular.module('common')
                     isFiltered = true;
                 }
 
-                if (!isFiltered && currentSubset.length > 0) {
+                if (!hoverData.force && !isFiltered && currentSubset.length > 0) {
                     this.hoveredNodes = this.hoveredNodes.filter(function (x) {
                         return currentSubset.indexOf(x) > -1;
                     });

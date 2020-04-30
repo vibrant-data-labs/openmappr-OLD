@@ -141,6 +141,8 @@ angular.module('common')
                         else $scope.beginOverlayAnim = true;
 
                         animateGraphToOverlay();
+                        // Hack for scrolling up on changing the nodes
+                        document.querySelector('.nameContainer').parentElement.scrollIntoView();
                     }
                     else if (_.isArray(data.nodes) && data.nodes.length > 1) {
                         $scope.cancelOverlay(true);
@@ -452,10 +454,10 @@ angular.module('common')
             }
 
             function getNodeName(values) {
-                const { Name, DataPointLabel } = values;
+                const Name = values[$scope.mapprSettings.labelAttr];
 
-                if (Name !== undefined || DataPointLabel !== undefined) {
-                    const nameThatExists = DataPointLabel || Name;
+                if (Name !== undefined) {
+                    const nameThatExists = Name;
                     //
                     const [name, description] = nameThatExists.split(':');
                     const [first, last] = name.split('');

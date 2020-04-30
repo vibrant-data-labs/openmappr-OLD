@@ -26,6 +26,9 @@ function ($timeout, dataGraph, linkService, zoomService, hoverService, selectSer
     **************************************/
     function postLinkFn(scope, element, attrs) {
         var links, hasLinks, incomingEdgesIndex, outgoingEdgesIndex;
+        scope.ui = {
+            imageShow : scope.mapprSettings.nodeImageShow
+        };
         if (scope.focusNode) {
 
             var node = scope.focusNode;
@@ -54,7 +57,7 @@ function ($timeout, dataGraph, linkService, zoomService, hoverService, selectSer
         }
 
         scope.onHover = function(link) {
-            hoverService.hoverNodes({ ids: [link.linkNode.id]});
+            hoverService.hoverNodes({ ids: [link.linkNode.id], force: true});
         };
 
         scope.onHoverOut = function() {

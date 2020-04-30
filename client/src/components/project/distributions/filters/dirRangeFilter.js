@@ -56,8 +56,17 @@ angular.module('common')
                     }
                 };
 
+                scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    if (!data.filtersCount) {
+                        // Reset filter values on reset
+                        filterConfig = selectService.getFilterForId(attrId)
+                        setRange();
+                    }
+                });
+
                 scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function() {
-                    // Reset filter values selection on selection reset
+                    // Reset filter values range on subset
+                    filterConfig = selectService.getFilterForId(attrId)
                     setRange();
                 });
 
