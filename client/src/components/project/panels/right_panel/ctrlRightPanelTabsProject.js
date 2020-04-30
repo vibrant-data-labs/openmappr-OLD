@@ -111,7 +111,7 @@ angular.module('common')
                 {
                     iconClass: 'database',
                     title: 'Edit data',
-                    panel: 'style',
+                    panel: 'edit_data',
                     tooltipTitle: 'Edit Data',
                     cmd: function() {
                         return $scope.openNetworkDataModal();
