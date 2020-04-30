@@ -101,7 +101,12 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
                 settings('isShiftKey', false);
             }
             
-            selectService.selectSingleNode(_getTopNode(event.data.node).id);
+            if (event.data.all) {
+                selectService.selectNodes({ attr: settings('nodeColorAttr'), value: event.data.labelId });
+            }
+            else {
+                selectService.selectSingleNode(_getTopNode(event.data.node).id);
+            }
         } else {
             selectService.unselect();
             hoverService.unhover();

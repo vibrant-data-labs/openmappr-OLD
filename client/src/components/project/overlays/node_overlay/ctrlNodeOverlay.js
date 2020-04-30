@@ -142,7 +142,10 @@ angular.module('common')
 
                         animateGraphToOverlay();
                         // Hack for scrolling up on changing the nodes
-                        document.querySelector('.nameContainer').parentElement.scrollIntoView();
+                        var container = document.querySelector('.nameContainer');
+                        if (container) {
+                            container.parentElement.scrollIntoView();
+                        }
                     }
                     else if (_.isArray(data.nodes) && data.nodes.length > 1) {
                         $scope.cancelOverlay(true);

@@ -127,7 +127,7 @@ function($q, renderGraphfactory, hoverService) {
         _clearTimer();
         d.isSelected = true;
         hoverService.unhover();
-        renderGraphfactory.sig().dispatchEvent('clickNodes', {node: d.nodes, degree: 0, all: true, genBy:'labelClick'});
+        renderGraphfactory.sig().dispatchEvent('clickNodes', {node: d.nodes, labelId: d.id, degree: 0, all: true, genBy:'labelClick'});
     }
 
     function labelHover(d) {
