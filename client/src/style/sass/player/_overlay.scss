@@ -3,11 +3,10 @@
 // Style for initial modal overlay in player
 
 .intro-overlay {
-    background-color: $body-bg;
+    background: $intro-overlay-bg  url('/img/intro-overlay.png') 50% no-repeat;
     background-size: cover;
-    background-position: center;
     bottom: 0;
-    left: 192px;
+    left: $side-menu-width;
     position: fixed;
     right: 0;
     top: 0;
@@ -18,28 +17,30 @@
     transition: left .2s;
 
     .hero {
-        background-color: rgba(1, 31, 42, 1);
         background-size: cover;
         background-position: center;
         width: 100%;
+        height: 100%;
         min-height: 400px;
         position: relative;
         color: #fff;
+        display: flex;
+        align-items: center;
 
         button {
-          background: #00d4fe;
+          background: none;
           border-radius: 20px;
-          height: 40px;
-          position: absolute;
-          left: 40px;
-          bottom: 40px;
-          color: $body-bg-dark;
-          font-size: 16px;
-          padding: 0 25px;
-          font-weight: 100;
+          color: $body-bg;
+          font-size: 14px;
+          line-height: 21px;
+          text-transform: uppercase;
+          padding: 8px 20px 6px;
+          font-weight: 400;
+          border: 1px solid rgba($body-bg, .3);
+          transition: border .2s;
 
           &:hover {
-            background: darken(#00d4fe, 10%);
+            border-color: rgba($body-bg, .9);
           }
         }
         
@@ -53,37 +54,35 @@
     .hero__background {
 
         /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#006479+0,011f2a+100 */
-        background: #006479; /* Old browsers */
-        background: -moz-linear-gradient(top, rgba(0, 100, 121, 1) 0%, rgba(1, 31, 42, .5) 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top, rgba(0, 100, 121, 1) 0%,rgba(1, 31, 42, .5) 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom, rgba(0, 100, 121, 1) 0%,rgba(1, 31, 42, .5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgba(0, 100, 121, 1)', endColorstr='rgba(1, 31, 42, .5)',GradientType=0 ); /* IE6-9 */
-
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        display: none;
     }
 
     .hero__content {
       position: relative;
-
-      padding: 20px 40px 90px;
+      max-width: 432px;
+      padding: 20px 40px 90px 57px;
+      box-sizing: content-box;
+      font-size: 14px;
+      line-height: 1.8;
+      font-family: 'Poppins', sans-serif;
 
       h1 {
-        font-weight: 500;
+        font-weight: 700;
+        font-family: 'Poppins', sans-serif;
+        font-size: 36px;
+        line-height: 1.37;
+        margin: 0 0 20px;
+        padding: 0 0 10px;
+        border-bottom: 1px solid rgba(#fff, .08);
+      }
+
+      p {
+        margin: 0 0 1.5em;
       }
 
       .subtitle {
         font-weight: 300;
       }
-    }
-
-    .content {
-      padding: 40px;
-      max-width: 800px;
-      font-weight: 200;
     }
 
     .background {

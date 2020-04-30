@@ -19,12 +19,21 @@
 
 .side-menu-compressed {
   .side-menu {
-    width: 72px;
+    width: $side-menu-compressed;
   }
 
   .right-panel,
   .intro-overlay {
-    left: 72px;
+    left: $side-menu-compressed;
+  }
+
+  .graph-container,
+  .header.simple {
+    left: $side-menu-compressed + $right-panel-width;
+  }
+
+  .publish-panel {
+    left: $side-menu-compressed + $right-panel-width + 20px;
   }
 
   .side-menu__logo {
