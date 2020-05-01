@@ -96,18 +96,18 @@ angular.module('common')
              */
             function selectNodes(selectData) {
                 var currentSubset = subsetService.currentSubset();
-                if (selectData.ids && selectData.ids.length) {
-                    this.selectedNodes = selectData.ids;
-                }
-                else {
-                    var cs = this._filter(selectData, subsetService.subsetNodes);
-                    this.selectedNodes = _.pluck(cs, 'id');
-                }
+
+                var cs = this._filter(selectData, subsetService.subsetNodes);
+                this.selectedNodes = _.pluck(cs, 'id');
 
                 if (currentSubset.length > 0) {
                     this.selectedNodes = this.selectedNodes.filter(function (x) {
                         return currentSubset.indexOf(x) > -1;
                     });
+                }
+
+                if (this.selectedNodes.length == 0) {
+                    this.selectedNodes = currentSubset;
                 }
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
@@ -169,13 +169,13 @@ angular.module('common')
                 if (force || !filterConfig.isEnabled) {
                     filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min, max }]);
                 } else {
-                    var item = _.find(filterConfig.selector.attrRanges, function(r) { return r.min == min && r.max == max});
+                    var item = _.find(filterConfig.selector.attrRanges, function (r) { return r.min == min && r.max == max });
                     if (item) {
-                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function(r) {
-                            return r.min != min || r.max != max; 
-                         });
+                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function (r) {
+                            return r.min != min || r.max != max;
+                        });
                     } else {
-                        filterConfig.selector.attrRanges.push({ min, max});
+                        filterConfig.selector.attrRanges.push({ min, max });
                     }
                 }
 
@@ -193,7 +193,7 @@ angular.module('common')
 
                 this.attrs = null;
 
-                for(var f of _.values(this.filters)) {
+                for (var f of _.values(this.filters)) {
                     if (f.isEnabled) {
                         f.isEnabled = false;
                         f.selector = null;
@@ -201,6 +201,10 @@ angular.module('common')
                     }
                 }
 
+                _.map(this.getSelectedNodes(), function(n) {
+                    n.isSelected = false;
+                    return n;
+                });
                 this.selectedNodes = currentSubset;
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
