@@ -19,10 +19,18 @@ angular.module('common')
             ********* Local Data *****************
             **************************************/
             this.hoveredNodes = [];
+            var hoveredSingleNode = null;
             var findNodeWithId;
 
             // reset to selected values only
-            $rootScope.$on(BROADCAST_MESSAGES.hss.select, unhover.bind(this, true));
+            (function (service) {
+                $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
+                    service.unhover(true);
+                    if (data.selectionCount > 0) {
+                        renderGraphfactory.getRenderer().render();
+                    }
+                });
+            })(this);
 
             /*************************************
             ********* Core Functions *************
@@ -42,12 +50,19 @@ angular.module('common')
              * @param {boolean} hoverData.force - whether hover the data, even if it not in subset
              */
             function hoverNodes(hoverData) {
-                this.unhover();
+                if (this.hoveredNodes && this.hoveredNodes.length > 1) {
+                    this.unhover();
+                }
                 var currentSubset = subsetService.currentSubset();
                 var isFiltered = false;
 
                 if (hoverData.ids && hoverData.ids.length) {
-                    this.hoveredNodes = hoverData.ids;
+                    if (hoverData.ids.length == 1) {
+                        hoveredSingleNode = hoverData.ids[0];
+                        this.hoveredNodes = this.hoveredNodes.concat(hoverData.ids);
+                    } else {
+                        this.hoveredNodes = hoverData.ids;
+                    }
                 } else {
                     var cs = filter(hoverData, subsetService.subsetNodes)
 
@@ -59,6 +74,10 @@ angular.module('common')
                     this.hoveredNodes = this.hoveredNodes.filter(function (x) {
                         return currentSubset.indexOf(x) > -1;
                     });
+                }
+
+                if (!hoverData.force && currentSubset.length > 0 && this.hoveredNodes.length == 0) {
+                    this.hoveredNodes = currentSubset;
                 }
 
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
@@ -93,15 +112,15 @@ angular.module('common')
             function createMinMaxFilter(filters, attrId, min, max) {
                 var filterConfig = filters[attrId];
                 if (!filterConfig) return;
-                
+
                 if (!filterConfig.isEnabled) {
                     filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min: min, max: max }]);
                 } else {
-                    var item = _.find(filterConfig.selector.attrRanges, function(r) { return r.min == min && r.max == max});
+                    var item = _.find(filterConfig.selector.attrRanges, function (r) { return r.min == min && r.max == max });
                     if (item) {
-                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function(r) {
-                            return r.min != min || r.max != max; 
-                         });
+                        filterConfig.selector.attrRanges = _.filter(filterConfig.selector.attrRanges, function (r) {
+                            return r.min != min || r.max != max;
+                        });
                     } else {
                         filterConfig.selector.attrRanges.push({ min: min, max: max });
                     }
@@ -112,15 +131,17 @@ angular.module('common')
             }
 
             function unhover(forceRender) {
-                this.hoveredNodes.splice(0, this.hoveredNodes.length);
+                this.hoveredNodes = [];
+                hoveredSingleNode = null;
 
                 if (selectService.singleNode) {
                     this.hoveredNodes = [selectService.singleNode.id];
+                    hoveredSingleNode = selectService.singleNode.id;
                 } else {
                     this.hoveredNodes = _.clone(selectService.selectedNodes || []);
                 }
 
-                draw(this.hoveredNodes, false, forceRender);
+                hoverByIds(this.hoveredNodes, 0, false, !!selectService.singleNode);
             }
 
             function _hoverHelper(ids, degree, withNeighbors) {
@@ -177,6 +198,7 @@ angular.module('common')
             }
 
             function draw(nodeIds, withNeighbors, forceRender) {
+                var selectedNodes = selectService.selectedNodes;
                 var subsetNodes = subsetService.subsetNodes;
                 var sigRender = renderGraphfactory.getRenderer();
                 var contexts = sigRender.contexts;
@@ -191,7 +213,7 @@ angular.module('common')
                     sigRender.greyout(false);
                 }
 
-                if (nodeIds.length == 1) {
+                if (!!hoveredSingleNode) {
                     withNeighbors = true;
                 }
 
@@ -211,16 +233,27 @@ angular.module('common')
                 var edges = {};
                 var nodes = _.map(nodeIds, function (nodeId) {
                     var node = findNodeWithId(nodeId, sigRender.sig);
-                    node.inHover = true;
-
-                    if (withNeighbors) {
+                    var isSelected = selectedNodes.indexOf(nodeId) > -1;
+                    if (isSelected) {
+                        node.isSelected = true;
+                        node.inHover = false;
+                    } else {
+                        node.isSelected = false;
+                        node.inHover = true;
+                    }
+                    if (hoveredSingleNode && hoveredSingleNode == nodeId) {
                         var neighNodes = [];
                         _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId) {
                             node.inHoverNeighbor = true;
                             //hoveredNodeNeighbors[targetId] = node;
                             _.forEach(edgeInfo, function addConnEdge(edge, edgeId) {
-                                neighNodes.push(findNodeWithId(edge.source, sigRender.sig));
-                                neighNodes.push(findNodeWithId(edge.target, sigRender.sig))
+                                var neighs = [findNodeWithId(edge.source, sigRender.sig), findNodeWithId(edge.target, sigRender.sig)];
+                                _.map(neighs, function(n) {
+                                    n.isSelected = false;
+                                    n.inHover = n.id == node.id;
+                                });
+                                
+                                neighNodes.push(...neighs);
                                 edges[edgeId] = edge;
                             });
                         });
@@ -236,7 +269,14 @@ angular.module('common')
                 var nodeId = window.mappr.utils.nodeId;
 
                 contexts.hovers.canvas.width = contexts.hovers.canvas.width;    // clear canvas
-                sigRender.greyout(_.keys(nodes).length > 1, subsetNodes.length > 0 ? 'select' : 'hover');    // only grey out if there are neighbors to show
+                var shouldGreyOut = nodes.length > 0 || subsetNodes.length > 0;
+                var mode = 'hover';
+                if (subsetNodes.length > 0) {
+                    mode = 'subset';
+                } else if (selectedNodes.length > 0) {
+                    mode = 'select';
+                }
+                sigRender.greyout(shouldGreyOut, mode);
                 if (settings('enableHovering')) {
                     // var prefix = settings('prefix');
 

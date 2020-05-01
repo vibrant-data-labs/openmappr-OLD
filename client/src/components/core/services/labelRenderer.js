@@ -133,7 +133,7 @@ function($q, renderGraphfactory, hoverService) {
     function labelHover(d) {
         var hoverFn = function() {
             _service.isGroupLabelHover = true;
-            hoverService.hoverNodes({ ids: _.pluck(hoverData.allnodes == undefined ? hoverData.nodes : hoverData.allnodes, 'id') });
+            hoverService.hoverNodes({ attr: renderGraphfactory.getRenderer().settings('nodeColorAttr'), value: d.id });
             hoverTimer = undefined;
         };
         _clearTimer();
