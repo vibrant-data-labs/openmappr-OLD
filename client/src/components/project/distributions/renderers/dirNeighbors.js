@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService',
-function ($timeout, dataGraph, linkService) {
+.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 'hoverService', 'selectService',
+function ($timeout, dataGraph, linkService, zoomService, hoverService, selectService) {
     'use strict';
 
     /*************************************
@@ -26,6 +26,9 @@ function ($timeout, dataGraph, linkService) {
     **************************************/
     function postLinkFn(scope, element, attrs) {
         var links, hasLinks, incomingEdgesIndex, outgoingEdgesIndex;
+        scope.ui = {
+            imageShow : scope.mapprSettings.nodeImageShow
+        };
         if (scope.focusNode) {
 
             var node = scope.focusNode;
@@ -46,17 +49,38 @@ function ($timeout, dataGraph, linkService) {
                 links = linkService.constructLinkInfo(node, incomingEdgesIndex, outgoingEdgesIndex, scope.mapprSettings.labelAttr, scope.mapprSettings.nodeImageAttr);
                 scope.numLinks = links.length;
             }
-
-            scope.links = filterLinks(links);
+            const onlySourceLink = links.filter(link => link.targetId !== node.id);
+            scope.links = filterLinks(onlySourceLink);
             
         } else {
             console.log('dirNeighbors', "Node has no links to other nodes");
         }
 
+        scope.onHover = function(link) {
+            hoverService.hoverNodes({ ids: [link.linkNode.id], force: true});
+        };
+
+        scope.onHoverOut = function() {
+            hoverService.unhover();
+        };
+
+        scope.onNeighborClick = function(link) {
+            selectService.selectSingleNode(link.linkNode.id);
+            
+            var dataset = dataGraph.getRawDataUnsafe();
+            var links = linkService.constructLinkInfo(link.linkNode, 
+                dataset.edgeInIndex[link.linkNode.id], 
+                dataset.edgeOutIndex[link.linkNode.id], 
+                scope.mapprSettings.labelAttr, 
+                scope.mapprSettings.nodeImageAttr);
+            const onlySourceLink = links.filter(link => link.targetId !== link.linkNode.id);
+            scope.links = filterLinks(onlySourceLink);
+        }
+
         function filterLinks(links){
             var newLinks = [];
             for (var i = 0; i < links.length; i++) {
-                if (i == 4) break;                
+                if (i == 4) break;
                 newLinks.push({
                     linkNode: links[i].linkNode,
                     attr: links[i].linkNode.attr,
@@ -97,21 +121,29 @@ function ($timeout, dataGraph, linkService) {
 
         //click (calls parent method. Maybe should move to attribute of this directive)
         scope.beginNeighborSwitch = function (linkNode, $event) {
-            console.log('beginNeighborSwitch', linkNode);
+            zoomService.restoreCamera();
             $($event.currentTarget).css({
                 opacity: 0
             });
-            scope.switchToNeighbor(linkNode, $event);
+            setTimeout(function(){ 
+                scope.switchToNeighbor(linkNode, $event); 
+            }, 1000);
+            
         };
 
         function getName(attrs){
-            var name = '';
-            var attrsArray = Object.keys({...attrs});
-            var attrsName = attrsArray.map( (attr) => attr.toLowerCase().includes('name') ? attr : null);
-            attrsName.filter(Boolean).forEach((attrName) => name += `${attrs[attrName]}`.slice(0, 15));
-            console.log({name});
-            return name;
+            var completeName = attrs.Name;
+            
+            var names = completeName.split(':');
+                if (names.length == 2){
+                    return {
+                        name : names[0],
+                        description: names[1]
+                    }
+                }
+                return { name: completeName };
         }
+
     }
     return dirDefn;
 }

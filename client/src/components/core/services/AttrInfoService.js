@@ -315,7 +315,7 @@ angular.module('common')
             function buildAttrInfoMap (attr, entities) {
                 var attribId = attr.id;
                 var infoObj = new InfoObj(attr);
-
+                
                 infoObj.existsOnAll = _.every(entities, function(item) { return item.attr[attribId] != null; });
                 infoObj.isNumeric = attr.isNumeric;
                 infoObj.isInteger = attr.isInteger;

@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighborClusters', ['graphSelectionService', 'FilterPanelService', 'graphHoverService',
-function(graphSelectionService, FilterPanelService, graphHoverService) {
+.directive('dirNeighborClusters', ['graphSelectionService', 'FilterPanelService', 'hoverService',
+function(graphSelectionService, FilterPanelService, hoverService) {
     'use strict';
 
     /*************************************
@@ -42,11 +42,11 @@ function(graphSelectionService, FilterPanelService, graphHoverService) {
         };
 
         scope.hoverGroup = function(group, $event) {
-            graphHoverService.hoverByIds(group.nodeIds, $event, false);
+            hoverService.hoverNodes({ ids: group.nodeIds });
         };
 
         scope.unHoverGroup = function(group, $event) {
-            graphHoverService.unhoverByIds(group.nodeIds, $event, false);
+            hoverService.unhover()
         };
     }
 

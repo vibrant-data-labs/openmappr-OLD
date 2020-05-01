@@ -14,7 +14,7 @@
 
 .bottom-left-btns {
     height: 100%;
-    left: -130px;
+    left: 90px;
     position: absolute;
 
     &.no-zoom {
@@ -82,7 +82,7 @@
 .publish-panel {
     @include user-select(none);
     bottom: 10px;
-    left: 530px;
+    left: $side-menu-width + $right-panel-width + 20px;
     position: absolute;
     right: 10px;
     z-index: 1099;

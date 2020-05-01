@@ -139,7 +139,7 @@ angular.module('common')
         classMap[nodeClasses.classDefault] = true;
         classMap[nodeClasses.classSelected] = node.isSelected;
         classMap[nodeClasses.classSelectedNeighbour] = !node.isSelected && node.isSelectedNeighbour;
-        classMap[nodeClasses.classHover] = node.inHover && !node.isSelected;
+        classMap[nodeClasses.classHover] = node.inHover;
 
         canvas.classed(classMap);
 
@@ -175,6 +175,7 @@ angular.module('common')
                     .attr("y", 0);
             }
 
+            
             // border stuff
             svg.select('.node-border')
                 .attr("cx", sz)
@@ -379,8 +380,9 @@ angular.module('common')
     }
     function hoverBorderStrokeWidth (node, settings) {
         var width = 0;
-        if(node.inHover && settings('inHoverMode'))
+        if(node.inHover && settings('inHoverMode')) {
             width = +settings('nodeHighlightBorderWidth');
+        }
         return width;
     }
 

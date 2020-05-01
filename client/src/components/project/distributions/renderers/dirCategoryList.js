@@ -48,6 +48,7 @@ angular.module('common')
                 scope.catListData = [];
                 scope.colorStr = FilterPanelService.getColorString();
                 scope.tooltipText = '';
+                scope.totalNodes = '';
 
                 /**
          * Prepares the data which is put into scope
@@ -58,6 +59,9 @@ angular.module('common')
                     var cs       = FilterPanelService.getCurrentSelection(),
                         attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id),
                         catListData;
+
+
+                    scope.totalNodes = cs.length;
 
                     scope.principalNode = null;
 
@@ -86,7 +90,7 @@ angular.module('common')
                 scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
                     try {
                         filteringCatVals = [];
-                        draw(true);
+                        draw(true, false);
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
@@ -95,7 +99,7 @@ angular.module('common')
                 // on current selection change, update highlights
                 scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                     try {
-                        draw();
+                        draw(false, true);
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
@@ -105,8 +109,8 @@ angular.module('common')
                     try {
                         var filterConfig = FilterPanelService.getFilterForId(attrId);
                         filteringCatVals = (filterConfig && filterConfig.state && filterConfig.state.selectedVals) || [];
-                        draw();
-                        hoverSelectedNodes();
+                        draw(false, true);
+                        // hoverSelectedNodes();
                     } catch(e) {
                         console.error(dirPrefix + "draw() throws error for attrId:" + scope.attrToRender.id + ',', e.stack,e);
                     }
@@ -154,7 +158,11 @@ angular.module('common')
                 scope.onCatClick = function(catData) {
                     catData.isChecked = !catData.isChecked;
                     selectFilter();
-                    hoverSelectedNodes();
+                    if (catData.isChecked) {
+                        hoverSelectedNodes(event);
+                    } else {
+                        unhoverSelectedNodes([catData.id], event);
+                    }
                 };
 
                 scope.onCatMouseover = function(catData, $event) {
@@ -163,12 +171,22 @@ angular.module('common')
                     }
                     else {
                         if(scope.catListData.inSelectionMode) {
-                            scope.tooltipText = catData.text + "(" + catData.selFreq + " of " + catData.globalFreq + ")";
+                            scope.tooltipText = catData.text + "(" + catData.selFreq + " of " + scope.totalNodes + ")";
                         }
                         else {
                             scope.tooltipText = catData.text;
                         }
                     }
+
+                    renderCtrl.hoverNodesByAttrib(attrId, catData.id, $event);
+                };
+
+                scope.outCat = function(catData, $event) {
+                    // $timeout(function() {
+                    scope.openTooltip = false;
+                    // renderCtrl.unHoverNodes();
+                    renderCtrl.unhoverNodesByAttrib(attrId, catData.id, $event);
+                    // }, 100);
                 };
 
                 scope.onFilterUpdate = function() {
@@ -180,10 +198,13 @@ angular.module('common')
                     return filterConfig.state.selectedVals;
                 }
 
-                function hoverSelectedNodes() {
-                    renderCtrl.unHoverNodes();
+                function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
-                    renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
+                    renderCtrl.highlightNodesByAttributes(attrId, selectedValues, event);
+                }
+
+                function unhoverSelectedNodes(values, event) {
+                    renderCtrl.unhighlightNodesByAttributes(attrId, values, event);
                 }
 
 

@@ -44,6 +44,12 @@ angular.module('common')
                 this.attrValMax = attrValMax;
                 return this;
             };
+            NodeSelector.prototype.ofMultiAttrRange = function(attrId, attrRanges) {
+                this.type = 'MULTI_ATTR_RANGE';
+                this.attrId = attrId;
+                this.attrRanges = attrRanges;
+                return this;
+            };
             NodeSelector.prototype.ofCluster = function(clusterAttrId, clusterAttrVal) {
                 this.type = 'CLUSTER';
                 this.attrId = clusterAttrId;
@@ -98,6 +104,12 @@ angular.module('common')
                 case 'ATTR_RANGE'       :
                     nodeIds = dataGraph.getNodesByAttribRange(attrId, this.attrValMin, this.attrValMax);
                     break;
+                case 'MULTI_ATTR_RANGE':
+                    nodeIds = this.attrRanges ? this.attrRanges.map(function(r) {
+                        return dataGraph.getNodesByAttribRange(attrId, r.min, r.max);
+                    }) : [];
+                    nodeIds = _.flatten(nodeIds);
+                    break;
                 case 'NODE'             : nodeIds = [this.entityId];
                     break;
                 case 'DATAPOINT'        : nodeIds = [rd.dataPointIdNodeIdMap[this.entityId]];
@@ -132,6 +144,8 @@ angular.module('common')
                     break;
                 case 'ATTR_RANGE'       : nodeIds = filterNodesByAttribRange(nodes, attr, this.attrValMin, this.attrValMax);
                     break;
+                case 'MULTI_ATTR_RANGE'       : nodeIds = filterNodesByMultiAttribRange(nodes, attr, this.attrRanges);
+                    break;                    
                 case 'MULTI_ATTR_VALUE' : nodeIds = _.uniq(_.flatten(_.map(this.attrVals, function(attrVal) {
                     return filterNodesByAttrib(nodes, attrId, attrInfo, attrVal, fivePct);
                 })));
@@ -260,6 +274,31 @@ angular.module('common')
                     // find all nodes with the value within the bracket (val >= low && val <= high)
                     selectedNodeIds = _.reduce(nodes, function(chosenOnes, node) {
                         if(node.attr[attrId] != null && node.attr[attrId] >= min && node.attr[attrId] <= max) {
+                            chosenOnes.push(node.id);
+                        }
+                        return chosenOnes;
+                    },[]);
+                }
+                var rg = dataGraph.getRenderableGraph();
+                return _.filter(selectedNodeIds, function(nodeId) { return rg.getNodeById(nodeId); });
+            }
+
+            function filterNodesByMultiAttribRange(nodes, attr, attrRanges) {
+                if(attr == null) { return []; }
+                var attrId = attr.id;
+                console.log(logPrefix,'Getting nodes in ranges: %s for attr: %s', _.map(attrRanges, function(r) { return r.min + ':' + r.max }).join(','), attrId);
+
+                var selectedNodeIds = [];
+                if(attr.isNumeric) {
+                    // find all nodes with the value within the bracket (val >= low && val <= high) for each range
+                    selectedNodeIds = _.reduce(nodes, function(chosenOnes, node) {
+                        if (!node.attr[attrId]) return chosenOnes;
+
+                        var matches = _.filter(attrRanges, function(r) {
+                            return node.attr[attrId] >= r.min && node.attr[attrId] <= r.max;
+                        })
+                        
+                        if(matches.length > 0) {
                             chosenOnes.push(node.id);
                         }
                         return chosenOnes;

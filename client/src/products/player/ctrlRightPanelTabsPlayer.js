@@ -1,7 +1,7 @@
 angular.module('common')
     .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
-        '$timeout', '$window',
-        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window) {
+        '$timeout', '$window', 'selectService',
+        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService) {
             'use strict';
 
             /*************************************
@@ -37,9 +37,13 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.togglePanel = function() {
+                document.body.classList.toggle('side-menu-compressed')
+            }
+
             $scope.rightPanelTabs = [
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-info-circle',
+                    iconClass: 'info',
                     title: 'Info',
                     tooltipTitle: 'See project information',
                     panel: 'modal',
@@ -60,10 +64,10 @@ angular.module('common')
                                 );
                                 ngIntroService.start();
                             }, 100);
-                    }
+                    },
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
+                    iconClass: 'slides',
                     title: 'Slides',
                     panel: 'slides',
                     tooltipTitle: 'See slide information and change views if there are more than one',
@@ -98,7 +102,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-filter',
+                    iconClass: 'filter',
                     title: 'Filters',
                     panel: 'filter',
                     tooltipTitle: 'Filter data by one or more attributes',
@@ -112,7 +116,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-map',
+                    iconClass: 'legend',
                     title: 'Legend',
                     panel: 'summary',
                     tooltipTitle: 'See color and sizing information',
@@ -121,7 +125,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
+                    iconClass: 'list',
                     title: 'List',
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
@@ -140,24 +144,32 @@ angular.module('common')
              ****** Event Listeners/Watches *******
              **************************************/
 
-            $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function() {
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.selectNodes, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.selectNodes, function() {
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
-                updateSelCount();
-            });
+            // $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
+            //     updateSelCount();
+            // });
 
-            $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
-                updateSelCount();
-            });
+            // $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+            //     updateSelCount();
+            // });
 
-            $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
-                updateSelCount();
+            // $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
+            //     updateSelCount();
+            // });
+
+            // $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
+            //     updateSelCount();
+            // });
+
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                $scope.selNodesCount = data.selectionCount;
             });
 
             /*************************************
@@ -168,9 +180,9 @@ angular.module('common')
              ********* Core Functions *************
              **************************************/
 
-            function updateSelCount() {
-                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
-            }
+            // function updateSelCount() {                
+            //     $scope.selNodesCount = selectService.selectedNodes.length;
+            // }
 
         }
     ]);

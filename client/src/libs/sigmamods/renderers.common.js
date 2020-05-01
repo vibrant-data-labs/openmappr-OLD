@@ -331,6 +331,10 @@
       else if(source == 'pop') {
         this.popGrey = enable;
         this.selectGrey = false;
+      } else if(source == 'subset') {
+        nodeOpacity /= 4;
+        edgeOpacity /= 4;
+        this.selectGrey = enable;
       }
       enable = this.hoverGrey || this.popGrey || this.selectGrey;
       if(!this.selectGrey) {  // hovering or pop

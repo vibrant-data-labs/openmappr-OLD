@@ -443,6 +443,12 @@
                     left: 35px;
                 }
             }
+            &.cat-item-subsetted {
+                cursor: default;
+                & .tag-checkbox label::after {
+                    border-color: $gray;
+                }
+            }
         }
 
         .cat-highlight {

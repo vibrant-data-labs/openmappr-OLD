@@ -35,6 +35,7 @@
 @import 'common/right-panel-tabs';
 @import 'common/pinned-media';
 @import 'common/intro';
+@import 'common/side-menu';
 
 @import 'mappr/styles';
 @import 'mappr/nav';
@@ -51,3 +52,8 @@
 
 //import last so will override any light theme styling
 @import 'common/dark-theme';
+
+@import 'sign-in/sign-in.scss';
+@import 'sign-in/logo.scss';
+@import 'sign-in/form-field.scss';
+@import 'sign-in/button.scss';

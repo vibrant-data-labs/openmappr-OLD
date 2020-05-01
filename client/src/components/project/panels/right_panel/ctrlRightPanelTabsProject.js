@@ -9,7 +9,8 @@ angular.module('common')
         'ngIntroService',
         '$timeout',
         'FilterPanelService',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService) {
+        'selectService',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService) {
             'use strict';
 
             /*************************************
@@ -24,6 +25,10 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.togglePanel = function() {
+                document.body.classList.toggle('side-menu-compressed')
+            }
+
             $scope.rightPanelTabs = [
             //   {
             //     iconClass: 'fa-info-circle',
@@ -34,7 +39,7 @@ angular.module('common')
             //     }
             // },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-filter',
+                    iconClass: 'filter',
                     title: 'Filters',
                     tooltipTitle: 'Filter data by one or more attributes',
                     panel: 'filter',
@@ -58,7 +63,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-map',
+                    iconClass: 'legend',
                     title: 'Legend',
                     tooltipTitle: 'See color and sizing information',
                     panel: 'summary',
@@ -67,7 +72,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-list-ul',
+                    iconClass: 'list',
                     title: 'List',
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
@@ -77,7 +82,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-play-circle-o',
+                    iconClass: 'player',
                     title: 'Player',
                     panel: 'player',
                     tooltipTitle: 'Publish shareable map and add project information',
@@ -86,7 +91,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-heart',
+                    iconClass: 'groups',
                     title: 'Groups',
                     tooltipTitle: 'Save customer selections',
                     panel: 'selection',
@@ -95,7 +100,7 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-paint-brush',
+                    iconClass: 'style',
                     title: 'Style',
                     panel: 'style',
                     tooltipTitle: 'Edit styling for nodes, links, and labels',
@@ -104,9 +109,9 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'fa fa-fw fa-2x fa-database',
+                    iconClass: 'database',
                     title: 'Edit data',
-                    panel: 'style',
+                    panel: 'edit_data',
                     tooltipTitle: 'Edit Data',
                     cmd: function() {
                         return $scope.openNetworkDataModal();
@@ -134,6 +139,10 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
                 updateSelCount();
             });
+            
+            $rootScope.$on(BROADCAST_MESSAGES.cleanStage, function() {                
+                updateSelCount();
+            });
 
             $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
                 updateSelCount();
@@ -141,6 +150,10 @@ angular.module('common')
 
             $rootScope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
                 updateSelCount();
+            });
+
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                $scope.selNodesCount = data.selectionCount;
             });
 
             function openNetworkDataModal() {
@@ -179,7 +192,7 @@ angular.module('common')
              **************************************/
 
             function updateSelCount() {
-                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
+                $scope.selNodesCount = selectService.selectedNodes.length;
             }
 
 
