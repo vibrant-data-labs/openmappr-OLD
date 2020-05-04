@@ -122,7 +122,7 @@ html(lang='en', data-ng-app='hcApp')
 			//- Single global object for app
 			window.MP_APP = {};
 
-	body#app.nav-min(data-custom-background, data-off-canvas-nav, data-ng-controller='AppCtrl', ng-class="{'dark-theme': appUi.theme == 'dark'}")
+	body#app.nav-min(data-custom-background, data-off-canvas-nav, data-ng-controller='AppCtrl', class="side-menu-compressed", ng-class="{'dark-theme': appUi.theme == 'dark'}")
 		div(data-ng-cloak='data-ng-cloak')
 			div(ng-if="isAuthenticated()", data-ng-controller='DashboardCtrl', ng-init="user.loadInitial()")
 				div
