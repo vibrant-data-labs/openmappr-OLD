@@ -37,5 +37,70 @@
         color: darken($color: #BA3665, $amount: 8);
       }
     }
+
+    &_play-toolbar {
+      display: block;
+      width: 26px;
+      height: 100%;
+      padding: 0;
+      font-size: 0;
+      position: relative;
+      background-color: #fff;
+
+      &:hover {
+        background-color: lighten($gray-light, 8);
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: 50%;
+      }
+
+      &.button {
+        &_icon {
+          &_check::before {
+            background-image: url('/img/play-toolbar/check.svg');
+          }
+
+          &_chevron-left::before {
+            background-image: url('/img/play-toolbar/arrow-left.svg');
+          }
+
+          &_chevron-right::before {
+            background-image: url('/img/play-toolbar/arrow-right.svg');
+          }
+
+          &_cancel::before {
+            background-image: url('/img/play-toolbar/cancel.svg');
+          }
+
+          &_target::before {
+            background-image: url('/img/play-toolbar/target.svg');
+          }
+
+          &_plus::before {
+            background-image: url('/img/play-toolbar/plus.svg');
+          }
+
+          &_minus::before {
+            background-image: url('/img/play-toolbar/minus.svg');
+          }
+
+          &_search::before {
+            background-image: url('/img/play-toolbar/search.svg');
+          }
+
+          &_help::before {
+            background-image: url('/img/play-toolbar/help.svg');
+          }
+        }
+      }
+    }
   }
 }
