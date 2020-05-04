@@ -32,7 +32,8 @@
     left: $side-menu-compressed + $right-panel-width;
   }
 
-  .publish-panel {
+  .publish-panel,
+  .play-toolbar_opened {
     left: $side-menu-compressed + $right-panel-width + 20px;
   }
 

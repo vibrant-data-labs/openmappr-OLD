@@ -1,6 +1,28 @@
 .play-toolbar {
-  display: flex;
   position: absolute;
   right: 20px;
-  top: 50px;
+  top: 20px;
+
+  &__buttons {
+    display: flex;
+  }
+
+  &__search {
+    display: none;
+    visibility: hidden;
+  }
+
+  &_opened {
+    left: $side-menu-width + $right-panel-width + 20px;
+
+    .play-toolbar__buttons {
+      display: none;
+      visibility: hidden;
+    }
+
+    .play-toolbar__search {
+      display: block;
+      visibility: visible;
+    }
+  }
 }

@@ -79,6 +79,14 @@ angular.module('common')
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.redo);
             };
 
+            $scope.searchToggle = function searchToggle() {
+                const playBar = document.getElementsByClassName('play-toolbar')[0];
+                const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
+
+                playBar.classList.toggle('play-toolbar_opened');
+                searchBoxInput.focus();
+            }
+
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;

@@ -1,72 +1,78 @@
 .playbar.play-toolbar
+  .play-toolbar__buttons
+    .button-group.button-group_type_play-toolbar
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_check(
+          ng-click="subsetFilters()",
+          ng-disabled="!(ui.subsetEnabled)"
+          uib-tooltip="Subset"
+          tooltip-append-to-body="true"
+          tooltip-placement="left"
+        ) check
 
-  .button-group.button-group_type_play-toolbar
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_check(
-        ng-click="subsetFilters()",
-        ng-disabled="!(ui.subsetEnabled)"
-        uib-tooltip="Subset"
-        tooltip-append-to-body="true"
-        tooltip-placement="left"
-      ) check
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_chevron-left(
+          ng-click="undoFilters()"
+          uib-tooltip="Undo"
+          tooltip-append-to-body="true"
+          tooltip-placement="right"
+          ng-disabled="!enableUndo"
+        ) back
 
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_chevron-left(
-        ng-click="undoFilters()"
-        uib-tooltip="Undo"
-        tooltip-append-to-body="true"
-        tooltip-placement="right"
-        ng-disabled="!enableUndo"
-      ) back
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_chevron-right(
+          ng-click="redoFilters()"
+          uib-tooltip="Redo"
+          tooltip-append-to-body="true"
+          tooltip-placement="right"
+          ng-disabled="!enableRedo"
+        ) forward
 
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_chevron-right(
-        ng-click="redoFilters()"
-        uib-tooltip="Redo"
-        tooltip-append-to-body="true"
-        tooltip-placement="right"
-        ng-disabled="!enableRedo"
-      ) forward
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_cancel(
+          ng-click="resetFilters()",
+          ng-disabled="!(ui.activeFilterCount > 0)"
+          uib-tooltip="Reset"
+          tooltip-append-to-body="true"
+          tooltip-placement="right"
+        ) cancel
 
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_cancel(
-        ng-click="resetFilters()",
-        ng-disabled="!(ui.activeFilterCount > 0)"
-        uib-tooltip="Reset"
-        tooltip-append-to-body="true"
-        tooltip-placement="right"
-      ) cancel
+    .button-group.button-group_type_play-toolbar(
+      ng-if="layout.plotType != 'list' && layout.plotType != 'grid'"
+    )
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_target target
 
-  .button-group.button-group_type_play-toolbar(
-    ng-if="layout.plotType != 'list' && layout.plotType != 'grid'"
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_plus(
+          ng-click="zoomInfo.zoomIn()"
+          uib-tooltip="Zoom in"
+          tooltip-append-to-body="true"
+          tooltip-placement="right"
+        ) zoom +
+
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_minus(
+          ng-click="zoomInfo.zoomOut()"
+          uib-tooltip="Zoom out"
+          tooltip-append-to-body="true"
+          tooltip-placement="right"
+        ) zoom -
+
+    .button-group.button-group_type_play-toolbar
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_search(ng-click="searchToggle()") search
+
+      .button-group__item
+        button.button.button_type_play-toolbar.button_icon_help help
+
+
+
+  .play-toolbar__search(
+    ng-if="player.settings.showSearch !== false"
+    ng-controller="SearchPanelCtrl"
+    ng-include=' "#{server_prefix}#{view_path}/components/project/panels/search/search.html" '
   )
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_target target
-
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_plus(
-        ng-click="zoomInfo.zoomIn()"
-        uib-tooltip="Zoom in"
-        tooltip-append-to-body="true"
-        tooltip-placement="right"
-      ) zoom +
-
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_minus(
-        ng-click="zoomInfo.zoomOut()"
-        uib-tooltip="Zoom out"
-        tooltip-append-to-body="true"
-        tooltip-placement="right"
-      ) zoom -
-
-  .button-group.button-group_type_play-toolbar
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_search search
-
-    .button-group__item
-      button.button.button_type_play-toolbar.button_icon_help help
-
-
   //.flex-container.shadow-btn.shadow-btn--icon-btn.shadown-btn--no-hover()
   //  button.vert-align(ng-click="subsetFilters()", ng-disabled="!(ui.subsetEnabled)" uib-tooltip="Subset" tooltip-append-to-body="true" tooltip-placement="left")
   //    i.material-icons.m-r-5 send
