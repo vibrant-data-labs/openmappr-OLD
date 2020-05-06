@@ -1,3 +1,5 @@
+import os
+dbHost = os.getenv('dbHost') or "mongo"
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -19,7 +21,7 @@ class TestingConfig(Config):
     DATABASE = 'MAPPR_TEST'
 
 class DockerConfig(Config):
-    DATABASE_URI = 'mongodb://mongo:27017/MAPPRDB'
+    DATABASE_URI = 'mongodb://'+dbHost+':27017/MAPPRDB'
     BEANSTALK_HOST = "beanstalk"
 
 # create other configs here
