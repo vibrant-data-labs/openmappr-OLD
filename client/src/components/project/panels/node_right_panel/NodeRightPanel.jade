@@ -7,12 +7,12 @@
             .section__header
               h3.section__title Selected Node
               .section__icons.icons
-                .right(ng-repeat="link in nodeRightInfo.section1" ng-if="link.type == 'link'")
+                .section__icons-icon(ng-repeat="link in nodeRightInfo.section1" ng-if="link.type == 'link'")
                   a(href="{{link.value}}" target="_blank" uib-tooltip="Go to {{link.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true")
                     img(alt="{{link.value}}" src="{{link.icon}}")
-                .right
+                .section__icons-icon.close
                   button(ng-click='cancelOverlay(); triggerInteraction();')
-                    i.fa.fa-times.fa-1-8x
+
             .section__content
               .nameContainer.user(ng-repeat="info in nodeRightInfo.section1" ng-if="info.type == 'name'")
                 .img-user
