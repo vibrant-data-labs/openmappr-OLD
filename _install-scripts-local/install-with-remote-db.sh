@@ -133,9 +133,9 @@ cd openmappr
 # Grab environment from user
 read -p 'Please enter your environment (latest,staging,etc): ' environ
 # Grab dbHost from user
-read -p 'Please enter a remote mongo host (leave blank for local mongo container): ' mongo_host
+read -p 'Please enter a remote database hostname or IP (db.openmappr.org,etc): ' mongo_host
 cp .env.sample .env
 sed -i "s/ENVIRONMENT=latest/ENVIRONMENT=${environ}/g" .env
 sed -i "s/DB_HOST=/DB_HOST=${mongo_host}/g" .env
 # Start server
-docker-compose up -d
+docker-compose -f docker-compose.remote.yml up -d
