@@ -1,7 +1,7 @@
 angular.module('common')
     .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
-        '$timeout', '$window', 'selectService',
-        function ($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService) {
+        '$timeout', '$window', 'selectService', 'subsetService',
+        function ($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -193,7 +193,11 @@ angular.module('common')
             // });
 
             $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
-                $scope.selNodesCount = data.selectionCount;
+                if (data.selectionCount == 0 && data.isSubsetted) {
+                    $scope.selNodesCount = subsetService.currentSubset().length;
+                } else {
+                    $scope.selNodesCount = data.selectionCount;
+                }
             });
 
             /*************************************

@@ -2,8 +2,8 @@
  * Uses the given renderGraph and settings to display graph
  */
 angular.module('common')
-.directive('sig', ['$rootScope','renderGraphfactory', 'eventBridgeFactory','dataGraph', 'labelService', 'graphSelectionService', 'zoomService', 'tagService', 'graphHoverService', 'inputMgmtService', 'SelectionSetService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService',
-function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelService, graphSelectionService, zoomService, tagService, graphHoverService, inputMgmtService, SelectionSetService, BROADCAST_MESSAGES, hoverService, selectService) {
+.directive('sig', ['$rootScope','renderGraphfactory', 'eventBridgeFactory','dataGraph', 'labelService', 'graphSelectionService', 'zoomService', 'tagService', 'graphHoverService', 'inputMgmtService', 'SelectionSetService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService',
+function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelService, graphSelectionService, zoomService, tagService, graphHoverService, inputMgmtService, SelectionSetService, BROADCAST_MESSAGES, hoverService, selectService, subsetService) {
     'use strict';
 
     /*************************************
@@ -66,6 +66,7 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
         zoomService.sigBinds(sig);
         hoverService.sigBinds(sig);
         selectService.sigBinds(sig);
+        subsetService.sigBinds(sig);
 
         scope.$on(BROADCAST_MESSAGES.sigma.doubleClickNode, function(event, data) {
             console.log("Node double clicked!:", event, data);

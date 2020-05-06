@@ -76,10 +76,6 @@ angular.module('common')
                     });
                 }
 
-                if (!hoverData.force && currentSubset.length > 0 && this.hoveredNodes.length == 0) {
-                    this.hoveredNodes = currentSubset;
-                }
-
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
             }
 
@@ -250,7 +246,7 @@ angular.module('common')
                                 var neighs = [findNodeWithId(edge.source, sigRender.sig), findNodeWithId(edge.target, sigRender.sig)];
                                 _.map(neighs, function(n) {
                                     n.isSelected = false;
-                                    n.inHover = n.id == node.id;
+                                    n.inHover = true;
                                 });
                                 
                                 neighNodes.push(...neighs);
@@ -277,6 +273,11 @@ angular.module('common')
                     mode = 'select';
                 }
                 sigRender.greyout(shouldGreyOut, mode);
+                if (nodes.length == 0) {
+                    sigRender.greyoutSubset(false);
+                } else {
+                    sigRender.greyoutSubset(true, selectedNodes.length > 0 ? 'select' : 'hover');
+                }
                 if (settings('enableHovering')) {
                     // var prefix = settings('prefix');
 
@@ -306,8 +307,8 @@ angular.module('common')
                         });
 
                     sigma.d3.labels.hover(
-                        _.reject(nodes, 'isAggregation'),
                         [],
+                        nodes,
                         sigRender.d3Sel.labels(),
                         settings
                     );
