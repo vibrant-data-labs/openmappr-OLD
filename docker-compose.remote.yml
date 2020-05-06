@@ -27,15 +27,6 @@ services:
       - dbHost=${DB_HOST}
     depends_on:
       - "beanstalk"
-  mongo:
-    image: mongo:3.2
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongo/data:/data/db
-      - ./mongo/config:/mongo
-    command: "/bin/sh -c 'cd /mongo && chmod 777 mongo.sh && ./mongo.sh'"
   beanstalk:
     image: kusmierz/beanstalkd
     restart: unless-stopped
