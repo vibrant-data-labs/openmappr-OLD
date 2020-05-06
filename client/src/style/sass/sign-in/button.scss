@@ -21,7 +21,7 @@
 
       &:focus,
       &:active {
-        transform: darken($color: #BA3665, $amount: 8);
+        background: darken($color: #BA3665, $amount: 8);
         box-shadow: inset 0 0 8px rgba($color: darken($color: #BA3665, $amount: 24), $alpha: .6);
       }
     }
@@ -48,7 +48,7 @@
       background-color: #fff;
 
       &:hover {
-        background-color: lighten($gray-light, 8);
+        background-color: lighten(lighten(#000, 90%), 8);
       }
 
       &::before {
