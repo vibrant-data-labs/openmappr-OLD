@@ -329,8 +329,10 @@
     edgeOpacity = this.settings('edgeUnselectedOpacity');// || 0.3;
     if( source !== undefined ) {
       // grey if either hover or select have requested it
-      if(source == 'hover')
+      if(source == 'hover') {
         this.hoverGrey = enable;
+        this.selectGrey = false;
+      }
       else if(source == 'select') {
         this.selectGrey = enable;
         this.popGrey = false
@@ -389,14 +391,14 @@
       // not in selection mode, add opacity.
       $(this.domElements['d3-subset']).stop().fadeTo(this.inDelay, 1)
       this.settings('inSelectionMode', true);
-      // if(this.domElements.edges)
-      //   $(this.domElements.edges).stop().fadeTo(this.inDelay, 1);
+      if(this.domElements.subset)
+        $(this.domElements.subset).stop().fadeTo(this.inDelay, 1);
     } else {
       this.settings('inSelectionMode', false);
       // not in selection mode, remove opacity.
       $(this.domElements['d3-subset']).stop().fadeTo(this.outDelay, nodeOpacity)
-      // if(this.domElements.edges)
-      //   $(this.domElements.edges).stop().fadeTo(this.outDelay, edgeOpacity)
+      if(this.domElements.subset)
+        $(this.domElements.subset).stop().fadeTo(this.outDelay, edgeOpacity)
     }
   };
   /**
