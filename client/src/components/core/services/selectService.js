@@ -86,6 +86,7 @@ angular.module('common')
             /**
              * Select the nodes
              * @param {Object} selectData - The select descriptor
+             * @param {Object} selectData.ids - The list of nodes by ids
              * @param {string} selectData.attr - The attribute
              * @param {string} selectData.value - the attribute value
              * @param {string} selectData.min - the attribute min value
@@ -114,6 +115,10 @@ angular.module('common')
                     if (_.xor(this.selectedNodes, currentSubset).length == 0) {
                         this.selectedNodes = [];
                     }
+                }
+
+                if (selectData.ids) {
+                    this.selectedNodes = _.uniq(this.selectedNodes.concat(selectData.ids));
                 }
 
                 // if (this.selectedNodes.length == 0) {
