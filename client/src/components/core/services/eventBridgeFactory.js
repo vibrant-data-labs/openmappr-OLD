@@ -53,9 +53,14 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
 
     // get top (last drawn) node from an array of hovered nodes
     function _getTopNode(nodes) {
-        nodes.sort(function(n1, n2) {   // sort by drawing order
-            return n2.idx - n1.idx;
-        });
+        var subsettedNodes = _.filter(nodes, function (n) { return n.isSubsetted});
+        var sortFunc = function (n1, n2) { return n2.idx - n1.idx; } // sort by drawing order
+        if (subsettedNodes.length > 0) {
+            subsettedNodes.sort(sortFunc);
+            return subsettedNodes[0];
+        }
+
+        nodes.sort(sortFunc);
         return nodes[0];
     }
 

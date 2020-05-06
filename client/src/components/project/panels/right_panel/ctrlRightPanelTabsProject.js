@@ -10,7 +10,8 @@ angular.module('common')
         '$timeout',
         'FilterPanelService',
         'selectService',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService) {
+        'subsetService',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -177,7 +178,11 @@ angular.module('common')
             });
 
             $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
-                $scope.selNodesCount = data.selectionCount;
+                if (data.selectionCount == 0 && data.isSubsetted) {
+                    $scope.selNodesCount = subsetService.currentSubset().length;
+                } else {
+                    $scope.selNodesCount = data.selectionCount;
+                }
             });
 
             function openNetworkDataModal() {
@@ -216,7 +221,7 @@ angular.module('common')
              **************************************/
 
             function updateSelCount() {
-                $scope.selNodesCount = selectService.selectedNodes.length;
+                $scope.selNodesCount = selectService.selectedNodes.length || subsetService.currentSubset().length;
             }
 
 

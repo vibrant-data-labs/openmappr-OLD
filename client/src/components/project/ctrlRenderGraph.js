@@ -128,7 +128,9 @@ angular.module('common')
 
             /// ZoomReset zooms to selection , and then a full reset.
             function zoomExtents() {
-                var nodes = selectService.getSelectedNodes();
+                var selectedNodes = selectService.getSelectedNodes();
+                var subsetNodes = subsetService.subsetNodes;
+                var nodes = selectedNodes && selectedNodes.length ? selectedNodes : subsetNodes;
                 if(nodes && nodes.length > 0 && !fullReset) {
                     disableFullReset.cancel();
                     zoomService.zoomToNodes(nodes);

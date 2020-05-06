@@ -6,8 +6,8 @@
 */
 
 angular.module('common')
-    .directive('dirSelectionInfo', ['dataGraph', '$rootScope', 'graphSelectionService', 'infoPanelService', 'AttrInfoService', 'linkService', 'graphHoverService', 'BROADCAST_MESSAGES', 'selectService',
-        function(dataGraph, $rootScope, graphSelectionService, infoPanelService, AttrInfoService, linkService, graphHoverService, BROADCAST_MESSAGES, selectService) {
+    .directive('dirSelectionInfo', ['dataGraph', '$rootScope', 'graphSelectionService', 'infoPanelService', 'AttrInfoService', 'linkService', 'graphHoverService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
+        function(dataGraph, $rootScope, graphSelectionService, infoPanelService, AttrInfoService, linkService, graphHoverService, BROADCAST_MESSAGES, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -144,7 +144,7 @@ angular.module('common')
                 function initialise() {
                     var selNodes = selectService.getSelectedNodes();
                     // CHECKPOINT
-                    if (!selNodes.length) selNodes = dataGraph.getAllNodes();
+                    if (!selNodes.length) selNodes = subsetService.subsetNodes || dataGraph.getAllNodes();
                     $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);
                     refresh(selNodes);
                     console.log('All node groups -> ', $scope.groupsAndClusters);
