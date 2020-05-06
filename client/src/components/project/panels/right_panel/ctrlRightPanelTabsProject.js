@@ -25,8 +25,32 @@ angular.module('common')
              *  Scope data
              */
 
-            $scope.togglePanel = function() {
-                document.body.classList.toggle('side-menu-compressed')
+            $scope.expandedState = {
+                isSet: false,
+                isExpanded: false
+            };
+            $scope.togglePanel = function () {
+                if ($scope.expandedState.isSet) {
+                    if ($scope.expandedState.isExpanded) {
+                        document.body.classList.remove('side-menu-compressed');
+                    } else {
+                        document.body.classList.add('side-menu-compressed');
+                    }
+                }
+                $scope.expandedState.isSet = true;
+                $scope.expandedState.isExpanded = document.body.classList.contains('side-menu-compressed');
+            }
+
+            $scope.expandPanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.remove('side-menu-compressed');
+                }
+            }
+
+            $scope.collapsePanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.add('side-menu-compressed');
+                }
             }
 
             $scope.rightPanelTabs = [
