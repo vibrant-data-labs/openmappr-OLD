@@ -1,7 +1,10 @@
 'use strict';
 
+var dbHost = process.env.dbHost;
+
 module.exports = {
-    'dbUrl': 'mongodb://mongo:27017/MAPPRDB',
+    //'dbUrl': 'mongodb://mongo:27017/MAPPRDB',
+    'dbUrl': 'mongodb://'+dbHost+':27017/MAPPRDB',
     'oldDbUrl': 'mongodb://mongo:27017/MPTEST',
     'sessiondbUrl': 'mongodb://mongo:27017/sessionDB',
     'elasticSearchConfig': {
