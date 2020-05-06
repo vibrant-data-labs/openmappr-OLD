@@ -112,7 +112,7 @@
 
     &_legend {
       &::before {
-        background-image: url('/img/tabs-menu/fa-map_white.svg');
+        background-image: url('/img/tabs-menu/legend_white.svg');
       }
     }
 
@@ -173,6 +173,12 @@
     &_player {
       &::before {
         background-image: url('/img/tabs-menu/player_white.svg');
+      }
+    }
+
+    &_snapshots {
+      &::before {
+        background-image: url('/img/tabs-menu/snapshots_white.svg');
       }
     }
 
