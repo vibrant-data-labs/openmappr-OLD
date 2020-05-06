@@ -100,7 +100,7 @@ angular.module('common')
                     n.isSelected = false;
                     return n;
                 });
-                
+
                 var currentSubset = subsetService.currentSubset();
 
                 var cs = this._filter(selectData, subsetService.subsetNodes);
@@ -199,6 +199,14 @@ angular.module('common')
 
                 if (this.singleNode) {
                     this.singleNode = null;
+                    $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                        filtersCount: this.getActiveFilterCount(),
+                        selectionCount: this.selectedNodes.length,
+                        isSubsetted: currentSubset.length > 0,
+                        nodes: this.getSelectedNodes(),
+                    });
+                    
+                    return;
                 }
 
                 this.attrs = null;

@@ -1,6 +1,6 @@
 angular.module('common')
-.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService',
-function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService) {
+.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService',
+function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService) {
     'use strict';
 
     /*************************************
@@ -62,8 +62,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
     };
 
     $scope.hoverNode = function(node) {
-        // graphHoverService.clearHovers(true);
-        nodeSelectionService.hoverNodeIdList([node.id], window.event);
+        hoverService.hoverNodes({ ids: [node.id]});
     };
 
     $scope.hideSearchResults = function() {
@@ -247,8 +246,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
     }
 
     function selectNode(node) {
-        nodeSelectionService.clearSelections();
-        nodeSelectionService.selectNodeNeighborIdList([node.id], window.event, true);
+        selectService.selectSingleNode(node.id);
         $scope.highlightTextInOverlay();
     }
 
