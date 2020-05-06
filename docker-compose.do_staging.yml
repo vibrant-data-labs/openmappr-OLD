@@ -24,6 +24,7 @@ services:
     restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1
+      - dbHost=mongo
     depends_on:
       - "beanstalk"
   mongo:

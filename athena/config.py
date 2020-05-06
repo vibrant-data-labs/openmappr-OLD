@@ -1,5 +1,5 @@
 import os
-dbHost = os.environ['dbHost'] or "mongo"
+dbHost = os.getenv('dbHost') or "mongo"
 class Config(object):
     DEBUG = False
     TESTING = False
