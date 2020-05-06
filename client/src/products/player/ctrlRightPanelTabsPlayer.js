@@ -1,7 +1,7 @@
 angular.module('common')
     .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
         '$timeout', '$window', 'selectService',
-        function($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService) {
+        function ($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService) {
             'use strict';
 
             /*************************************
@@ -16,17 +16,17 @@ angular.module('common')
              *  LOAD CHANGE ngIntroService
              */
 
-            ngIntroService.setOptions({showProgress: true})
+            ngIntroService.setOptions({ showProgress: true })
 
             ngIntroService.onBeforeChange(function (targetElement) {
-                if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'slides'){
+                if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'slides') {
                     var nodeID = graphSelectionService.dataGraph.getAllNodes()[0].id;
                     graphSelectionService.selectByIds(nodeID);
                     $scope.zoomInfo.zoomExtents();
                 }
             });
             ngIntroService.onExit(function () {
-                if ($scope.panelUI.currentPanelOpen == 'slides'){
+                if ($scope.panelUI.currentPanelOpen == 'slides') {
                     graphSelectionService.clearSelectionCaches();
                     $scope.zoomInfo.zoomReset();
                 }
@@ -37,8 +37,32 @@ angular.module('common')
              *  Scope data
              */
 
-            $scope.togglePanel = function() {
-                document.body.classList.toggle('side-menu-compressed')
+            $scope.expandedState = {
+                isSet: false,
+                isExpanded: false
+            };
+            $scope.togglePanel = function () {
+                if ($scope.expandedState.isSet) {
+                    if ($scope.expandedState.isExpanded) {
+                        document.body.classList.remove('side-menu-compressed');
+                    } else {
+                        document.body.classList.add('side-menu-compressed');
+                    }
+                }
+                $scope.expandedState.isSet = true;
+                $scope.expandedState.isExpanded = document.body.classList.contains('side-menu-compressed');
+            }
+
+            $scope.expandPanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.remove('side-menu-compressed');
+                }
+            }
+
+            $scope.collapsePanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.add('side-menu-compressed');
+                }
             }
 
             $scope.rightPanelTabs = [
@@ -48,13 +72,13 @@ angular.module('common')
                     tooltipTitle: 'See project information',
                     panel: 'modal',
                     // highlighted: true,
-                    cmd: function() {
+                    cmd: function () {
                         $scope.panelUI.openPanel('modal');
-                        if(!$window.localStorage.modal)
+                        if (!$window.localStorage.modal)
                             $timeout(function () {
                                 ngIntroService.setOptions(
                                     {
-                                        steps:[
+                                        steps: [
                                             {
                                                 element: '#firstLoad',
                                                 intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
@@ -71,13 +95,13 @@ angular.module('common')
                     title: 'Slides',
                     panel: 'slides',
                     tooltipTitle: 'See slide information and change views if there are more than one',
-                    cmd: function() {
+                    cmd: function () {
                         $scope.panelUI.openPanel('slides');
-                        if(!$window.localStorage.slides)
+                        if (!$window.localStorage.slides)
                             $timeout(function () {
                                 ngIntroService.setOptions(
                                     {
-                                        steps:[
+                                        steps: [
                                             {
                                                 element: '#slideNavigator',
                                                 intro: 'Slide Navigator'
@@ -85,7 +109,7 @@ angular.module('common')
                                             {
                                                 element: '#slideDescription',
                                                 intro: 'Slide Description'
-                                            }, 
+                                            },
                                             {
                                                 element: '#mainCanvas',
                                                 intro: 'Main Canvas'
@@ -106,9 +130,9 @@ angular.module('common')
                     title: 'Filters',
                     panel: 'filter',
                     tooltipTitle: 'Filter data by one or more attributes',
-                    cmd: function() {
-                        $scope.panelUI.openPanel('filter');                        
-                        if(!$window.localStorage.filter)
+                    cmd: function () {
+                        $scope.panelUI.openPanel('filter');
+                        if (!$window.localStorage.filter)
                             $timeout(function () {
                                 ngIntroService.setOptions(FilterPanelService.getFilterIntroOptions());
                                 ngIntroService.start();
@@ -120,7 +144,7 @@ angular.module('common')
                     title: 'Legend',
                     panel: 'summary',
                     tooltipTitle: 'See color and sizing information',
-                    cmd: function() {
+                    cmd: function () {
                         $scope.panelUI.openPanel('summary');
                     }
                 },
@@ -130,7 +154,7 @@ angular.module('common')
                     showSelCount: true,
                     tooltipTitle: 'See the list view of selected nodes - or all nodes if none are selected',
                     panel: 'info',
-                    cmd: function() {
+                    cmd: function () {
                         $scope.panelUI.openPanel('info');
                     }
                 }
@@ -168,7 +192,7 @@ angular.module('common')
             //     updateSelCount();
             // });
 
-            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
                 $scope.selNodesCount = data.selectionCount;
             });
 
