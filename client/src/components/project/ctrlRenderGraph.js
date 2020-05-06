@@ -88,7 +88,7 @@ angular.module('common')
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
-                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0);
+                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
             });
 

@@ -89,6 +89,10 @@ angular.module('common')
                 }
             });
 
+            $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function() {
+                $scope.cancelOverlay();
+            });
+
             $scope.$on(BROADCAST_MESSAGES.nodeOverlay.highlightText, function (e, data) {
                 $scope.searchQuery = _.get(data, 'text', '');
             });
@@ -124,6 +128,10 @@ angular.module('common')
     **************************************/
 
             function onNodesSelect(e, data) {
+                if (data.nodes.length == 0) {
+                    $scope.cancelOverlay();
+                    return;
+                }
                 // TODO: correct this bug
                 // if(!$scope.mapprSettings) return;
                 // else if(($scope.mapprSettings.nodeFocusShow || showNodeDetailOnLoad === true)
@@ -335,7 +343,8 @@ angular.module('common')
                     }
 
                     //animate graph to position
-                    zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
+                    //zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
+                    zoomService.centerNode($scope.focusNode);
 
                 }
 

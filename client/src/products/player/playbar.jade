@@ -41,7 +41,7 @@
       ng-if="layout.plotType != 'list' && layout.plotType != 'grid'"
     )
       .button-group__item
-        button.button.button_type_play-toolbar.button_icon_target target
+        button.button.button_type_play-toolbar.button_icon_target(ng-click="zoomInfo.zoomExtents()") target
 
       .button-group__item
         button.button.button_type_play-toolbar.button_icon_plus(

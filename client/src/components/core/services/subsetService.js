@@ -28,6 +28,7 @@ angular.module('common')
     ********* Local Data *****************
     **************************************/
             var currentSubsetIndex = -1;
+            var findNodeWithId;
 
             /*************************************
     ********* Core Functions *************
@@ -103,8 +104,46 @@ angular.module('common')
                     val.isSelected = false;
                 });
 
+                if (settings('drawEdges')) {
+                    var graph = renderGraphfactory.sig().graph;
+                    var edges = {};
+                    var neighbourFn = 'getNodeNeighbours';
+                    var graph;
+                    // Which direction to use
+                    if (settings('edgeDirectionalRender') === 'all')
+                        neighbourFn = 'getNodeNeighbours';
+                    else if (settings('edgeDirectionalRender') === 'incoming')
+                        neighbourFn = 'getInNodeNeighbours';
+                    else if (settings('edgeDirectionalRender') === 'outgoing')
+                        neighbourFn = 'getOutNodeNeighbours';
+
+                    var subsetNodes = _.pluck(nodes, 'id');
+                    _.forEach(nodes, function(node) {
+                        _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId) {
+                            _.forEach(edgeInfo, function addConnEdge(edge, edgeId) {
+                                if (_.includes(subsetNodes, edge.source) &&
+                                    _.includes(subsetNodes, edge.target)) {
+                                    edges[edgeId] = edge;
+                                }
+                            });
+                        });
+                    });
+
+                    contexts.subset.canvas.width = contexts.subset.canvas.width;    // clear canvas
+
+                    _.each(edges, function (o) {
+                        sigma.canvas.edges.def(
+                            o,
+                            findNodeWithId(o.source, sigRender.sig),
+                            findNodeWithId(o.target, sigRender.sig),
+                            contexts.subset,
+                            settings,
+                            sigRender.displayScale
+                        );
+                    });
+                }
+
                 var nodeId = window.mappr.utils.nodeId;
-                contexts.subset.canvas.width = contexts.subset.canvas.width;    // clear canvas
 
                 var mainSel = d3sel.selectAll('div').data(nodes, nodeId);
                 mainSel.exit().remove();
@@ -140,6 +179,25 @@ angular.module('common')
                 renderer.bind('render', function () {
                     draw(_this.subsetNodes);
                 });
+
+                findNodeWithId = function findNodeWithId(nodeId) {
+                    var node = sig.graph.nodes(nodeId);
+                    if (!node) {
+                        // possibly aggregated, return the node Aggregation
+                        node = sig.graph.getParentAggrNode(nodeId);
+                        if (!node) {
+                            console.warn('Node with Id: %s does not exist in the graph', nodeId);
+                        } else {
+                            //console.log('Found aggregation node:%O  for node Id:%s', node, nodeId);
+                        }
+                    } else {
+                        //console.log('Found node:%O  for node Id:%s', node, nodeId);
+                    }
+                    if (node && node[renderGraphfactory.getRendererPrefix() + 'size'] == null) {
+                        console.warn('Node hasn\'t been rendered: %O', node);
+                    }
+                    return node;
+                };
             }
         }
     ]);
