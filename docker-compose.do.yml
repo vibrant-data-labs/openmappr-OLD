@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: openmapprimages/openmappr_web:staging
+    image: openmapprimages/openmappr_web:${ENVIRONMENT}
     command: ./run_docker_mode.sh
     restart: unless-stopped
     depends_on:
@@ -12,19 +12,19 @@ services:
     volumes:
       - "./server:/usr/src/mappr/server"
     environment:
-      - dbHost=mongo
+      - dbHost=${DB_HOST}
     logging:
       driver: "json-file"
       options:
         max-size: "100k"
         max-file: "10"
   athena:
-    image: openmapprimages/openmappr_athena:staging
+    image: openmapprimages/openmappr_athena:${ENVIRONMENT}
     command: ./run_docker_mode.sh
     restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1
-      - dbHost=mongo
+      - dbHost=${DB_HOST}
     depends_on:
       - "beanstalk"
   mongo:
