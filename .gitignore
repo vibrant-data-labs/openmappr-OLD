@@ -39,6 +39,10 @@ activate/
 npm-debug.log
 node_modules
 
+.idea
+.sass-cache
+
+
 # Sublime #
 ###################
 *.sublime-project

@@ -11,6 +11,8 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+    environment:
+      - dbHost=${DB_HOST}
     logging:
       driver: "json-file"
       options:
@@ -22,6 +24,7 @@ services:
     restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1
+      - dbHost=${DB_HOST}
     depends_on:
       - "beanstalk"
   mongo:
