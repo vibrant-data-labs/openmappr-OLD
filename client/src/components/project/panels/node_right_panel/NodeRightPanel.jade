@@ -54,18 +54,20 @@
                           .cat-text.no-margin.truncate {{tag}}
 
           section.section(ng-if="nodeRightInfo.section4.length")
-            .section-container(style="padding: 10px; display:flex; width: 100%; flex-wrap: wrap;")
-              #numberAndDates.tabcontent(ng-repeat="number in nodeRightInfo.section4" style="width: {{Section4Largest}}px")
-                .number
-                  p {{number.key}}
-                  p {{number.value}}
+            .section__content.section__info
+              dl#numberAndDates.section-info(
+                ng-repeat="number in nodeRightInfo.section4"
+                style="width: {{Section4Largest}}px"
+              )
+                dt.section-info__label {{number.key}}
+                dd.section-info__value {{number.value}}
 
           section.section(ng-if="nodeRightInfo.section5.length")
-            .section-container
-              #information.tabcontent(ng-repeat="number in nodeRightInfo.section5")
-                .information
-                  p {{number.key}}
-                  p {{number.value}}
+            .section__content.section__info
+              dl#information.section-info(ng-repeat="number in nodeRightInfo.section5")
+                dt.section-info__label {{number.key}}
+                dd.section-info__value {{number.value}}
+
           section.section
             .section__header
               h3.section__title Nearest Neightbors
