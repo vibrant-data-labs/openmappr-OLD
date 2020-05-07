@@ -15,16 +15,29 @@
     &_filter {
       padding: 0 20px;
 
+      &.card_expanded {
+        .card__title,
+        .card__action-sort,
+        .card__action-search {
+          display: none;
+        }
+
+        .card__search-box {
+          visibility: visible;
+          display: block;
+        }
+      }
+
       .card__header {
         display: flex;
         align-items: center;
-        padding: 15px 0;
+        padding: 15px 0 0;
       }
 
       .card__title {
         margin: 0;
         color: #BC3364;
-        font: 700 18px/27px 'Poppins'
+        font: 700 18px/42px 'Poppins'
       }
 
       .card__action-sort {
@@ -73,6 +86,9 @@
       .card__search-box {
         position: relative;
         background: #fff;
+        visibility: hidden;
+        display: none;
+        flex-grow: 1;
 
         &::before {
           position: absolute;
@@ -90,7 +106,7 @@
           width: 100%;
           border: 2px solid #EBEFF2;
           transition: background-color .2s;
-          padding: 10px 30px 10px 40px;
+          padding: 7px 30px 8px 40px;
           font: 400 15px/1 'Poppins';
           border-radius: 4px;
           background: #fff url('/img/filter-panel/search.svg') 12px 50% no-repeat;

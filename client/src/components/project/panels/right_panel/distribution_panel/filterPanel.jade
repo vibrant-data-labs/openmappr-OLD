@@ -40,14 +40,13 @@
 							button.card__action-sort sort
 
 							.card__action-search
-								button search icon
+								button(ng-click="searchToggle()") search
+
+							.card__search-box
+								input(type='text')/
+								button.close(ng-click="searchToggle()") close
 
 						.card__body
-							.card__search-box.visible
-								input(type='text')/
-								button.close close
-
-
 							.card__content
 								ul.tag-list
 								ul.search-results
@@ -92,7 +91,7 @@
 								.col-xs-2(ng-if="attr.metadata.minLabel")
 									h6.no-margin {{::attr.metadata.minLabel}}
 								div(style="color:{{focusNode.colorStr}};" ng-class="{'col-xs-8': attr.metadata.minLabel, 'col-xs-12': !attr.metadata.minLabel}")
-									h6.no-margin.text-center(style="color:{{nodeColorStr}};" uib-tooltip="{{attr.metadata.descr || attr.title}}" tooltip-placement='right' tooltip-append-to-body="true")
+									h6.no-margin.text-center(uib-tooltip="{{attr.metadata.descr || attr.title}}" tooltip-placement='right' tooltip-append-to-body="true")
 										span {{::attr.title}}
 										span(ng-show="attr.principalVal") :&nbsp;{{attr.principalVal}}
 								.col-xs-2(ng-if="attr.metadata.maxLabel")
