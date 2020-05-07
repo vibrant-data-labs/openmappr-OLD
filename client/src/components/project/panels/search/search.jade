@@ -1,5 +1,5 @@
-.search.shadow-btn.no-padding
-	.square-btn.no-background.text-center.uib-dropdown.pull-left.vert-align(uib-dropdown dropdown-append-to-body)
+.search.search-box
+	//.square-btn.no-background.text-center.uib-dropdown.pull-left.vert-align(uib-dropdown dropdown-append-to-body)
 		div.vert-align(uib-dropdown-toggle auto-close="outsideClick")
 			h4.no-margin.pull-left.truncate {{ui.attrFilterText}}&nbsp;
 			i.fa.fa-caret-down
@@ -27,12 +27,22 @@
 								h6.no-margin.truncate {{::attrVM.title}}
 									span &nbsp;&nbsp;&nbsp;
 										i.fa.fa-info-circle(ng-if="::attrVM.metadata.descr" uib-tooltip="{{::attrVM.metadata.descr}}" tooltip-placement="right" tooltip-append-to-body="true")
-	.square-btn.no-background.no-border.search-input
-		input.h4.form-control(ng-show="!ui.overlayOpen" style="width: 100%" type="text", ng-model="globalSearch.text",  ng-keyup="searchFn($event)" ng-focus="ui.showInfoIcon = true" ng-blur="ui.showInfoIcon = false")
-		input.h4.form-control(ng-show="ui.overlayOpen" style="width: 100%" type="text", ng-model="globalSearch.text" ng-change="highlightTextInOverlay($event)" ng-focus="ui.showInfoIcon = true" ng-blur="ui.showInfoIcon = false")
-		i.fa.fa-info-circle(ng-show="ui.showInfoIcon" uib-tooltip="Searching “climate change” will find the exact phrase, while a search for: climate change, will find “climate” OR “change”. Search is not case sensitive. Use the drop down to the left to select which attributes to search (default is all)." tooltip-placement="bottom" tooltip-append-to-body="true")
-		i.fa.fa-search
-	.clearfix
+	.search-box__input-wrap
+		.search-input
+			input.search-box__input(
+				ng-show="!ui.overlayOpen"
+				type="text", ng-model="globalSearch.text",
+				ng-keyup="searchFn($event)" ng-focus="ui.showInfoIcon = true" ng-blur="ui.showInfoIcon = false"
+			)
+
+			input.search-box__input(
+				ng-show="ui.overlayOpen"
+				type="text",
+				ng-model="globalSearch.text" ng-change="highlightTextInOverlay($event)" ng-focus="ui.showInfoIcon = true"
+				ng-blur="ui.showInfoIcon = false"
+			)
+
+		button.search-box__close(ng-click="searchToggle()") Close
 	//- show and hide for results
 	.search-results.uib-dropdown-menu-flexing(ng-show="showSearchResults")
 		.search-results-cover(ng-click="hideSearchResults();")

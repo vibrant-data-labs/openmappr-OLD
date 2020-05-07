@@ -100,19 +100,22 @@ angular.module('common')
             // main circle
             sel.append('circle').classed('node-main', true);
 
-            // node image filter
-            if(showImage && node.attr[imageAttr] && node.attr[imageAttr].length > 5) {
-                sel.append("svg:clipPath")
-                    .attr('id', clipId)
-                    .append('circle');
-                // image
-                sel.append('svg:image').classed('node-img', true)
-                    .attr('clip-path', 'url(#' + clipId +')');
+            if (node.inHover || node.isSelected) {
+                // node image filter
+                if (showImage && node.attr[imageAttr] && node.attr[imageAttr].length > 5) {
+                    sel.append("svg:clipPath")
+                        .attr('id', clipId)
+                        .append('circle');
+                    // image
+                    sel.append('svg:image').classed('node-img', true)
+                        .attr('clip-path', 'url(#' + clipId + ')');
+                }
+                // hover border
+                sel.append('circle').classed('node-hover-border', true);
             }
+
             //border
             sel.append('circle').classed('node-border', true);
-            // hover border
-            sel.append('circle').classed('node-hover-border', true);
         }
     }
     function d3NodeHighlightRender (node, canvas, settings) {

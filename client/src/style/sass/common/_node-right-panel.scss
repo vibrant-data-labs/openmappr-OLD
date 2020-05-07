@@ -1,0 +1,154 @@
+.node-right-panel {
+  background: #EBEFF2;
+
+  .section {
+    border-bottom: 1px solid #E4EAEF;
+    background: #fff;
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    &__header  {
+      display: flex;
+      padding: 20px;
+      align-items: center;
+
+      + .section__content {
+        padding-top: 0;
+      }
+    }
+
+    &__title {
+      font: 400 15px/21px 'Poppins';
+      color: #323C47;
+      margin: 0;
+    }
+
+    &__icons {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+
+      &-icon {
+        display: block;
+        width: 16px;
+        height: 16px;
+
+        a {
+          display: flex;
+          align-items: center;
+          height: 16px;
+        }
+
+        img {
+          display: block;
+          max-width: 100%;
+        }
+
+        &.close {
+          width: 20px;
+          height: 20px;
+          opacity: .8;
+          border: 2px solid #323C47;
+          border-radius: 50%;
+          box-sizing: content-box;
+          margin-left: 30px;
+
+          button {
+            padding: 0;
+            display: block;
+            height: 20px;
+            width: 100%;
+            background: url('/img/play-toolbar/cancel.svg') 50% no-repeat;
+            background-size: 12px;
+            transition: transform .2s;
+
+            &:hover {
+              transform: rotate(90deg);
+            }
+          }
+        }
+      }
+    }
+
+    &__content {
+      padding: 20px;
+    }
+
+    &_tabs {
+      background: none;
+
+      .section__content {
+        background: #fff;
+      }
+
+      .tab {
+        button {
+          white-space: nowrap;
+          width: auto;
+          height: 28px;
+          font-size: 13px;
+          font-weight: 500;
+          padding: 0 18px;
+          color: #818890;
+          border-radius: 5px 5px 0 0;
+          background: #D2D6D9;
+
+          &:hover {
+            background: darken(#D2D6D9, 4);
+          }
+
+          &.active {
+            background: #fff;
+            color: #BC3364;
+          }
+        }
+      }
+
+      .tabcontent {
+        p {
+          margin: 0;
+
+          &:not(:last-child) {
+            margin-bottom: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .tabContainer {
+    position: relative;
+
+    &::after {
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      width: 40px;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to right, rgba(#E4EAEF, 0), rgba(#E4EAEF,  1));
+    }
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+      padding: 0 10px;
+      font-size: 13px;
+      line-height: 20px;
+      border: 1px solid #E2E2E2;
+      border-radius: 20px;
+      color: #616161;
+      margin: 0 4px 4px 0;
+    }
+
+    .cat-item {
+      border: 0!important;
+    }
+  }
+}

@@ -2,8 +2,8 @@
 * Handles Graph Hover ops
 */
 angular.module('common')
-    .service('hoverService', ['$rootScope', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService', 'SelectorService',
-        function ($rootScope, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, selectService, subsetService, SelectorService) {
+    .service('hoverService', ['$rootScope', '$timeout', '$q', 'renderGraphfactory', 'dataGraph', 'nodeRenderer', 'inputMgmtService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService', 'SelectorService',
+        function ($rootScope, $timeout, $q, renderGraphfactory, dataGraph, nodeRenderer, inputMgmtService, BROADCAST_MESSAGES, selectService, subsetService, SelectorService) {
 
             "use strict";
 
@@ -14,21 +14,18 @@ angular.module('common')
             this.unhover = unhover;
             this.sigBinds = sigBinds;
 
-
             /*************************************
             ********* Local Data *****************
             **************************************/
             this.hoveredNodes = [];
             var hoveredSingleNode = null;
             var findNodeWithId;
+            var deferAction = null;
 
             // reset to selected values only
             (function (service) {
                 $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
                     service.unhover(true);
-                    if (data.selectionCount > 0) {
-                        renderGraphfactory.getRenderer().render();
-                    }
                 });
             })(this);
 
@@ -74,10 +71,6 @@ angular.module('common')
                     this.hoveredNodes = this.hoveredNodes.filter(function (x) {
                         return currentSubset.indexOf(x) > -1;
                     });
-                }
-
-                if (!hoverData.force && currentSubset.length > 0 && this.hoveredNodes.length == 0) {
-                    this.hoveredNodes = currentSubset;
                 }
 
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
@@ -130,7 +123,7 @@ angular.module('common')
                 return filterConfig;
             }
 
-            function unhover(forceRender) {
+            function unhover() {
                 this.hoveredNodes = [];
                 hoveredSingleNode = null;
 
@@ -141,12 +134,18 @@ angular.module('common')
                     this.hoveredNodes = _.clone(selectService.selectedNodes || []);
                 }
 
-                hoverByIds(this.hoveredNodes, 0, false, !!selectService.singleNode);
+                _hoverHelper(this.hoveredNodes, 0, !!selectService.singleNode);
             }
 
             function _hoverHelper(ids, degree, withNeighbors) {
-                degree = degree || 0;
-                hoverByIds(ids, degree, false, withNeighbors);
+                if (deferAction) {
+                    $timeout.cancel(deferAction);
+                }
+
+                deferAction = $timeout(function() {
+                    degree = degree || 0;
+                    hoverByIds(ids, degree, false, withNeighbors);
+                }, 100);
             }
 
             /** 
@@ -250,7 +249,7 @@ angular.module('common')
                                 var neighs = [findNodeWithId(edge.source, sigRender.sig), findNodeWithId(edge.target, sigRender.sig)];
                                 _.map(neighs, function(n) {
                                     n.isSelected = false;
-                                    n.inHover = n.id == node.id;
+                                    n.inHover = true;
                                 });
                                 
                                 neighNodes.push(...neighs);
@@ -277,6 +276,11 @@ angular.module('common')
                     mode = 'select';
                 }
                 sigRender.greyout(shouldGreyOut, mode);
+                if (nodes.length == 0) {
+                    sigRender.greyoutSubset(false);
+                } else {
+                    sigRender.greyoutSubset(true, selectedNodes.length > 0 ? 'select' : 'hover');
+                }
                 if (settings('enableHovering')) {
                     // var prefix = settings('prefix');
 
@@ -295,8 +299,9 @@ angular.module('common')
                     // Render nodes in hover state
                     var mainSel = d3sel.selectAll('div').data(nodes, nodeId);
                     mainSel.exit().remove();
+                    mainSel.remove();
                     //create nodes if needed
-                    mainSel.enter()
+                    d3sel.selectAll('div').data(nodes, nodeId).enter()
                         .append('div')
                         .style('position', 'absolute')
                         // .style('z-index', function(d, i) { return d.idx + 1;})
@@ -306,8 +311,8 @@ angular.module('common')
                         });
 
                     sigma.d3.labels.hover(
-                        _.reject(nodes, 'isAggregation'),
                         [],
+                        nodes,
                         sigRender.d3Sel.labels(),
                         settings
                     );

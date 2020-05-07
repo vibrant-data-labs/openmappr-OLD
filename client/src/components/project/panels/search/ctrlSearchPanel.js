@@ -1,6 +1,6 @@
 angular.module('common')
-.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService',
-function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService) {
+.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService', 'subsetService',
+function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService, subsetService) {
     'use strict';
 
     /*************************************
@@ -62,8 +62,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
     };
 
     $scope.hoverNode = function(node) {
-        // graphHoverService.clearHovers(true);
-        nodeSelectionService.hoverNodeIdList([node.id], window.event);
+        hoverService.hoverNodes({ ids: [node.id]});
     };
 
     $scope.hideSearchResults = function() {
@@ -144,6 +143,12 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
 
         searchService.searchNodes($scope.globalSearch.text, dataRef, filterAttrIds)
         .then(function(hits) {
+            var subsetNodes = subsetService.currentSubset();
+            if (subsetNodes && subsetNodes.length) {
+                hits = _.filter(hits, function(hit) {
+                    return _.includes(subsetNodes, hit._source.id);
+                });
+            }
             console.log('[ctrlSearchPanel : ] nodes found -- ', hits);
             var rgNodes = renderGraphfactory.getGraph().nodes();
             var dataPointIdNodeIdMap = dataGraph.getRawDataUnsafe().dataPointIdNodeIdMap;
@@ -247,14 +252,12 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
     }
 
     function selectNode(node) {
-        nodeSelectionService.clearSelections();
-        nodeSelectionService.selectNodeNeighborIdList([node.id], window.event, true);
+        selectService.selectSingleNode(node.id);
         $scope.highlightTextInOverlay();
     }
 
     function selectAllNodes(showSearchResults) {
-        nodeSelectionService.clearSelections();
-        nodeSelectionService.selectNodeIdList(_.map($scope.searchResults, 'id'), window.event, true);
+        selectService.selectNodes({ ids: _.map($scope.searchResults, 'id') });
         if(!showSearchResults) {
             $scope.hideSearchResults();
         }

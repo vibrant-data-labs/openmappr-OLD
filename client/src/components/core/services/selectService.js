@@ -79,12 +79,14 @@ angular.module('common')
                     $rootScope.$on(BROADCAST_MESSAGES.hss.subset.init, function (ev) {
                         subsetService.subsetSelection(service.getSelectedNodes());
                         service.filters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');
+                        service.unselect();
                     });
                 })(this);
             }
             /**
              * Select the nodes
              * @param {Object} selectData - The select descriptor
+             * @param {Object} selectData.ids - The list of nodes by ids
              * @param {string} selectData.attr - The attribute
              * @param {string} selectData.value - the attribute value
              * @param {string} selectData.min - the attribute min value
@@ -95,20 +97,33 @@ angular.module('common')
              * @param {boolean} selectData.force - whether replace value of current filter
              */
             function selectNodes(selectData) {
+                _.map(this.getSelectedNodes(), function(n) {
+                    n.isSelected = false;
+                    return n;
+                });
+
                 var currentSubset = subsetService.currentSubset();
 
                 var cs = this._filter(selectData, subsetService.subsetNodes);
                 this.selectedNodes = _.pluck(cs, 'id');
-
+                
                 if (currentSubset.length > 0) {
                     this.selectedNodes = this.selectedNodes.filter(function (x) {
                         return currentSubset.indexOf(x) > -1;
                     });
+
+                    if (_.xor(this.selectedNodes, currentSubset).length == 0) {
+                        this.selectedNodes = [];
+                    }
                 }
 
-                if (this.selectedNodes.length == 0) {
-                    this.selectedNodes = currentSubset;
+                if (selectData.ids) {
+                    this.selectedNodes = _.uniq(this.selectedNodes.concat(selectData.ids));
                 }
+
+                // if (this.selectedNodes.length == 0) {
+                //     this.selectedNodes = currentSubset;
+                // }
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
                     filtersCount: this.getActiveFilterCount(),
@@ -189,6 +204,14 @@ angular.module('common')
 
                 if (this.singleNode) {
                     this.singleNode = null;
+                    $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                        filtersCount: this.getActiveFilterCount(),
+                        selectionCount: this.selectedNodes.length,
+                        isSubsetted: currentSubset.length > 0,
+                        nodes: this.getSelectedNodes(),
+                    });
+                    
+                    return;
                 }
 
                 this.attrs = null;
@@ -205,7 +228,7 @@ angular.module('common')
                     n.isSelected = false;
                     return n;
                 });
-                this.selectedNodes = currentSubset;
+                this.selectedNodes = [];
 
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
                     filtersCount: this.getActiveFilterCount(),

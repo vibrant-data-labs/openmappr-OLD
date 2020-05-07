@@ -1,0 +1,25 @@
+.button-group {
+  display: flex;
+
+  &_type {
+    &_play-toolbar {
+
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+
+      border: 1px solid $gray-light;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow: 0 1px 0 $gray-light;
+
+      .button-group__item {
+        height: 26px;
+
+        &:not(:last-child) {
+          border-right: 1px solid $gray-light;
+        }
+      }
+    }
+  }
+}

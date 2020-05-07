@@ -153,6 +153,10 @@ angular.module('common')
                 refreshSelectionInfo(data.nodes);
             });
 
+            $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(e, data) {
+                refreshSelectionInfo(data.nodes);
+            });
+
             $scope.$on(BROADCAST_MESSAGES.attr.typeChanged, function(e, modifiedAttr) {
                 var changedAttr = _.find($scope.nodeInfoAttrs, 'id', modifiedAttr.id);
                 if(!changedAttr) {
