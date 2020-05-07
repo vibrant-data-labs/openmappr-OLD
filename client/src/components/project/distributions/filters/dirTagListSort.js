@@ -9,9 +9,12 @@ function(FilterPanelService, BROADCAST_MESSAGES) {
     var dirDefn = {
         restrict: 'E',
         scope: {
-            attr: '='
+            attr: '=',
+            sortTypes: '=', // List of Sort types objects eg. {id: 'alphabetical', title: 'Alphabetical'}
+            sortConfig: '=', // Model for sort => {sortType: 'alphabetical', sortOrder: 'desc'}
+            alignToRight: '<'
         },
-        template: '<dir-sort-menu align-to-right="true" sort-types="sortTypes" sort-config="attr.sortOps"></dir-sort-menu>',
+        template: '<button ng-click="setSortOrder($event)">sort</button>',
         link: postLinkFn
     };
 
@@ -53,6 +56,14 @@ function(FilterPanelService, BROADCAST_MESSAGES) {
         scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
             scope.sortTypes = filterSortOpts(sortTypes, renderType);
         });
+
+        scope.sortOrder = 'desc';
+        scope.setSortOrder = function setSortOrder($event) {
+            var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            scope.sortConfig = scope.sortConfig || {};
+            scope.sortConfig.sortOrder = newSortOrder;
+            $event.stopPropagation();
+        }
     }
 
 

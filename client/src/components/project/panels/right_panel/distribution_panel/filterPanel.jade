@@ -31,74 +31,66 @@
 		//- FILTER_PANEL_CONTENT starts from here
 		.panel-scroll.flex-fill.flex-vert-container(ng-controller="FilterPanelCtrl")
 			//- span {{filteredDistrAttrs.length}} of {{nodeDistrAttrs.length}}
-			ul.filter-list
-				li.filter-list__item
-					section.card.card_type_filter
-						header.card__header
-							h2.card__title Keywords
-
-							button.card__action-sort sort
-
-							.card__action-search
-								button(ng-click="searchToggle()") search
-
-							.card__search-box
-								input(type='text')/
-								button.close(ng-click="searchToggle()") close
-
-						.card__body
-							.card__content
-								ul.tag-list
-								ul.search-results
-
-						footer.card__footer
-							.card-pagination
-								span.card-pagination__button.disabled &larr; Less
-								span.card-pagination__total 1-127
-								span.card-pagination__button More &rarr;
-
-
-			ul.list-unstyled.flex-fill.left-panel-body(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr")
-				li.filter-item(
+			ul.filter-list(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr")
+				li.filter-list__item(
 					ng-repeat="attr in ui.filteredAttrs = (nodeDistrAttrs | filter: {title : ui.statsSearchKey}) track by attr.id",
 					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1)}",
 					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)',
 					ng-style="{'display': 'block', 'margin-bottom':'15px', 'height': 'auto'}"
 				)
-					.row
-						.attr-title
-							.row.vert-align
-								.col-xs-6
-									h6.title.truncate(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true") {{::attr.title}}
-								//- .col-xs-4
-								//- .col-xs-4
-								//- 	h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
-								.col-xs-5(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", style="padding-left:0;")
-									dir-tag-list-sort(attr="::attr")
-								.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
-									dir-attr-mod(attr="::attr", placement="selection")
-						.col-xs-12()
-							.row(ng-if="attr.attrType === 'string' && attr.principalVal", style="height:20px;")
-								.col-xs-1
-								.col-xs-11
-									div
-										h6.truncate.no-margin(style="color:{{nodeColorStr}};" ng-text-truncate="attr.principalVal" ng-tt-chars-threshold="200" ng-tt-more-label="more..." ng-tt-less-label="...less")
-										//- h6.truncate.no-margin {{attr.principalVal}}
-							dir-attr-renderer(attr-to-render="attr", node-color-str="nodeColorStr", is-node="true", show-filter="ui.enableFilters", disable-filter="attr.disableFilter" theme="appUi.theme" pinned-media="pinnedMedia")
-							.clearfix
-						.col-xs-12
-							.attr-subtitle.row(ng-if="attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float' || attr.attrType === 'year' " ng-class="{'filters-on':ui.enableFilters}" ng-style="{'margin-bottom': '3px'}")
-								.col-xs-2(ng-if="attr.metadata.minLabel")
-									h6.no-margin {{::attr.metadata.minLabel}}
-								div(style="color:{{focusNode.colorStr}};" ng-class="{'col-xs-8': attr.metadata.minLabel, 'col-xs-12': !attr.metadata.minLabel}")
-									h6.no-margin.text-center.title(
-										uib-tooltip="{{attr.metadata.descr || attr.title}}"
-										tooltip-placement='right'
-										tooltip-append-to-body="true"
-									)
-										span {{::attr.title}}
-										span(ng-show="attr.principalVal") :&nbsp;{{attr.principalVal}}
-								.col-xs-2(ng-if="attr.metadata.maxLabel")
-									h6.no-margin.text-right.pull-right {{::attr.metadata.maxLabel}}
-							.divider
-					.clearfix
+					section.card.card_type_filter(data-attr="{{attr.id}}")
+						header.card__header(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true")
+							h2.card__title {{::attr.title}}
+
+							dir-tag-list-sort(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", class="card__action-sort", attr="::attr")
+
+							.card__action-search
+								button(ng-click="searchToggle(attr)") search
+
+							.card__search-box
+								input(type='text')/
+								button.close(ng-click="searchToggle(attr)") close
+
+						.card__body
+							.card__content
+								dir-attr-renderer(attr-to-render="attr", noe-color-str="nodeColorStr", is-node="true", show-filter="ui.enableFilters", disable-filter="attr.disableFilter" theme="appUi.theme" pinned-media="pinnedMedia")
+
+					h6.no-margin.text-center.title(
+						ng-if="attr.attrType == 'integer' || attr.attrType == 'float' || attr.attrType == 'boolean' || attr.attrType == 'year' "
+						uib-tooltip="{{attr.metadata.descr || attr.title}}"
+						tooltip-placement='right'
+						tooltip-append-to-body="true"
+					)
+						span {{::attr.title}}
+						span(ng-show="attr.principalVal") :&nbsp;{{attr.principalVal}}
+
+					//- .row
+					//- 	.attr-title
+					//- 		.row.vert-align
+					//- 			.col-xs-6
+					//- 				h6.title.truncate(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true") {{::attr.title}}
+					//- 			.col-xs-4
+					//- 			.col-xs-4
+					//- 				h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
+					//- 			.col-xs-5(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", style="padding-left:0;")
+					//- 				dir-tag-list-sort(attr="::attr")
+					//- 			.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
+					//- 				dir-attr-mod(attr="::attr", placement="selection")
+					//- 	.col-xs-12()
+					//- 		.row(ng-if="attr.attrType === 'string' && attr.principalVal", style="height:20px;")
+					//- 			.col-xs-1
+					//- 			.col-xs-11
+					//- 				div
+					//- 					h6.truncate.no-margin(style="color:{{nodeColorStr}};" ng-text-truncate="attr.principalVal" ng-tt-chars-threshold="200" ng-tt-more-label="more..." ng-tt-less-label="...less")
+					//- 					h6.truncate.no-margin {{attr.principalVal}}
+					//- 		dir-attr-renderer(attr-to-render="attr", node-color-str="nodeColorStr", is-node="true", show-filter="ui.enableFilters", disable-filter="attr.disableFilter" theme="appUi.theme" pinned-media="pinnedMedia")
+					//- 		.clearfix
+					//- 	.col-xs-12
+					//- 		.attr-subtitle.row(ng-if="attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float' || attr.attrType === 'year' " ng-class="{'filters-on':ui.enableFilters}" ng-style="{'margin-bottom': '3px'}")
+					//- 			.col-xs-2(ng-if="attr.metadata.minLabel")
+					//- 				h6.no-margin {{::attr.metadata.minLabel}}
+					//- 			div(style="color:{{focusNode.colorStr}};" ng-class="{'col-xs-8': attr.metadata.minLabel, 'col-xs-12': !attr.metadata.minLabel}")
+					//- 			.col-xs-2(ng-if="attr.metadata.maxLabel")
+					//- 				h6.no-margin.text-right.pull-right {{::attr.metadata.maxLabel}}
+					//- 		.divider
+					//- .clearfix

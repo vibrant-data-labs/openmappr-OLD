@@ -51,8 +51,8 @@ angular.module('common')
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
             });
 
-            $scope.searchToggle = function searchToggle() {
-                const card = document.getElementsByClassName('card_type_filter')[0];
+            $scope.searchToggle = function searchToggle(attr) {
+                const card = document.querySelector('.card_type_filter[data-attr="' + attr.id + '"]');
                 //const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
 
                 card.classList.toggle('card_expanded');
