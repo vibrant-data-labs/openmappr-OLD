@@ -31,39 +31,41 @@
 		//- FILTER_PANEL_CONTENT starts from here
 		.panel-scroll.flex-fill.flex-vert-container(ng-controller="FilterPanelCtrl")
 			//- span {{filteredDistrAttrs.length}} of {{nodeDistrAttrs.length}}
+			ul.filter-list
+				li.filter-list__item
+					section.card.card_type_filter
+						header.card__header
+							h2.card__title Keywords
+
+							button.card__action-sort sort
+
+							.card__action-search
+								button search icon
+
+						.card__body
+							.card__search-box.visible
+								input(type='text')/
+								button.close close
+
+
+							.card__content
+								ul.tag-list
+								ul.search-results
+
+						footer.card__footer
+							.card-pagination
+								span.card-pagination__button.disabled &larr; Less
+								span.card-pagination__total 1-127
+								span.card-pagination__button More &rarr;
+
+
 			ul.list-unstyled.flex-fill.left-panel-body(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr")
-				li.filter-item.card.card_type_filter(
+				li.filter-item(
 					ng-repeat="attr in ui.filteredAttrs = (nodeDistrAttrs | filter: {title : ui.statsSearchKey}) track by attr.id",
 					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1)}",
 					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)',
 					ng-style="{'display': 'block', 'margin-bottom':'15px', 'height': 'auto'}"
 				)
-
-					.card__header
-						h2.card__title(
-							ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr" +
-							".attrType != 'year' ",
-							uib-tooltip="{{::attr.metadata.descr}}"
-							tooltip-placement='right'
-							tooltip-append-to-body="true"
-						) {{::attr.title}}
-
-						button.card__action-sort sort
-
-						.card__action-search
-							button search icon
-
-					.card__body
-						.card__search-box.visible
-							input(type='text')/
-
-						.card__content
-							ul.tag-list
-							ul.search-results
-
-					.card__footer
-						.pagination 1-127
-
 					.row
 						.attr-title
 							.row.vert-align
