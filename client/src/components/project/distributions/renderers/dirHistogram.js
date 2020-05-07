@@ -155,13 +155,18 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, payload) {
-                    while (histElem.firstChild) {
-                        histElem.removeChild(histElem.lastChild);
-                    }
+                    animateRemoval(histElem, histoData);
                     
-                    attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
-                    histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, payload.nodes);
-                    updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
+                    $timeout(function() {
+                        while (histElem.firstChild) {
+                            histElem.removeChild(histElem.lastChild);
+                        }
+                        attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
+                        histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, payload.nodes);
+                        $timeout(function () {
+                            updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
+                        }, 500);
+                    }, 500);
                 });
 
                 // Create global distributions & selection bars
@@ -487,6 +492,23 @@ angular.module('common')
                 return binThresholds;
             }
 
+            function animateRemoval(histElem, histoData) {
+                d3.select(histElem)
+                    .selectAll('.bar')
+                    .selectAll('rect')
+                    .each(function() {
+                        var barElem = d3.select(this);
+                        var newBarHeight = 0;
+                        var selY = sanitizeYPosn(histoData.yScaleFunc(0), histoData.height, histoData.opts);
+
+                        barElem
+                            .transition()
+                            .duration(500)
+                            .attr("height", newBarHeight)
+                            .attr("y", selY);
+                    });
+            }
+
             function createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, nodes) {
                 var isOrdinal = histoData.isOrdinal = !attrInfo.isNumeric;
                 _log(logPrefix + 'Rendering attr: ', attrInfo.attr.title);
@@ -592,15 +614,16 @@ angular.module('common')
                         return "translate(" + x(xVal) + "," + 0 + ")";
                     });
 
+                var globalBarFillColor = opts.barColor;
                 // Make global bar
                 bar.append("rect")
-                    .attr("x", function (d, i) { return getBarXPosn(d, i, binType, barWidth); })
-                    .attr("y", function (d) {
-                        return y(d.y);
-                    })
+                    .attr('opacity', 1)
+                    .style({ fill: globalBarFillColor, 'shape-rendering': 'crispEdges' })
                     .attr("data-main-bar", "true")
+                    .attr("x", function (d, i) { return getBarXPosn(d, i, binType, barWidth); })
                     .attr("width", barWidth)
-                    .attr("height", function (d) { return height - y(d.y); });
+                    .attr("y", height)
+                    .attr("height", 0);
 
                 // Make selection bar, initially height 0
                 bar.append("rect")
@@ -619,6 +642,15 @@ angular.module('common')
                     .attr("width", barWidth)
                     .attr("height", 0);
 
+                    $timeout(function(b) {
+                        b.select('[data-main-bar="true"]')
+                        .transition()
+                        .duration(1000)
+                        .attr("y", function (d) {
+                            return y(d.y);
+                        })
+                        .attr("height", function (d) { return height - y(d.y); });
+                    }, 100, null, bar);
                 // Attach listeners on parent of overlapping bars i.e 'g' element
                 bar.on('mouseover', onBarHover)
                     .on('mouseout', onBarUnHover)
