@@ -91,7 +91,11 @@
 								.col-xs-2(ng-if="attr.metadata.minLabel")
 									h6.no-margin {{::attr.metadata.minLabel}}
 								div(style="color:{{focusNode.colorStr}};" ng-class="{'col-xs-8': attr.metadata.minLabel, 'col-xs-12': !attr.metadata.minLabel}")
-									h6.no-margin.text-center(uib-tooltip="{{attr.metadata.descr || attr.title}}" tooltip-placement='right' tooltip-append-to-body="true")
+									h6.no-margin.text-center.title(
+										uib-tooltip="{{attr.metadata.descr || attr.title}}"
+										tooltip-placement='right'
+										tooltip-append-to-body="true"
+									)
 										span {{::attr.title}}
 										span(ng-show="attr.principalVal") :&nbsp;{{attr.principalVal}}
 								.col-xs-2(ng-if="attr.metadata.maxLabel")
