@@ -12,7 +12,7 @@ angular.module('common')
                 template: '<div class="histogram" ng-mouseleave="outBar()" ng-mousemove="overBar($event)">' +
                     '<div class="tooltip-positioner" uib-tooltip="{{tooltipText}}" tooltip-append-to-body="true" tooltip-is-open="openTooltip"></div>' +
                     '</div>' +
-                    '<dir-range-filter ng-if="showFilter" ng-class="{disableFilter: disableFilter}"></dir-range-filter>',
+                    '<dir-range-filter ng-if="showFilter" ng-class="{disableFilter: disableFilter}" attr="attrInfo"></dir-range-filter>',
                 link: postLinkFn
             };
 
@@ -71,6 +71,7 @@ angular.module('common')
                 var histoBars; // Ref for histo svg bars
                 var mappTheme = projFactory.getProjectSettings().theme || 'light';
                 var attrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id));
+                scope.attrInfo=attrInfo;
                 var histElem = element[0].childNodes[0];
                 var tooltip = element.find(".d3-tip");
 
@@ -155,13 +156,14 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, payload) {
+                    attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
+                    scope.attrInfo=attrInfo;
                     animateRemoval(histElem, histoData);
                     
                     $timeout(function() {
                         while (histElem.firstChild) {
                             histElem.removeChild(histElem.lastChild);
                         }
-                        attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
                         histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, payload.nodes);
                         $timeout(function () {
                             updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
