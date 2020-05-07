@@ -1,6 +1,6 @@
 angular.module('common')
-.service('labelRenderer', ['$q', 'renderGraphfactory', 'graphHoverService',
-function($q, renderGraphfactory, graphHoverService) {
+.service('labelRenderer', ['$q', 'renderGraphfactory', 'hoverService',
+function($q, renderGraphfactory, hoverService) {
 
     "use strict";
     var _service = this;
@@ -126,14 +126,14 @@ function($q, renderGraphfactory, graphHoverService) {
     function labelClick(d) {
         _clearTimer();
         d.isSelected = true;
-        graphHoverService.clearHovers(true);
-        renderGraphfactory.sig().dispatchEvent('clickNodes', {node: d.nodes, degree: 0, all: true, genBy:'labelClick'});
+        hoverService.unhover();
+        renderGraphfactory.sig().dispatchEvent('clickNodes', {node: d.nodes, labelId: d.id, degree: 0, all: true, genBy:'labelClick'});
     }
 
     function labelHover(d) {
         var hoverFn = function() {
             _service.isGroupLabelHover = true;
-            graphHoverService.hoverNodes(hoverData.allnodes == undefined ? hoverData.nodes : hoverData.allnodes, 0);
+            hoverService.hoverNodes({ attr: renderGraphfactory.getRenderer().settings('nodeColorAttr'), value: d.id });
             hoverTimer = undefined;
         };
         _clearTimer();
@@ -145,7 +145,7 @@ function($q, renderGraphfactory, graphHoverService) {
         _clearTimer();
         _service.isGroupLabelHover = false;
         if(!d.isSelected) {
-            graphHoverService.clearHovers(true);
+            hoverService.unhover();
         }
         renderGraphfactory.sig().dispatchEvent('outNodes', {nodes: d.nodes});
     }

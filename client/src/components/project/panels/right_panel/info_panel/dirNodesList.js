@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'graphHoverService', 'graphSelectionService', 'FilterPanelService', 'layoutService',
-function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPanelService, layoutService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'selectService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -67,14 +67,8 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         };
 
         scope.selectNode = function(nodeId, $event) {
-            if(scope.panelMode == 'selection') {
-                parCtrl.openNodeBrowserInSelMode();
-            }
-            parCtrl.replaceSelection();
-            graphHoverService.clearHovers($event);
-            graphSelectionService.selectByIds([nodeId] ,1);
-            FilterPanelService.rememberSelection(false);
-
+            hoverService.unhover();
+            selectService.selectSingleNode(nodeId);
         };
 
         scope.hoverNode = function(nodeId) {
@@ -86,7 +80,7 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
         };
 
         scope.selectGroup = function(group) {
-            selectNodes(_.map(group.nodes, 'id'));
+            selectService.selectNodes({ attr: group.attr, value: group.name});
         };
 
         scope.hoverGroup = function(group) {
@@ -133,24 +127,13 @@ function(BROADCAST_MESSAGES, graphHoverService, graphSelectionService, FilterPan
             return d3.rgb(scope.layout.scalers.color(cluster)).toString();
         }
 
-        function selectNodes(nodeIds, ev) {
-            parCtrl.replaceSelection();
-            graphHoverService.clearHovers(ev);
-
-            scope.selectedGroup = nodeIds;
-            graphHoverService.hoverByIds(nodeIds, 0, false);
-
-
-            FilterPanelService.rememberSelection(false);
-        }
-
         function hoverNodes(nodeIds) {
             parCtrl.persistSelection();
-            graphHoverService.hoverByIds(nodeIds, 0, false);
+            hoverService.hoverNodes({ ids: nodeIds });
         }
 
         function unHoverNodes(nodeIds) {
-            graphHoverService.unhoverByIds(nodeIds);
+            hoverService.unhover();
             if (scope.selectedGroup != undefined) hoverNodes(scope.selectedGroup);
         }
     }

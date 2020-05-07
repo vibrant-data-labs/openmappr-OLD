@@ -6,11 +6,11 @@ html(lang='en', data-ng-app='hcApp')
 		meta(name="viewport", content="initial-scale=.7, user-scalable=no, minimal-ui")
 		meta(name="apple-mobile-web-app-capable" content="yes")
 		meta(property="fb:app_id", content="1389717224632761")
-		meta(property="og:image", content="https://s3-us-west-1.amazonaws.com/mappr-misc/icons/vdat-blue-dot-logo.png")
+		meta(property="og:image", content="/img/openmappr_socialmedia.png")
 		meta(property="og:title", content="Vibrant Data - Mappr")
-		meta(property="og:description", content="Data Science and Ecosytem Monitoring Platform")
+		meta(property="og:description", content="Data science and visualization platform")
 		title Vibrant Data - Mappr
-		meta(name="description", content="Data Science and Ecosytem Monitoring Platform")
+		meta(name="description", content="Data science and visualization platform")
 		link(rel="stylesheet", href="#{server_prefix}/css/mappr-icons/style.css")
 		link(href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel="stylesheet")
 		link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
@@ -122,7 +122,7 @@ html(lang='en', data-ng-app='hcApp')
 			//- Single global object for app
 			window.MP_APP = {};
 
-	body#app.nav-min(data-custom-background, data-off-canvas-nav, data-ng-controller='AppCtrl', ng-class="{'dark-theme': appUi.theme == 'dark'}")
+	body#app.nav-min(data-custom-background, data-off-canvas-nav, data-ng-controller='AppCtrl', class="side-menu-compressed", ng-class="{'dark-theme': appUi.theme == 'dark'}")
 		div(data-ng-cloak='data-ng-cloak')
 			div(ng-if="isAuthenticated()", data-ng-controller='DashboardCtrl', ng-init="user.loadInitial()")
 				div

@@ -1,6 +1,6 @@
 angular.module('common')
-.service('eventBridgeFactory', ['$q','$timeout', 'renderGraphfactory', 'inputMgmtService', 'graphHoverService','graphSelectionService',
-function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService, graphSelectionService) {
+.service('eventBridgeFactory', ['$q','$timeout', 'renderGraphfactory', 'inputMgmtService', 'graphHoverService','graphSelectionService', 'hoverService', 'selectService',
+function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService, graphSelectionService, hoverService, selectService) {
 
     "use strict";
 
@@ -53,9 +53,14 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
 
     // get top (last drawn) node from an array of hovered nodes
     function _getTopNode(nodes) {
-        nodes.sort(function(n1, n2) {   // sort by drawing order
-            return n2.idx - n1.idx;
-        });
+        var subsettedNodes = _.filter(nodes, function (n) { return n.isSubsetted});
+        var sortFunc = function (n1, n2) { return n2.idx - n1.idx; } // sort by drawing order
+        if (subsettedNodes.length > 0) {
+            subsettedNodes.sort(sortFunc);
+            return subsettedNodes[0];
+        }
+
+        nodes.sort(sortFunc);
         return nodes[0];
     }
 
@@ -63,7 +68,7 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
         var _node = inputMgmtService.inputMapping().hoverNode;
         var hoverFn = function() {
             event.data.allNodes = [_getTopNode(hoverNodes)];    // pass top node through
-            graphHoverService.hoverHandler(name, event, _node);
+            hoverService.hoverNodes({ ids: _.pluck([_getTopNode(hoverNodes)], 'id'), withNeighbors: true});
             hoverTimer = undefined;
             hoverNodes = undefined;
         };
@@ -89,7 +94,7 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
             }
         }
         event.data.nodes = [_getTopNode(event.data.nodes)];
-        graphHoverService.hoverOutHandler(name, event, inputMgmtService.inputMapping().hoverStage);
+        hoverService.unhover();
     }
 
     function clickHandler (name, event) {
@@ -100,10 +105,16 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
                 event.shiftKey = true;
                 settings('isShiftKey', false);
             }
-            graphSelectionService.clickNodesHander(name, event, inputMgmtService.inputMapping().clickNode);
+            
+            if (event.data.all) {
+                selectService.selectNodes({ attr: settings('nodeColorAttr'), value: event.data.labelId });
+            }
+            else {
+                selectService.selectSingleNode(_getTopNode(event.data.node).id);
+            }
         } else {
-            graphSelectionService.clickStageHander(name, event, inputMgmtService.inputMapping().clickStage);
-            graphHoverService.clearHovers(true);
+            selectService.unselect();
+            hoverService.unhover();
         }
     }
     function doubleClickHandler (name, event) {
@@ -111,7 +122,7 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
             graphSelectionService.clickNodesHander(name, event, inputMgmtService.inputMapping().clickNode);
         } else {
             graphSelectionService.clickStageHander(name, event, inputMgmtService.inputMapping().clickStage);
-            graphHoverService.clearHovers(true);
+            hoverService.unhover();
         }
     }
     /**

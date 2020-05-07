@@ -1,8 +1,8 @@
 //RenderCtrl sets up dataGraph and the current Snapshot
 // if an attribute is changed, loads the new graph!
 angular.module('common')
-    .controller('renderGraphCtrl', ['$scope', '$rootScope', '$routeParams','$q', '$timeout', '$location', 'leafletData', 'dataService','networkService' ,'dataGraph', 'AttrInfoService', 'layoutService', 'snapshotService', 'orgFactory', 'projFactory', 'playerFactory', 'graphSelectionService', 'zoomService', 'SelectorService', 'BROADCAST_MESSAGES',
-        function($scope, $rootScope, $routeParams, $q, $timeout, $location, leafletData, dataService, networkService, dataGraph, AttrInfoService, layoutService, snapshotService,  orgFactory, projFactory, playerFactory, graphSelectionService, zoomService, SelectorService, BROADCAST_MESSAGES) {
+    .controller('renderGraphCtrl', ['$scope', '$rootScope', '$routeParams','$q', '$timeout', '$location', 'leafletData', 'dataService','networkService' ,'dataGraph', 'AttrInfoService', 'layoutService', 'snapshotService', 'orgFactory', 'projFactory', 'playerFactory', 'graphSelectionService', 'zoomService', 'SelectorService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
+        function($scope, $rootScope, $routeParams, $q, $timeout, $location, leafletData, dataService, networkService, dataGraph, AttrInfoService, layoutService, snapshotService,  orgFactory, projFactory, playerFactory, graphSelectionService, zoomService, SelectorService, BROADCAST_MESSAGES, selectService, subsetService) {
             'use strict';
 
 
@@ -40,6 +40,10 @@ angular.module('common')
                 zoomIn: _.noop,
                 zoomOut: _.noop
             };
+            $scope.ui = {
+                activeFilterCount: 0,
+                subsetEnabled: false
+            };
             $scope.rawDataId = null;
             $scope.plotType = 'original';
             $scope.enableUndo = false;
@@ -59,11 +63,12 @@ angular.module('common')
             };
 
             $scope.resetFilters = function() {
-                $scope.$broadcast('RESETFILTERS');
+                subsetService.unsubset();
+                selectService.unselect();
             };
 
             $scope.subsetFilters = function subsetFilters() {
-                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.changed);
+                subsetService.subset();
             };
 
             $scope.undoFilters = function undoFilters() {
@@ -74,7 +79,18 @@ angular.module('common')
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.redo);
             };
 
+            $scope.searchToggle = function searchToggle() {
+                const playBar = document.getElementsByClassName('play-toolbar')[0];
+                const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
 
+                playBar.classList.toggle('play-toolbar_opened');
+                searchBoxInput.focus();
+            }
+
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
+                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
+                $scope.ui.subsetEnabled = data.selectionCount > 0;
+            });
 
 
 
@@ -112,7 +128,9 @@ angular.module('common')
 
             /// ZoomReset zooms to selection , and then a full reset.
             function zoomExtents() {
-                var nodes = graphSelectionService.selectedNodesAndNeighbors();
+                var selectedNodes = selectService.getSelectedNodes();
+                var subsetNodes = subsetService.subsetNodes;
+                var nodes = selectedNodes && selectedNodes.length ? selectedNodes : subsetNodes;
                 if(nodes && nodes.length > 0 && !fullReset) {
                     disableFullReset.cancel();
                     zoomService.zoomToNodes(nodes);
@@ -151,7 +169,7 @@ angular.module('common')
                 console.group('renderGraphCtrl.onProjectOrPlayerLoad');
                 dataGraph.clear();
                 layoutService.invalidateCurrent();
-                graphSelectionService.clearSelections();
+                selectService.unselect();
                 snapshotService.clear();
                 var snapIdP = null;
                 $scope.updatePlotType('original');

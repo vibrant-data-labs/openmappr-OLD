@@ -1,4 +1,4 @@
-.right-panel__tabs.side-menu
+.right-panel__tabs.side-menu(ng-mouseover="expandPanel()", ng-mouseleave="collapsePanel()")
   .side-menu__logo
     .logo
       img.logo__image(src="/img/logo-light_horizontal.svg" alt="Vibrant Logo")/
@@ -25,6 +25,10 @@
       li.tabs-menu__item
         span.tabs-menu__link.tabs-menu__link_settings
           span.tabs-menu__text Settings
+
+      li.tabs-menu__item
+        span.tabs-menu__link.tabs-menu__link_snapshots
+          span.tabs-menu__text Snapshots
 
 
   .side-menu__footer

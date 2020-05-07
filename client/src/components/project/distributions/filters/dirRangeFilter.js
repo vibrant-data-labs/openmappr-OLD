@@ -1,6 +1,6 @@
 angular.module('common')
-    .directive('dirRangeFilter', ['FilterPanelService','AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES',
-        function(FilterPanelService, AttrInfoService, SelectorService, BROADCAST_MESSAGES) {
+    .directive('dirRangeFilter', ['FilterPanelService','AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService',
+        function(FilterPanelService, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService, selectService) {
             'use strict';
 
             /*************************************
@@ -31,7 +31,7 @@ angular.module('common')
             function postLinkFn(scope, element, attrs, renderCtrl) {
                 var
                     attrId       = renderCtrl.getAttrId(),
-                    filterConfig = FilterPanelService.getFilterForId(attrId),
+                    filterConfig = selectService.getFilterForId(attrId),
                     attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(attrId),
                     binCount     = renderCtrl.getBinCount();
 
@@ -52,26 +52,22 @@ angular.module('common')
                     stop: function(ev, ui) {
                         console.log(logPrefix + 'Slider stop - event & ui ', ev, ui);
                         var valueRange = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]);
-                        renderCtrl.hoverNodesByAttribRange(attrInfo.attr.id, valueRange.min, valueRange.max, window.event);
-                        applyFilters(scope.bounds, scope.filterRange);
+                        selectService.selectNodes({ attr: attrInfo.attr.id, min: valueRange.min, max: valueRange.max, force: true});
                     }
                 };
 
-                scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
-                    attrId       = renderCtrl.getAttrId();
-                    filterConfig = FilterPanelService.getFilterForId(attrId);
-                    attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(attrId);
-
-                    // Reset filter values selection on selection reset
-                    init(scope.bounds);
-                    // console.log(logPrefix + 'dirRangeFilter filter obj: ', filterConfig);
+                scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    if (!data.filtersCount) {
+                        // Reset filter values on reset
+                        filterConfig = selectService.getFilterForId(attrId)
+                        setRange();
+                    }
                 });
 
-                scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function() {
-                    filterConfig = FilterPanelService.getFilterForId(attrId);
-                    // Reset filter values selection on selection reset
+                scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function() {
+                    // Reset filter values range on subset
+                    filterConfig = selectService.getFilterForId(attrId)
                     setRange();
-                    // console.log(logPrefix + 'dirRangeFilter filter obj: ', filterConfig);
                 });
 
                 scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
@@ -88,32 +84,6 @@ angular.module('common')
                     scope.filterRange = filterConfig.state.filterRange
                         ? _.clone(filterConfig.state.filterRange)
                         :  [0, binCount];
-                }
-
-                function applyFilters(bounds, filterRange) {
-                    console.assert(filterRange[0] < filterRange[1]);
-                    console.assert(bounds.min <= filterRange[0]);
-                    console.assert(bounds.max >= filterRange[1]);
-
-                    var disableFilter = filterRange[0] == bounds.min && filterRange[1] == bounds.max;
-
-                    filterConfig.isEnabled = !disableFilter;
-                    filterConfig.state.filterRange = _.clone(filterRange);
-                    filterConfig.selector = filterConfig.isEnabled ? genSelector(filterRange[0], filterRange[1]) : null;
-                }
-
-                function genSelector (min, max) {
-                    console.log('attrInfo: ', attrInfo);
-                    var attrMax = attrInfo.stats.max, attrMin = attrInfo.stats.min;
-                    var step = (attrMax - attrMin) / binCount;
-
-                    var
-                        valMin = attrMin + (min === 0 ? 0 : min * step),
-                        valMax = max === binCount ? attrMax : attrMin + max * step;
-
-                    var selector = SelectorService.newSelector();
-                    selector.ofAttrRange(attrId, valMin, valMax);
-                    return selector;
                 }
 
                 function getValueRangeFilterRange(min, max) {

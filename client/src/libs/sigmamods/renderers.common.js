@@ -103,12 +103,14 @@
       this.domElements['d3-selections'].style.display = 'none';
       this.domElements['d3-hovers'].style.display = 'none';
       this.domElements['d3-annotations'].style.display = 'none';
+      this.domElements['d3-subset'].style.display = 'none';
     } else {
       this.domElements['selections'].style.display = '';
       this.domElements['hovers'].style.display = '';
       this.domElements['d3-selections'].style.display = '';
       this.domElements['d3-hovers'].style.display = '';
       this.domElements['d3-annotations'].style.display = '';
+      this.domElements['d3-subset'].style.display = '';
       this.dispatchEvent('render');   // render selected and hovered nodes and edges
     }
     return this;
@@ -119,9 +121,11 @@
     var self = this;
     this.initDOM('canvas', 'selections'); // For edges between neighbors of selections
     this.initDOM('canvas', 'hovers'); // For edges between neighbors when hovering
+    this.initDOM('canvas', 'subset');
     //d3 stuff
     this.initDOM('div', 'd3-annotations');
     this.initDOM('div', 'd3-selections');
+    this.initDOM('div', 'd3-subset');
     this.initDOM('div', 'd3-hovers');
 
     this.initDOM('canvas', 'mouse');
@@ -135,6 +139,9 @@
     this.d3Sel.selections = _.once(function() {
       return d3.select(self.domElements['d3-selections']);
     });
+    this.d3Sel.subset = _.once(function() {
+      return d3.select(self.domElements['d3-subset']);
+    });    
     this.d3Sel.hovers = _.once(function() {
       return d3.select(self.domElements['d3-hovers']);
     });
@@ -322,8 +329,10 @@
     edgeOpacity = this.settings('edgeUnselectedOpacity');// || 0.3;
     if( source !== undefined ) {
       // grey if either hover or select have requested it
-      if(source == 'hover')
+      if(source == 'hover') {
         this.hoverGrey = enable;
+        this.selectGrey = false;
+      }
       else if(source == 'select') {
         this.selectGrey = enable;
         this.popGrey = false
@@ -331,6 +340,10 @@
       else if(source == 'pop') {
         this.popGrey = enable;
         this.selectGrey = false;
+      } else if(source == 'subset') {
+        nodeOpacity /= 4;
+        edgeOpacity /= 4;
+        this.selectGrey = enable;
       }
       enable = this.hoverGrey || this.popGrey || this.selectGrey;
       if(!this.selectGrey) {  // hovering or pop
@@ -350,6 +363,42 @@
       $(this.domElements.scene).stop().fadeTo(this.outDelay, nodeOpacity)
       if(this.domElements.edges)
         $(this.domElements.edges).stop().fadeTo(this.outDelay, edgeOpacity)
+    }
+  };
+
+  sigma.renderers.common.prototype.greyoutSubset  = function(enable, source) {
+    var nodeOpacity = this.settings('nodeUnselectedOpacity'),// || 0.3,
+    edgeOpacity = this.settings('edgeUnselectedOpacity');// || 0.3;
+    if( source !== undefined ) {
+      // grey if either hover or select have requested it
+      if(source == 'hover')
+        this.hoverGrey = enable;
+      else if(source == 'select') {
+        this.selectGrey = enable;
+        this.popGrey = false
+      }
+      else if(source == 'pop') {
+        this.popGrey = enable;
+        this.selectGrey = false;
+      }
+      enable = this.hoverGrey || this.popGrey || this.selectGrey;
+      if(!this.selectGrey) {  // hovering or pop
+        nodeOpacity *= 2;   // nodes and edges are less faded
+        edgeOpacity *= 2;
+      }
+    }
+    if(!enable) {
+      // not in selection mode, add opacity.
+      $(this.domElements['d3-subset']).stop().fadeTo(this.inDelay, 1)
+      this.settings('inSelectionMode', true);
+      if(this.domElements.subset)
+        $(this.domElements.subset).stop().fadeTo(this.inDelay, 1);
+    } else {
+      this.settings('inSelectionMode', false);
+      // not in selection mode, remove opacity.
+      $(this.domElements['d3-subset']).stop().fadeTo(this.outDelay, nodeOpacity)
+      if(this.domElements.subset)
+        $(this.domElements.subset).stop().fadeTo(this.outDelay, edgeOpacity)
     }
   };
   /**

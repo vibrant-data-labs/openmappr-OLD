@@ -9,7 +9,9 @@ angular.module('common')
         'ngIntroService',
         '$timeout',
         'FilterPanelService',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService) {
+        'selectService',
+        'subsetService',
+        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -24,8 +26,32 @@ angular.module('common')
              *  Scope data
              */
 
-            $scope.togglePanel = function() {
-                document.body.classList.toggle('side-menu-compressed')
+            $scope.expandedState = {
+                isSet: false,
+                isExpanded: false
+            };
+            $scope.togglePanel = function () {
+                if ($scope.expandedState.isSet) {
+                    if ($scope.expandedState.isExpanded) {
+                        document.body.classList.remove('side-menu-compressed');
+                    } else {
+                        document.body.classList.add('side-menu-compressed');
+                    }
+                }
+                $scope.expandedState.isSet = true;
+                $scope.expandedState.isExpanded = document.body.classList.contains('side-menu-compressed');
+            }
+
+            $scope.expandPanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.remove('side-menu-compressed');
+                }
+            }
+
+            $scope.collapsePanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.add('side-menu-compressed');
+                }
             }
 
             $scope.rightPanelTabs = [
@@ -110,7 +136,7 @@ angular.module('common')
                 {
                     iconClass: 'database',
                     title: 'Edit data',
-                    panel: 'style',
+                    panel: 'edit_data',
                     tooltipTitle: 'Edit Data',
                     cmd: function() {
                         return $scope.openNetworkDataModal();
@@ -151,6 +177,14 @@ angular.module('common')
                 updateSelCount();
             });
 
+            $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                if (data.selectionCount == 0 && data.isSubsetted) {
+                    $scope.selNodesCount = subsetService.currentSubset().length;
+                } else {
+                    $scope.selNodesCount = data.selectionCount;
+                }
+            });
+
             function openNetworkDataModal() {
 
                 var modalInstance = $uibModal.open({
@@ -187,7 +221,7 @@ angular.module('common')
              **************************************/
 
             function updateSelCount() {
-                $scope.selNodesCount = graphSelectionService.getSelectedNodes().length;
+                $scope.selNodesCount = selectService.selectedNodes.length || subsetService.currentSubset().length;
             }
 
 

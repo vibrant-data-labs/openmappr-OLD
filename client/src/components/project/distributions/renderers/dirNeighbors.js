@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 
-function ($timeout, dataGraph, linkService, zoomService) {
+.directive('dirNeighbors', ['$timeout', 'dataGraph', 'linkService','zoomService', 'hoverService', 'selectService',
+function ($timeout, dataGraph, linkService, zoomService, hoverService, selectService) {
     'use strict';
 
     /*************************************
@@ -26,6 +26,9 @@ function ($timeout, dataGraph, linkService, zoomService) {
     **************************************/
     function postLinkFn(scope, element, attrs) {
         var links, hasLinks, incomingEdgesIndex, outgoingEdgesIndex;
+        scope.ui = {
+            imageShow : scope.mapprSettings.nodeImageShow
+        };
         if (scope.focusNode) {
 
             var node = scope.focusNode;
@@ -53,10 +56,31 @@ function ($timeout, dataGraph, linkService, zoomService) {
             console.log('dirNeighbors', "Node has no links to other nodes");
         }
 
+        scope.onHover = function(link) {
+            hoverService.hoverNodes({ ids: [link.linkNode.id], force: true});
+        };
+
+        scope.onHoverOut = function() {
+            hoverService.unhover();
+        };
+
+        scope.onNeighborClick = function(link) {
+            selectService.selectSingleNode(link.linkNode.id);
+            
+            var dataset = dataGraph.getRawDataUnsafe();
+            var links = linkService.constructLinkInfo(link.linkNode, 
+                dataset.edgeInIndex[link.linkNode.id], 
+                dataset.edgeOutIndex[link.linkNode.id], 
+                scope.mapprSettings.labelAttr, 
+                scope.mapprSettings.nodeImageAttr);
+            const onlySourceLink = links.filter(link => link.targetId !== link.linkNode.id);
+            scope.links = filterLinks(onlySourceLink);
+        }
+
         function filterLinks(links){
             var newLinks = [];
             for (var i = 0; i < links.length; i++) {
-                if (i == 4) break;                
+                if (i == 4) break;
                 newLinks.push({
                     linkNode: links[i].linkNode,
                     attr: links[i].linkNode.attr,

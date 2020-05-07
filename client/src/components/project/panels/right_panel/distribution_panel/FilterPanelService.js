@@ -3,8 +3,8 @@
  * This service builds intelligence about an attribute in the dataset
  */
 angular.module('common')
-    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'graphHoverService', 'constSteps',
-        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, graphHoverService, constSteps) {
+    .service('FilterPanelService', ['$timeout', '$q', 'dataGraph', 'AttrInfoService', 'attrUIService', 'renderGraphfactory', 'hoverService', 'constSteps',
+        function ($timeout, $q, dataGraph, AttrInfoService, attrUIService, renderGraphfactory, hoverService, constSteps) {
             "use strict";
 
             /*************************************
@@ -210,7 +210,7 @@ angular.module('common')
                     filterCfg.selector = null;
                     filterCfg.state = {};
                 });
-                graphHoverService.clearHovers();
+                hoverService.unhover();
                 applyFilters();
 
                 selectionRedoHistory = [];

@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES',
-        function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, dataGraph, AttrInfoService, graphSelectionService, layoutService, nodeSelectionService, uiService, attrUIService, renderGraphfactory, networkService, BROADCAST_MESSAGES){
+    .controller('FilterPanelCtrl', ['$scope', '$rootScope', '$timeout', 'FilterPanelService', 'SelectorService', 'dataGraph', 'AttrInfoService', 'graphSelectionService', 'layoutService', 'nodeSelectionService', 'uiService', 'attrUIService', 'renderGraphfactory', 'networkService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
+        function($scope, $rootScope, $timeout, FilterPanelService, SelectorService, dataGraph, AttrInfoService, graphSelectionService, layoutService, nodeSelectionService, uiService, attrUIService, renderGraphfactory, networkService, BROADCAST_MESSAGES, selectService, subsetService){
             'use strict';
 
             /*************************************
@@ -46,6 +46,10 @@ angular.module('common')
                 $scope.ui.renderDistr = false;
             });
 
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
+                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
+                $scope.ui.subsetEnabled = data.selectionCount > 0;
+            });
 
             /*************************************
     ********* Initialise *****************
@@ -69,6 +73,7 @@ angular.module('common')
 
                 // Initialise bases on panel state
                 if(clearServiceState) {
+                    selectService.init();
                     FilterPanelService.init();
                 }
                 if(FilterPanelService.shouldReplaceNewSel()) {
@@ -131,7 +136,7 @@ angular.module('common')
                 var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function() {
                     x();
                     if(data.snapshot && data.snapshot.processSelection) {
-                        resetInitialSelection(graphSelectionService.getSelectedNodes());
+                        resetInitialSelection(selectService.getSelectedNodes());
                     }
                     else {
                         console.warn(logPrefix + 'carrying over previous selection on snapshot change, so not resetting initial selection for filter panel.');
@@ -156,10 +161,10 @@ angular.module('common')
                 setSortForTags($scope.nodeDistrAttrs, newSelection.length > 0);
 
                 if (!nodes || nodes.length < 1) {
-                    graphSelectionService.clearSelections(true);
+                    //graphSelectionService.clearSelections(true);
                 }
 
-                $rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
+                //$rootScope.$broadcast(BROADCAST_MESSAGES.fp.initialSelection.changed, {nodes: newSelection});
 
                 updateInfoData($scope.currentSelection);
             }
@@ -196,10 +201,8 @@ angular.module('common')
             }
 
             function resetFilters() {
-                FilterPanelService.resetFilters();
-                $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.reset);
-                $scope.$emit(BROADCAST_MESSAGES.fp.filter.reset);
-                updateSelAndGraph(window.event);
+                subsetService.unsubset();
+                selectService.unselect();
             }
 
             function updateNodeColorStr () {
@@ -221,7 +224,7 @@ angular.module('common')
                 else {
                     $scope.nodeCountInGraph = dataGraph.getAllNodes().length;
                 }
-                $scope.ui.activeFilterCount = FilterPanelService.getActiveFilterCount();
+                $scope.ui.activeFilterCount = selectService.getActiveFilterCount();
 
                 var infoObj = AttrInfoService.getNodeAttrInfoForRG();
                 if(selection.length === 1) {
@@ -271,14 +274,14 @@ angular.module('common')
 
                 $scope.currentSelection = currentSelection;
                 if(!currentSelection || (_.isArray(currentSelection) && currentSelection.length === 0)) {
-                    if(FilterPanelService.getActiveFilterCount() > 0) {
-                        graphSelectionService.clearSelections();
+                    if(selectService.getActiveFilterCount() > 0) {
+                        selectService.unselect();
                         //Hack to show graph darkened state
                         renderer.render({drawLabels: false});
                         renderer.greyout(true, 'select');
                     }
                     else {
-                        graphSelectionService.clearSelections(true);
+                        selectService.unselect();
                     }
 
                     // UI SERVICE not available in player ,removing this for now
