@@ -1,0 +1,49 @@
+.search-box {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px #E0E2E4;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+
+  &__input-wrap {
+    position: relative;
+
+    .search-input {
+      width: 100%;
+    }
+  }
+
+  &__input {
+    height: 60px;
+    width: 100%;
+    padding: 0 54px;
+    border: 0;
+    font: 400 16px/25px 'Poppins', sans-serif;
+    color: #000;
+    border-radius: 32px;
+    background: url('/img/play-toolbar/search-purple.svg') 24px 50% no-repeat;
+  }
+
+  &__close {
+    background: url('/img/play-toolbar/cancel-grey.svg') 50% no-repeat;
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    font-size: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    &:hover {
+      background-image: url('/img/play-toolbar/cancel.svg');
+    }
+  }
+
+  .search-results {
+    float: none;
+    max-width: none;
+    box-shadow: none;
+    margin: 0;
+  }
+}

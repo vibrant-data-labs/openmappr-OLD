@@ -79,8 +79,16 @@ angular.module('common')
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.filter.redo);
             };
 
+            $scope.searchToggle = function searchToggle() {
+                const playBar = document.getElementsByClassName('play-toolbar')[0];
+                const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
+
+                playBar.classList.toggle('play-toolbar_opened');
+                searchBoxInput.focus();
+            }
+
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
-                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0);
+                $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
             });
 
@@ -120,7 +128,9 @@ angular.module('common')
 
             /// ZoomReset zooms to selection , and then a full reset.
             function zoomExtents() {
-                var nodes = selectService.getSelectedNodes();
+                var selectedNodes = selectService.getSelectedNodes();
+                var subsetNodes = subsetService.subsetNodes;
+                var nodes = selectedNodes && selectedNodes.length ? selectedNodes : subsetNodes;
                 if(nodes && nodes.length > 0 && !fullReset) {
                     disableFullReset.cancel();
                     zoomService.zoomToNodes(nodes);

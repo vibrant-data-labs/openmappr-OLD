@@ -6,7 +6,6 @@
 		//- 	h1.pull-left.no-margin.truncate(ng-bind-html="headerTitle")
 			//- .info-btn.pull-left.text-center(ng-if="hasModal || player.settings.infoClickToParent" ng-click="infoBtnClick();") i
 		ul.list-unstyled.pull-right.vert-align.no-margin
-			li.pull-right.search-list(ng-if="player.settings.showSearch !== false" ng-controller="SearchPanelCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/search/search.html" ')
 			//- li.square-btn.pull-right.no-border(ng-click="resetLayoutSelections();", ng-show="appUi.showGridResetBtn", uib-tooltip="Reset Selections" tooltip-placement="bottom")
 			//- 	i.fa.fa-fw.fa-refresh 
 			//- li.square-btn.pull-right(ng-click="panelUI.openPanel('summary', false); closeOverlay();" ng-hide="panelUI.summaryPanelOpen" uib-tooltip="Show Legend" tooltip-placement="bottom")
