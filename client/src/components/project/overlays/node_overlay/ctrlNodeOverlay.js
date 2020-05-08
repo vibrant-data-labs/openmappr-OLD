@@ -47,6 +47,7 @@ angular.module('common')
             $scope.finishAnimation = finishAnimation; //for when finished (show overlay)
             $scope.activeTabs2 = activeTabs2;
             $scope.activeTabs3 = activeTabs3;
+            $scope.activeNeigh = activeNeigh;
             $scope.Section4Largest = 0;
 
             $scope.onSectionHover = onSectionHover;
@@ -115,6 +116,18 @@ angular.module('common')
                     _buildAttrsPrincipalVal();
                 }
             });
+
+            $scope.onHover = function(link) {
+                hoverService.hoverNodes({ ids: [link.nodeId], force: true});
+            };
+    
+            $scope.onHoverOut = function() {
+                hoverService.unhover();
+            };
+    
+            $scope.onNeighborClick = function(link) {
+                selectService.selectSingleNode(link.nodeId);
+            }
 
             $scope.$on(BROADCAST_MESSAGES.layout.attrClicked, function (event, data) {
                 var infoObj = AttrInfoService.getNodeAttrInfoForRG();
@@ -422,6 +435,7 @@ angular.module('common')
                     console.log({ nodesa, nodeAttrsObj, filteredAttr }, 7778);
 
                     mapRightPanel(filteredAttr, nodesa.attr);
+                    buildNeighbours(nodesa);
                 }
 
             }
@@ -454,6 +468,84 @@ angular.module('common')
                 $scope.nodeRightInfo = result;
                 console.log(result, 7778);
 
+            }
+
+            function buildNeighbours(node) {
+                var graph = renderGraphfactory.sig().graph;
+                var incoming = [];
+                var outgoing = [];
+                // Which direction to use
+                switch ($scope.mapprSettings.edgeDirectionalRender) {
+                    case 'all':
+                        incoming = getIncomingNeighbours(node, graph);
+                        outgoing = getOutgoingNeighbours(node, graph);
+                        break;
+                    case 'incoming':
+                        incoming = getIncomingNeighbours(node, graph);
+                        break;
+                    case 'outgoing':
+                        outgoing = getOutgoingNeighbours(node, graph);
+                        break;
+                }
+
+                $scope.neighs = {
+                    in: _.sortBy(incoming, [ {'weight': 'desc' }]),
+                    out: _.sortBy(outgoing, [ {'weight': 'desc' }])
+                };
+
+                $scope.sectionNeigh = incoming.length > 0 ? 'in' : 'out';
+            }
+
+            function getIncomingNeighbours(node, graph) {
+                var result = [];
+                _.forEach(graph.getInNodeNeighbours(node.id), function (edgeInfo, targetId) {
+                    _.forEach(edgeInfo, function(edge, edgeId) {
+                        var neighNode = graph.nodes(edge.source);
+                        const nameThatExists = neighNode.attr[$scope.mapprSettings.labelAttr];
+                        //
+                        const [name, description] = nameThatExists.split(':');
+                        const [first, last] = name.split('');
+                        const initials = first[0] + last[0];
+                        result.push({
+                            nodeId: neighNode.id,
+                            weight: edge.size,
+                            name: name,
+                            description: description,
+                            initials: initials,
+                            colorStr: neighNode.colorStr,
+                            imageShow: $scope.mapprSettings.nodeImageShow,
+                            image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
+                        })
+                    });
+                });
+
+                return result;
+            }
+
+            function getOutgoingNeighbours(node, graph) {
+                var result = [];
+                _.forEach(graph.getOutNodeNeighbours(node.id), function (edgeInfo, targetId) {
+                    _.forEach(edgeInfo, function(edge, edgeId) {
+                        var neighNode = graph.nodes(edge.target);
+                        const nameThatExists = neighNode.attr[$scope.mapprSettings.labelAttr];
+                        //
+                        const [name, description] = nameThatExists.split(':');
+                        const [first, last] = name.split('');
+                        const initials = first[0] + last[0];
+                        result.push({
+                            nodeId: neighNode.id,
+                            weight: edge.size,
+                            name: name,
+                            description: description,
+                            initials: initials,
+                            colorStr: neighNode.colorStr,
+                            imageShow: $scope.mapprSettings.nodeImageShow,
+                            image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
+                        })
+                    });
+                });
+
+                return result;
             }
 
             function getSectionTags(attr, values, result) {
@@ -725,6 +817,10 @@ angular.module('common')
 
             function activeTabs3(newValue) {
                 $scope.sectionActive3 = newValue;
+            }
+
+            function activeNeigh(newValue) {
+                $scope.sectionNeigh = newValue;
             }
 
             //pending
