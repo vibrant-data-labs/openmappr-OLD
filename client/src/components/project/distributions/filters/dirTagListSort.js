@@ -10,11 +10,8 @@ function(FilterPanelService, BROADCAST_MESSAGES) {
         restrict: 'E',
         scope: {
             attr: '=',
-            sortTypes: '=', // List of Sort types objects eg. {id: 'alphabetical', title: 'Alphabetical'}
-            sortConfig: '=', // Model for sort => {sortType: 'alphabetical', sortOrder: 'desc'}
-            alignToRight: '<'
         },
-        template: '<button ng-click="setSortOrder($event)">sort</button>',
+        template: '<button ng-click="setSortOrder($event);">sort</button>',
         link: postLinkFn
     };
 
@@ -51,18 +48,20 @@ function(FilterPanelService, BROADCAST_MESSAGES) {
             throw new Error('Sort menu not supported for renderType', renderType);
         }
 
-        scope.sortTypes = filterSortOpts(sortTypes, renderType);
+        // scope.sortTypes = filterSortOpts(sortTypes, renderType);
 
-        scope.$on(BROADCAST_MESSAGES.fp.initialSelection.changed, function() {
-            scope.sortTypes = filterSortOpts(sortTypes, renderType);
-        });
+        // scope.$on(BROADCAST_MESSAGES.hss.select, function() {
+        //     scope.sortTypes = filterSortOpts(sortTypes, renderType);
+        // });
 
-        scope.sortOrder = 'desc';
+        console.log("POSTLINK", scope.attr);
+        var sortOrder = 'desc';
         scope.setSortOrder = function setSortOrder($event) {
+            console.log("SORTED", scope.attr);
+
             var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-            scope.sortConfig = scope.sortConfig || {};
-            scope.sortConfig.sortOrder = newSortOrder;
-            $event.stopPropagation();
+            scope.attr.sortConfig = scope.attr.sortConfig || {};
+            scope.attr.sortConfig.sortOrder = newSortOrder;
         }
     }
 

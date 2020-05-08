@@ -42,14 +42,14 @@
 						header.card__header(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true")
 							h2.card__title {{::attr.title}}
 
-							dir-tag-list-sort(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", class="card__action-sort", attr="::attr")
+							button.card__action-sort(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", ng-class="{ 'up': attr.sortConfig && attr.sortConfig.sortOrder === 'asc' }", ng-click="setSortOrder(attr)")
 
 							.card__action-search
 								button(ng-click="searchToggle(attr)") search
 
 							.card__search-box
-								input(type='text')/
-								button.close(ng-click="searchToggle(attr)") close
+								input(type='text', ng-model="attr.searchQuery", ng-change="search(attr, $event)")/
+								button.close(ng-click="clearSearch(attr); searchToggle(attr);") close
 
 						.card__body
 							.card__content

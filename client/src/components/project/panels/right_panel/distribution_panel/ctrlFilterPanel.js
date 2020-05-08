@@ -59,6 +59,17 @@ angular.module('common')
                 //searchBoxInput.focus();
             }
 
+            $scope.clearSearch = function search(attr) {
+                attr.searchQuery = null;
+            }
+
+            $scope.setSortOrder = function setSortOrder(attr) {
+                var sortOrder = attr.sortConfig && attr.sortConfig.sortOrder || 'desc';
+                var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+                attr.sortConfig = attr.sortConfig || { sortType: 'frequency'};
+                attr.sortConfig.sortOrder = newSortOrder;
+            }
+
             /*************************************
     ********* Initialise *****************
     **************************************/
