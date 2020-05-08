@@ -170,11 +170,6 @@ angular.module('common')
                         else $scope.beginOverlayAnim = true;
 
                         animateGraphToOverlay();
-                        // Hack for scrolling up on changing the nodes
-                        var container = document.querySelector('.nameContainer');
-                        if (container) {
-                            container.parentElement.scrollIntoView();
-                        }
                     }
                     else if (_.isArray(data.nodes) && data.nodes.length > 1) {
                         $scope.cancelOverlay(true);
@@ -322,6 +317,12 @@ angular.module('common')
                             borderColor: ''
                         });
                     });
+
+                    // Hack for scrolling up on changing the nodes
+                    var container = document.querySelector('.section__icons');
+                    if (container) {
+                        container.parentElement.scrollIntoView();
+                    }
                 });
 
 
@@ -493,7 +494,7 @@ angular.module('common')
                     out: _.sortBy(outgoing, [ {'weight': 'desc' }])
                 };
 
-                $scope.sectionNeigh = incoming.length > 0 ? 'in' : 'out';
+                $scope.sectionNeigh = outgoing.length > 0 ? 'out' : 'in';
             }
 
             function getIncomingNeighbours(node, graph) {
@@ -549,18 +550,20 @@ angular.module('common')
             }
 
             function getSectionTags(attr, values, result) {
-                const { attrType, renderType, valuesCount } = attr;
+                const { attrType, renderType } = attr;
                 if (renderType !== 'tag-cloud') return;
                 var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(attr.id);
                 if (attrType === 'liststring') {
                     if(attrInfo.isSingleton) {
-                        result.section5.push({ key: attr.title || attr.id, value: values[attr.id].join(', ')});                        
+                        var count = attrInfo.valuesCount[values[attr.id]];
+                        result.section5.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id].join(', '), isTag: count > 1});                        
                     } else {
-                        result.section3.push({ key: attr.title || attr.id, value: values[attr.id]});                        
+                        result.section3.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
                     }
                 }
                 else if (attrType === 'string') {
-                    result.section5.push({ key: attr.title || attr.id, value: values[attr.id]});
+                    var count = attrInfo.valuesCount[values[attr.id]];
+                    result.section5.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id], isTag: count > 1 });
                 }
             }
 
@@ -629,13 +632,15 @@ angular.module('common')
             }
 
             function onSectionHover(sections, tag) {
-                hoverService.hoverNodes({ attr: sections.key, value: tag});
+                hoverService.hoverNodes({ attr: sections.id, value: tag});
             }
 
             function onSectionSelect(sections, tag) {
                 var node = selectService.singleNode;
-                selectService.selectNodes({ attr: sections.key, value: tag});
-                selectService.selectSingleNode(node.id);
+                selectService.selectNodes({ attr: sections.id, value: tag});
+                $timeout(function() {
+                    selectService.selectSingleNode(node.id);
+                }, 500);
             }
 
             function onSectionLeave() {
