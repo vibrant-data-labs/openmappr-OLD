@@ -80,7 +80,6 @@ function ($timeout, dataGraph, linkService, zoomService, hoverService, selectSer
         function filterLinks(links){
             var newLinks = [];
             for (var i = 0; i < links.length; i++) {
-                if (i == 4) break;
                 newLinks.push({
                     linkNode: links[i].linkNode,
                     attr: links[i].linkNode.attr,
@@ -132,7 +131,7 @@ function ($timeout, dataGraph, linkService, zoomService, hoverService, selectSer
         };
 
         function getName(attrs){
-            var completeName = attrs.Name;
+            var completeName = attrs[scope.mapprSettings.labelAttr];
             
             var names = completeName.split(':');
                 if (names.length == 2){
