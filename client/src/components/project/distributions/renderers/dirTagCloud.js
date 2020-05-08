@@ -19,7 +19,7 @@ angular.module('common')
     ************ Local Data **************
     **************************************/
             var dirPrefix = '[dirTagCloud] ';
-            var ITEMS_TO_SHOW = 100;
+            var ITEMS_TO_SHOW = 10;
             var ITEMS_TO_SHOW_INITIALLY = 10;
             var totalNodes = 0;
 
@@ -162,12 +162,16 @@ angular.module('common')
                     }
                 });
 
-                scope.$watch('attrToRender.sortOps', function (sortOps) {
-                    console.log('dirTagCloud: sortOps', sortOps);
-                    sortType = sortOps.sortType || 'statistical';
-                    sortOrder = sortOps.sortOrder || 'desc';
+                scope.$watch('attrToRender.sortConfig', function (sortOps) {
+                    console.log('dirTagCloud: sortConfig', sortOps);
+                    sortType = sortOps && sortOps.sortType || 'statistical';
+                    sortOrder = sortOps && sortOps.sortOrder || 'desc';
                     scope.catListData.data = sortTagData(scope.catListData.data, sortType, sortOrder, scope.catListData.highlightedCats.length > 0);
                 }, true);
+
+                scope.$watch('attrToRender.searchQuery', function onSearchQueryChanged(newVal, oldVal) {
+                    distrData.searchQuery = newVal || '';
+                });
 
                 // scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
                 //     filteringCatVals = [];
