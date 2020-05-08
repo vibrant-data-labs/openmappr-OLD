@@ -44,7 +44,6 @@ angular.module('common')
                         val.isSubsetted = false;
                     });
                 }
-                draw(nodes);
                 var nodeIds = _.pluck(nodes, 'id');
                 if (currentSubsetIndex == this.subsetHistory.length - 1) {
                     this.subsetHistory.push(nodeIds);
@@ -56,6 +55,8 @@ angular.module('common')
                 currentSubsetIndex++;
 
                 this.subsetNodes = nodes;
+                draw(this.currentSubset());
+
                 $rootScope.$broadcast(BROADCAST_MESSAGES.hss.subset.changed, {
                     subsetCount: this.currentSubset().length,
                     nodes: nodes,
@@ -88,7 +89,7 @@ angular.module('common')
 
             }
 
-            function draw(nodes) {
+            function draw(nodeIds) {
                 var sigRender = renderGraphfactory.getRenderer();
                 var contexts = sigRender.contexts;
                 var d3sel = sigRender.d3Sel.subset();
@@ -98,6 +99,7 @@ angular.module('common')
                     inHoverMode: false
                 });
 
+                var nodes = _.map(nodeIds, findNodeWithId);
                 _.forEach(nodes, function (val) {
                     val.isSubsetted = true;
                     val.inHover = false;
@@ -177,7 +179,7 @@ angular.module('common')
                 var renderer = sig.renderers.graph;
                 var _this = this;
                 renderer.bind('render', function () {
-                    draw(_this.subsetNodes);
+                    draw(_this.currentSubset());
                 });
 
                 findNodeWithId = function findNodeWithId(nodeId) {
