@@ -1,4 +1,4 @@
-.right-panel__tabs.side-menu(ng-mouseover="expandPanel()", ng-mouseleave="collapsePanel()")
+.right-panel__tabs.side-menu
   .side-menu__logo
     .logo
       img.logo__image(src="/img/logo-light_horizontal.svg" alt="Vibrant Logo")/
@@ -10,8 +10,11 @@
         ng-class="{'tabs-menu__item_active': tab.panel === panelUI.currentPanelOpen}"
         )
 
-        span.tabs-menu__link(ng-class="{'highlighted': tab.highlighted}" data-toggle="tooltip" title="{{tab" +
-        ".tooltipTitle}}" class='tabs-menu__link_{{tab.iconClass}}')
+        span.tabs-menu__link(ng-class="{'highlighted': tab.highlighted}" 
+          data-toggle="tooltip" 
+          uib-tooltip="{{tab.title}}: {{tab.tooltipTitle}}" 
+          tooltip-placement="right" 
+          class='tabs-menu__link_{{tab.iconClass}}')
           span.tabs-menu__text {{tab.title}}
           span.tabs-menu__badge(ng-if="tab.showSelCount && selNodesCount !== 0") {{selNodesCount}}
 
