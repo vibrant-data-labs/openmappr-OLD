@@ -41,6 +41,7 @@ angular.module('common')
     ********* Local Data *****************
     **************************************/
             var logPrefix = "[AttrInfoService] ";
+            const SINGLETONE_TAG_FRACTION = 0.8;
 
     // Render types for individual attr type
     // Note:-
@@ -470,6 +471,15 @@ angular.module('common')
                 destination.nUniqueTags = nUniqueTags; // no of tags in the data
                 destination.maxTagFreq = maxTagFrequency;
                 destination.nodeValsFreq = nodeValsFreq;
+                destination.isSingleton = nodes.reduce(function(acc, cv) {
+                    var attrValue = cv.attr[attribName];
+                    if (attrValue && _.isArray(attrValue)) {
+                        acc.fraction += (attrValue.length > 1 ? 0 : 1) / nodes.length;
+                    } else {
+                        acc.fraction += 1 / nodes.length;
+                    }
+                    return acc;
+                }, { fraction: 0 }).fraction > SINGLETONE_TAG_FRACTION;
                 _nonNumericHelper(destination, counts);
             }
 
