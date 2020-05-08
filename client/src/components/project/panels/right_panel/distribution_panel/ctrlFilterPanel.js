@@ -51,6 +51,25 @@ angular.module('common')
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
             });
 
+            $scope.searchToggle = function searchToggle(attr) {
+                const card = document.querySelector('.card_type_filter[data-attr="' + attr.id + '"]');
+                //const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
+
+                card.classList.toggle('card_expanded');
+                //searchBoxInput.focus();
+            }
+
+            $scope.clearSearch = function search(attr) {
+                attr.searchQuery = null;
+            }
+
+            $scope.setSortOrder = function setSortOrder(attr) {
+                var sortOrder = attr.sortConfig && attr.sortConfig.sortOrder || 'desc';
+                var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+                attr.sortConfig = attr.sortConfig || { sortType: 'frequency'};
+                attr.sortConfig.sortOrder = newSortOrder;
+            }
+
             /*************************************
     ********* Initialise *****************
     **************************************/

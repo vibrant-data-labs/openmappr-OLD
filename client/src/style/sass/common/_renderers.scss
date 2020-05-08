@@ -310,13 +310,15 @@
 
     //slider for filters
     .slider-filter {
-        background-color: $body-bg;
+        background: none;
         border-radius: 10px;
         height: 20px;
         // margin: 40px 0px -50px 5px;
         padding: 5px 5px 0 15px;
         position: relative;
         z-index: 1;
+        transform: translateY(-29px);
+        margin-bottom: -20px;
 
         .ui-slider {
             border: 0;
@@ -326,20 +328,40 @@
             width: 100%;
         }
         .ui-slider-handle {
-            background: $text-color;
-            border: 6px solid $panel-text-dark;
+            background: #315F6B;
+            border: 4px solid #fff;
             border-radius: 100%;
-            box-shadow: 0 1px 2px $shadow-color;
             display: block;
-            height: 20px;
-            margin: -5px -15px;
+            height: 14px;
+            margin: -2px -10px;
             position: absolute;
-            width: 20px;
+            width: 14px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.5);
         }
         .ui-slider-range {
-            background-color: $text-color;
+            background: none;
             height: 10px;
             position: absolute;
+
+            &::before, &::after {
+                content: '';
+                position: absolute;
+                height: 2px;
+                left: 0;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &::before {
+                background: #559AAC;
+                margin-top: -1px;
+            }
+
+            &::after {
+                margin-top: 1px;
+                background: #315F6B;
+            }
         }
         .slider-holder {
             padding-left: 40px;
