@@ -24,6 +24,7 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
     this.saveCamera       = saveCamera;
     this.zoomToOffsetPosition = zoomToOffsetPosition;
     this.centerNode       = centerNode;
+    this.nodeFocus        = nodeFocus;
     this.shiftSavedCamCoords = shiftSavedCamCoords;
     // geo
     this.onGeoZoomStart   = onGeoZoomStart;
@@ -484,6 +485,50 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
 
         var cam = getRenderCamera();
         panCamera(panX * cam.ratio, panY * cam.ratio, _.noop);
+    }
+
+    function nodeFocus(node) {
+        if(!node.id || !node.dataPointId) throw new Error('Not a valid node object');
+        // Visible graph area center coords
+        var rightPanel = $('#right-panel'),
+            header = $('#header'),
+            leftPanelWidth = $('.node-right-panel').width() || 0,
+            rightPanelWidth = $('.right-panel').offset().left + $('.right-panel').width(),
+            headerHeight = header ? $(header).height() : 0;
+
+        // Boundaries for canvas
+        var bounds = {
+            left: 0, 
+            right: (window.innerWidth - rightPanelWidth - leftPanelWidth),
+            top: headerHeight,
+            bottom: window.innerHeight
+        };
+
+        // if node falls in 5% distance of boundary then treat it as shouldCenter
+        bounds.left = bounds.right * 0.05;
+        bounds.right = bounds.right - bounds.left;
+
+        var nodeData = {
+            x: node['camcam1:x'],
+            y: node['camcam1:y']
+        };
+
+        var shouldCenter = nodeData.x < bounds.left ||
+                            nodeData.x > bounds.right ||
+                            nodeData.y < bounds.top ||
+                            nodeData.y > bounds.bottom;
+        
+        if (shouldCenter) {
+            var centerPos = {
+                x: bounds.left + (bounds.right - bounds.left) / 2,
+                y: bounds.top + (bounds.bottom - bounds.top) / 2
+            };
+            var panX = (centerPos.x - node['camcam1:x']) * -1;
+            var panY = (centerPos.y - node['camcam1:y']) * -1;
+
+            var cam = getRenderCamera();
+            panCamera(panX * cam.ratio, panY * cam.ratio, _.noop);
+        }
     }
 
     function geoZoomToOffsetPosition(nodes) {

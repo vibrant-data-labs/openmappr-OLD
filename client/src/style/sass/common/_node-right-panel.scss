@@ -76,6 +76,12 @@
       padding: 20px;
     }
 
+    &__info {
+      display: flex;
+      flex-wrap: wrap;
+
+    }
+
     &_tabs {
       background: none;
 
@@ -149,6 +155,31 @@
 
     .cat-item {
       border: 0!important;
+    }
+  }
+
+  .section-info {
+    flex: 0 0 50%;
+    color: #0C0C0C;
+    font-family: 'Poppins';
+    box-sizing: border-box;
+
+    &:nth-child(odd) {
+      padding-right: 5px;
+    }
+
+    &:nth-child(even) {
+      padding-left: 5px;
+    }
+
+    &__label {
+      opacity: .5;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    &__value {
+      font-size: 14px;
     }
   }
 }

@@ -144,7 +144,7 @@ angular.module('common')
                 function initialise() {
                     var selNodes = selectService.getSelectedNodes();
                     // CHECKPOINT
-                    if (!selNodes.length) selNodes = subsetService.subsetNodes || dataGraph.getAllNodes();
+                    if (!selNodes.length) selNodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes: dataGraph.getAllNodes();
                     $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);
                     refresh(selNodes);
                     console.log('All node groups -> ', $scope.groupsAndClusters);

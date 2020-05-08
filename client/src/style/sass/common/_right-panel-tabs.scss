@@ -47,6 +47,12 @@
         color: #333;
       }
     }
+
+    .tooltip {
+      max-width: 350px;
+      width: 200px;
+      font-size: 12px;
+    }
   }
 
   &__text {
