@@ -10,7 +10,9 @@ angular.module('common')
                 restrict: 'AE',
                 require: '?^dirAttrRenderer',
                 templateUrl: '#{server_prefix}#{view_path}/components/project/distributions/filters/rangeFilter.html',
-                scope: {},
+                scope: {
+                    attr: '='
+                },
                 link: postLinkFn
             };
 
@@ -32,7 +34,7 @@ angular.module('common')
                 var
                     attrId       = renderCtrl.getAttrId(),
                     filterConfig = selectService.getFilterForId(attrId),
-                    attrInfo     = AttrInfoService.getNodeAttrInfoForRG().getForId(attrId),
+                    attrInfo     = scope.attr,
                     binCount     = renderCtrl.getBinCount();
 
                 console.assert(attrInfo.isNumeric || attrInfo.isYear, logPrefix + 'attribute should be isNumeric/isYear');
@@ -64,15 +66,21 @@ angular.module('common')
                     }
                 });
 
-                scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function() {
-                    // Reset filter values range on subset
-                    filterConfig = selectService.getFilterForId(attrId)
-                    setRange();
+                scope.$watch('attr', function(){
+                    attrInfo = scope.attr;
+                    
                 });
 
-                scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
-                    scope.filterRange = [0, binCount];
-                });
+                // scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function() {
+                //     // Reset filter values range on subset
+                //     filterConfig = selectService.getFilterForId(attrId);
+                //     console.log("FILTERCONFIG", attrInfo);
+                //     setRange();
+                // });
+
+                // scope.$on(BROADCAST_MESSAGES.fp.filter.reset, function() {
+                //     scope.filterRange = [0, binCount];
+                // });
 
                 function init () {
                     binCount = renderCtrl.getBinCount();

@@ -218,7 +218,7 @@ angular.module('common')
                     // remove selection from filter service panel
                     selectService.unselect();
                     // restore camera
-                    zoomService.restoreCamera();
+                    //zoomService.restoreCamera();
                     // graphSelectionService.clearSelections();
                     $rootScope.$broadcast(BROADCAST_MESSAGES.nodeOverlay.removing, { clearSelections: true });
                 }
@@ -338,9 +338,9 @@ angular.module('common')
                     }
 
                     //save camera position (for going back)
-                    if (!$scope.neighborNode && !$scope.showOverlay) {
-                        zoomService.saveCamera();
-                    }
+                    // if (!$scope.neighborNode && !$scope.showOverlay) {
+                    //     zoomService.saveCamera();
+                    // }
 
                     //animate graph to position
                     //zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
