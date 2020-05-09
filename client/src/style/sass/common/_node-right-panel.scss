@@ -158,6 +158,23 @@
     }
   }
 
+  .section__short-strings {
+    .section-info {
+      max-width:50%;
+    }
+    .tag-list__item {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: inline-block;
+      max-width: 100%;
+      margin: 0;
+      .cat-text-container, .cat-text-container > div {
+        overflow: hidden;
+        max-width: 100%;
+      }
+    }
+  }
+
   .section-info {
     flex: 0 0 50%;
     color: #0C0C0C;
