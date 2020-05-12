@@ -59,10 +59,11 @@
 
   &__text {
     display: block;
-    transition: all .2s;
     white-space: nowrap;
-    transform: translateX(0);
+    opacity: 1;
     text-overflow: ellipsis;
+    transition: all .3s;
+    transition-delay: .2s;
   }
 
   &__badge {
@@ -85,7 +86,7 @@
     padding: 10px 10px 10px 55px;
     color: #fff;
     opacity: .8;
-    transition: opacity .2s;
+    transition: opacity .3s;
 
     &::before {
       content: '';
@@ -97,6 +98,7 @@
       transform: translateY(-50%);
       background-position: 50%;
       background-repeat: no-repeat;
+      transition: all .3s;
     }
 
     &_info {
