@@ -117,6 +117,13 @@ angular.module('common')
                 }
             });
 
+            $scope.onTagLoad = function(section, $event) {
+                console.log("ON TAG LOAD");
+                if (!section.popupText && $($event.target)[0].scrollWidth > $($event.target).innerWidth()) {
+                    section.popupText = section.value;
+                }
+            }
+
             $scope.onHover = function(link) {
                 hoverService.hoverNodes({ ids: [link.nodeId], force: true});
             };
@@ -502,17 +509,11 @@ angular.module('common')
                 _.forEach(graph.getInNodeNeighbours(node.id), function (edgeInfo, targetId) {
                     _.forEach(edgeInfo, function(edge, edgeId) {
                         var neighNode = graph.nodes(edge.source);
-                        const nameThatExists = neighNode.attr[$scope.mapprSettings.labelAttr];
-                        //
-                        const [name, description] = nameThatExists.split(':');
-                        const [first, last] = name.split('');
-                        const initials = first[0] + last[0];
+
                         result.push({
                             nodeId: neighNode.id,
                             weight: edge.size,
-                            name: name,
-                            description: description,
-                            initials: initials,
+                            name: neighNode.attr[$scope.mapprSettings.labelAttr],
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -528,17 +529,11 @@ angular.module('common')
                 _.forEach(graph.getOutNodeNeighbours(node.id), function (edgeInfo, targetId) {
                     _.forEach(edgeInfo, function(edge, edgeId) {
                         var neighNode = graph.nodes(edge.target);
-                        const nameThatExists = neighNode.attr[$scope.mapprSettings.labelAttr];
-                        //
-                        const [name, description] = nameThatExists.split(':');
-                        const [first, last] = name.split('');
-                        const initials = first[0] + last[0];
+
                         result.push({
                             nodeId: neighNode.id,
                             weight: edge.size,
-                            name: name,
-                            description: description,
-                            initials: initials,
+                            name: neighNode.attr[$scope.mapprSettings.labelAttr],
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -590,16 +585,9 @@ angular.module('common')
                 const Name = values[$scope.mapprSettings.labelAttr];
 
                 if (Name !== undefined) {
-                    const nameThatExists = Name;
-                    //
-                    const [name, description] = nameThatExists.split(':');
-                    const [first, last] = name.split('');
-                    const initials = first[0] + last[0];
                     return ({
                         type: 'name',
-                        name,
-                        description,
-                        initials,
+                        name: Name,
                         color: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd',
                         imageShow: $scope.mapprSettings.nodeImageShow,
                         image: values[$scope.mapprSettings.nodeImageAttr]
@@ -631,7 +619,7 @@ angular.module('common')
                 if (attr.attrType === 'url') return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value) });
             }
 
-            function onSectionHover(sections, tag) {
+            function onSectionHover(sections, tag, $event) {
                 hoverService.hoverNodes({ attr: sections.id, value: tag});
             }
 
@@ -694,16 +682,6 @@ angular.module('common')
                 return false;
             }
 
-            function getName(completeName) {
-                var names = completeName.split(':');
-                if (names.length == 2) {
-                    return {
-                        name: names[0],
-                        description: names[1]
-                    }
-                }
-                return { name: completeName };
-            }
             function formatDate(num) {
                 var date = new Date(num);
                 var day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();

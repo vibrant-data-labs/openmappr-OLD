@@ -552,7 +552,6 @@
       box-shadow: 0 2px 2px $shadow-color-light;
       position: relative;
       z-index: 2;
-      display: none; // TODO: remove this block in jade-file
 
       &.hovered {
         h6 > i:first-child {
