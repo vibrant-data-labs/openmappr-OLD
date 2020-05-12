@@ -204,6 +204,10 @@ function($timeout, $rootScope, $window, projFactory, FilterPanelService, BROADCA
                 });
 
                 $element.on( 'scroll', function(e) {
+                    if (typeof $scope.onScroll === 'function') {
+                        $scope.onScroll();
+                    }
+                    
                     throttUpdateFPScrollStatus(true);
                     scrollHandler(e);
                     debouncedViewportRenderer(e);

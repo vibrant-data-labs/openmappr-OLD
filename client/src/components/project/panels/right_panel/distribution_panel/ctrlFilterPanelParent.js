@@ -8,7 +8,6 @@ angular.module('common')
     **************************************/
             // var logPrefix = '[ctrlFilterPanelParent: ] ';
 
-
             /*************************************
     ********* Scope Bindings *************
     **************************************/
@@ -40,6 +39,11 @@ angular.module('common')
 
             $scope.attrSearched = function() {
                 $scope.$broadcast(BROADCAST_MESSAGES.fp.attrSearched, {query: $scope.ui.statsSearchKey});
+            };
+
+            $scope.navigateTo = function(className) {
+                document.querySelector(className).scrollIntoView({ behavior: 'smooth' });
+                document.querySelector('.filter-header').scrollIntoView();
             };
 
             /**
