@@ -551,14 +551,28 @@ angular.module('common')
                 if (attrType === 'liststring') {
                     if(attrInfo.isSingleton) {
                         var count = attrInfo.valuesCount[values[attr.id]];
-                        result.section5.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id].join(', '), isTag: count > 1});                        
+                        var value = values[attr.id];
+                        result.section5.push({ 
+                            key: attr.title || attr.id, 
+                            id: attr.id, 
+                            values: _.map(value, function(v) {
+                                return {
+                                    value: v,
+                                    isTag: attrInfo.valuesCount[v] > 1
+                                }
+                            })});
                     } else {
                         result.section3.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
                     }
                 }
                 else if (attrType === 'string') {
                     var count = attrInfo.valuesCount[values[attr.id]];
-                    result.section5.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id], isTag: count > 1 });
+                    result.section5.push({
+                        key: attr.title || attr.id, id: attr.id, values: [{
+                            value: values[attr.id], 
+                            isTag: count > 1
+                        }]
+                    });
                 }
             }
 

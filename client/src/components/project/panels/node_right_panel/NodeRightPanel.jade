@@ -66,22 +66,20 @@
             .section__content.section__info.section__short-strings
               dl#information.section-info(ng-repeat="number in nodeRightInfo.section5")
                 dt.section-info__label {{number.key}}
-                dd.section-info__value(ng-if="!number.isTag") {{number.value}}
-                dd.tag-list__item(ng-if="number.isTag", 
-                  style="cursor:pointer", 
-                  ng-mouseover="onSectionHover(number, number.value, $event)", 
-                  ng-mouseleave="onSectionLeave()", 
-                  ng-click="onSectionSelect(number, number.value)",
-                  uib-tooltip="{{number.value.length > 10 ? number.value : null}}", 
-			            tooltip-placement="left", 
-			            tooltip-append-to-body="true")
-                  .cat-info
-                  .cat-list.tag-cloud
-                    .cat-item
-                      .cat-highlight(style="opacity: 0;")
+                dd(ng-repeat="val in number.values", ng-class="{'tag-list__item': val.isTag}")
+                  .cat-list.tag-cloud(ng-if="val.isTag")
+                    .cat-item(
+                      style="cursor:pointer", 
+                      ng-mouseover="onSectionHover(number, val.value, $event)", 
+                      ng-mouseleave="onSectionLeave()", 
+                      ng-click="onSectionSelect(number, val.value)",
+                      uib-tooltip="{{val.value.length > 10 ? val.value : null}}", 
+                      tooltip-placement="left", 
+                      tooltip-append-to-body="true")
                       .vert-align.cat-text-container
                         div
-                          .cat-text.no-margin.truncate {{number.value}}
+                          .cat-text.no-margin.truncate {{val.value}}
+                  span.section-info__value(ng-if="!val.isTag") {{val.value}}
 
           section.section.section_tabs(ng-if="(neighs.in && neighs.in.lentgh) || (neighs.out && neighs.out.length)")
             .tabContainer
