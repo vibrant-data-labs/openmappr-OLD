@@ -32,17 +32,17 @@
 
 		.filter-header
 			ul.filter-header__list
-				li.filter-header__item.filter-header__item_current
+				li.filter-header__item.tag.filter-header__item_current(ng-click="navigateTo('.tags-first-item')")
 					span.filter-header__link Tags
-				li.filter-header__item
+				li.filter-header__item.chart(ng-click="navigateTo('.chart-first-item')")
 					span.filter-header__link Charts
 
 		.panel-scroll.flex-fill.flex-vert-container(ng-controller="FilterPanelCtrl")
 			//- span {{filteredDistrAttrs.length}} of {{nodeDistrAttrs.length}}
-			ul.filter-list(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr")
+			ul.filter-list(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr", on-scroll="onScroll")
 				li.filter-list__item(
 					ng-repeat="attr in ui.filteredAttrs = (nodeDistrAttrs | filter: {title : ui.statsSearchKey}) track by attr.id",
-					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1)}",
+					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1), 'chart-first-item': attr.isFirstChart, 'tags-first-item': attr.isFirstTag}",
 					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)',
 					ng-style="{'display': 'block', 'margin-bottom':'15px', 'height': 'auto'}"
 				)
@@ -71,34 +71,3 @@
 					)
 						span {{::attr.title}}
 						span(ng-show="attr.principalVal") :&nbsp;{{attr.principalVal}}
-
-					//- .row
-					//- 	.attr-title
-					//- 		.row.vert-align
-					//- 			.col-xs-6
-					//- 				h6.title.truncate(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true") {{::attr.title}}
-					//- 			.col-xs-4
-					//- 			.col-xs-4
-					//- 				h6.color-primary.truncate.text-right(ng-if="attr.inViewport && (attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float')", style="color:{{nodeColorStr}}") &nbsp;{{attr.principalVal}}
-					//- 			.col-xs-5(ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", style="padding-left:0;")
-					//- 				dir-tag-list-sort(attr="::attr")
-					//- 			.col-xs-1(ng-if="MAPP_EDITOR_OPEN")
-					//- 				dir-attr-mod(attr="::attr", placement="selection")
-					//- 	.col-xs-12()
-					//- 		.row(ng-if="attr.attrType === 'string' && attr.principalVal", style="height:20px;")
-					//- 			.col-xs-1
-					//- 			.col-xs-11
-					//- 				div
-					//- 					h6.truncate.no-margin(style="color:{{nodeColorStr}};" ng-text-truncate="attr.principalVal" ng-tt-chars-threshold="200" ng-tt-more-label="more..." ng-tt-less-label="...less")
-					//- 					h6.truncate.no-margin {{attr.principalVal}}
-					//- 		dir-attr-renderer(attr-to-render="attr", node-color-str="nodeColorStr", is-node="true", show-filter="ui.enableFilters", disable-filter="attr.disableFilter" theme="appUi.theme" pinned-media="pinnedMedia")
-					//- 		.clearfix
-					//- 	.col-xs-12
-					//- 		.attr-subtitle.row(ng-if="attr.attrType === 'integer' || attr.attrType ==='boolean' || attr.attrType === 'float' || attr.attrType === 'year' " ng-class="{'filters-on':ui.enableFilters}" ng-style="{'margin-bottom': '3px'}")
-					//- 			.col-xs-2(ng-if="attr.metadata.minLabel")
-					//- 				h6.no-margin {{::attr.metadata.minLabel}}
-					//- 			div(style="color:{{focusNode.colorStr}};" ng-class="{'col-xs-8': attr.metadata.minLabel, 'col-xs-12': !attr.metadata.minLabel}")
-					//- 			.col-xs-2(ng-if="attr.metadata.maxLabel")
-					//- 				h6.no-margin.text-right.pull-right {{::attr.metadata.maxLabel}}
-					//- 		.divider
-					//- .clearfix

@@ -6,7 +6,11 @@ angular.module('common')
             /*************************************
     ************ Local Data **************
     **************************************/
-            var logPrefix = '[ctrlFilterPanel: ] ';
+            var logPrefix = '[ctrlFilterPanel: ] ';          
+            var groups = {
+                tag: ['tag-cloud'],
+                charts: ['histogram']
+            };
 
             /*************************************
     ********* Scope Bindings *************
@@ -70,6 +74,18 @@ angular.module('common')
                 attr.sortConfig.sortOrder = newSortOrder;
             }
 
+            $scope.onScroll = function() {
+                var chartItem = $('.chart-first-item').position().top;
+
+                if (chartItem < window.innerHeight / 2) {
+                    document.querySelector('.filter-header__item.tag').classList.remove('filter-header__item_current');
+                    document.querySelector('.filter-header__item.chart').classList.add('filter-header__item_current');
+                } else {
+                    document.querySelector('.filter-header__item.tag').classList.add('filter-header__item_current');
+                    document.querySelector('.filter-header__item.chart').classList.remove('filter-header__item_current');
+                }
+            }
+
             /*************************************
     ********* Initialise *****************
     **************************************/
@@ -120,14 +136,40 @@ angular.module('common')
                         $scope.nodeDistrAttrs.push(attrClone);
                     }
                 });
+
+                var tagAttrs = $scope.nodeDistrAttrs.filter(function(x) { return groups.tag.includes(x.renderType);});
+                var visibleTagAttrs = tagAttrs.filter(function(x) {
+                    return x.visible;
+                });
+                if (visibleTagAttrs.length) {
+                    visibleTagAttrs[0].isFirstTag = true;
+                }
+
+                var chartAttrs = $scope.nodeDistrAttrs.filter(function(x) { return groups.charts.includes(x.renderType);});
+                var visibleChartAttrs = chartAttrs.filter(function(x) {
+                    return x.visible;
+                });
+
+                if (visibleChartAttrs.length) {
+                    visibleChartAttrs[0].isFirstChart = true;
+                }
+
                 $scope.ui.totalAttrsCount = $scope.nodeDistrAttrs.length;
 
-                // move network attrs to top
+                // move network attrs to top, both for tags and charts
                 var networkAttrs = networkService.getNetworkAttrs(networkService.getCurrentNetwork().id);
-                $scope.nodeDistrAttrs = _($scope.nodeDistrAttrs)
+                tagAttrs = _(tagAttrs)
                     .partition(function(attr) { return networkAttrs.indexOf(attr.id) > -1; })
                     .flatten()
                     .value();
+
+                chartAttrs = _(chartAttrs)
+                    .partition(function (attr) { return networkAttrs.indexOf(attr.id) > -1; })
+                    .flatten()
+                    .value();
+
+                $scope.nodeDistrAttrs = [...tagAttrs, ...chartAttrs];
+
                 updateNodeColorStr();
                 // Set 'sortType' for tag attrs
                 setSortForTags($scope.nodeDistrAttrs, !_.isEmpty(newSelection));
