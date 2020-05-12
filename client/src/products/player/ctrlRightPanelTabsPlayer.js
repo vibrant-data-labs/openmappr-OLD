@@ -90,40 +90,45 @@ angular.module('common')
                             }, 100);
                     },
                 },
+                // {
+                //     iconClass: 'slides',
+                //     title: 'Slides',
+                //     panel: 'slides',
+                //     tooltipTitle: 'See slide information and change views if there are more than one',
+                //     cmd: function () {
+                //         $scope.panelUI.openPanel('slides');
+                //         if (!$window.localStorage.slides)
+                //             $timeout(function () {
+                //                 ngIntroService.setOptions(
+                //                     {
+                //                         steps: [
+                //                             {
+                //                                 element: '#slideNavigator',
+                //                                 intro: 'Slide Navigator'
+                //                             },
+                //                             {
+                //                                 element: '#slideDescription',
+                //                                 intro: 'Slide Description'
+                //                             },
+                //                             {
+                //                                 element: '#mainCanvas',
+                //                                 intro: 'Main Canvas'
+                //                             },
+                //                             {
+                //                                 element: '#nodeZoom',
+                //                                 intro: 'Zoom in to node'
+                //                             }
+                //                         ]
+                //                     },
+                //                 );
+                //                 ngIntroService.start();
+                //             }, 100);
+                //     }
+                // },
                 {
-                    iconClass: 'slides',
-                    title: 'Slides',
-                    panel: 'slides',
-                    tooltipTitle: 'See slide information and change views if there are more than one',
-                    cmd: function () {
-                        $scope.panelUI.openPanel('slides');
-                        if (!$window.localStorage.slides)
-                            $timeout(function () {
-                                ngIntroService.setOptions(
-                                    {
-                                        steps: [
-                                            {
-                                                element: '#slideNavigator',
-                                                intro: 'Slide Navigator'
-                                            },
-                                            {
-                                                element: '#slideDescription',
-                                                intro: 'Slide Description'
-                                            },
-                                            {
-                                                element: '#mainCanvas',
-                                                intro: 'Main Canvas'
-                                            },
-                                            {
-                                                element: '#nodeZoom',
-                                                intro: 'Zoom in to node'
-                                            }
-                                        ]
-                                    },
-                                );
-                                ngIntroService.start();
-                            }, 100);
-                    }
+                    iconClass: 'snapshots',
+                    title: 'Snapshots',
+                    panel: 'snapshots'
                 },
                 {
                     iconClass: 'filter',
