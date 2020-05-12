@@ -68,4 +68,10 @@
   .tabs-menu__badge {
     left: 35px;
   }
+
+  .tabs-menu__link.toggle {
+    &::before {
+      transform: scaleX(-1) translate(50%, -50%);
+    }
+  }
 }

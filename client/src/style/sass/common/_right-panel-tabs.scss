@@ -46,6 +46,8 @@
         background: #C2CFE1;
         color: #333;
       }
+
+
     }
 
     .tooltip {
@@ -79,8 +81,7 @@
   &__link {
     display: block;
     position: relative;
-    font-size: 13px;
-    line-height: 20px;
+    font: 500 13px/20px 'Poppins';
     padding: 10px 10px 10px 55px;
     color: #fff;
     opacity: .8;
@@ -188,11 +189,17 @@
       }
     }
 
+    &_feedback {
+      &::before {
+        background-image: url('/img/tabs-menu/feedback.svg');
+      }
+    }
+
     &.toggle {
       font-size: 11px;
       line-height: 17px;
-      color: #90A0B7;
-      margin: 50px 0 10px;
+      margin: 0 0 10px;
+      opacity: 1;
 
       &::before {
         background-image: url('/img/tabs-menu/toggle_white.svg');
