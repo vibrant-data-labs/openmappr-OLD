@@ -29,6 +29,14 @@
 					input.h6.no-margin.form-control.pull-left(placeholder="Search Attributes.." ng-model="ui.statsSearchKey", ng-model-options="{'debounce': 500}", ng-change="attrSearched();")
 					i.fa.fa-search
 		//- FILTER_PANEL_CONTENT starts from here
+
+		.filter-header
+			ul.filter-header__list
+				li.filter-header__item.filter-header__item_current
+					span.filter-header__link Tags
+				li.filter-header__item
+					span.filter-header__link Charts
+
 		.panel-scroll.flex-fill.flex-vert-container(ng-controller="FilterPanelCtrl")
 			//- span {{filteredDistrAttrs.length}} of {{nodeDistrAttrs.length}}
 			ul.filter-list(dir-attr-modifiers="", data-dir-virtual-scroll="", variable-height="", container-item-count="nodeDistrAttrs.length" dir-kill-tooltip-on-scroll, ng-if="ui.renderDistr")

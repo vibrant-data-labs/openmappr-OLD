@@ -314,7 +314,7 @@
         border-radius: 10px;
         height: 20px;
         // margin: 40px 0px -50px 5px;
-        padding: 5px 5px 0 15px;
+        padding: 5px 5px 0 28px;
         position: relative;
         z-index: 1;
         transform: translateY(-29px);
@@ -468,7 +468,7 @@
             &.cat-item-subsetted {
                 cursor: default;
                 & .tag-checkbox label::after {
-                    border-color: $gray;
+                    border-color: #BC3364;
                 }
             }
         }

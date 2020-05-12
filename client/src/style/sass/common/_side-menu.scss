@@ -22,9 +22,12 @@
     width: $side-menu-compressed;
   }
 
-  .right-panel,
   .intro-overlay {
     left: $side-menu-compressed;
+  }
+
+  .right-panel {
+    left: $side-menu-compressed + 20px;
   }
 
   .graph-container,
