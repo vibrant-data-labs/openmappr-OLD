@@ -54,7 +54,11 @@ angular.module('common')
                     stop: function(ev, ui) {
                         console.log(logPrefix + 'Slider stop - event & ui ', ev, ui);
                         var valueRange = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]);
-                        selectService.selectNodes({ attr: attrInfo.attr.id, min: valueRange.min, max: valueRange.max, force: true});
+                        if (valueRange.min == attrInfo.stats.min && valueRange.max == attrInfo.stats.max) {
+                            selectService.selectNodes({ attr: attrInfo.attr.id, forceDisable: true });
+                        } else {
+                            selectService.selectNodes({ attr: attrInfo.attr.id, min: valueRange.min, max: valueRange.max, force: true});
+                        }
                     }
                 };
 
