@@ -173,6 +173,14 @@ angular.module('common')
                         isGrid = false;
                         //may not need
                         $scope.focusNode = data.nodes[0];
+
+                        // if the right panel was not previously opened
+                        if (!$scope.showOverlay) {
+                            $scope.activeTabs2(0);
+                            $scope.activeTabs3(0);
+                            $scope.activeNeigh('out');
+                        }
+
                         if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') $scope.beginOverlayRightPanel = true;
                         else $scope.beginOverlayAnim = true;
 
@@ -225,6 +233,7 @@ angular.module('common')
                     console.warn(logPrefix + 'overlay is not open, wrongly called!');
                     return;
                 }
+                
                 //hide node pop and overlay
                 $scope.beginOverlayRightPanel = false;
                 $scope.beginOverlayAnim = false;
@@ -298,6 +307,7 @@ angular.module('common')
             }
 
             function finishAnimation() {
+                var prevShowOverlay = $scope.showOverlay;
                 $scope.showOverlay = true;
                 $scope.showNeighborNode = false;
                 $scope.hideContent = false;
@@ -325,10 +335,11 @@ angular.module('common')
                         });
                     });
 
-                    // Hack for scrolling up on changing the nodes
-                    var container = document.querySelector('.section__icons');
-                    if (container) {
-                        container.parentElement.scrollIntoView();
+                    if (!prevShowOverlay) {
+                        var container = document.querySelector('.section__icons');
+                        if (container) {
+                            container.parentElement.scrollIntoView();
+                        }
                     }
                 });
 
