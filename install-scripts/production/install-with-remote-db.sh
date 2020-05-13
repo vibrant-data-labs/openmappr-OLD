@@ -130,5 +130,12 @@ docker run -d --restart=always --name watchtower -v \
 # Clone openMappr repo
 git clone https://github.com/selfhostedofficial/openmappr
 cd openmappr
+# Grab environment from user
+read -p 'Please enter your environment (latest,staging,etc): ' environ
+# Grab dbHost from user
+read -p 'Please enter a remote database hostname or IP (db.openmappr.org,etc): ' mongo_host
+cp .env.sample .env
+sed -i "s/ENVIRONMENT=latest/ENVIRONMENT=${environ}/g" .env
+sed -i "s/DB_HOST=/DB_HOST=${mongo_host}/g" .env
 # Start server
-docker-compose -f docker-compose.do_production.yml up
+docker-compose -f docker-compose.remote.yml up -d

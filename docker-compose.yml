@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: openmapprimages/openmappr_web:latest
+    image: openmapprimages/openmappr_web:${ENVIRONMENT}
     command: ./run_docker_mode.sh
     restart: unless-stopped
     depends_on:
@@ -11,25 +11,22 @@ services:
       - "8080:8080"
     volumes:
       - "./server:/usr/src/mappr/server"
+    environment:
+      - dbHost=${DB_HOST}
     logging:
       driver: "json-file"
       options:
         max-size: "100k"
         max-file: "10"
   athena:
-    image: openmapprimages/openmappr_athena:latest
+    image: openmapprimages/openmappr_athena:${ENVIRONMENT}
     command: ./run_docker_mode.sh
     restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1
+      - dbHost=${DB_HOST}
     depends_on:
-      - "mongo"
       - "beanstalk"
-  beanstalk:
-    image: kusmierz/beanstalkd
-    restart: unless-stopped
-    ports:
-      - "11300:11300"
   mongo:
     image: mongo:3.2
     restart: unless-stopped
@@ -39,6 +36,11 @@ services:
       - ./mongo/data:/data/db
       - ./mongo/config:/mongo
     command: "/bin/sh -c 'cd /mongo && chmod 777 mongo.sh && ./mongo.sh'"
+  beanstalk:
+    image: kusmierz/beanstalkd
+    restart: unless-stopped
+    ports:
+      - "11300:11300"
   elasticsearch:
     image: elasticsearch:2.4
     restart: unless-stopped
