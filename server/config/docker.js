@@ -1,9 +1,14 @@
 'use strict';
 
+var dbHost = process.env.dbHost || "mongo";
+
 module.exports = {
-    'dbUrl': 'mongodb://mongo:27017/MAPPRDB',
-    'oldDbUrl': 'mongodb://mongo:27017/MPTEST',
-    'sessiondbUrl': 'mongodb://mongo:27017/sessionDB',
+    //'dbUrl': 'mongodb://mongo:27017/MAPPRDB',
+    'dbUrl': 'mongodb://'+dbHost+':27017/MAPPRDB',
+    //'oldDbUrl': 'mongodb://mongo:27017/MPTEST',
+    'oldDbUrl': 'mongodb://'+dbHost+':27017/MPTEST',
+    //'sessiondbUrl': 'mongodb://mongo:27017/sessionDB',
+    'sessiondbUrl': 'mongodb://'+dbHost+':27017/sessionDB',
     'elasticSearchConfig': {
         host: 'elasticsearch:9200',
         log: 'error',
