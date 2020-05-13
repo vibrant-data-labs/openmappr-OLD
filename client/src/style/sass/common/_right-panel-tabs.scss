@@ -46,6 +46,8 @@
         background: #C2CFE1;
         color: #333;
       }
+
+
     }
 
     .tooltip {
@@ -57,10 +59,11 @@
 
   &__text {
     display: block;
-    transition: all .2s;
     white-space: nowrap;
-    transform: translateX(0);
+    opacity: 1;
     text-overflow: ellipsis;
+    transition: all .3s;
+    transition-delay: .2s;
   }
 
   &__badge {
@@ -79,12 +82,11 @@
   &__link {
     display: block;
     position: relative;
-    font-size: 13px;
-    line-height: 20px;
+    font: 500 13px/20px 'Poppins';
     padding: 10px 10px 10px 55px;
     color: #fff;
     opacity: .8;
-    transition: opacity .2s;
+    transition: opacity .3s;
 
     &::before {
       content: '';
@@ -96,6 +98,7 @@
       transform: translateY(-50%);
       background-position: 50%;
       background-repeat: no-repeat;
+      transition: all .3s;
     }
 
     &_info {
@@ -188,11 +191,17 @@
       }
     }
 
+    &_feedback {
+      &::before {
+        background-image: url('/img/tabs-menu/feedback.svg');
+      }
+    }
+
     &.toggle {
       font-size: 11px;
       line-height: 17px;
-      color: #90A0B7;
-      margin: 50px 0 10px;
+      margin: 0 0 10px;
+      opacity: 1;
 
       &::before {
         background-image: url('/img/tabs-menu/toggle_white.svg');

@@ -178,38 +178,20 @@ angular.module('common')
                 //     draw(); // Reset scope data
                 // });
 
+                scope.getTooltipInfo = function(catData) {
+                    var subsetLength = subsetService.currentSubset().length;
+                    var totalNodes = subsetLength > 0 ? subsetLength : catData.totalNodes;
+                    var currentFreq = subsetLength > 0 ? catData.selTagFreq : catData.globalTagFreq;
+                    return currentFreq + " of " + totalNodes + " tagged as " + catData.text;
+                }
+
                 scope.overCat = function (catData, event) {
-                    $timeout(function () {
-                        var curTarget = $(event.currentTarget);
-                        var pos = curTarget.position();
-                        // console.log('off: ', off);
-                        // console.log('catData: ', catData);
-                        var subsetLength = subsetService.currentSubset().length;
-                        var totalNodes = subsetLength > 0 ? subsetLength : catData.totalNodes;
-                        var currentFreq = subsetLength > 0 ? catData.selTagFreq : catData.globalTagFreq;
-                        scope.tooltipText = currentFreq + " of " + totalNodes + " tagged as " + catData.text;
-                        element.find('.tooltip-positioner').css({
-                            top: pos.top + curTarget.height() / 2,
-                            left: pos.left + curTarget.width()
-                        });
-                        scope.openTooltip = true;
-
-
-                        //renderCtrl.hoverNodesByAttrib(attrId, catData.id, event);
-
-                    }, 10);
-                    // hover nodes
                     hoverService.hoverNodes({ attr: attrId, value: catData.id });
                 };
 
                 scope.outCat = function (catData, event) {
-                    $timeout(function () {
-                        scope.openTooltip = false;
-                    }, 100);
                     hoverService.unhover();
-
                 };
-
 
                 scope.showMore = function () {
                     distrData.numShowGroups++;
