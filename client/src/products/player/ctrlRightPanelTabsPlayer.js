@@ -91,10 +91,10 @@ angular.module('common')
                     },
                 },
                 {
-                    iconClass: 'slides',
-                    title: 'Slides',
+                    iconClass: 'snapshots',
+                    title: 'Snapshots',
                     panel: 'slides',
-                    tooltipTitle: 'See slide information and change views if there are more than one',
+                    tooltipTitle: 'See snapshot information and change views if there are more than one',
                     cmd: function () {
                         $scope.panelUI.openPanel('slides');
                         if (!$window.localStorage.slides)

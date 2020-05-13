@@ -22,9 +22,12 @@
     width: $side-menu-compressed;
   }
 
-  .right-panel,
   .intro-overlay {
     left: $side-menu-compressed;
+  }
+
+  .right-panel {
+    left: $side-menu-compressed + 20px;
   }
 
   .graph-container,
@@ -57,7 +60,6 @@
     opacity: 0;
     white-space: nowrap;
     overflow: hidden;
-    transform: translateX(-200px);
   }
   .tabs-menu__link {
     &::before {
@@ -67,5 +69,11 @@
   }
   .tabs-menu__badge {
     left: 35px;
+  }
+
+  .tabs-menu__link.toggle {
+    &::before {
+      transform: scaleX(-1) translate(50%, -50%);
+    }
   }
 }
