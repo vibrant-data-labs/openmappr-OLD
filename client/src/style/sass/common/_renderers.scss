@@ -4,6 +4,8 @@
 // "Stats" section of the right panel
 
 .attr-renderers {
+    position: relative;
+
     .embed,
     img,
     p,
@@ -315,10 +317,14 @@
         height: 20px;
         // margin: 40px 0px -50px 5px;
         padding: 5px 5px 0 28px;
-        position: relative;
         z-index: 1;
-        transform: translateY(-29px);
-        margin-bottom: -20px;
+        //position: relative;
+        //transform: translateY(-29px);
+        //margin-bottom: -20px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 75px;
 
         .ui-slider {
             border: 0;
