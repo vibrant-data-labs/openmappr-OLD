@@ -292,7 +292,7 @@ angular.module('common')
                 if(attr.isNumeric) {
                     // find all nodes with the value within the bracket (val >= low && val <= high) for each range
                     selectedNodeIds = _.reduce(nodes, function(chosenOnes, node) {
-                        if (!node.attr[attrId]) return chosenOnes;
+                        if (!Number.isFinite(node.attr[attrId])) return chosenOnes;
 
                         var matches = _.filter(attrRanges, function(r) {
                             return node.attr[attrId] >= r.min && node.attr[attrId] <= r.max;
