@@ -144,9 +144,9 @@ function($q, renderGraphfactory, hoverService) {
     function labelUnHover(d) {
         _clearTimer();
         _service.isGroupLabelHover = false;
-        if(!d.isSelected) {
-            hoverService.unhover();
-        }
+        // if(!d.isSelected) {
+        //     hoverService.unhover();
+        // }
         renderGraphfactory.sig().dispatchEvent('outNodes', {nodes: d.nodes});
     }
 

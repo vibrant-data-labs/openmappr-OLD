@@ -118,8 +118,8 @@ angular.module('common')
             });
 
             $scope.onTagLoad = function(section, $event) {
-                console.log("ON TAG LOAD");
-                if (!section.popupText && $($event.target)[0].scrollWidth > $($event.target).innerWidth()) {
+                var elem = $event.target[0];
+                if (!section.popupText && $(elem).find('.cat-text')[0].scrollWidth > elem.clientWidth) {
                     section.popupText = section.value;
                 }
             }

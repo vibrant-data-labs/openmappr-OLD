@@ -314,7 +314,8 @@ angular.module('common')
                         [],
                         nodes,
                         sigRender.d3Sel.labels(),
-                        settings
+                        settings,
+                        subsetNodes && subsetNodes.length
                     );
                 }
             }

@@ -69,11 +69,12 @@
                 dd(ng-repeat="val in number.values", ng-class="{'tag-list__item': val.isTag}")
                   .cat-list.tag-cloud(ng-if="val.isTag")
                     .cat-item(
+                      dir-elem-ready="onTagLoad(val, $event)"
                       style="cursor:pointer", 
                       ng-mouseover="onSectionHover(number, val.value, $event)", 
                       ng-mouseleave="onSectionLeave()", 
                       ng-click="onSectionSelect(number, val.value)",
-                      uib-tooltip="{{val.value.length > 10 ? val.value : null}}", 
+                      uib-tooltip="{{val.popupText}}", 
                       tooltip-placement="left", 
                       tooltip-append-to-body="true")
                       .vert-align.cat-text-container

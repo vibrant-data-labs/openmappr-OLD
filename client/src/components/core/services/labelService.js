@@ -107,7 +107,7 @@ angular.module('common')
             // allnodes are all the nodes, so that groups can contain every node, even those offscreen
             // every group will have at least one onscreen node
             //
-            function addGroupNodes(nodes, allnodes, settings, inHover) {
+            function addGroupNodes(nodes, allnodes, settings, inHover, hasSubset) {
                 var onScreen = function(x, y) {
                     return x > 0 && x < window.innerWidth - leftPanelWidth && y > 0 && y < window.innerHeight;
                 };
@@ -126,15 +126,24 @@ angular.module('common')
                         var x = node[prefix + 'x'], y = node[prefix + 'y'];
                         var group = node.attr[attr];
                         if(!groups[group]) {
+                            var groupNodes = allGroups[group];
+                            var count = groupInfo.valuesCount[group];
+                            if (hasSubset) {
+                                groupNodes = _.filter(groupNodes, function(n) {
+                                    return _.find(nodes, function(q) { return q.id == n.id });
+                                });
+                                count = groupNodes.length;
+                            }
+
                             groups[group] = {title: group,
                                 id: group,
-                                nodes: allGroups[group],
+                                nodes: groupNodes,
                                 viznodes: [],
                                 sumX: 0,
                                 sumY: 0,
                                 isGroup: true,
                                 inHover: inHover,
-                                count: groupInfo.valuesCount[group]
+                                count: count
                             };
                         }
                         var info = groups[group];
@@ -184,7 +193,7 @@ angular.module('common')
                         }
                         // add visible group labels if inHover or more than one is visible
                         // (one group label visible means the user probably knows where they are so don't bother with it)
-                        if(inHover || onScreen > 1) {
+                        if(inHover || onScreen > 0) {
                             _.each(groups, function(info) {
                                 if(info.onScreen) {
                                     finalNodes.push(info);
@@ -291,7 +300,7 @@ angular.module('common')
                 // selected nodes
                 var selNodes = [];//_.filter(sortedNodes, isSelected);
 
-                if(thresholded && thresholded.length > 1){
+                if(thresholded && thresholded.length > 0){
                     collisionCount = 0;
                     optFilterCollisions(thresholded, maxLabels/*thresholded.length*/, settings,  function(result){
                         var labelsToShow = _.compact(result).concat(selNodes);
@@ -379,7 +388,7 @@ angular.module('common')
             // Default renderer, generally called directly by sigma
             // Labels can be in default or selected state. Label would never be in hover state though.(hopefully)
             //
-            function defRenderer (nodes, allnodes, d3Sel, settings) {
+            function defRenderer (nodes, allnodes, d3Sel, settings, hasSubset) {
                 var isTweening = settings('tweening'),
                     cssClass = sigma.d3.labels.cssClasses.baseCssClass, // the css class to apply for labels
                     cssGroup = sigma.d3.labels.cssClasses.cssGroupClass, // the css class to apply for group labels
@@ -392,7 +401,7 @@ angular.module('common')
                 }
 
                 // Create final list of nodes with labels
-                strat(addGroupNodes(nodes, allnodes, settings, false), settings, false, function(nodesToLabel){
+                strat(addGroupNodes(nodes, allnodes, settings, false, hasSubset), settings, false, function(nodesToLabel){
                     if(nodesToLabel.length > 0 && typeof _.last(nodesToLabel) !== "undefined"){
                         var sel = d3Sel.selectAll('div').data(nodesToLabel, nodeId);
                         // create html element for holding the label if it does not exist in the selection.
@@ -495,7 +504,7 @@ angular.module('common')
             /// Called by hover service when a user hovers or unhovers a node on the graph. The nodes list is of hovered nodes
             /// selNodes are the selected nodes.  Collision detection is run on both hovered and selected
             ///
-            function hoverRenderer(nodes, selNodes, d3Sel, settings) {
+            function hoverRenderer(nodes, selNodes, d3Sel, settings, hasSubset) {
                 var prefix = settings('prefix') || '',
                     labelSizeFunc = labelSizeFuncFactory(prefix, settings),
                     cssClass = sigma.d3.labels.cssClasses.baseCssClass, // the css class to apply for nodes in hover
@@ -506,7 +515,7 @@ angular.module('common')
 
                 var allNodes = _.uniq(nodes.concat(selNodes));  // merge hovered and selected nodes
                 if(labelRenderer.isGroupLabelHover) {
-                    allNodes = addGroupNodes(allNodes, allNodes, settings, true);   // add group labels if enabled
+                    allNodes = addGroupNodes(allNodes, allNodes, settings, true, hasSubset);   // add group labels if enabled
                 }
                 sigma.d3.labels.filterCollision(allNodes, settings, true, function(nodes) {
 
