@@ -125,11 +125,15 @@ angular.module('common')
             }
 
             $scope.onHover = function(link) {
-                hoverService.hoverNodes({ ids: [link.nodeId], force: true});
+                $scope.hoverTimeout.then(function() {
+                    hoverService.hoverNodes({ ids: [link.nodeId], force: true});
+                });
             };
     
             $scope.onHoverOut = function() {
-                hoverService.unhover();
+                $scope.hoverTimeout.then(function() {
+                    hoverService.unhover();
+                });
             };
     
             $scope.onNeighborClick = function(link) {
@@ -179,6 +183,13 @@ angular.module('common')
                             $scope.activeTabs2(0);
                             $scope.activeTabs3(0);
                             $scope.activeNeigh('out');
+                            $scope.hoverTimeout = Promise.resolve();
+                        } else {
+                            $scope.hoverTimeout = new Promise(function(resolve, reject) {
+                                $timeout(function() {
+                                    resolve();
+                                }, 500);
+                            });
                         }
 
                         if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') $scope.beginOverlayRightPanel = true;
@@ -343,7 +354,7 @@ angular.module('common')
                     }
                 });
 
-
+                zoomService.nodeFocus($scope.focusNode);
             }
 
             function animateGraphToOverlay() {
@@ -384,9 +395,6 @@ angular.module('common')
 
                     //animate graph to position
                     //zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
-                    $timeout(function() {
-                        zoomService.nodeFocus($scope.focusNode);
-                    }, 500);
                 }
 
                 //update attr display data
@@ -649,11 +657,7 @@ angular.module('common')
             }
 
             function onSectionSelect(sections, tag) {
-                var node = selectService.singleNode;
                 selectService.selectNodes({ attr: sections.id, value: tag});
-                $timeout(function() {
-                    selectService.selectSingleNode(node.id);
-                }, 500);
             }
 
             function onSectionLeave() {

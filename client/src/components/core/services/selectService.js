@@ -103,6 +103,8 @@ angular.module('common')
                     return n;
                 });
 
+                this.singleNode = null;
+
                 var currentSubset = subsetService.currentSubset();
 
                 var cs = this._filter(selectData, subsetService.subsetNodes);
