@@ -17,9 +17,9 @@
               .nameContainer.user(ng-repeat="info in nodeRightInfo.section1" ng-if="info.type == 'name'")
                 .img-user
                   .img-user
-                    img.img(
+                    div.img(
                       ng-if="!info.imageShow || !info.image",
-                      ng-src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{info.name}}&background={{info.color}}"
+                      style="background:{{info.color}}"
                     )
                     div.img(
                       ng-if="info.imageShow && info.image"
@@ -101,9 +101,9 @@
               #neighborsOut.tabcontent(ng-if="sectionNeigh=='out'")
                 .user(ng-repeat="link in neighs.out", style="cursor:pointer;", ng-mouseover="onHover(link)", ng-mouseleave="onHoverOut()", ng-click="onNeighborClick(link)")
                     .img-user
-                        img.img(
+                        div.img(
                           ng-if="!link.imageShow || !link.image"
-                          src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{link.name}}&background={{link.colorStr}}"
+                          style="background: {{link.colorStr}}"
                         )
                         div.img(
                           ng-if="link.imageShow && link.image"
@@ -116,9 +116,9 @@
               #neighborsIn.tabcontent(ng-if="sectionNeigh=='in'")
                 .user(ng-repeat="link in neighs.in", style="cursor:pointer;", ng-mouseover="onHover(link)", ng-mouseleave="onHoverOut()", ng-click="onNeighborClick(link)")
                     .img-user
-                        img.img(
+                        div.img(
                           ng-if="!link.imageShow || !link.image"
-                          src="https://ui-avatars.com/api/?rounded=true&color=FFFFFF&bold=true&size=42&name={{link.name}}&background={{link.colorStr}}"
+                          style="background: {{link.colorStr}}"
                         )
                         div.img(
                           ng-if="link.imageShow && link.image"
