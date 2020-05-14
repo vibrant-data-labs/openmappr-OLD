@@ -333,16 +333,6 @@ angular.module('common')
                         settings,
                         subsetNodes && subsetNodes.length
                     );
-
-                    if (!nodes.length && selectedNodes && selectedNodes.length) {
-                        sigma.d3.labels.def(
-                            [],
-                            [],
-                            sigRender.d3Sel.labels(),
-                            settings,
-                            subsetNodes && subsetNodes.length
-                        );
-                    }
                 }
             }
 

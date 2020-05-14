@@ -151,6 +151,8 @@ angular.module('common')
                 }
             });
 
+            $scope.darken = window.mappr.utils.darkenColor;
+
             /*************************************
             ********* Initialise *****************
             **************************************/
@@ -533,6 +535,7 @@ angular.module('common')
                             nodeId: neighNode.id,
                             weight: edge.size,
                             name: neighNode.attr[$scope.mapprSettings.labelAttr],
+                            color: neighNode.color,
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -553,6 +556,7 @@ angular.module('common')
                             nodeId: neighNode.id,
                             weight: edge.size,
                             name: neighNode.attr[$scope.mapprSettings.labelAttr],
+                            color: neighNode.color,
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -621,7 +625,8 @@ angular.module('common')
                     return ({
                         type: 'name',
                         name: Name,
-                        color: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd',
+                        color: $scope.focusNode ? $scope.focusNode.color : [139, 194, 205],
+                        colorStr: $scope.focusNode ? $scope.focusNode.colorStr : $scope.darken([139, 194, 205]),
                         imageShow: $scope.mapprSettings.nodeImageShow,
                         image: values[$scope.mapprSettings.nodeImageAttr]
                     })

@@ -508,23 +508,35 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
         bounds.left = bounds.right * 0.05;
         bounds.right = bounds.right - bounds.left;
 
+        var deltaY = window.innerHeight * 0.05;
+        bounds.top += deltaY;
+        bounds.bottom -= deltaY;
         var nodeData = {
             x: node['camcam1:x'],
             y: node['camcam1:y']
         };
 
-        var shouldCenter = nodeData.x < bounds.left ||
-                            nodeData.x > bounds.right ||
-                            nodeData.y < bounds.top ||
-                            nodeData.y > bounds.bottom;
+        var outOfX = nodeData.x < bounds.left || nodeData.x > bounds.right;
+        var outOfY = nodeData.y < bounds.top || nodeData.y > bounds.bottom;
         
-        if (shouldCenter) {
-            var centerPos = {
-                x: bounds.left + (bounds.right - bounds.left) / 2,
-                y: bounds.top + (bounds.bottom - bounds.top) / 2
+        if (outOfX || outOfY) {
+            var resultCoordinates = {
+                x: nodeData.x,
+                y: nodeData.y
             };
-            var panX = (centerPos.x - node['camcam1:x']) * -1;
-            var panY = (centerPos.y - node['camcam1:y']) * -1;
+
+            if (outOfX) {
+                var leftDistance = bounds.left - nodeData.x;
+                resultCoordinates.x = leftDistance > 0 ? bounds.left : bounds.right;
+            }
+
+            if (outOfY) {
+                var topDistance = bounds.top - nodeData.y;
+                resultCoordinates.y = topDistance > 0 ? bounds.top : bounds.bottom;
+            }
+
+            var panX = (resultCoordinates.x - node['camcam1:x']) * -1;
+            var panY = (resultCoordinates.y - node['camcam1:y']) * -1;
 
             var cam = getRenderCamera();
             panCamera(panX * cam.ratio, panY * cam.ratio, _.noop);
