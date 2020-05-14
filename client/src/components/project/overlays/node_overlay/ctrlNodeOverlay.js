@@ -246,7 +246,10 @@ angular.module('common')
                     console.warn(logPrefix + 'overlay is not open, wrongly called!');
                     return;
                 }
-                
+                if ($scope.canvasPanX) {
+                    zoomService.panRightPanelBack($scope.canvasPanX);
+                    $scope.canvasPanX = 0;
+                }
                 //hide node pop and overlay
                 $scope.beginOverlayRightPanel = false;
                 $scope.beginOverlayAnim = false;
@@ -356,7 +359,7 @@ angular.module('common')
                     }
                 });
 
-                zoomService.nodeFocus($scope.focusNode);
+                $scope.canvasPanX = zoomService.nodeFocus($scope.focusNode);
             }
 
             function animateGraphToOverlay() {

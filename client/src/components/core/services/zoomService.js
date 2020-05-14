@@ -25,6 +25,7 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
     this.zoomToOffsetPosition = zoomToOffsetPosition;
     this.centerNode       = centerNode;
     this.nodeFocus        = nodeFocus;
+    this.panRightPanelBack = panRightPanelBack;
     this.shiftSavedCamCoords = shiftSavedCamCoords;
     // geo
     this.onGeoZoomStart   = onGeoZoomStart;
@@ -487,6 +488,7 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
         panCamera(panX * cam.ratio, panY * cam.ratio, _.noop);
     }
 
+    // Returns the flag indicating whether was the panning or not
     function nodeFocus(node) {
         if(!node.id || !node.dataPointId) throw new Error('Not a valid node object');
         // Visible graph area center coords
@@ -540,7 +542,16 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
 
             var cam = getRenderCamera();
             panCamera(panX * cam.ratio, panY * cam.ratio, _.noop);
+
+            return panX;
         }
+
+        return 0;
+    }
+
+    function panRightPanelBack(panX) {
+        var cam = getRenderCamera();
+        panCamera(-panX * cam.ratio, 0, _.noop);
     }
 
     function geoZoomToOffsetPosition(nodes) {
