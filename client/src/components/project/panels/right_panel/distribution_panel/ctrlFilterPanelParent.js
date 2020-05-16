@@ -43,7 +43,6 @@ angular.module('common')
 
             $scope.navigateTo = function(className) {
                 document.querySelector(className).scrollIntoView({ behavior: 'smooth' });
-                document.querySelector('.filter-header').scrollIntoView();
             };
 
             /**

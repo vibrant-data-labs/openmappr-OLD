@@ -125,11 +125,15 @@ angular.module('common')
             }
 
             $scope.onHover = function(link) {
-                hoverService.hoverNodes({ ids: [link.nodeId], force: true});
+                $scope.hoverTimeout.then(function() {
+                    hoverService.hoverNodes({ ids: [link.nodeId], force: true});
+                });
             };
     
             $scope.onHoverOut = function() {
-                hoverService.unhover();
+                $scope.hoverTimeout.then(function() {
+                    hoverService.unhover();
+                });
             };
     
             $scope.onNeighborClick = function(link) {
@@ -146,6 +150,8 @@ angular.module('common')
                     }, 500);
                 }
             });
+
+            $scope.darken = window.mappr.utils.darkenColor;
 
             /*************************************
             ********* Initialise *****************
@@ -179,6 +185,13 @@ angular.module('common')
                             $scope.activeTabs2(0);
                             $scope.activeTabs3(0);
                             $scope.activeNeigh('out');
+                            $scope.hoverTimeout = Promise.resolve();
+                        } else {
+                            $scope.hoverTimeout = new Promise(function(resolve, reject) {
+                                $timeout(function() {
+                                    resolve();
+                                }, 500);
+                            });
                         }
 
                         if ($scope.mapprSettings.nodeFocusRenderTemplate == 'node-right-panel') $scope.beginOverlayRightPanel = true;
@@ -233,7 +246,10 @@ angular.module('common')
                     console.warn(logPrefix + 'overlay is not open, wrongly called!');
                     return;
                 }
-                
+                if ($scope.canvasPanX) {
+                    zoomService.panRightPanelBack($scope.canvasPanX);
+                    $scope.canvasPanX = 0;
+                }
                 //hide node pop and overlay
                 $scope.beginOverlayRightPanel = false;
                 $scope.beginOverlayAnim = false;
@@ -343,7 +359,7 @@ angular.module('common')
                     }
                 });
 
-
+                $scope.canvasPanX = zoomService.nodeFocus($scope.focusNode);
             }
 
             function animateGraphToOverlay() {
@@ -384,9 +400,6 @@ angular.module('common')
 
                     //animate graph to position
                     //zoomService.zoomToOffsetPosition(pos, relRatio, offset, Array($scope.focusNode));
-                    $timeout(function() {
-                        zoomService.nodeFocus($scope.focusNode);
-                    }, 500);
                 }
 
                 //update attr display data
@@ -525,6 +538,7 @@ angular.module('common')
                             nodeId: neighNode.id,
                             weight: edge.size,
                             name: neighNode.attr[$scope.mapprSettings.labelAttr],
+                            color: neighNode.color,
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -545,6 +559,7 @@ angular.module('common')
                             nodeId: neighNode.id,
                             weight: edge.size,
                             name: neighNode.attr[$scope.mapprSettings.labelAttr],
+                            color: neighNode.color,
                             colorStr: neighNode.colorStr,
                             imageShow: $scope.mapprSettings.nodeImageShow,
                             image: neighNode.attr[$scope.mapprSettings.nodeImageAttr]
@@ -613,7 +628,8 @@ angular.module('common')
                     return ({
                         type: 'name',
                         name: Name,
-                        color: $scope.focusNode ? $scope.focusNode.colorStr : '8bc2cd',
+                        color: $scope.focusNode ? $scope.focusNode.color : [139, 194, 205],
+                        colorStr: $scope.focusNode ? $scope.focusNode.colorStr : $scope.darken([139, 194, 205]),
                         imageShow: $scope.mapprSettings.nodeImageShow,
                         image: values[$scope.mapprSettings.nodeImageAttr]
                     })
@@ -649,11 +665,7 @@ angular.module('common')
             }
 
             function onSectionSelect(sections, tag) {
-                var node = selectService.singleNode;
                 selectService.selectNodes({ attr: sections.id, value: tag});
-                $timeout(function() {
-                    selectService.selectSingleNode(node.id);
-                }, 500);
             }
 
             function onSectionLeave() {
