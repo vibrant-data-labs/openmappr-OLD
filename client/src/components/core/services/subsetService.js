@@ -166,10 +166,11 @@ angular.module('common')
                 
                 if (nodes.length > 0) {
                     sigma.d3.labels.def(
-                        [],
+                        nodes,
                         nodes,
                         sigRender.d3Sel.labels(),
-                        settings
+                        settings,
+                        true
                     );
                 }
             }

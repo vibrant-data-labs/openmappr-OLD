@@ -21,13 +21,13 @@ angular.module('common')
             ngIntroService.onBeforeChange(function (targetElement) {
                 if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'slides') {
                     var nodeID = graphSelectionService.dataGraph.getAllNodes()[0].id;
-                    graphSelectionService.selectByIds(nodeID);
+                    selectService.selectSingleNode(nodeID);
                     $scope.zoomInfo.zoomExtents();
                 }
             });
             ngIntroService.onExit(function () {
                 if ($scope.panelUI.currentPanelOpen == 'slides') {
-                    graphSelectionService.clearSelectionCaches();
+                    selectService.unselect();
                     $scope.zoomInfo.zoomReset();
                 }
                 $window.localStorage[$scope.panelUI.currentPanelOpen] = true;

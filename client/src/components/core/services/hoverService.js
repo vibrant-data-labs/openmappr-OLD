@@ -69,7 +69,7 @@ angular.module('common')
 
                 if (!hoverData.force && !isFiltered && currentSubset.length > 0) {
                     this.hoveredNodes = this.hoveredNodes.filter(function (x) {
-                        return currentSubset.indexOf(x) > -1;
+                        return (currentSubset.indexOf(x) > -1) || findNodeWithId(x).inHover;
                     });
                 }
 
@@ -240,7 +240,8 @@ angular.module('common')
                         node.isSelected = false;
                         node.inHover = true;
                     }
-                    if (hoveredSingleNode && hoveredSingleNode == nodeId) {
+                    if (hoveredSingleNode && hoveredSingleNode == nodeId ||
+                        selectService.singleNode && selectService.singleNode.id == nodeId) {
                         var neighNodes = [];
                         _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId) {
                             node.inHoverNeighbor = true;
@@ -306,16 +307,42 @@ angular.module('common')
                         .style('position', 'absolute')
                         // .style('z-index', function(d, i) { return d.idx + 1;})
                         .each(function hnc(node) {
-                            nodeRenderer.d3NodeHighlightCreate(node, d3.select(this), settings);
-                            nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
+                            if (hoveredSingleNode) {
+                                var borderType = 'none';
+                                var isHovered = hoveredSingleNode == node.id;
+                                var isSelected = selectService.singleNode && selectService.singleNode.id == node.id;
+                                if (isSelected) {
+                                    borderType = 'select';
+                                }
+                                else if (isHovered) {
+                                    borderType = 'hover';
+                                }
+
+                                nodeRenderer.d3NodeHighlightCreate(node, d3.select(this), settings);
+                                nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings, borderType);
+                            } else {
+                                nodeRenderer.d3NodeHighlightCreate(node, d3.select(this), settings);
+                                nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings);
+                            }
                         });
 
                     sigma.d3.labels.hover(
                         [],
                         nodes,
                         sigRender.d3Sel.labels(),
-                        settings
+                        settings,
+                        subsetNodes && subsetNodes.length
                     );
+
+                    if (!nodes.length && selectedNodes && selectedNodes.length) {
+                        sigma.d3.labels.def(
+                            [],
+                            [],
+                            sigRender.d3Sel.labels(),
+                            settings,
+                            subsetNodes && subsetNodes.length
+                        );
+                    }
                 }
             }
 

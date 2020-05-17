@@ -122,6 +122,18 @@
         }
       }
     }
+
+    .img-user {
+      .img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        cursor: pointer;
+        border: 3px solid transparent;
+      }
+    }
   }
 
   .tabContainer {

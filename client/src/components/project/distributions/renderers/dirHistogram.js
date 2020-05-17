@@ -783,18 +783,18 @@ angular.module('common')
                         nodeVal = principalNode.attr[attrInfo.attr.id];
                         valInRange = _.inRange(nodeVal, selectionCountsList[i].min, selectionCountsList[i].max);
 
-                        if (i === 0) {
-                            // First bar
-                            if (nodeVal >= 0 && nodeVal < selectionCountsList[i].min) {
-                                valInRange = true;
-                            }
-                        }
-                        else if (i === bar[0].length - 1) {
-                            // Last bar
-                            if (nodeVal > 0 && nodeVal >= selectionCountsList[i].max) {
-                                valInRange = true;
-                            }
-                        }
+                        // if (i === 0) {
+                        //     // First bar
+                        //     if (nodeVal >= 0 && nodeVal < selectionCountsList[i].min) {
+                        //         valInRange = true;
+                        //     }
+                        // }
+                        // else if (i === bar[0].length - 1) {
+                        //     // Last bar
+                        //     if (nodeVal > 0 && nodeVal >= selectionCountsList[i].max) {
+                        //         valInRange = true;
+                        //     }
+                        // }
 
                         if (valInRange) {
                             barElem.insert("rect", '[data-selection="true"]')

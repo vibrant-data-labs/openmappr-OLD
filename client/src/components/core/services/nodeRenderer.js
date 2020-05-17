@@ -118,7 +118,8 @@ angular.module('common')
             sel.append('circle').classed('node-border', true);
         }
     }
-    function d3NodeHighlightRender (node, canvas, settings) {
+    function d3NodeHighlightRender (node, canvas, settings, borderType) {
+        if (borderType == null) borderType = 'hover';
         var svg = canvas.select('svg');
         var n = node;
         var prefix = settings('prefix'),
@@ -126,7 +127,7 @@ angular.module('common')
             imageAttr = settings("nodeImageAttr");
         var size = nodeSize(n, settings, prefix),
             borderRadius = size + borderRadiusOffset(n, settings),
-            strokeWidth = borderStrokeWidth(n, settings),
+            strokeWidth = borderStrokeWidth(n, settings, borderType),
             border = borderRadius + strokeWidth,
             hoverBorderRadius = size + hoverBorderRadiusOffset(n, settings),
             hoverStrokeWidth = hoverBorderStrokeWidth(n, settings),
@@ -140,9 +141,9 @@ angular.module('common')
 
         var classMap = {};
         classMap[nodeClasses.classDefault] = true;
-        classMap[nodeClasses.classSelected] = node.isSelected;
+        classMap[nodeClasses.classSelected] = node.isSelected || borderType == 'select';
         classMap[nodeClasses.classSelectedNeighbour] = !node.isSelected && node.isSelectedNeighbour;
-        classMap[nodeClasses.classHover] = node.inHover;
+        classMap[nodeClasses.classHover] = node.inHover && borderType != 'select';
 
         canvas.classed(classMap);
 
@@ -178,23 +179,28 @@ angular.module('common')
                     .attr("y", 0);
             }
 
-            
             // border stuff
-            svg.select('.node-border')
+            var nodeBorder = svg.select('.node-border')
                 .attr("cx", sz)
                 .attr("cy", sz)
                 .attr("r", borderRadius)
-                .style('stroke-width',  strokeWidth + 'px')
                 .style('fill', 'transparent')
                 .style("stroke", function(n){ return darkenColor(n.color);});
+
+                if (borderType == 'hover' || borderType == 'select') {
+                    nodeBorder.style('stroke-width',  strokeWidth + 'px');
+                }
             // hover border stuff
-            svg.select('.node-hover-border')
-                .attr("cx", sz)
-                .attr("cy", sz)
-                .attr("r", hoverBorderRadius)
-                .style('stroke-width',  hoverStrokeWidth + 'px')
-                .style('fill', 'transparent')
-                .style("stroke", function(n){ return isDark ? n.colorStr : darkenColor(n.color);});
+            
+            if (borderType == "hover") {
+                svg.select('.node-hover-border')
+                    .attr("cx", sz)
+                    .attr("cy", sz)
+                    .attr("r", hoverBorderRadius)
+                    .style('stroke-width',  hoverStrokeWidth + 'px')
+                    .style('fill', 'transparent')
+                    .style("stroke", function(n){ return isDark ? n.colorStr : darkenColor(n.color);});
+            }
         }
     }
 
@@ -396,9 +402,9 @@ angular.module('common')
             offset = +settings('nodeSelectionBorderOffset');
         return offset;
     }
-    function borderStrokeWidth (node, settings) {
+    function borderStrokeWidth (node, settings, borderType) {
         var width = 1;
-        if(node.isSelected)
+        if(node.isSelected || borderType == 'select')
             width = +settings('nodeSelectionBorderWidth');
         return width;
     }

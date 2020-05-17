@@ -95,12 +95,15 @@ angular.module('common')
              * @param {array}  selectData.ids - nodeIds
              * @param {boolean} selectData.filters - whether apply current filters
              * @param {boolean} selectData.force - whether replace value of current filter
+             * @param {boolean} selectData.forceDisable - whether disable current filter
              */
             function selectNodes(selectData) {
                 _.map(this.getSelectedNodes(), function(n) {
                     n.isSelected = false;
                     return n;
                 });
+
+                this.singleNode = null;
 
                 var currentSubset = subsetService.currentSubset();
 
@@ -150,7 +153,7 @@ angular.module('common')
             function filter(data, subset) {
                 if (data.attr) {
                     if (data.min || data.max) {
-                        this.createMinMaxFilter(data.attr, data.min, data.max, data.force);
+                        this.createMinMaxFilter(data.attr, data.min, data.max, data.force, data.forceDisable);
                     } else {
                         this.createMultipleFilter(data.attr, data.value);
                     }
@@ -179,7 +182,7 @@ angular.module('common')
                 return filterConfig;
             }
 
-            function createMinMaxFilter(attrId, min, max, force) {
+            function createMinMaxFilter(attrId, min, max, force, forceDisable) {
                 var filterConfig = this.getFilterForId(attrId);
                 if (force || !filterConfig.isEnabled) {
                     filterConfig.selector = SelectorService.newSelector().ofMultiAttrRange(attrId, [{ min, max }]);
@@ -194,7 +197,7 @@ angular.module('common')
                     }
                 }
 
-                filterConfig.isEnabled = filterConfig.selector.attrRanges.length > 0;
+                filterConfig.isEnabled = !forceDisable && filterConfig.selector.attrRanges.length > 0;
 
                 return filterConfig;
             }
