@@ -33,12 +33,21 @@
             .tabContainer
               .tabVisible
                 .tab(ng-repeat="tab in nodeRightInfo.section2")
-                  button(ng-class="{active: sectionActive2==$index}", ng-click="activeTabs2($index)") {{tab.key}}
+                  button(
+                    ng-class="{active: sectionActive2==$index}",
+                    ng-click="activeTabs2($index)"
+                    style="max-width: 90px"
+                  ) {{tab.key}}
+
+                .tab.more(role="button")
 
             .section__content
               #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2")
                 iframe(ng-if="tab.value.includes('http') && sectionActive2==$index" ng-src="{{ tab.value | trustUrl }}", id='iframe001', width="100%", height="200px" frameborder="0", webkitallowfullscreen, mozallowfullscreen, allowfullscreen)
+
+                a.section__more(href="#") &larr; Less
                 p(ng-if="!tab.value.includes('http') && sectionActive2==$index") {{tab.value}}
+                a.section__more(href="#") Read More &rarr;
 
           section.section.section_tabs(ng-if="nodeRightInfo.section3.length")
             .tabContainer
@@ -60,7 +69,7 @@
                         div
                           .cat-text.no-margin.truncate {{tag}}
 
-          section.section(ng-if="nodeRightInfo.section4.length")
+          section.section.section_compact(ng-if="nodeRightInfo.section4.length")
             .section__content.section__info
               dl#numberAndDates.section-info(
                 ng-repeat="number in nodeRightInfo.section4"
@@ -69,7 +78,7 @@
                 dt.section-info__label {{number.key}}
                 dd.section-info__value {{number.value}}
 
-          section.section(ng-if="nodeRightInfo.section5.length")
+          section.section.section_compact(ng-if="nodeRightInfo.section5.length")
             .section__content.section__info.section__short-strings
               dl#information.section-info(ng-repeat="number in nodeRightInfo.section5")
                 dt.section-info__label {{number.key}}

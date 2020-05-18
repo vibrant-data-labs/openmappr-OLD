@@ -197,6 +197,12 @@
       }
     }
 
+    &_export {
+      &::before {
+        background-image: url('/img/tabs-menu/export_white.svg');
+      }
+    }
+
     &.toggle {
       font-size: 11px;
       line-height: 17px;

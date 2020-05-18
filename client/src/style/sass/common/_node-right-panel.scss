@@ -1,5 +1,6 @@
 .node-right-panel {
   background: #EBEFF2;
+  padding-top: 64px;
 
   .section {
     border-bottom: 1px solid #E4EAEF;
@@ -9,10 +10,21 @@
       margin-bottom: 10px;
     }
 
+    &_compact {
+      .section__content {
+        margin-bottom: -20px;
+      }
+    }
+
     &__header  {
       display: flex;
       padding: 20px;
       align-items: center;
+      position: fixed;
+      top: 0;
+      width: 345px;
+      background: #fff;
+      z-index: 100;
 
       + .section__content {
         padding-top: 0;
@@ -100,6 +112,8 @@
           color: #818890;
           border-radius: 5px 5px 0 0;
           background: #D2D6D9;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &:hover {
             background: darken(#D2D6D9, 4);
@@ -108,6 +122,24 @@
           &.active {
             background: #fff;
             color: #BC3364;
+          }
+        }
+
+        &.more {
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          z-index: 10;
+          padding: 0;
+          width: 40px;
+          border-radius: 5px 0 0 0;
+          background: #D2D6D9 url('../img/tab-more.svg') 50% no-repeat;
+          cursor: pointer;
+          transition: background-color .2s;
+
+          &:hover {
+            background-color: darken(#D2D6D9, 8);
           }
         }
       }
@@ -120,6 +152,17 @@
             margin-bottom: 10px;
           }
         }
+      }
+    }
+
+    &__more {
+      font: 400 12px/18px 'Poppins';
+      color: #BC3364;
+      display: inline-block;
+      margin-bottom: 10px;
+
+      &:hover {
+        color: darken(#BC3364, 16);
       }
     }
 
@@ -192,6 +235,7 @@
     color: #0C0C0C;
     font-family: 'Poppins';
     box-sizing: border-box;
+    margin-bottom: 20px;
 
     &:nth-child(odd) {
       padding-right: 5px;
