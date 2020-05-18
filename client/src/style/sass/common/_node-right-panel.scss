@@ -106,6 +106,8 @@
           color: #818890;
           border-radius: 5px 5px 0 0;
           background: #D2D6D9;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &:hover {
             background: darken(#D2D6D9, 4);

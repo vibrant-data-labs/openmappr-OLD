@@ -33,7 +33,11 @@
             .tabContainer
               .tabVisible
                 .tab(ng-repeat="tab in nodeRightInfo.section2")
-                  button(ng-class="{active: sectionActive2==$index}", ng-click="activeTabs2($index)") {{tab.key}}
+                  button(
+                    ng-class="{active: sectionActive2==$index}",
+                    ng-click="activeTabs2($index)"
+                    style="max-width: 90px"
+                  ) {{tab.key}}
 
             .section__content
               #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2")
