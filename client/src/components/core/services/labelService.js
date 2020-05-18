@@ -41,6 +41,7 @@ angular.module('common')
             sigma.d3.labels.topXSize = topXSize;
             sigma.d3.labels.filterCollision = topXSizeCollision;
             sigma.d3.labels.cssClasses = labelRenderer.classes;
+            sigma.d3.labels.selectOrder = selectOrder;
 
 
             sigma.d3.labels.def = defRenderer;
@@ -83,9 +84,11 @@ angular.module('common')
             }
 
             function selectOrder(node) {
-                if( node.isSelected && node.inHover )
+                if (node.specialHighlight) 
+                    return 9;
+                if( node.inHoverNeighbor && node.inHover )
                     return 8;
-                if( node.isSelectedNeighbour && node.inHover )
+                if( node.isSelected && node.inHover )
                     return 7;
                 if( node.inHover && node.isGroup )
                     return 6;
@@ -366,7 +369,8 @@ angular.module('common')
                     });
                 };
                 // Remove collisions algo
-                var filteredList = [validNodes[0]],
+                var selNodes = _.filter(validNodes, function (n) { return n.specialHighlight;});
+                var filteredList = [ selNodes.length ? selNodes[0] : validNodes[0]],
                     listToTest =  _.rest(validNodes);
 
                 while(filteredList.length < noOfnodesToFilter && listToTest.length > 0) {
@@ -400,6 +404,7 @@ angular.module('common')
                     return; // no label rendering when tweening
                 }
 
+                d3Sel.selectAll('div').remove();
                 // Create final list of nodes with labels
                 strat(addGroupNodes(nodes, allnodes, settings, false, hasSubset), settings, false, function(nodesToLabel){
                     if(nodesToLabel.length > 0 && typeof _.last(nodesToLabel) !== "undefined"){
@@ -517,6 +522,7 @@ angular.module('common')
                 if(labelRenderer.isGroupLabelHover) {
                     allNodes = addGroupNodes(allNodes, allNodes, settings, true, hasSubset);   // add group labels if enabled
                 }
+
                 sigma.d3.labels.filterCollision(allNodes, settings, true, function(nodes) {
 
                     var sel = d3Sel.selectAll('div').data(nodes, nodeId);

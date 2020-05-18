@@ -31,6 +31,7 @@
     "gexf": "^0.2.5",
     "goo.gl": "^0.1.4",
     "gridfs-stream": "^1.1.1",
+    "grunt-cache-bust": "^1.7.0",
     "has-glob": "^0.1.1",
     "ioredis": "^1.15.1",
     "is-glob": "^2.0.1",
