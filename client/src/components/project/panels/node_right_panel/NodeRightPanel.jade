@@ -66,7 +66,7 @@
                         div
                           .cat-text.no-margin.truncate {{tag}}
 
-          section.section(ng-if="nodeRightInfo.section4.length")
+          section.section.section_compact(ng-if="nodeRightInfo.section4.length")
             .section__content.section__info
               dl#numberAndDates.section-info(
                 ng-repeat="number in nodeRightInfo.section4"
@@ -75,7 +75,7 @@
                 dt.section-info__label {{number.key}}
                 dd.section-info__value {{number.value}}
 
-          section.section(ng-if="nodeRightInfo.section5.length")
+          section.section.section_compact(ng-if="nodeRightInfo.section5.length")
             .section__content.section__info.section__short-strings
               dl#information.section-info(ng-repeat="number in nodeRightInfo.section5")
                 dt.section-info__label {{number.key}}

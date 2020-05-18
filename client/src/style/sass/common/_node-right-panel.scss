@@ -10,6 +10,12 @@
       margin-bottom: 10px;
     }
 
+    &_compact {
+      .section__content {
+        margin-bottom: -20px;
+      }
+    }
+
     &__header  {
       display: flex;
       padding: 20px;
@@ -218,6 +224,7 @@
     color: #0C0C0C;
     font-family: 'Poppins';
     box-sizing: border-box;
+    margin-bottom: 20px;
 
     &:nth-child(odd) {
       padding-right: 5px;
