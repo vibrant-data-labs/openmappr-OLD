@@ -118,6 +118,24 @@
             color: #BC3364;
           }
         }
+
+        &.more {
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          z-index: 10;
+          padding: 0;
+          width: 40px;
+          border-radius: 5px 0 0 0;
+          background: #D2D6D9 url('../img/tab-more.svg') 50% no-repeat;
+          cursor: pointer;
+          transition: background-color .2s;
+
+          &:hover {
+            background-color: darken(#D2D6D9, 8);
+          }
+        }
       }
 
       .tabcontent {
