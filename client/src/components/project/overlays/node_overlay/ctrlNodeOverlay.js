@@ -657,7 +657,11 @@ angular.module('common')
 
 
             function setToSectionOne(attr, value = '') {
-                if (attr.attrType === 'url') return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value) });
+                if (attr.attrType === 'url')
+                    return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value) });
+                if (attr.renderType === 'email') {
+                    return ({ type: 'email', icon: 'https://image.flaticon.com/icons/svg/561/561127.svg', value, tooltip: value});
+                }
             }
 
             function onSectionHover(sections, tag, $event) {
@@ -679,7 +683,8 @@ angular.module('common')
                 const { attrType, renderType, id } = attr;
 
                 return (attrType === 'string' && renderType === 'text' && id === 'Name') ||
-                    (attrType === 'url' && renderType === 'default')
+                    (attrType === 'url' && renderType === 'default') ||
+                    (attrType === 'string' && renderType === 'email');
 
             }
             function mapToSectionTwo(attr) {
