@@ -27,11 +27,7 @@
     }
 
     .project-layout {
-      button,
-      div,
-      span {
-          @include user-select(none);
-      }
+
     }
 
     sig {
