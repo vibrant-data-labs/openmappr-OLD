@@ -11,7 +11,7 @@
                   a(href="{{link.value}}" target="_blank" uib-tooltip="Go to {{link.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true" ng-class="link.class")
                     img(alt="{{link.value}}" src="{{link.icon}}")
                 .section__icons-icon(ng-repeat="email in nodeRightInfo.section1" ng-if="email.type == 'email'")
-                  a(href="mailto:{{email.value}}" target="_blank" uib-tooltip="{{email.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true" ng-class="link.class")
+                  a(href="mailto:{{email.value}}" target="_blank" uib-tooltip="{{email.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true" ng-class="email.class")
                     img(alt="{{email.value}}" src="{{email.icon}}")                    
                 .section__icons-icon.close
                   button(ng-click='cancelOverlay(); triggerInteraction();')
