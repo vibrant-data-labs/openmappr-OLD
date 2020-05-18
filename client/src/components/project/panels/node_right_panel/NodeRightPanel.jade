@@ -8,10 +8,10 @@
               h3.section__title Selected Node
               .section__icons.icons
                 .section__icons-icon(ng-repeat="link in nodeRightInfo.section1" ng-if="link.type == 'link'")
-                  a(href="{{link.value}}" target="_blank" uib-tooltip="Go to {{link.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true")
+                  a(href="{{link.value}}" target="_blank" uib-tooltip="Go to {{link.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true" ng-class="link.class")
                     img(alt="{{link.value}}" src="{{link.icon}}")
                 .section__icons-icon(ng-repeat="email in nodeRightInfo.section1" ng-if="email.type == 'email'")
-                  a(href="mailto:{{email.value}}" target="_blank" uib-tooltip="{{email.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true")
+                  a(href="mailto:{{email.value}}" target="_blank" uib-tooltip="{{email.tooltip}}" tooltip-placement="left" tooltip-append-to-body="true" ng-class="link.class")
                     img(alt="{{email.value}}" src="{{email.icon}}")                    
                 .section__icons-icon.close
                   button(ng-click='cancelOverlay(); triggerInteraction();')

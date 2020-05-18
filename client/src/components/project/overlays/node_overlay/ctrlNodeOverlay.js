@@ -502,8 +502,8 @@ angular.module('common')
                         value: values[attr.id], 
                         text: attr.renderType === 'text' ? { 
                             isExpanded: false,
-                            shortValue: values[attr.id].substring(0, 100), 
-                            couldExpand: values[attr.id].length > 100
+                            shortValue: values[attr.id].split(' ').splice(0, $scope.mapprSettings.nodeFocusTextLength).join(' '), 
+                            couldExpand: values[attr.id].split(' ').length > $scope.mapprSettings.nodeFocusTextLength
                          } : null });
                     if (mapToSectionFour(attr)) result.section4.push({ key: attr.title ? attr.title : attr.id, value: parseValueToSection4(attr, values[attr.id]) });
                     getSectionTags(attr, values, result);
@@ -665,15 +665,24 @@ angular.module('common')
                 if (url.includes('crunchbase.com')) return 'Crunchbase.com';
                 if (url.includes('ted.com')) return 'Ted.com';
                 return 'External Link';
+            }
 
+            function getLinkClass(url) {
+                return {
+                    facebook: url.includes('facebook.com'),
+                    twitter: url.includes('twitter.com'),
+                    linkedin: url.includes('linkedin.com'),
+                    crunchbase: url.includes('crunchbase.com'),
+                    ted: url.includes('ted.com')
+                };
             }
 
 
             function setToSectionOne(attr, value = '') {
                 if (attr.attrType === 'url')
-                    return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value) });
+                    return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value), class: getLinkClass(value) });
                 if (attr.renderType === 'email') {
-                    return ({ type: 'email', icon: 'https://image.flaticon.com/icons/svg/561/561127.svg', value, tooltip: value});
+                    return ({ type: 'email', icon: 'https://image.flaticon.com/icons/svg/561/561127.svg', value, tooltip: value, class: { 'email': true }});
                 }
             }
 
