@@ -124,6 +124,11 @@ angular.module('common')
             }
 
             function unhover() {
+                _.each(this.hoveredNodes, function(n) {
+                    var node = findNodeWithId(n);
+                    node.specialHighlight = false;
+                });
+
                 this.hoveredNodes = [];
                 hoveredSingleNode = null;
 
@@ -142,7 +147,7 @@ angular.module('common')
                     $timeout.cancel(deferAction);
                 }
 
-                deferAction = $timeout(function() {
+                deferAction = $timeout(function () {
                     degree = degree || 0;
                     hoverByIds(ids, degree, false, withNeighbors);
                 }, 100);
@@ -242,17 +247,17 @@ angular.module('common')
                     }
                     if (hoveredSingleNode && hoveredSingleNode == nodeId ||
                         selectService.singleNode && selectService.singleNode.id == nodeId) {
+                        node.specialHighlight = true;
                         var neighNodes = [];
                         _.forEach(graph[neighbourFn](node.id), function addTargetNode(edgeInfo, targetId) {
-                            node.inHoverNeighbor = true;
                             //hoveredNodeNeighbors[targetId] = node;
                             _.forEach(edgeInfo, function addConnEdge(edge, edgeId) {
                                 var neighs = [findNodeWithId(edge.source, sigRender.sig), findNodeWithId(edge.target, sigRender.sig)];
-                                _.map(neighs, function(n) {
-                                    n.isSelected = false;
+                                _.map(neighs, function (n) {
                                     n.inHover = true;
+                                    node.inHoverNeighbor = true;
                                 });
-                                
+
                                 neighNodes.push(...neighs);
                                 edges[edgeId] = edge;
                             });
@@ -297,6 +302,14 @@ angular.module('common')
                         );
                     });
 
+                    // Sort by drawing order
+                    nodes = nodes.sort(function(a, b) {
+                        var weightA = sigma.d3.labels.selectOrder(a);
+                        var weightB = sigma.d3.labels.selectOrder(b);
+
+                        return weightA - weightB;
+                    });
+
                     // Render nodes in hover state
                     var mainSel = d3sel.selectAll('div').data(nodes, nodeId);
                     mainSel.exit().remove();
@@ -317,6 +330,9 @@ angular.module('common')
                                 else if (isHovered) {
                                     borderType = 'hover';
                                 }
+                                else if (node.isSelected && !node.inHoverNeighbor) {
+                                    borderType = 'select';
+                                }
 
                                 nodeRenderer.d3NodeHighlightCreate(node, d3.select(this), settings);
                                 nodeRenderer.d3NodeHighlightRender(node, d3.select(this), settings, borderType);
@@ -326,17 +342,11 @@ angular.module('common')
                             }
                         });
 
-                    sigma.d3.labels.hover(
-                        [],
-                        nodes,
-                        sigRender.d3Sel.labels(),
-                        settings,
-                        subsetNodes && subsetNodes.length
-                    );
-
                     if (!nodes.length && selectedNodes && selectedNodes.length) {
-                        sigma.d3.labels.def(
-                            [],
+                        sigRender.d3Sel.labels().selectAll('div').remove();
+                    } else {
+                        sigma.d3.labels.hover(
+                            nodes,
                             [],
                             sigRender.d3Sel.labels(),
                             settings,

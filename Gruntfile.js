@@ -103,10 +103,13 @@ module.exports = function(grunt) {
 
 		concurrent: {},
 
-		http_upload: {}
+		http_upload: {},
+
+		cacheBust: {}
 	};
 
 	grunt.loadNpmTasks('grunt-contrib-compass');
+	grunt.loadNpmTasks('grunt-cache-bust');
 
 	function addTask(plugin, task, config) {
 		if(arguments.length < 3) {
@@ -461,6 +464,16 @@ module.exports = function(grunt) {
 		prod_build_dir + '/views/tmp'
 	]);
 
+	addTask('cacheBust', 'prod', {
+		options: {
+			baseDir: prod_build_dir,
+			assets: ['js/**/*.js']
+		},
+		src: [prod_build_dir + '/views/index_player.jade',
+				prod_build_dir + '/views/index_mappr.jade',
+				prod_build_dir + '/views/index_sources.jade']
+	});
+
 	// GZIP related
 	addTask('compress', 'prod_gzip_js', {
 		options: {
@@ -666,7 +679,7 @@ module.exports = function(grunt) {
 		'preprocess:prod_jade',
 		'concurrent:prod2',
 		'clean:prod_tmp',
-
+		'cacheBust:prod',
 		'concurrent:prod3',
 		'clean:prod_pre_gzip',
 		'concurrent:prod4',
@@ -923,6 +936,15 @@ module.exports = function(grunt) {
 		dev_build_dir + '/views/tmp'
 	]);
 
+addTask('cacheBust', 'dev', {
+		options: {
+			baseDir: './client/build/dev',
+			assets: ['js/**/*.js', 'css/**/*.css']
+		},
+		src: ['client/build/dev/views/index_player.jade',
+			'client/build/dev/views/index_mappr.jade',
+			'client/build/dev/views/index_sources.jade']
+	});
 
 	addTask('concurrent', 'dev1', {
 		tasks: [
@@ -958,21 +980,21 @@ module.exports = function(grunt) {
 		tasks: [
 				'compass:dev',
 				'concat:dev_css_mappr',
-				'concat:dev_css_player',
+				'concat:dev_css_player'
 				]
 	});
 
 	addTask('watch', 'dev_css_mappr', {
 		files: ['client/src/style/css/sass.css'],
 		tasks: [
-				'concat:dev_css_mappr',
+				'concat:dev_css_mappr'
 				]
 	});
 
 	addTask('watch', 'dev_css_player', {
 		files: ['client/src/style/css/player.css'],
 		tasks: [
-				'concat:dev_css_player',
+				'concat:dev_css_player'
 				]
 	});
 
@@ -996,7 +1018,7 @@ module.exports = function(grunt) {
 		grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
 	});
 
-	grunt.registerTask('default', [
+	var tasks = [
 		'clean:dev',
 		'compass:dev',
 		'concat:dev_css_mappr',
@@ -1016,6 +1038,12 @@ module.exports = function(grunt) {
 		'copy:dev_jade',
 		'svgmin:dev',
 		'includeSource:dev_jade',
-		'clean:dev_tmp'
-	]);
+		'clean:dev_tmp',
+	];
+
+	if (process.env.NODE_ENV !== 'local') {
+		tasks.push('cacheBust:dev');
+	}
+
+	grunt.registerTask('default', tasks);
 };
