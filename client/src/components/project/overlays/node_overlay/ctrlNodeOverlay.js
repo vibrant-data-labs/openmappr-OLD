@@ -135,6 +135,14 @@ angular.module('common')
                     hoverService.unhover();
                 });
             };
+
+            $scope.toggleText = function(tab, event) {
+                if (tab.text) {
+                    tab.text.isExpanded = !tab.text.isExpanded;
+                }
+
+                event.preventDefault();
+            }
     
             $scope.onNeighborClick = function(link) {
                 selectService.selectSingleNode(link.nodeId);
@@ -480,19 +488,24 @@ angular.module('common')
                 var result = {
                     section1: [],
                     section2: [],
-                    section3: [],
+                    sectionTags: [],
                     section4: [],
-                    section5: [],
+                    sectionShortTags: [],
                 };
 
                 result.section1.push(getNodeName(values));
 
                 attrArray.map((attr) => {
                     if (mapToSectionOne(attr)) result.section1.push({ ...setToSectionOne(attr, values[attr.id]) });
-                    if (mapToSectionTwo(attr)) result.section2.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
-                    //if (mapToSectionThree(attr, values)) result.section3.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
+                    if (mapToSectionTwo(attr)) result.section2.push({ 
+                        key: attr.title ? attr.title : attr.id, 
+                        value: values[attr.id], 
+                        text: attr.renderType === 'text' ? { 
+                            isExpanded: false,
+                            shortValue: values[attr.id].substring(0, 100), 
+                            couldExpand: values[attr.id].length > 100
+                         } : null });
                     if (mapToSectionFour(attr)) result.section4.push({ key: attr.title ? attr.title : attr.id, value: parseValueToSection4(attr, values[attr.id]) });
-                    //if (mapToSectionFive(attr, values)) result.section5.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
                     getSectionTags(attr, values, result);
                 });
 
@@ -578,7 +591,7 @@ angular.module('common')
                     if(attrInfo.isSingleton) {
                         var count = attrInfo.valuesCount[values[attr.id]];
                         var value = values[attr.id];
-                        result.section5.push({ 
+                        result.sectionShortTags.push({ 
                             key: attr.title || attr.id, 
                             id: attr.id, 
                             values: _.map(value, function(v) {
@@ -588,12 +601,12 @@ angular.module('common')
                                 }
                             })});
                     } else {
-                        result.section3.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
+                        result.sectionTags.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
                     }
                 }
                 else if (attrType === 'string') {
                     var count = attrInfo.valuesCount[values[attr.id]];
-                    result.section5.push({
+                    result.sectionShortTags.push({
                         key: attr.title || attr.id, id: attr.id, values: [{
                             value: values[attr.id], 
                             isTag: count > 1
@@ -714,14 +727,6 @@ angular.module('common')
                     (attrType === 'float' && renderType === 'histogram') ||
                     (attrType === 'year' && renderType === 'histogram') ||
                     (attrType === 'timestamp' && renderType === 'histogram')
-            }
-            function mapToSectionFive(attr) {
-                const { attrType, renderType, valuesCount } = attr;
-                if (_.includes(['liststring', 'string'], attrType) && renderType === 'tag-cloud') {
-                    return valuesCount / $scope.totalCount <= TAGS_FRACTION;
-                }
-
-                return false;
             }
 
             function formatDate(num) {

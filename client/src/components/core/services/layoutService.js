@@ -427,6 +427,7 @@ function($q, dataGraph, renderGraphfactory,AttrInfoService, leafletData, partiti
             nodeFocusShowNeighbors: true,
             nodeFocusNeighborsButton: true,
             nodeFocusNeighborsBefore: null,
+            nodeFocusTextLength: 100,
 
             showNodeDetailOnLoad: false, // load node focus + node overlay for snap
 

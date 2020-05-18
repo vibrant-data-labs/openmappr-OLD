@@ -45,21 +45,21 @@
                 .tab.more(role="button")
 
             .section__content
-              #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2")
-                iframe(ng-if="tab.value.includes('http') && sectionActive2==$index" ng-src="{{ tab.value | trustUrl }}", id='iframe001', width="100%", height="200px" frameborder="0", webkitallowfullscreen, mozallowfullscreen, allowfullscreen)
+              #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2", ng-if="sectionActive2==$index")
+                iframe(ng-if="tab.value.includes('http')" ng-src="{{ tab.value | trustUrl }}", id='iframe001', width="100%", height="200px" frameborder="0", webkitallowfullscreen, mozallowfullscreen, allowfullscreen)
+                a.section__more(href="#", ng-if="tab.text && tab.text.couldExpand && tab.text.isExpanded", ng-click="toggleText(tab, $event)") &larr; Less
+                p(ng-if="tab.text") {{tab.text.isExpanded ? tab.value : (tab.text.shortValue + '...')}}
+                p(ng-if="!tab.text && !tab.value.includes('http')") {{tab.value}}
+                a.section__more(href="#", ng-if="tab.text && tab.text.couldExpand && !tab.text.isExpanded", ng-click="toggleText(tab, $event)") Read More &rarr;
 
-                a.section__more(href="#") &larr; Less
-                p(ng-if="!tab.value.includes('http') && sectionActive2==$index") {{tab.value}}
-                a.section__more(href="#") Read More &rarr;
-
-          section.section.section_tabs(ng-if="nodeRightInfo.section3.length")
+          section.section.section_tabs(ng-if="nodeRightInfo.sectionTags.length")
             .tabContainer
               .tabVisible
-                .tab(ng-repeat="tab in nodeRightInfo.section3")
+                .tab(ng-repeat="tab in nodeRightInfo.sectionTags")
                   button(ng-class="{active: sectionActive3==$index}", ng-click="activeTabs3($index)") {{tab.key}}
             .section__content
               #tedtags.tabcontent.tag-list(
-                ng-repeat="sections in nodeRightInfo.section3"
+                ng-repeat="sections in nodeRightInfo.sectionTags"
                 ng-if="sectionActive3==$index"
               )
                 .tag-list__item(ng-repeat="tag in sections.value" )
@@ -72,18 +72,9 @@
                         div
                           .cat-text.no-margin.truncate {{tag}}
 
-          section.section.section_compact(ng-if="nodeRightInfo.section4.length")
-            .section__content.section__info
-              dl#numberAndDates.section-info(
-                ng-repeat="number in nodeRightInfo.section4"
-                style="width: {{Section4Largest}}px"
-              )
-                dt.section-info__label {{number.key}}
-                dd.section-info__value {{number.value}}
-
-          section.section.section_compact(ng-if="nodeRightInfo.section5.length")
+          section.section.section_compact(ng-if="nodeRightInfo.sectionShortTags.length")
             .section__content.section__info.section__short-strings
-              dl#information.section-info(ng-repeat="number in nodeRightInfo.section5")
+              dl#information.section-info(ng-repeat="number in nodeRightInfo.sectionShortTags")
                 dt.section-info__label {{number.key}}
                 dd(ng-repeat="val in number.values", ng-class="{'tag-list__item': val.isTag}")
                   .cat-list.tag-cloud(ng-if="val.isTag")
@@ -100,6 +91,15 @@
                         div
                           .cat-text.no-margin.truncate {{val.value}}
                   span.section-info__value(ng-if="!val.isTag") {{val.value}}
+
+          section.section.section_compact(ng-if="nodeRightInfo.section4.length")
+            .section__content.section__info
+              dl#numberAndDates.section-info(
+                ng-repeat="number in nodeRightInfo.section4"
+                style="width: {{Section4Largest}}px"
+              )
+                dt.section-info__label {{number.key}}
+                dd.section-info__value {{number.value}}
 
           section.section.section_tabs(ng-if="(neighs.in && neighs.in.lentgh) || (neighs.out && neighs.out.length)")
             .tabContainer
