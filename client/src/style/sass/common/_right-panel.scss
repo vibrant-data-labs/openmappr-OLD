@@ -45,6 +45,14 @@
     font-weight: 300;
   }
 
+  .groups-title {
+    font: 400 18px/24px "Poppins";
+    margin: 0;
+    padding-left: 25px;
+    background-size: 20px;
+    color: #334D6E;
+  }
+
   .square-btn {
     &.small-btn {
       height: 22px;
@@ -53,6 +61,36 @@
       h6 {
         margin: 0;
       }
+    }
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+      padding: 0 10px;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 20px;
+      border: 1px solid #E2E2E2;
+      border-radius: 20px;
+      color: #616161;
+      margin: 0 4px 4px 0;
+
+      &.active {
+        background-color: #e0e0e0;
+      }
+      &.cat-item-subsetted {
+        background-color: #c0c0c0;
+      }
+      &:hover {
+        border-color: darken(#E2E2E2, 16);
+      }
+    }
+
+    .cat-item {
+      border: 0!important;
     }
   }
 

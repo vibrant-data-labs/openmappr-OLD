@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService',
-        function($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService) {
+    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService', 'subsetService',
+        function ($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -77,13 +77,13 @@ angular.module('common')
             $scope.exportSelection = $rootScope.MAPP_EDITOR_OPEN ? exportSelectionFromApp : exportSelectionFromPlayer;
             $rootScope.exportSelection = $scope.exportSelection;
 
-            $scope.hideDropdowns = function() {
+            $scope.hideDropdowns = function () {
                 //hack to close dropdown
-                $('.uib-dropdown-menu').css({display:'none'});
+                $('.uib-dropdown-menu').css({ display: 'none' });
             };
 
 
-            $scope.clearSelections = function() {
+            $scope.clearSelections = function () {
                 graphSelectionService.clearSelections(true);
                 $rootScope.$broadcast(BROADCAST_MESSAGES.cleanStage);
                 $scope.$broadcast(BROADCAST_MESSAGES.renderGraph.changed);
@@ -100,12 +100,12 @@ angular.module('common')
             $scope.$on(BROADCAST_MESSAGES.renderGraph.changed, initialise);
             $scope.$on(BROADCAST_MESSAGES.network.updated, initialise);
 
-            $scope.$on(BROADCAST_MESSAGES.dataGraph.nodeAttrsUpdated, function() {
+            $scope.$on(BROADCAST_MESSAGES.dataGraph.nodeAttrsUpdated, function () {
                 refreshSelectionInfo(graphSelectionService.getSelectedNodes());
             });
 
-            $scope.$on(BROADCAST_MESSAGES.overNodes, function(e, data) {
-                if(selPersists) {
+            $scope.$on(BROADCAST_MESSAGES.overNodes, function (e, data) {
+                if (selPersists) {
                     return console.warn(logPrefix + 'Selection in place, not refreshing info');
                 }
                 $scope.ui.interactionType = 'hover';
@@ -114,24 +114,24 @@ angular.module('common')
                 refreshSelectionInfo(data.nodes, data.neighbours);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.outNodes, function() {
-                if(selPersists) {
+            $scope.$on(BROADCAST_MESSAGES.outNodes, function () {
+                if (selPersists) {
                     return console.warn(logPrefix + 'Selection in place, not refreshing info');
                 }
                 $scope.ui.graphInteracted = false;
                 refreshSelectionInfo([]);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.rightPanelExited, function() {
-                if(selPersists) {
+            $scope.$on(BROADCAST_MESSAGES.rightPanelExited, function () {
+                if (selPersists) {
                     return console.warn(logPrefix + 'Selection in place, not refreshing info');
                 }
                 $scope.ui.graphInteracted = false;
                 refreshSelectionInfo([]);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
-                if( data.nodes.length > 0 ) {
+            $scope.$on(BROADCAST_MESSAGES.selectNodes, function (e, data) {
+                if (data.nodes.length > 0) {
                     selPersists = true;
                     $scope.ui.graphInteracted = true;
                 }
@@ -139,27 +139,27 @@ angular.module('common')
                 refreshSelectionInfo(data.nodes);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.selectStage, function() {
+            $scope.$on(BROADCAST_MESSAGES.selectStage, function () {
                 selPersists = false;
                 $scope.ui.graphInteracted = false;
                 refreshSelectionInfo([]);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function(e, data) {
+            $scope.$on(BROADCAST_MESSAGES.fp.currentSelection.changed, function (e, data) {
                 refreshSelectionInfo(data.nodes);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function (e, data) {
                 refreshSelectionInfo(data.nodes);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(e, data) {
+            $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (e, data) {
                 refreshSelectionInfo(data.nodes);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.attr.typeChanged, function(e, modifiedAttr) {
+            $scope.$on(BROADCAST_MESSAGES.attr.typeChanged, function (e, modifiedAttr) {
                 var changedAttr = _.find($scope.nodeInfoAttrs, 'id', modifiedAttr.id);
-                if(!changedAttr) {
+                if (!changedAttr) {
                     console.warn(logPrefix + 'type changed for not an info attr, ignoring info panel update');
                     return;
                 }
@@ -167,17 +167,17 @@ angular.module('common')
                 changedAttr.showRenderer = AttrInfoService.shouldRendererShowforSN(changedAttr.attrType, changedAttr.renderType);
             });
 
-            $scope.$on(BROADCAST_MESSAGES.nodeOverlay.creating, function() {
+            $scope.$on(BROADCAST_MESSAGES.nodeOverlay.creating, function () {
                 // $scope.panelUI.openPanel('filter');
             });
 
-            $scope.$on(BROADCAST_MESSAGES.layout.attrClicked, function(event, data) {
+            $scope.$on(BROADCAST_MESSAGES.layout.attrClicked, function (event, data) {
                 var infoObj = AttrInfoService.getNodeAttrInfoForRG();
                 var attr = data.attr;
-                if(!AttrInfoService.isDistrAttr(attr, infoObj.getForId(attr.id))) {
-                    var ele = angular.element(document.getElementById('infoattr-'+attr.id.replace(/ /g, '_')));
+                if (!AttrInfoService.isDistrAttr(attr, infoObj.getForId(attr.id))) {
+                    var ele = angular.element(document.getElementById('infoattr-' + attr.id.replace(/ /g, '_')));
                     var scrEle = angular.element(document.getElementById('info-panel-scroll'));
-                    if(scrEle && _.get(ele, 'length', 0) > 0) {
+                    if (scrEle && _.get(ele, 'length', 0) > 0) {
                         scrEle.scrollToElementAnimated(ele);
                     }
                 }
@@ -188,18 +188,18 @@ angular.module('common')
             /*************************************
     ********* Initialise *****************
     **************************************/
-            if(dataGraph.getRawDataUnsafe() || _.keys($scope.mapprSettings).length > 0) {
+            if (dataGraph.getRawDataUnsafe() || _.keys($scope.mapprSettings).length > 0) {
                 initialise();
             }
 
             /**
     * // App specific controller stuff
     */
-            if($rootScope.MAPP_EDITOR_OPEN) {
+            if ($rootScope.MAPP_EDITOR_OPEN) {
                 var SelectionSetService = $injector.get('SelectionSetService');
                 $scope.ui.showSelectionSets = true;
                 $scope.selectionSetVMs = SelectionSetService.getSelectionVMs();
-                $scope.invertSelection = function() {
+                $scope.invertSelection = function () {
                     var currSelNodeIds = _.map(graphSelectionService.getSelectedNodes(), 'id');
                     var allNodeIds = _.map(dataGraph.getAllNodes(), 'id');
                     var invertedNodeIds = _.difference(allNodeIds, currSelNodeIds);
@@ -207,19 +207,19 @@ angular.module('common')
                     FilterPanelService.rememberSelection(false);
                 };
 
-                $scope.createNewSelection = function() {
+                $scope.createNewSelection = function () {
                     console.log(logPrefix + 'adding a new selection');
                     var newSelVM = SelectionSetService.addNewSelection(false);
                     newSelVM.create();
                 };
 
-                $scope.toggleNodeOverlay = function() {
-                    if(!$scope.mapprSettings) throw new Error('mapprSettings not found');
+                $scope.toggleNodeOverlay = function () {
+                    if (!$scope.mapprSettings) throw new Error('mapprSettings not found');
                     $scope.mapprSettings.nodeFocusShow = !$scope.mapprSettings.nodeFocusShow;
                     $scope.ui.showInfoAttrs = $scope.mapprSettings.nodeFocusShow ? false : true;
                     console.log(logPrefix + 'node overlay toggled');
                     //show overlay
-                    if($scope.mapprSettings.nodeFocusShow) {
+                    if ($scope.mapprSettings.nodeFocusShow) {
                         graphSelectionService.selectByIds([$scope.selInfo.singleNodeInfo.id]);
                     }
                     else {
@@ -249,7 +249,7 @@ angular.module('common')
                     controller: 'NetworkDataModalCtrl',
                     size: 'lg',
                     resolve: {
-                        mapprSettings: function() {
+                        mapprSettings: function () {
                             return $scope.mapprSettings;
                         }
                     }
@@ -257,10 +257,10 @@ angular.module('common')
 
                 //Called when modal is closed
                 modalInstance.result.then(
-                    function() {
+                    function () {
                         console.log('Closing network data modal');
                     },
-                    function() {
+                    function () {
                         console.warn("Modal dismissed at: " + new Date());
                     }
                 );
@@ -280,14 +280,14 @@ angular.module('common')
                 var panelMode = infoPanelService.getPanelMode(selNodes, $scope.mapprSettings.nodeColorAttr);
                 resetSelectionInfo();
                 $scope.selInfo.selNodesCount = selNodes.length;
-                $scope.selInfo.selPerc = (($scope.selInfo.selNodesCount*100)/$scope.generalInfo.totalNodesCount).toFixed(0);
+                $scope.selInfo.selPerc = (($scope.selInfo.selNodesCount * 100) / $scope.generalInfo.totalNodesCount).toFixed(0);
 
-                if(panelMode == 'network') {
+                if (panelMode == 'network') {
                     $scope.ui.graphInteracted = false;
                     $scope.ui.infoTitle = 'Network';
                     $scope.ui.networkName = currNw.name;
                 }
-                else if(panelMode == 'node') {
+                else if (panelMode == 'node') {
                     $scope.ui.infoTitle = 'NODE';
                     var labelAttr = $scope.mapprSettings.labelAttr || 'DataPointLabel';
                     var selNode = selNodes[0];
@@ -298,11 +298,11 @@ angular.module('common')
                     console.log('sel node: ', selNode);
                     console.log('sel info: ', $scope.selInfo);
                 }
-                else if(panelMode == 'selection') {
+                else if (panelMode == 'selection') {
                     var clusterVal;
                     $scope.ui.infoTitle = 'SELECTION';
                 }
-                else if(panelMode == 'cluster') {
+                else if (panelMode == 'cluster') {
                     clusterVal = networkService.getSelectionClusterVal(selNodes, $scope.mapprSettings.nodeColorAttr);
                     $scope.selInfo.clusterVal = clusterVal;
                     $scope.selInfo.colorStr = selNodes[0].colorStr;
@@ -310,7 +310,7 @@ angular.module('common')
                 }
 
                 // Hack
-                if(!$scope.$$phase && !$rootScope.$$phase) {
+                if (!$scope.$$phase && !$rootScope.$$phase) {
                     $scope.$apply();
                 }
             }
@@ -328,7 +328,7 @@ angular.module('common')
 
             function exportSelectionFromApp(downloadSelection, downloadNeighbours) {
                 var currProject = projFactory.currProjectUnsafe();
-                if(!currProject) throw new Error('No project');
+                if (!currProject) throw new Error('No project');
                 var currSelection = graphSelectionService.getSelectedNodesLinksIds(downloadNeighbours);
                 var currentNetwork = networkService.getCurrentNetwork();
                 var fileNamePrefix = $scope.selectionHeading
@@ -341,26 +341,38 @@ angular.module('common')
                     fileNamePrefix: fileNamePrefix
                 };
 
-                if(downloadSelection) {
+                if (downloadSelection) {
                     postObj.selectionData = {
                         nodeIds: currSelection.nodeIds,
                         linkIds: currSelection.linkIds
                     };
                 }
                 projFactory.downloadNetworksData(currProject.org.ref, currProject._id, postObj)
-                    .then(function(result) {
+                    .then(function (result) {
                         _export(result, currProject.projName);
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         console.error(err);
                         uiService.logError('Some error occured while downloading, try again later!');
                     });
             }
 
-            function exportSelectionFromPlayer(downloadSelection, downloadNeighbours) {
-                var currSelection = graphSelectionService.getSelectedNodesLinksIds(downloadNeighbours);
+            function exportSelectionFromPlayer(type) {
+                var nodes = [];
+                var links = [];
+                if (type == 'all') {
+                    nodes = dataGraph.getAllNodes();
+                    links = dataGraph.getAllEdges();
+                } else if (type == 'select') {
+                    nodes = selectService.getSelectedNodes();
+                    links = dataGraph.getEdgesByNodes(nodes);
+                } else if (type == 'subset') {
+                    nodes = subsetService.subsetNodes;
+                    links = dataGraph.getEdgesByNodes(nodes);
+                }
+
                 var currentNetwork = networkService.getCurrentNetwork();
-                var fileName = (function() {
+                var fileName = (function () {
                     var div = document.createElement("div");
                     div.innerHTML = $scope.headerTitle; // In player's CtrlApp. Is html string
                     return div.textContent || div.innerText || "Mappr";
@@ -369,26 +381,24 @@ angular.module('common')
                 var postObj = {
                     networkId: currentNetwork.id,
                     downloadFormat: 'xlsx',
-                    fileNamePrefix:  'Selection'
+                    fileNamePrefix: type
                 };
 
-                if(downloadSelection) {
-                    postObj.selectionData = {
-                        nodeIds: currSelection.nodeIds,
-                        linkIds: currSelection.linkIds
-                    };
-                }
+                postObj.selectionData = {
+                    nodeIds: _.pluck(nodes, 'id'),
+                    linkIds: _.pluck(links, 'id')
+                };
 
                 playerFactory.currPlayer()
-                    .then(function(player) {
-                        playerFactory.downloadSelection(player._id, postObj, function(result) {
+                    .then(function (player) {
+                        playerFactory.downloadSelection(player._id, postObj, function (result) {
                             _export(result, fileName);
                         });
                     });
             }
 
             function _export(data, fileName) {
-                window.saveAs(new Blob([s2ab(data)],{type:"application/octet-stream"}), fileName + ".xlsx");
+                window.saveAs(new Blob([s2ab(data)], { type: "application/octet-stream" }), fileName + ".xlsx");
 
                 function s2ab(s) {
                     var buf = new window.ArrayBuffer(s.length);

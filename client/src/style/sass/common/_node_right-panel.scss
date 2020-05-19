@@ -107,8 +107,7 @@
                             //height: 56px;
                             display: flex;
                             width: 100%;
-                            overflow-x: auto;
-                            overflow-y: hidden;
+                            overflow: hidden;
                             -ms-overflow-style: none;
 
                             &::-webkit-scrollbar {
