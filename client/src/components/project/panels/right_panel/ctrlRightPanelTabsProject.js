@@ -60,7 +60,7 @@ angular.module('common')
                     document.body.classList.add('side-menu-compressed');
                 }
             }
-
+            // send support email
             $scope.sendSupportEmail = function () {
                 $http.post('/support', {
                     message: document.forms[0].elements[0].value
@@ -72,7 +72,7 @@ angular.module('common')
                     console.log(err)
                 });
             }
-
+            // toggle floating contact form
             $scope.toggleForm = function () {
               if (document.getElementById("floatingForm").style.display == "block") {
                 document.getElementById("floatingForm").style.display = "none";
