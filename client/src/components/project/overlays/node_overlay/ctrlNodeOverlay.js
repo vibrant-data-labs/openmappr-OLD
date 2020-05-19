@@ -681,7 +681,7 @@ angular.module('common')
                 if ($scope.Section4Largest < largestLn * 7) $scope.Section4Largest = largestLn * 7;
 
                 if (attrType === 'timestamp') {
-                    return new Date(value * 1000).toDateString();
+                    return moment(new Date(value * 1000)).format('DD-MMM-YYYY');
                 }
                 if (attrType === 'integer' || attrType === 'float') {
                     return parseFloat(value).toLocaleString();
