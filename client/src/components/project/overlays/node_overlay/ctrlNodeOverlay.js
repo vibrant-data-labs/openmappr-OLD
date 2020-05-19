@@ -720,13 +720,15 @@ angular.module('common')
             }
 
             function getLinkClass(url) {
-                return {
-                    facebook: url.includes('facebook.com'),
-                    twitter: url.includes('twitter.com'),
-                    linkedin: url.includes('linkedin.com'),
-                    crunchbase: url.includes('crunchbase.com'),
-                    ted: url.includes('ted.com')
-                };
+                var result = {};
+                if (url.includes('facebook.com')) result['facebook'] = true;
+                else if (url.includes('twitter.com')) result['twitter'] = true;
+                else if (url.includes('linkedin.com')) result['linkedin'] = true;
+                else if (url.includes('crunchbase.com')) result['crunchbase'] = true;
+                else if (url.includes('ted.com')) result['ted'] = true;
+                else result['website'] = true;
+
+                return result;
             }
 
 
