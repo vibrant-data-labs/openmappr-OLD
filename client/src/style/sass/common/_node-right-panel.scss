@@ -47,10 +47,52 @@
         width: 16px;
         height: 16px;
 
+        &:not(:first-child) {
+          margin-left: 8px;
+        }
+
         a {
           display: flex;
           align-items: center;
           height: 16px;
+          width: 16px;
+
+          &.facebook,
+          &.linkedin,
+          &.email,
+          &.crunchbase,
+          &.website {
+            opacity: .7;
+            transition: opacity .2s;
+
+            &:hover {
+              opacity: 1;
+            }
+
+            img {
+              display: none;
+            }
+          }
+
+          &.facebook {
+            background: url('../img/node-right-panel/facebook.svg') 50% no-repeat;
+          }
+
+          &.linkedin {
+            background: url('../img/node-right-panel/linkedin.svg') 50% no-repeat;
+          }
+
+          &.website {
+            background: url('../img/node-right-panel/website.svg') 50% no-repeat;
+          }
+
+          &.email {
+            background: url('../img/node-right-panel/mail.svg') 50% no-repeat;
+          }
+
+          &.crunchbase {
+            background: url('../img/node-right-panel/crunchbase.svg') 50% no-repeat;
+          }
         }
 
         img {
@@ -82,6 +124,8 @@
           }
         }
       }
+
+
     }
 
     &__content {
