@@ -142,27 +142,31 @@ angular.module('common')
 
             $scope.onSection2Load = function(val, $event) {
                 var elem = $event.target[0];
-                $scope.section2More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
-                $scope.section2Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                $timeout(() => {
+                    $scope.section2More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                    $scope.section2Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                }, 200)
 
                 $(elem).find('.tabVisible').on('scroll', function () {
                     $timeout(() => {
                         $scope.section2More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
                         $scope.section2Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
-                    }, 100)
+                    }, 200)
                 })
             }
 
             $scope.onSection3Load = function(val, $event) {
                 var elem = $event.target[0];
-                $scope.section3More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
-                $scope.section3Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                $timeout(() => {
+                    $scope.section3More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                    $scope.section3Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                }, 200);
 
                 $(elem).find('.tabVisible').on('scroll', function () {
                     $timeout(() => {
                         $scope.section3More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
                         $scope.section3Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
-                    }, 100)
+                    }, 200)
                 })
             }
 
