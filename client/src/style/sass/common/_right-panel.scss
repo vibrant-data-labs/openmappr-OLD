@@ -78,6 +78,12 @@
       color: #616161;
       margin: 0 4px 4px 0;
 
+      &.active {
+        background-color: #e0e0e0;
+      }
+      &.cat-item-subsetted {
+        background-color: #c0c0c0;
+      }
       &:hover {
         border-color: darken(#E2E2E2, 16);
       }

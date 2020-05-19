@@ -41,6 +41,30 @@ angular.module('common')
 
                 setRange();
 
+                var formatValue = function (val) {
+                    var attrType = attrInfo.attrType;
+                    if (attrType == 'timestamp') { return window.moment.unix(val).format(format); }
+                    else if (attrType == 'year') { return Number(val).toFixed(0); }
+                    else {
+                        if ((val % 1 !== 0)) {
+                            return d3.format(",.2f")(val);
+                        }
+                        else {
+                            return d3.format("s")(val);
+                        }
+                    }
+                }
+
+                scope.startValue = function() {
+                    var val = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]).min;
+                    return formatValue(val);
+                };
+
+                scope.endValue = function() {
+                    var val = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]).max;
+                    return formatValue(val);
+                };
+
                 scope.bounds = {
                     min : 0,
                     max : binCount,
@@ -50,9 +74,11 @@ angular.module('common')
                     range: true,
                     start: function(ev, ui) {
                         console.log(logPrefix + 'Slider start - event & ui ', ev, ui);
+                        scope.isHovered = true;
                     },
                     stop: function(ev, ui) {
                         console.log(logPrefix + 'Slider stop - event & ui ', ev, ui);
+                        scope.isHovered = false;
                         var valueRange = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]);
                         if (valueRange.min == attrInfo.stats.min && valueRange.max == attrInfo.stats.max) {
                             selectService.selectNodes({ attr: attrInfo.attr.id, forceDisable: true });
@@ -72,7 +98,6 @@ angular.module('common')
 
                 scope.$watch('attr', function(){
                     attrInfo = scope.attr;
-                    
                 });
 
                 // scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function() {
