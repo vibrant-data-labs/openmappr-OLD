@@ -29,18 +29,12 @@
                     i.fa.fa-info-circle(ng-if="::attrVM.metadata.descr" uib-tooltip="{{::attrVM.metadata.descr}}" tooltip-placement="right" tooltip-append-to-body="true")
   .search-box__input-wrap
 
-    .search-box__dropdown.search-dropdown
-      span.search-dropdown__button(role="button" ng-click="toggleSearchDropdown()") All
+    .search-box__dropdown.search-dropdown(ng-click="toggleSearchDropdown()", ng-class="{ 'search-dropdown_opened': searchDropdownVisible}")
+      span.search-dropdown__button(role="button") {{selectedSearchValue ? selectedSearchValue.title : 'All'}}
 
       ul.search-dropdown__list
-        li.search-dropdown__item.selected(ng-click="toggleSearchItem('All')") All
-        li.search-dropdown__item(ng-click="toggleSearchItem('Video')") Video
-        li.search-dropdown__item(ng-click="toggleSearchItem('Description')") Description
-        li.search-dropdown__item(ng-click="toggleSearchItem('Keyword tags')") Keyword tags
-        li.search-dropdown__item(ng-click="toggleSearchItem('Keyword list')") Keyword list
-        li.search-dropdown__item(ng-click="toggleSearchItem('Event')") Event
-        li.search-dropdown__item(ng-click="toggleSearchItem('TED tags')") TED tags
-        li.search-dropdown__item(ng-click="toggleSearchItem('Speaker occupation')") Speaker occupation
+        li.search-dropdown__item(ng-click="toggleSearchItem(null)" ng-class="{ 'selected': !selectedSearchValue }") All
+        li.search-dropdown__item(ng-click="toggleSearchItem(attrVM)" ng-repeat="attrVM in filterAttrVMs" ng-class="{ 'selected': selectedSearchValue && selectedSearchValue.id == attrVM.id }") {{attrVM.title}}
 
     .search-input
       input.search-box__input(
@@ -89,6 +83,8 @@
 
       .square-btn.small-btn.pull-right(ng-if="searchResults.length > 0" ng-click="selectAllNodes(); $event.stopPropagation();")
         h6 Select&nbsp;All
+      .square-btn.small-btn.pull-right(ng-if="ui.numShowGroups > 0" ng-click="showLess();")
+        h6 Show&nbsp;less
 
     ul.search-results__list
       li.search-results__list-item(
@@ -96,16 +92,13 @@
         ng-click="selectNode(node); $event.stopPropagation();"
         ng-mouseenter="hoverNode(node); $event.stopPropagation();"
       )
-        .search-results-item(
-          uib-tooltip-html="getSearchHighlights(node);"
-          tooltip-placement="auto left-top"
-          tooltip-append-to-body="true"
-        )
+        .search-results-item
           span.search-results-item__color(style="background:{{node.colorStr}};")
           span.search-results-item__label {{node.attr[ui.nodeLabelAttr]}}
+        span.search-results-item__sublabel(ng-bind-html="getSearchHighlights(node)")
 
     .search-results__footer
-      span.more(ng-click='showMore()') Show more results
+      span.more(ng-click='showMore()' ng-if="searchResults && searchResults.length > ui.showLimit") Show more results
 
         //- .header
         //- 	h6.title.text-uppercase.pointable-cursor.vert-align.no-margin

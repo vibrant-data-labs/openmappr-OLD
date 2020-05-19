@@ -143,6 +143,10 @@
         &:not(:last-child) {
             margin-bottom: 10px;
         }
+
+        &:hover .search-results-item__sublabel {
+            display: block;
+        }
     }
 
     .search-results-item {
@@ -159,6 +163,11 @@
         &__label {
             color: #192A3E;
             font: 400 12px/20px 'Poppins';
+        }
+
+        &__sublabel {
+            font: 400 12px/20px 'Poppins';
+            display: none;
         }
     }
 

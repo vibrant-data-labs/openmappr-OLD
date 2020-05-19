@@ -44,6 +44,7 @@ angular.module('common')
                 activeFilterCount: 0,
                 subsetEnabled: false
             };
+            $scope.showSearch = false;
             $scope.rawDataId = null;
             $scope.plotType = 'original';
             $scope.enableUndo = false;
@@ -57,6 +58,8 @@ angular.module('common')
             $scope.zoomInfo.zoomExtents = zoomExtents;
             $scope.zoomInfo.zoomReset = zoomService.zoomReset;
             $scope.switchSnapshot = switchSnapshot; //A function for children to switch between snapshots and networks
+
+            $scope.selectedSearchValue = null;
 
             $scope.updatePlotType = function(plotType) {
                 $scope.plotType = plotType || 'original';
@@ -80,31 +83,28 @@ angular.module('common')
             };
 
             $scope.searchToggle = function searchToggle() {
-                const playBar = document.getElementsByClassName('play-toolbar')[0];
-                const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
-
-                playBar.classList.toggle('play-toolbar_opened');
-                searchBoxInput.focus();
+                $scope.showSearch = !$scope.showSearch;
             }
 
             $scope.toggleSearchDropdown = function toggleSearchDropdown() {
-                const dropdown = document.getElementsByClassName('search-dropdown')[0];
-
-                dropdown.classList.toggle('search-dropdown_opened');
+                $scope.searchDropdownVisible = !$scope.searchDropdownVisible;
             }
 
             $scope.toggleSearchItem = function toggleSearchItem(value) {
-                const dropdown = document.getElementsByClassName('search-dropdown')[0];
-                const dropdownButton = document.getElementsByClassName('search-dropdown__button')[0];
-
-                dropdownButton.innerHTML = value;
-                dropdown.classList.toggle('search-dropdown_opened');
-                // TODO: change class 'selected' for active item
+                $scope.selectedSearchValue = value;
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
+
+                if (data.nodes.length == 1) {
+                    $scope.showSearch = false;
+                }
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function() {
+                $scope.showSearch = false;
             });
 
 
