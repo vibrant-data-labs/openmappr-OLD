@@ -152,6 +152,12 @@ function(BROADCAST_MESSAGES, hoverService, selectService, subsetService, FilterP
                 scope.nodesStatus = 'Total nodes';
                 scope.linksStatus = 'Total links';
             }
+
+            if (data.nodes.length == 1) {
+                scope.singleNode = data.nodes[0];
+            } else {
+                scope.singleNode = null;
+            }
         })
 
         function getFunctionColor(cluster) {

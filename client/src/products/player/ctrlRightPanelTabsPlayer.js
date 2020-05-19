@@ -37,6 +37,7 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.currentExport = 'all';
             $scope.expandedState = {
                 isSet: false,
                 isExpanded: false
@@ -63,6 +64,11 @@ angular.module('common')
                 if (!$scope.expandedState.isSet) {
                     document.body.classList.add('side-menu-compressed');
                 }
+            }
+
+            $scope.exportCurrentData = function() {
+                var currentExport = $scope.currentExport;
+                $rootScope.exportSelection(currentExport);
             }
 
             $scope.rightPanelTabs = [
@@ -157,6 +163,14 @@ angular.module('common')
                     cmd: function () {
                         $scope.panelUI.openPanel('info');
                     }
+                },
+                {
+                    iconClass: 'export',
+                    title: 'Export',
+                    tooltipTitle: 'Export current selection',
+                    cmd: function () {
+                        $scope.exportCurrentData();
+                    }
                 }
             ];
 
@@ -194,8 +208,10 @@ angular.module('common')
 
             $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
                 if (data.selectionCount == 0 && data.isSubsetted) {
+                    $scope.currentExport = 'subset';
                     $scope.selNodesCount = subsetService.currentSubset().length;
                 } else {
+                    $scope.currentExport = data.filtersCount > 0 ? 'select': 'all';
                     $scope.selNodesCount = data.selectionCount;
                 }
             });
