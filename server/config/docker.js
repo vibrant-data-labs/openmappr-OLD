@@ -1,6 +1,6 @@
 'use strict';
 
-var dbHost = process.env.dbHost || "mongo";
+var dbHost = process.env.DB_HOST || "mongo";
 
 module.exports = {
     //'dbUrl': 'mongodb://mongo:27017/MAPPRDB',

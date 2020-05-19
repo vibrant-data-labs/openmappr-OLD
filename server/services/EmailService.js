@@ -2,8 +2,8 @@
 var _            = require('lodash'),
     Promise      = require("bluebird"),
     fs           = require('fs'),
-    nodemailer   = require('nodemailer');
-
+    nodemailer   = require('nodemailer'),
+    sgMail       = require('@sendgrid/mail');
 var config = require("./AppConfig").get();
 
 var supportTransport = nodemailer.createTransport('SMTP', config.email);
@@ -39,7 +39,29 @@ function sendFromSupport(to, sub, templateName, htmlData) {
     });
 }
 
+function sendSupportEmail(req, res) {
+    var logPrefix = '[EmailService: ] ';
+    _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
+    console.log(logPrefix + 'sending email');
+    return new Promise((resolve, reject) => {
+        console.log(process.env.EMAIL_TO)
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        var msg = {
+            to: process.env.EMAIL_TO,
+            from: process.env.EMAIL_FROM,
+            subject: 'New Support Message',
+            text: req.body.message,
+            html: req.body.message,
+        };
+        sgMail.send(msg, (error, info) =>
+            error ? reject(error) : resolve(info)
+        )
+      res.end()
+    })
+}
+
 
 module.exports = {
-    sendFromSupport: sendFromSupport
+    sendFromSupport: sendFromSupport,
+    sendSupportEmail: sendSupportEmail
 };
