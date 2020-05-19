@@ -32,17 +32,22 @@
                   h6 {{info.name}}
                   p {{info.description}}
 
-          section.section.section_tabs
+          section.section.section_tabs(ng-if="nodeRightInfo.section2.length", dir-elem-ready="onSection2Load(null, $event)")
             .tabContainer
               .tabVisible
-                .tab(ng-repeat="tab in nodeRightInfo.section2")
+                .tab.less(role="button", ng-if="section2Less", ng-click="scrollParentLeft($event)")
+                .tab(ng-repeat="tab in nodeRightInfo.section2", dir-elem-ready="onTabLoad(tab, $event)")
                   button(
                     ng-class="{active: sectionActive2==$index}",
                     ng-click="activeTabs2($index)"
-                    style="max-width: 90px"
-                  ) {{tab.key}}
+                    style="max-width: 90px",
+                    uib-tooltip="{{tab.headerPopupText}}", 
+                    tooltip-placement="bottom", 
+                    tooltip-append-to-body="true"
+                  )
+                    span {{tab.key}}
 
-                .tab.more(role="button")
+                .tab.more(role="button", ng-if="section2More", ng-click="scrollParentRight($event)")
 
             .section__content
               #description.tabcontent(ng-repeat="tab in nodeRightInfo.section2", ng-if="sectionActive2==$index")
@@ -52,11 +57,20 @@
                 p(ng-if="!tab.text && !tab.value.includes('http')") {{tab.value}}
                 a.section__more(href="#", ng-if="tab.text && tab.text.couldExpand && !tab.text.isExpanded", ng-click="toggleText(tab, $event)") Read More &rarr;
 
-          section.section.section_tabs(ng-if="nodeRightInfo.sectionTags.length")
+          section.section.section_tabs(ng-if="nodeRightInfo.sectionTags.length", dir-elem-ready="onSection3Load(null, $event)")
             .tabContainer
               .tabVisible
-                .tab(ng-repeat="tab in nodeRightInfo.sectionTags")
-                  button(ng-class="{active: sectionActive3==$index}", ng-click="activeTabs3($index)") {{tab.key}}
+                .tab.less(role="button", ng-if="section3Less", ng-click="scrollParentLeft($event)")
+                .tab(ng-repeat="tab in nodeRightInfo.sectionTags", dir-elem-ready="onTabLoad(tab, $event)")
+                  button(
+                    ng-class="{active: sectionActive3==$index}", 
+                    ng-click="activeTabs3($index)",
+                    uib-tooltip="{{tab.headerPopupText}}", 
+                    tooltip-placement="bottom", 
+                    tooltip-append-to-body="true")
+                      span {{tab.key}}
+
+                .tab.more(role="button", ng-if="section3More", ng-click="scrollParentRight($event)")
             .section__content
               #tedtags.tabcontent.tag-list(
                 ng-repeat="sections in nodeRightInfo.sectionTags"
@@ -101,7 +115,7 @@
                 dt.section-info__label {{number.key}}
                 dd.section-info__value {{number.value}}
 
-          section.section.section_tabs(ng-if="(neighs.in && neighs.in.lentgh) || (neighs.out && neighs.out.length)")
+          section.section.section_tabs(ng-if="(neighs.in && neighs.in.length) || (neighs.out && neighs.out.length)")
             .tabContainer
               .tabVisible
                 .tab(ng-if="neighs.out && neighs.out.length")

@@ -124,6 +124,48 @@ angular.module('common')
                 }
             }
 
+            $scope.onTabLoad = function(tab, $event) {
+                var elem = $($event.target[0]).find('span')[0];
+                if (elem.scrollWidth > elem.clientWidth) {
+                    elem.style.textOverflow = 'ellipsis';
+                    tab.headerPopupText = tab.key;
+                }
+            }
+
+            $scope.scrollParentRight = function($event) {
+                $($event.target.parentElement).animate({ scrollLeft: '+=' + ($('.node-rigth-panel-overlay').width() / 2) }, 500, 'swing');
+            }
+
+            $scope.scrollParentLeft = function($event) {
+                $($event.target.parentElement).animate({ scrollLeft: '-=' + ($('.node-rigth-panel-overlay').width() / 2) }, 500, 'swing');
+            }
+
+            $scope.onSection2Load = function(val, $event) {
+                var elem = $event.target[0];
+                $scope.section2More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                $scope.section2Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+
+                $(elem).find('.tabVisible').on('scroll', function () {
+                    $timeout(() => {
+                        $scope.section2More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
+                        $scope.section2Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
+                    }, 100)
+                })
+            }
+
+            $scope.onSection3Load = function(val, $event) {
+                var elem = $event.target[0];
+                $scope.section3More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                $scope.section3Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+
+                $(elem).find('.tabVisible').on('scroll', function () {
+                    $timeout(() => {
+                        $scope.section3More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
+                        $scope.section3Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
+                    }, 100)
+                })
+            }
+
             $scope.onHover = function(link) {
                 $scope.hoverTimeout.then(function() {
                     hoverService.hoverNodes({ ids: [link.nodeId], force: true});
@@ -168,6 +210,16 @@ angular.module('common')
             /*************************************
     ********* Core Functions *************
     **************************************/
+
+            function isTabInView(elem) {
+                var docViewRight = $(window).innerWidth();
+                var docViewLeft = docViewRight - $('.node-rigth-panel-overlay').width();
+            
+                var elemLeft = $(elem).offset().left;
+                var elemRight = elemLeft + $(elem).width();
+            
+                return (elemRight <= docViewRight) && (elemLeft >= docViewLeft);
+            }
 
             function onNodesSelect(e, data) {
                 if (data.nodes.length == 0) {

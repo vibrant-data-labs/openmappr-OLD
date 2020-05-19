@@ -112,8 +112,13 @@
           color: #818890;
           border-radius: 5px 5px 0 0;
           background: #D2D6D9;
-          overflow: hidden;
-          text-overflow: ellipsis;
+
+          span {
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            vertical-align: bottom;
+          }
 
           &:hover {
             background: darken(#D2D6D9, 4);
@@ -122,6 +127,25 @@
           &.active {
             background: #fff;
             color: #BC3364;
+          }
+        }
+
+        &.less {
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          z-index: 10;
+          padding: 0;
+          width: 40px;
+          border-radius: 5px 0 0 0;
+          background: #D2D6D9 url('../img/tab-more.svg') 50% no-repeat;
+          cursor: pointer;
+          transition: background-color .2s;
+          transform: rotate(180deg);
+
+          &:hover {
+            background-color: darken(#D2D6D9, 8);
           }
         }
 
