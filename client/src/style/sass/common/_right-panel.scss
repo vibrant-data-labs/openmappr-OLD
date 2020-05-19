@@ -64,6 +64,30 @@
     }
   }
 
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    &__item {
+      padding: 0 10px;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 20px;
+      border: 1px solid #E2E2E2;
+      border-radius: 20px;
+      color: #616161;
+      margin: 0 4px 4px 0;
+
+      &:hover {
+        border-color: darken(#E2E2E2, 16);
+      }
+    }
+
+    .cat-item {
+      border: 0!important;
+    }
+  }
+
   .panel-number {
     float: right;
     margin-right: 10px;

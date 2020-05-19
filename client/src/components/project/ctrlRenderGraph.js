@@ -87,6 +87,21 @@ angular.module('common')
                 searchBoxInput.focus();
             }
 
+            $scope.toggleSearchDropdown = function toggleSearchDropdown() {
+                const dropdown = document.getElementsByClassName('search-dropdown')[0];
+
+                dropdown.classList.toggle('search-dropdown_opened');
+            }
+
+            $scope.toggleSearchItem = function toggleSearchItem(value) {
+                const dropdown = document.getElementsByClassName('search-dropdown')[0];
+                const dropdownButton = document.getElementsByClassName('search-dropdown__button')[0];
+
+                dropdownButton.innerHTML = value;
+                dropdown.classList.toggle('search-dropdown_opened');
+                // TODO: change class 'selected' for active item
+            }
+
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;

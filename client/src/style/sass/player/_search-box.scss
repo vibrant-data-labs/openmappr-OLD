@@ -4,10 +4,10 @@
   box-shadow: 0 8px 16px #E0E2E4;
   width: 100%;
   height: auto;
-  overflow: hidden;
 
   &__input-wrap {
     position: relative;
+    display: flex;
 
     .search-input {
       width: 100%;
@@ -45,5 +45,119 @@
     max-width: none;
     box-shadow: none;
     margin: 0;
+  }
+}
+
+.search-dropdown {
+  position: relative;
+  border-right: 1px solid #E5E5E5;
+
+  &_opened {
+    border-color: transparent;
+    .search-dropdown__list {
+      display: block;
+      visibility: visible;
+    }
+
+    .search-dropdown__button {
+      max-width: 220px;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  &__button {
+    display: block;
+    height: 100%;
+    padding: 0 44px;
+    font: 400 15px/60px 'Poppins';
+    color: #616161;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    z-index: 30;
+    max-width: 240px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &::before {
+      width: 12px;
+      height: 9px;
+      background: url('../img/search/check.svg') 50% no-repeat;
+      left: 24px;
+    }
+
+    &::after {
+      width: 8px;
+      height: 5px;
+      background: url('../img/search/arrow-down.svg') 50% no-repeat;
+      right: 20px;
+    }
+  }
+
+  &__list {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    margin: 0;
+    padding: 70px 24px 10px 24px;
+    list-style: none;
+    background: #fff;
+    box-shadow: 0 8px 16px #E0E2E4;
+    border-radius: 16px;
+    min-width: 216px;
+
+    &::before {
+      position: absolute;
+      content: '';
+      top: 0;
+      height: 60px;
+      width: 8px;
+      right: 20px;
+      background: url('../img/search/arrow-down.svg') 50% no-repeat;
+      transform: scaleY(-1);
+    }
+
+    &::after {
+      position: absolute;
+      top: 60px;
+      content: '';
+      background: #EBEFF2;
+      height: 1px;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  &__item {
+    font: 400 14px/32px 'Poppins';
+    color: #323C47;
+    cursor: pointer;
+    padding: 0 0 0 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &:hover {
+      color: darken(#323C47, 16);
+    }
+
+    &.selected {
+      background: url('../img/search/check.svg') 0 50% no-repeat;
+    }
   }
 }
