@@ -28,6 +28,20 @@
                   span &nbsp;&nbsp;&nbsp;
                     i.fa.fa-info-circle(ng-if="::attrVM.metadata.descr" uib-tooltip="{{::attrVM.metadata.descr}}" tooltip-placement="right" tooltip-append-to-body="true")
   .search-box__input-wrap
+
+    .search-box__dropdown.search-dropdown
+      span.search-dropdown__button(role="button" ng-click="toggleSearchDropdown()") All
+
+      ul.search-dropdown__list
+        li.search-dropdown__item.selected(ng-click="toggleSearchItem('All')") All
+        li.search-dropdown__item(ng-click="toggleSearchItem('Video')") Video
+        li.search-dropdown__item(ng-click="toggleSearchItem('Description')") Description
+        li.search-dropdown__item(ng-click="toggleSearchItem('Keyword tags')") Keyword tags
+        li.search-dropdown__item(ng-click="toggleSearchItem('Keyword list')") Keyword list
+        li.search-dropdown__item(ng-click="toggleSearchItem('Event')") Event
+        li.search-dropdown__item(ng-click="toggleSearchItem('TED tags')") TED tags
+        li.search-dropdown__item(ng-click="toggleSearchItem('Speaker occupation')") Speaker occupation
+
     .search-input
       input.search-box__input(
         ng-show="!ui.overlayOpen"
