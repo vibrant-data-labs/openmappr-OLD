@@ -44,7 +44,6 @@ function sendSupportEmail(req, res) {
     _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
     console.log(logPrefix + 'sending email');
     return new Promise((resolve, reject) => {
-        console.log(process.env.EMAIL_TO)
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
         var msg = {
             to: process.env.EMAIL_TO,
