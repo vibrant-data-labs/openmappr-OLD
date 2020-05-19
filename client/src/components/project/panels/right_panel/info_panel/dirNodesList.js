@@ -1,6 +1,6 @@
 angular.module('common')
-.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'selectService', 'FilterPanelService', 'layoutService',
-function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, layoutService) {
+.directive('dirNodesList', ['BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService', 'FilterPanelService', 'layoutService',
+function(BROADCAST_MESSAGES, hoverService, selectService, subsetService, FilterPanelService, layoutService) {
     'use strict';
 
     /*************************************
@@ -11,6 +11,7 @@ function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, la
         require: '?^dirSelectionInfo',
         scope: {
             nodes: '=',
+            links: '=',
             labelAttr: '=',
             nodeColorAttr: '=',
             panelMode: '=',
@@ -44,6 +45,23 @@ function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, la
         scope.nodeSearchQuery = '';
         scope.numShowGroups = 0;
         scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
+
+        var hasSelection = selectService.getSelectedNodes() && selectService.getSelectedNodes().length;
+        var hasSubset = subsetService.currentSubset() && subsetService.currentSubset().length;
+
+        if (hasSubset && hasSelection) {
+            scope.nodesStatus = 'Nodes selected';
+            scope.linksStatus = 'Links selected';
+        } else if (hasSubset) {
+            scope.nodesStatus = 'Nodes subset';
+            scope.linksStatus = 'Links subset';
+        } else if(hasSelection) {
+            scope.nodesStatus = 'Nodes selected';
+            scope.linksStatus = 'Links selected';
+        } else {
+            scope.nodesStatus = 'Total nodes';
+            scope.linksStatus = 'Total links';
+        }
 
         layoutService.getCurrent().then(function (layout) {
             scope.layout = layout;
@@ -122,6 +140,19 @@ function(BROADCAST_MESSAGES, hoverService, selectService, FilterPanelService, la
                 return memoizedGetFunctionColor(groupName);
             }
         }
+
+        scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+            if (data.filtersCount > 0) {
+                scope.nodesStatus = 'Nodes selected';
+                scope.linksStatus = 'Links selected';
+            } else if (data.isSubsetted) {
+                scope.nodesStatus = 'Nodes subset';
+                scope.linksStatus = 'Links subset';
+            } else {
+                scope.nodesStatus = 'Total nodes';
+                scope.linksStatus = 'Total links';
+            }
+        })
 
         function getFunctionColor(cluster) {
             return d3.rgb(scope.layout.scalers.color(cluster)).toString();
