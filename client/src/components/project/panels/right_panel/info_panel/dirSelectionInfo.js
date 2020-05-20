@@ -120,7 +120,9 @@ angular.module('common')
                         var principalNodeIdx = _.findIndex($scope.selInfo.genericSelNodes, 'id', _.get(data, 'nodes[0].id'));
                         if(principalNodeIdx < 0) { throw new Error('principal Node not found in selected nodes list'); }
                         $scope.selInfo.principalNode = $scope.selInfo.genericSelNodes[principalNodeIdx];
-                        $scope.selInfo.nodeNeighbors = getNodeNeighbors([$scope.selInfo.principalNode]);
+                        if (data.nodes.length == 1) {
+                            $scope.selInfo.nodeNeighbors = getNodeNeighbors(data.nodes);
+                        }
                         initialise();
                         return;
                     }
@@ -159,7 +161,15 @@ angular.module('common')
                 function refresh(selNodes, selLinks) {
                     var panelMode = $scope.selInfo.panelMode = infoPanelService.getPanelMode(selNodes, $scope.mapprSettings.nodeColorAttr);
                     $scope.selInfo.genericSelNodes = _.clone(selNodes);
-                    $scope.selInfo.genericSelLinks = selLinks || dataGraph.getEdgesByNodes(selNodes);
+                    if (!selLinks) {
+                        $scope.selInfo.genericSelLinks = null; 
+                        new Promise(function(resolve) {
+                            $scope.selInfo.genericSelLinks = dataGraph.getEdgesByNodes(selNodes);
+                            resolve();
+                        });
+                    } else {
+                        $scope.selInfo.genericSelLinks = selLinks
+                    }
                     $scope.selInfo.selectedGroups = [];
                     $scope.selInfo.linkInfoAttrIds = [];
                     $scope.selInfo.nodeColorAttr = $scope.mapprSettings.nodeColorAttr;
@@ -167,7 +177,9 @@ angular.module('common')
                     if(panelMode == 'node') {
                         $scope.selInfo.principalNode = _.first(selNodes);
                         $scope.selInfo.group = getGroupForNode($scope.selInfo.principalNode);
-                        $scope.selInfo.nodeNeighbors = getNodeNeighbors($scope.selInfo.genericSelNodes);
+                        if (selectService.singleNode) {
+                            $scope.selInfo.nodeNeighbors = getNodeNeighbors([selectService.singleNode]);
+                        }
                     }
                     else if(panelMode == 'cluster') {
                         $scope.selInfo.principalNode = _.first(selNodes);
@@ -183,7 +195,9 @@ angular.module('common')
                     else if(panelMode == 'selection') {
                         $scope.selInfo.principalNode = _.first(selNodes);
                         $scope.selInfo.group = getGroupForNode($scope.selInfo.principalNode);
-                        $scope.selInfo.nodeNeighbors = getNodeNeighbors($scope.selInfo.genericSelNodes);
+                        if (selectService.singleNode) {
+                            $scope.selInfo.nodeNeighbors = getNodeNeighbors([selectService.singleNode]);
+                        }
                         // Divide nodes into groups and sort them by archetypes
                         $scope.selInfo.selectedGroups = getGroupsForSelection(selNodes, $scope.mapprSettings.nodeColorAttr);
                         $scope.selInfo.genericSelNodes = _($scope.selInfo.selectedGroups)

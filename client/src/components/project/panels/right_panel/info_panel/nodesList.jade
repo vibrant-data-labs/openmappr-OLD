@@ -6,7 +6,8 @@
 				span.m-l-auto.m-r-5 Sorted By:
 				dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
 			.vert-align
-				span.dark-grey-font {{links.length}} {{linksStatus}}
+				span.dark-grey-font(ng-if="links") {{links.length}} {{linksStatus}}
+				span.dark-drey-font(ng-if="!links") ...
 				//- dir-export()
 		li.panel-item.list-item(ng-if="viewLimit < nodes.length || numShowGroups !== 0")
 			.row.vert-align
@@ -28,7 +29,7 @@
 		li.panel-item.list-item.pointable-cursor.no-animate.no-hover(ng-click="selectNode(singleNode.id, $event)" ng-mouseenter="hoverNode(singleNode.id, $event)" ng-mouseleave="unHoverNode(singleNode.id, $event)")
 			.row.vert-align
 				.col-xs-12
-					h6.groups-title Currently selected node:
+					h6.groups-title Selected node:
 			.row.vert-align.truncate(uib-tooltip-html="getNodeTooltipHtml(singleNode)" tooltip-placement="right" tooltip-append-to-body="true")
 				.col-xs-2
 					.big-circle(style="background: {{getNodeColor(singleNode)}};")
@@ -53,9 +54,8 @@
 	ul.list-unstyled.panel-list.m-t-10
 		li.panel-item.list-item.no-hover
 			.row.vert-align
-				.col-xs-6
+				.col-xs-12
 					h6.groups-title {{nodeColorAttr}}:
-				.col-xs-4.pointable-cursor
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="group in selectedGroups" ng-click="selectGroup(group, $event)" ng-mouseenter="hoverGroup(group, $event)" ng-mouseleave="unHoverGroup(group, $event)")
 			.row.vert-align
 				.col-xs-2
