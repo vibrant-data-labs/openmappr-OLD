@@ -156,7 +156,7 @@
       color: darken(#323C47, 16);
     }
 
-    &.selected {
+    &_selected {
       background: url('../img/search/check.svg') 0 50% no-repeat;
     }
   }

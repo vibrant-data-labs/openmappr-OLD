@@ -17,10 +17,10 @@
   &_opened {
     left: $side-menu-width + $right-panel-width + 20px;
 
-    .play-toolbar__buttons {
-      display: none;
-      visibility: hidden;
-    }
+    //.play-toolbar__buttons {
+    //  display: none;
+    //  visibility: hidden;
+    //}
 
     .play-toolbar__search {
       display: block;
