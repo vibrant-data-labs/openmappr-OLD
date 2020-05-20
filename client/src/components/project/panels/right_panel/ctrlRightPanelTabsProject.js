@@ -110,7 +110,7 @@ angular.module('common')
                         
                         $timeout(function () {
                             ngIntroService.setOptions(FilterPanelService.getFilterIntroOptions());
-                            ngIntroService.start();
+                            //ngIntroService.start();
                         }, 100);
                     }
                 },

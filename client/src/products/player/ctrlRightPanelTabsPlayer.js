@@ -113,7 +113,7 @@ angular.module('common')
                                         ]
                                     }
                                 );
-                                ngIntroService.start();
+                                //ngIntroService.start();
                             }, 100);
                     },
                 },
@@ -148,7 +148,7 @@ angular.module('common')
                                         ]
                                     },
                                 );
-                                ngIntroService.start();
+                                //ngIntroService.start();
                             }, 100);
                     }
                 },
@@ -162,7 +162,7 @@ angular.module('common')
                         if (!$window.localStorage.filter)
                             $timeout(function () {
                                 ngIntroService.setOptions(FilterPanelService.getFilterIntroOptions());
-                                ngIntroService.start();
+                                //ngIntroService.start();
                             }, 100);
                     }
                 },
