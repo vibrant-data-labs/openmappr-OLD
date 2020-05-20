@@ -156,7 +156,7 @@
       }
 
       .card-pagination {
-        font-size: 14px;
+        font-size: 12px;
         line-height: 16px;
         display: flex;
         align-items: center;
@@ -168,6 +168,14 @@
         &__button {
           color: #C02D62;
           cursor: pointer;
+
+          &:first-child {
+            margin-right: .5em;
+          }
+
+          &:last-child {
+            margin-left: .5em;
+          }
 
           &:hover {
             color: darken(#C02D62, 10%);
