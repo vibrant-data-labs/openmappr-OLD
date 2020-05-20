@@ -1,8 +1,8 @@
 //RenderCtrl sets up dataGraph and the current Snapshot
 // if an attribute is changed, loads the new graph!
 angular.module('common')
-    .controller('renderGraphCtrl', ['$scope', '$rootScope', '$routeParams','$q', '$timeout', '$location', 'leafletData', 'dataService','networkService' ,'dataGraph', 'AttrInfoService', 'layoutService', 'snapshotService', 'orgFactory', 'projFactory', 'playerFactory', 'graphSelectionService', 'zoomService', 'SelectorService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
-        function($scope, $rootScope, $routeParams, $q, $timeout, $location, leafletData, dataService, networkService, dataGraph, AttrInfoService, layoutService, snapshotService,  orgFactory, projFactory, playerFactory, graphSelectionService, zoomService, SelectorService, BROADCAST_MESSAGES, selectService, subsetService) {
+    .controller('renderGraphCtrl', ['$scope', '$rootScope', '$routeParams', '$q', '$timeout', '$location', 'leafletData', 'dataService', 'networkService', 'dataGraph', 'AttrInfoService', 'layoutService', 'snapshotService', 'orgFactory', 'projFactory', 'playerFactory', 'graphSelectionService', 'zoomService', 'SelectorService', 'BROADCAST_MESSAGES', 'selectService', 'subsetService',
+        function ($scope, $rootScope, $routeParams, $q, $timeout, $location, leafletData, dataService, networkService, dataGraph, AttrInfoService, layoutService, snapshotService, orgFactory, projFactory, playerFactory, graphSelectionService, zoomService, SelectorService, BROADCAST_MESSAGES, selectService, subsetService) {
             'use strict';
 
 
@@ -15,7 +15,7 @@ angular.module('common')
                 hasCustomData: false, // Has any custom data to load
                 hasUserInfo: false, //Has user info - name, pic,
                 showExtUserOverlay: false, //whether to show ext user overlay
-                userName:'',
+                userName: '',
                 userPicUrl: '',
                 userDistrVals: [],
                 snap: {}, // which snap to load
@@ -26,7 +26,7 @@ angular.module('common')
             };
 
             var fullReset = false;
-            var disableFullReset = _.debounce(function() {
+            var disableFullReset = _.debounce(function () {
                 fullReset = false;
             }, 2000);
 
@@ -49,6 +49,22 @@ angular.module('common')
             $scope.plotType = 'original';
             $scope.enableUndo = false;
             $scope.enableRedo = false;
+            $scope.operations = {
+                list: [],
+                opened: false,
+                togglePanel: function () {
+                    if ($scope.operations.list.length > 1) {
+                        $scope.operations.opened = !$scope.operations.opened;
+                    }
+                },
+                last: function () {
+                    if ($scope.operations.list.length) {
+                        return $scope.operations.list[$scope.operations.list.length - 1];
+                    }
+
+                    return {};
+                }
+            };
 
             /**
     * Scope methods
@@ -61,13 +77,18 @@ angular.module('common')
 
             $scope.selectedSearchValue = null;
 
-            $scope.updatePlotType = function(plotType) {
+            $scope.updatePlotType = function (plotType) {
                 $scope.plotType = plotType || 'original';
             };
 
-            $scope.resetFilters = function() {
+            $scope.resetFilters = function () {
                 subsetService.unsubset();
                 selectService.unselect();
+
+                delete $scope.operations.list;
+                $scope.operations.list = [];
+                updateOperation('init');
+                $scope.operations.opened = false;
             };
 
             $scope.subsetFilters = function subsetFilters() {
@@ -94,16 +115,28 @@ angular.module('common')
                 $scope.selectedSearchValue = value;
             }
 
-            $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
+            $scope.$on(BROADCAST_MESSAGES.hss.select, function (e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
 
                 if (data.nodes.length == 1) {
                     $scope.showSearch = false;
                 }
+
+                if (!data.nodes.length && $scope.operations.last().type == 'select') {
+                    removeOperation();
+                } else if ($scope.operations.last().type == 'select') {
+                    updateOperation('select', true);
+                } else {
+                    updateOperation('select');
+                }
             });
 
-            $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function() {
+            $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (e, data) {
+                updateOperation('subset');
+            })
+
+            $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function () {
                 $scope.showSearch = false;
             });
 
@@ -113,14 +146,14 @@ angular.module('common')
     ****** Event Listeners/Watches *******
     **************************************/
             //ctrlProject broadcasts a project:load event on new project load
-            $scope.$on(BROADCAST_MESSAGES.project.load, function(event, data) { onProjectOrPlayerLoad(event, data); });
+            $scope.$on(BROADCAST_MESSAGES.project.load, function (event, data) { onProjectOrPlayerLoad(event, data); });
 
             //ctrlPlayer broadcasts a player:load event on new player load
-            $scope.$on(BROADCAST_MESSAGES.player.load, function(event, data) { onProjectOrPlayerLoad(event, data); });
+            $scope.$on(BROADCAST_MESSAGES.player.load, function (event, data) { onProjectOrPlayerLoad(event, data); });
 
             $scope.$on(BROADCAST_MESSAGES.network.changed, onNetworkChange);
 
-            $scope.$on(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, function(evt, undoRedoStatus) {
+            $scope.$on(BROADCAST_MESSAGES.fp.filter.undoRedoStatus, function (evt, undoRedoStatus) {
                 $scope.enableUndo = undoRedoStatus.enableUndo;
                 $scope.enableRedo = undoRedoStatus.enableRedo;
             });
@@ -149,7 +182,7 @@ angular.module('common')
                 }
                 var subsetNodes = subsetService.subsetNodes;
                 var nodes = selectedNodes && selectedNodes.length ? selectedNodes : subsetNodes;
-                if(nodes && nodes.length > 0 && !fullReset) {
+                if (nodes && nodes.length > 0 && !fullReset) {
                     disableFullReset.cancel();
                     zoomService.zoomToNodes(nodes);
                     fullReset = true;
@@ -159,15 +192,61 @@ angular.module('common')
                 }
             }
 
+            function updateOperation(type, replace) {
+                switch (type) {
+                    case 'init': {
+                        $scope.operations.list.push({
+                            type: 'init',
+                            totalNodes: dataGraph.getAllNodes().length
+                        });
+                        break;
+                    }
+                    case 'select': {
+                        var selectedNodes = selectService.getSelectedNodes();
+                        if (!selectedNodes.length) break;
+
+                        var totalNodes = subsetService.currentSubset().length || dataGraph.getAllNodes().length;
+                        if (replace) {
+                            _.last($scope.operations.list).nodesCount = selectedNodes.length;
+                            _.last($scope.operations.list).totalNodes = totalNodes;
+                        } else {
+                            $scope.operations.list.push({
+                                type: 'select',
+                                nodesCount: selectedNodes.length,
+                                totalNodes: totalNodes
+                            });
+                        }
+
+
+                        break;
+                    }
+                    case 'subset': {
+                        // As subset occurs only on selected nodes
+                        var prevNodesCount = removeOperation().totalNodes;
+                        $scope.operations.list.push({
+                            type: 'subset',
+                            nodesCount: subsetService.currentSubset().length,
+                            totalNodes: prevNodesCount
+                        });
+                        break;
+                    }
+                    default: throw new Error("Unknown operation");
+                }
+            }
+
+            function removeOperation() {
+                return $scope.operations.list.pop();
+            }
+
             function onNetworkChange(event, eventData) {
                 dataGraph.clear();
                 layoutService.invalidateCurrent();
                 AttrInfoService.clearRenderGraphCaches();
-                $scope.updatePlotType(_.get(eventData, 'snapshot.layout.plotType' , 'original'));
+                $scope.updatePlotType(_.get(eventData, 'snapshot.layout.plotType', 'original'));
                 var data = loadSuccess(networkService.getCurrentNetwork());
                 $rootScope.$broadcast(BROADCAST_MESSAGES.dataGraph.loaded, data);
                 $scope.$broadcast(BROADCAST_MESSAGES.snapshot.loaded, {
-                    snapshot : eventData && eventData.snapshot ? eventData.snapshot : null
+                    snapshot: eventData && eventData.snapshot ? eventData.snapshot : null
                 });
             }
 
@@ -183,7 +262,7 @@ angular.module('common')
      * @param  {version Info data} // this is stupid
      * @return {nothing}
      */
-            function onProjectOrPlayerLoad (event) {
+            function onProjectOrPlayerLoad(event) {
                 console.group('renderGraphCtrl.onProjectOrPlayerLoad');
                 dataGraph.clear();
                 layoutService.invalidateCurrent();
@@ -199,10 +278,10 @@ angular.module('common')
                     snapIdP = playerFactory.currPlayer(true).then(loadPlayerSnapshot);
                 }
                 // snapshots loaded or there were no snapshots.
-                var rawDataP = dataService.currDataSet().then(function(dataSet){
+                var rawDataP = dataService.currDataSet().then(function (dataSet) {
                     _.each(networkService.getNetworks(), AttrInfoService.loadInfoForNetwork, AttrInfoService);
                     return dataSet;
-                }).catch( function(err) {
+                }).catch(function (err) {
                     console.log('Error in empty Project!', err);
                     dataGraph.clear();
                     $rootScope.$broadcast(BROADCAST_MESSAGES.dataGraph.loaded, null);
@@ -210,46 +289,46 @@ angular.module('common')
                     return $q.reject(err);
                 });
 
-                $q.all({ snapId : snapIdP, rawData : rawDataP})
-                    .then(function(obj) {
+                $q.all({ snapId: snapIdP, rawData: rawDataP })
+                    .then(function (obj) {
                         var snapId = obj.snapId;
                         var snap = snapId != null ? snapshotService.getById(snapId) : null;
-                        if(snapId) {
+                        if (snapId) {
                             $scope.updatePlotType(snap.layout.plotType);
                             var onSigma = graphSelectionService.loadFromSnapshot(snapshotService.getById(snapId));
                             snapshotService.setCurrentSnapshot(snapId);
                             loadNetworkForSnapshot(snapId);
 
-                            var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function() {
+                            var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function () {
                                 // Build connections obj
                                 checkforCustomSelections();
 
                                 // Check if OnSigma needs to be updated for player
-                                if(event.name === BROADCAST_MESSAGES.player.load) {
-                                    if(playerLoadInfo.hasUserInfo) {
+                                if (event.name === BROADCAST_MESSAGES.player.load) {
+                                    if (playerLoadInfo.hasUserInfo) {
                                         onSigma = _.noop;
                                         console.log('playerLoadInfo: ', playerLoadInfo);
                                         $scope.$emit(BROADCAST_MESSAGES.extUserOverlay.create, playerLoadInfo);
 
-                                        $scope.$on(BROADCAST_MESSAGES.extUserOverlay.minimized, function() {
+                                        $scope.$on(BROADCAST_MESSAGES.extUserOverlay.minimized, function () {
                                             graphSelectionService.selectByIds(playerLoadInfo.initialNodeIds, 0);
                                             $scope.zoomInfo.zoomExtents();
                                         });
 
-                                        if(playerLoadInfo.initialNodeIds) {
-                                            $timeout(function() {
+                                        if (playerLoadInfo.initialNodeIds) {
+                                            $timeout(function () {
                                                 graphSelectionService.selectByIds(playerLoadInfo.initialNodeIds, 0);
                                                 $scope.zoomInfo.zoomExtents();
                                             });
                                         }
 
-                                        $scope.$on(BROADCAST_MESSAGES.extUserOverlay.close, function(e, data) {
-                                            if(data && data.distrClick) {
+                                        $scope.$on(BROADCAST_MESSAGES.extUserOverlay.close, function (e, data) {
+                                            if (data && data.distrClick) {
                                                 console.log(logPrefix + 'distribution click, dont show user connections');
                                                 return;
                                             }
-                                            if(data && data.switchedToNeighbour) {
-                                                var x = $scope.$on(BROADCAST_MESSAGES.nodeOverlay.removing, function() {
+                                            if (data && data.switchedToNeighbour) {
+                                                var x = $scope.$on(BROADCAST_MESSAGES.nodeOverlay.removing, function () {
                                                     x();
                                                     graphSelectionService.selectByIds(playerLoadInfo.nodeIdsToSelect, 0);
                                                 });
@@ -260,15 +339,15 @@ angular.module('common')
                                             $scope.zoomInfo.zoomExtents();
                                         });
                                     }
-                                    else if(playerLoadInfo.hasCustomData) {
-                                        if(playerLoadInfo.nodeIdsToSelect.length > 0) {
-                                            onSigma = function() {
+                                    else if (playerLoadInfo.hasCustomData) {
+                                        if (playerLoadInfo.nodeIdsToSelect.length > 0) {
+                                            onSigma = function () {
                                                 console.log(logPrefix + 'ignoring snap selections, loading selections specified in URL');
-                                                $timeout(function() {
+                                                $timeout(function () {
                                                     graphSelectionService.selectByIds(playerLoadInfo.nodeIdsToSelect, 0); //zero degree selection
                                                 });
-                                                if(playerLoadInfo.shouldZoom) {
-                                                    setTimeout(function() {
+                                                if (playerLoadInfo.shouldZoom) {
+                                                    setTimeout(function () {
                                                         $scope.zoomInfo.zoomExtents();
                                                     }, 300);
                                                 }
@@ -287,9 +366,11 @@ angular.module('common')
                         $rootScope.$broadcast(BROADCAST_MESSAGES.dataGraph.loaded, data);
                         console.log('triggering snapshost laoded');
                         $rootScope.$broadcast(BROADCAST_MESSAGES.snapshot.loaded, {
-                            snapshot : snap
+                            snapshot: snap
                         });
                         console.groupEnd();
+
+                        updateOperation('init');
                     });
             }
 
@@ -302,7 +383,7 @@ angular.module('common')
                 console.log('Switching to snapshot with id: %O', snapId);
                 var snap = snapshotService.getById(snapId),
                     onSigma = _.noop;
-                if(!snap) {
+                if (!snap) {
                     console.warn('no snapshot to load! given Id:' + snapId);
                     return;
                 }
@@ -312,20 +393,20 @@ angular.module('common')
                 var currentNWId = networkService.getCurrentNetwork().id;
                 loadNetworkForSnapshot(snap.id);
                 // regen Data when new network is being loaded
-                if(currentNWId !== networkService.getCurrentNetwork().id) {
+                if (currentNWId !== networkService.getCurrentNetwork().id) {
                     dataGraph.clear();
                     AttrInfoService.clearRenderGraphCaches();
                     var data = loadSuccess(networkService.getCurrentNetwork());
                     $rootScope.$broadcast(BROADCAST_MESSAGES.dataGraph.loaded, data);
                 }
                 $scope.$broadcast(BROADCAST_MESSAGES.snapshot.changed, {
-                    snapshot : snap
+                    snapshot: snap
                 });
                 // select nodes when render is complete
-                if(snap.processSelection) {
+                if (snap.processSelection) {
                     onSigma = graphSelectionService.loadFromSnapshot(snap);
                 }
-                var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function() {
+                var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function () {
                     onSigma();
                     x();
                 });
@@ -342,10 +423,10 @@ angular.module('common')
                 return frag;
             }
 
-            function loadNetworkForSnapshot (snapId) {
+            function loadNetworkForSnapshot(snapId) {
                 var currSnap = snapshotService.getById(snapId);
                 var nwId = currSnap && currSnap.networkId ? currSnap.networkId : null;
-                if(nwId != null && networkService.exist(nwId)) {
+                if (nwId != null && networkService.exist(nwId)) {
                     console.log("Loading snapshot network: ", nwId);
                     networkService.setCurrentNetwork(nwId);
                 } else {
@@ -362,14 +443,14 @@ angular.module('common')
             /**
      * Loads snapshots for project and creates a new one if none exist.
      */
-            function loadProjectSnapshot (project, snapIdToSwitch) {
+            function loadProjectSnapshot(project, snapIdToSwitch) {
                 console.group('ctrlRenderGraph.loadProjectSnapshot %O', project);
                 var currSnapId = null;
                 return snapshotService.loadSnapshots()
-                    .then(function(snaps) {
-                        if(snaps.length > 0) {
+                    .then(function (snaps) {
+                        if (snaps.length > 0) {
                             console.log('loading existing snapshot from snapshots: %O', snaps);
-                            if(snapIdToSwitch && _.contains(_.pluck(snaps, 'id'), snapIdToSwitch)) {
+                            if (snapIdToSwitch && _.contains(_.pluck(snaps, 'id'), snapIdToSwitch)) {
                                 currSnapId = snapIdToSwitch;
                                 console.log(currSnapId);
                             } else {
@@ -385,19 +466,19 @@ angular.module('common')
                             console.groupEnd();
                             return currSnapId;
                         }
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         console.log('ctrlRenderGraph.loadProjectSnapshot', err);
                         return $q.reject(err);
                     });
 
             }
 
-            function loadPlayerSnapshot (player) {
+            function loadPlayerSnapshot(player) {
                 console.group('ctrlRenderGraph.loadPlayerSnapshots', player);
                 var currSnapId = null;
                 return snapshotService.loadSnapshots(true)
-                    .then(function(snaps) {
-                        if(snaps.length > 0) {
+                    .then(function (snaps) {
+                        if (snaps.length > 0) {
                             console.log('loading existing snapshot from snapshots: %O', snaps);
                             decodePlayerLoadInfo(snaps);
                             currSnapId = playerLoadInfo.snap.id;
@@ -409,7 +490,7 @@ angular.module('common')
                             console.groupEnd();
                             return currSnapId;
                         }
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         console.log('ctrlRenderGraph.loadPlayerSnapshot', err);
                         return $q.reject(err);
                     });
@@ -427,11 +508,11 @@ angular.module('common')
 
                 playerLoadInfo.snap = snaps[0];
 
-                if(pathSplitArr.length > 0 && (viewPath == 'select' || viewPath == 'compare')) {
-                    if(viewPath == 'select') {
+                if (pathSplitArr.length > 0 && (viewPath == 'select' || viewPath == 'compare')) {
+                    if (viewPath == 'select') {
                         playerLoadInfo.hasCustomData = true;
                     }
-                    else if(viewPath == 'compare') {
+                    else if (viewPath == 'compare') {
                         playerLoadInfo.hasUserInfo = true;
                     }
                 }
@@ -445,8 +526,8 @@ angular.module('common')
         */
 
                 // Finds which snapshot to load
-                if(snapNum && (+snapNum)%1===0) {
-                    if(+snapNum <= snaps.length) {
+                if (snapNum && (+snapNum) % 1 === 0) {
+                    if (+snapNum <= snaps.length) {
                         playerLoadInfo.snap = snaps[+snapNum - 1];
                         console.log(logPrefix + 'Snapshot num to load found in Url');
                     }
@@ -454,7 +535,7 @@ angular.module('common')
                         console.error(logPrefix + 'snap number greater than snaps count');
                     }
                 }
-                if(urlSearchObj.zoom == true || urlSearchObj.zoom == 'true') {
+                if (urlSearchObj.zoom == true || urlSearchObj.zoom == 'true') {
                     playerLoadInfo.shouldZoom = true;
                 }
 
@@ -473,21 +554,21 @@ angular.module('common')
                     distrVals = [],
                     clusterKey = 'Cluster';
 
-                if(playerLoadInfo.hasUserInfo) {
+                if (playerLoadInfo.hasUserInfo) {
                     playerLoadInfo.showExtUserOverlay = true;
                     nodeIds = urlSearchObj.uconn ? urlSearchObj.uconn.split('+') : []; // Individual node Ids specified
                     clusterVal = urlSearchObj.uclust ? urlSearchObj.uclust : ''; //Cluster vals
                     distrVals = urlSearchObj.udata ? urlSearchObj.udata.split('+') : []; // Choose an appropriate separator
                     //node ids and/or cluster ids to select initially
-                    if(urlSearchObj.nids) {
+                    if (urlSearchObj.nids) {
                         initialNodeIds = urlSearchObj.nids ? urlSearchObj.nids.split('+') : []; // Individual node Ids specified
                         var clusterIds = urlSearchObj.cids ? urlSearchObj.cids.split('+') : []; //Cluster vals
 
-                        _.each(clusterIds, function(cid) {
+                        _.each(clusterIds, function (cid) {
                             var selector = SelectorService.newSelector();
                             selector.ofCluster(clusterKey, cid, true); //Need to confirm the cluster attrib name
                             selector.selectfromDataGraph();
-                            if(_.isArray(selector.nodeIds)) {
+                            if (_.isArray(selector.nodeIds)) {
                                 initialNodeIds = initialNodeIds.concat(selector.nodeIds);
                             }
                         });
@@ -501,15 +582,15 @@ angular.module('common')
                     playerLoadInfo.clusterVal = clusterVal;
                     playerLoadInfo.userDistrVals = distrVals;
                 }
-                else if(playerLoadInfo.hasCustomData) {
+                else if (playerLoadInfo.hasCustomData) {
                     nodeIds = urlSearchObj.nids ? urlSearchObj.nids.split('+') : []; // Individual node Ids specified
                     clusterIds = urlSearchObj.cids ? urlSearchObj.cids.split('+') : []; //Cluster vals
 
-                    _.each(clusterIds, function(cid) {
+                    _.each(clusterIds, function (cid) {
                         var selector = SelectorService.newSelector();
                         selector.ofCluster(clusterKey, cid, true); //Need to confirm the cluster attrib name
                         selector.selectfromDataGraph();
-                        if(_.isArray(selector.nodeIds)) {
+                        if (_.isArray(selector.nodeIds)) {
                             nodeIds = nodeIds.concat(selector.nodeIds);
                         }
                     });
