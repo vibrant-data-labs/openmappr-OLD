@@ -19,8 +19,8 @@ angular.module('common')
     ************ Local Data **************
     **************************************/
             var dirPrefix = '[dirTagCloud] ';
-            var ITEMS_TO_SHOW = 10;
-            var ITEMS_TO_SHOW_INITIALLY = 10;
+            var ITEMS_TO_SHOW = 20;
+            var ITEMS_TO_SHOW_INITIALLY = 20;
             var totalNodes = 0;
 
 
@@ -48,6 +48,10 @@ angular.module('common')
                     searchQuery: '',
                     initialItemCount: initVisItemCount,
                     startItem: function() {
+                        if (distrData.numShownCats == scope.catListData.data.length) {
+                            return distrData.numShowGroups * distrData.step + 1;
+                        }
+
                         return distrData.numShownCats - distrData.step + 1;
                     },
                     step: ITEMS_TO_SHOW
@@ -198,6 +202,12 @@ angular.module('common')
                     hoverService.unhover();
                 };
 
+
+                scope.showLastPage = function() {
+                    distrData.numShowGroups = Math.floor(scope.catListData.data.length / distrData.step);
+                    distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
+                };
+
                 scope.showMore = function () {
                     distrData.numShowGroups++;
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
@@ -205,6 +215,11 @@ angular.module('common')
                 scope.showLess = function () {
                     distrData.numShowGroups--;
                     distrData.numShowGroups = distrData.numShowGroups < 0 ? 0 : distrData.numShowGroups;
+                    distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
+                };
+
+                scope.showFirstPage = function() {
+                    distrData.numShowGroups = 0;
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
                 };
 
