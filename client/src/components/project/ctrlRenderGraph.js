@@ -44,6 +44,7 @@ angular.module('common')
                 activeFilterCount: 0,
                 subsetEnabled: false
             };
+            $scope.showSearch = false;
             $scope.rawDataId = null;
             $scope.plotType = 'original';
             $scope.enableUndo = false;
@@ -57,6 +58,8 @@ angular.module('common')
             $scope.zoomInfo.zoomExtents = zoomExtents;
             $scope.zoomInfo.zoomReset = zoomService.zoomReset;
             $scope.switchSnapshot = switchSnapshot; //A function for children to switch between snapshots and networks
+
+            $scope.selectedSearchValue = null;
 
             $scope.updatePlotType = function(plotType) {
                 $scope.plotType = plotType || 'original';
@@ -80,16 +83,28 @@ angular.module('common')
             };
 
             $scope.searchToggle = function searchToggle() {
-                const playBar = document.getElementsByClassName('play-toolbar')[0];
-                const searchBoxInput = document.getElementsByClassName('search-box__input')[0];
+                $scope.showSearch = !$scope.showSearch;
+            }
 
-                playBar.classList.toggle('play-toolbar_opened');
-                searchBoxInput.focus();
+            $scope.toggleSearchDropdown = function toggleSearchDropdown() {
+                $scope.searchDropdownVisible = !$scope.searchDropdownVisible;
+            }
+
+            $scope.toggleSearchItem = function toggleSearchItem(value) {
+                $scope.selectedSearchValue = value;
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function(e, data) {
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
+
+                if (data.nodes.length == 1) {
+                    $scope.showSearch = false;
+                }
+            });
+
+            $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function() {
+                $scope.showSearch = false;
             });
 
 

@@ -332,6 +332,16 @@
             margin: 0;
             position: relative;
             width: 100%;
+
+            &-horizontal.active .ui-slider-handle:before {
+                content: " ";
+                position: absolute;
+                z-index: -1;
+                top: -7px;
+                left: -7px;
+                border: 10px solid lighten(#315F6B, 20%);
+                border-radius: 100%;
+            }
         }
         .ui-slider-handle {
             background: #315F6B;

@@ -124,6 +124,52 @@ angular.module('common')
                 }
             }
 
+            $scope.onTabLoad = function(tab, $event) {
+                var elem = $($event.target[0]).find('span')[0];
+                if (elem.scrollWidth > elem.clientWidth) {
+                    elem.style.textOverflow = 'ellipsis';
+                    tab.headerPopupText = tab.key;
+                }
+            }
+
+            $scope.scrollParentRight = function($event) {
+                $($event.target.parentElement).animate({ scrollLeft: '+=' + ($('.node-rigth-panel-overlay').width() / 2) }, 500, 'swing');
+            }
+
+            $scope.scrollParentLeft = function($event) {
+                $($event.target.parentElement).animate({ scrollLeft: '-=' + ($('.node-rigth-panel-overlay').width() / 2) }, 500, 'swing');
+            }
+
+            $scope.onSection2Load = function(val, $event) {
+                var elem = $event.target[0];
+                $timeout(() => {
+                    $scope.section2More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                    $scope.section2Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                }, 200)
+
+                $(elem).find('.tabVisible').on('scroll', function () {
+                    $timeout(() => {
+                        $scope.section2More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
+                        $scope.section2Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
+                    }, 200)
+                })
+            }
+
+            $scope.onSection3Load = function(val, $event) {
+                var elem = $event.target[0];
+                $timeout(() => {
+                    $scope.section3More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
+                    $scope.section3Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
+                }, 200);
+
+                $(elem).find('.tabVisible').on('scroll', function () {
+                    $timeout(() => {
+                        $scope.section3More = !isTabInView($(this).find('.tab:not(.more):not(.less)').last()[0]);
+                        $scope.section3Less = !isTabInView($(this).find('.tab:not(.more):not(.less)').first()[0]);
+                    }, 200)
+                })
+            }
+
             $scope.onHover = function(link) {
                 $scope.hoverTimeout.then(function() {
                     hoverService.hoverNodes({ ids: [link.nodeId], force: true});
@@ -135,6 +181,14 @@ angular.module('common')
                     hoverService.unhover();
                 });
             };
+
+            $scope.toggleText = function(tab, event) {
+                if (tab.text) {
+                    tab.text.isExpanded = !tab.text.isExpanded;
+                }
+
+                event.preventDefault();
+            }
     
             $scope.onNeighborClick = function(link) {
                 selectService.selectSingleNode(link.nodeId);
@@ -160,6 +214,16 @@ angular.module('common')
             /*************************************
     ********* Core Functions *************
     **************************************/
+
+            function isTabInView(elem) {
+                var docViewRight = $(window).innerWidth();
+                var docViewLeft = docViewRight - $('.node-rigth-panel-overlay').width();
+            
+                var elemLeft = $(elem).offset().left;
+                var elemRight = elemLeft + $(elem).width();
+            
+                return (elemRight <= docViewRight) && (elemLeft >= docViewLeft);
+            }
 
             function onNodesSelect(e, data) {
                 if (data.nodes.length == 0) {
@@ -480,19 +544,24 @@ angular.module('common')
                 var result = {
                     section1: [],
                     section2: [],
-                    section3: [],
+                    sectionTags: [],
                     section4: [],
-                    section5: [],
+                    sectionShortTags: [],
                 };
 
                 result.section1.push(getNodeName(values));
 
                 attrArray.map((attr) => {
                     if (mapToSectionOne(attr)) result.section1.push({ ...setToSectionOne(attr, values[attr.id]) });
-                    if (mapToSectionTwo(attr)) result.section2.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
-                    //if (mapToSectionThree(attr, values)) result.section3.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
+                    if (mapToSectionTwo(attr)) result.section2.push({ 
+                        key: attr.title ? attr.title : attr.id, 
+                        value: values[attr.id], 
+                        text: attr.renderType === 'text' ? { 
+                            isExpanded: false,
+                            shortValue: values[attr.id].split(' ').splice(0, $scope.mapprSettings.nodeFocusTextLength).join(' '), 
+                            couldExpand: values[attr.id].split(' ').length > $scope.mapprSettings.nodeFocusTextLength
+                         } : null });
                     if (mapToSectionFour(attr)) result.section4.push({ key: attr.title ? attr.title : attr.id, value: parseValueToSection4(attr, values[attr.id]) });
-                    //if (mapToSectionFive(attr, values)) result.section5.push({ key: attr.title ? attr.title : attr.id, value: values[attr.id] });
                     getSectionTags(attr, values, result);
                 });
 
@@ -578,7 +647,7 @@ angular.module('common')
                     if(attrInfo.isSingleton) {
                         var count = attrInfo.valuesCount[values[attr.id]];
                         var value = values[attr.id];
-                        result.section5.push({ 
+                        result.sectionShortTags.push({ 
                             key: attr.title || attr.id, 
                             id: attr.id, 
                             values: _.map(value, function(v) {
@@ -588,12 +657,12 @@ angular.module('common')
                                 }
                             })});
                     } else {
-                        result.section3.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
+                        result.sectionTags.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
                     }
                 }
                 else if (attrType === 'string') {
                     var count = attrInfo.valuesCount[values[attr.id]];
-                    result.section5.push({
+                    result.sectionShortTags.push({
                         key: attr.title || attr.id, id: attr.id, values: [{
                             value: values[attr.id], 
                             isTag: count > 1
@@ -612,7 +681,7 @@ angular.module('common')
                 if ($scope.Section4Largest < largestLn * 7) $scope.Section4Largest = largestLn * 7;
 
                 if (attrType === 'timestamp') {
-                    return new Date(value * 1000).toDateString();
+                    return moment(new Date(value * 1000)).format('DD-MMM-YYYY');
                 }
                 if (attrType === 'integer' || attrType === 'float') {
                     return parseFloat(value).toLocaleString();
@@ -652,12 +721,27 @@ angular.module('common')
                 if (url.includes('crunchbase.com')) return 'Crunchbase.com';
                 if (url.includes('ted.com')) return 'Ted.com';
                 return 'External Link';
+            }
 
+            function getLinkClass(url) {
+                var result = {};
+                if (url.includes('facebook.com')) result['facebook'] = true;
+                else if (url.includes('twitter.com')) result['twitter'] = true;
+                else if (url.includes('linkedin.com')) result['linkedin'] = true;
+                else if (url.includes('crunchbase.com')) result['crunchbase'] = true;
+                else if (url.includes('ted.com')) result['ted'] = true;
+                else result['website'] = true;
+
+                return result;
             }
 
 
             function setToSectionOne(attr, value = '') {
-                if (attr.attrType === 'url') return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value) });
+                if (attr.attrType === 'url')
+                    return ({ type: 'link', icon: getLinkIcon(value), value, tooltip: getLinkTooltip(value), class: getLinkClass(value) });
+                if (attr.renderType === 'email') {
+                    return ({ type: 'email', icon: 'https://image.flaticon.com/icons/svg/561/561127.svg', value, tooltip: value, class: { 'email': true }});
+                }
             }
 
             function onSectionHover(sections, tag, $event) {
@@ -679,7 +763,8 @@ angular.module('common')
                 const { attrType, renderType, id } = attr;
 
                 return (attrType === 'string' && renderType === 'text' && id === 'Name') ||
-                    (attrType === 'url' && renderType === 'default')
+                    (attrType === 'url' && renderType === 'default') ||
+                    (attrType === 'string' && renderType === 'email');
 
             }
             function mapToSectionTwo(attr) {
@@ -709,14 +794,6 @@ angular.module('common')
                     (attrType === 'float' && renderType === 'histogram') ||
                     (attrType === 'year' && renderType === 'histogram') ||
                     (attrType === 'timestamp' && renderType === 'histogram')
-            }
-            function mapToSectionFive(attr) {
-                const { attrType, renderType, valuesCount } = attr;
-                if (_.includes(['liststring', 'string'], attrType) && renderType === 'tag-cloud') {
-                    return valuesCount / $scope.totalCount <= TAGS_FRACTION;
-                }
-
-                return false;
             }
 
             function formatDate(num) {

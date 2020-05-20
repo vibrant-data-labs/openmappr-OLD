@@ -57,7 +57,15 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
         var subsettedNodes = currentSubset && currentSubset.length ?
             _.filter(nodes, function (n) { return (currentSubset.indexOf(n.id) > -1) || n.inHover; }) : nodes;
 
-        var sortFunc = function (n1, n2) { return n2.idx - n1.idx; } // sort by drawing order
+        var sortFunc = function (n1, n2) { 
+            var weightN1 = 0;
+            var weightN2 = 0;
+            if (sigma) {
+                weightN1 = sigma.d3.labels.selectOrder(n1);
+                weightN2 = sigma.d3.labels.selectOrder(n2);
+            }
+            return weightN1 == weightN2 ? (n2.idx - n1.idx) : (weightN2 - weightN1); 
+        }
         if (subsettedNodes.length > 0) {
             subsettedNodes.sort(sortFunc);
             return subsettedNodes[0];
@@ -84,7 +92,7 @@ function ($q, $timeout, renderGraphfactory, inputMgmtService, graphHoverService,
         } else {
             hoverNodes = event.data.nodes;
         }
-        hoverTimer = setTimeout(hoverFn, 200);
+        hoverTimer = setTimeout(hoverFn, 100);
     }
 
     function hoverOutHandler (name, event) {

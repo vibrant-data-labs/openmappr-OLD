@@ -45,7 +45,12 @@ angular.module('common')
                 var distrData = {
                     numShowGroups: 0,
                     numShownCats: initVisItemCount,
-                    searchQuery: ''
+                    searchQuery: '',
+                    initialItemCount: initVisItemCount,
+                    startItem: function() {
+                        return distrData.numShownCats - distrData.step + 1;
+                    },
+                    step: ITEMS_TO_SHOW
                 };
                 scope.attrId = attrId;
                 scope.distrData = distrData;
@@ -198,7 +203,8 @@ angular.module('common')
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
                 };
                 scope.showLess = function () {
-                    distrData.numShowGroups = 0;
+                    distrData.numShowGroups--;
+                    distrData.numShowGroups = distrData.numShowGroups < 0 ? 0 : distrData.numShowGroups;
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
                 };
 

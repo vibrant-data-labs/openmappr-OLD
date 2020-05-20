@@ -88,30 +88,87 @@
 }
 
 .search-results {
-    box-shadow: 0 0 3px rgba(0, 0, 0, .4);
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
     background: $body-bg;
     color: $text-color;
     float: right;
-    margin: 1px 0 1px -500px;
-    max-width: 500px;
+    margin: 0;
     min-width: 246px;
     overflow: visible;
     position: relative;
     right: 0;
     top: 0;
     width: 100%;
+    padding: 24px;
+    border-top: 1px solid #EBEFF2;
 
-    .header {
-        border-bottom: 1px solid $border-color;
-        align-self: flex-start;
-        color: $text-color;
-        display: block;
-        font-size: 13px;
-        padding: 8px 20px;
-        width: 100%;
-        z-index: 1;
+    &__header,
+    &__list,
+    &__footer{
+        z-index: 10;
+    }
+
+    &__header {
+        margin-bottom: 16px;
+
+        span {
+            font: 500 12px/18px 'Poppins';
+            color: rgba(0, 0, 0, .38);
+            text-transform: uppercase;
+            display: inline-block;
+        }
+    }
+
+    &__footer {
+        margin-top: 10px;
+
+        .more {
+            font: 13px/20px 'Poppins';
+            color: #BC3364;
+            cursor: pointer;
+            display: inline-block;
+
+            &:hover {
+                color: darken(#BC3364, 16);
+            }
+        }
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__list-item {
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        &:hover .search-results-item__sublabel {
+            display: block;
+        }
+    }
+
+    .search-results-item {
+        display: flex;
+        align-items: center;
+
+        &__color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 14px;
+        }
+
+        &__label {
+            color: #192A3E;
+            font: 400 12px/20px 'Poppins';
+        }
+
+        &__sublabel {
+            font: 400 12px/20px 'Poppins';
+            display: none;
+        }
     }
 
     .show-more {

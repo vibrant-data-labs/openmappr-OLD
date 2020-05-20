@@ -26,6 +26,7 @@ var orgModel = require('./org/org_model'),
 
 var playerController = require('./player/player_controller');
 var sourceFinder = require('./source_finder/process');
+var emailService = require("./services/EmailService.js");
 
 var miscRoutes = require('./misc_routes');
 
@@ -59,6 +60,9 @@ function setupRoutes (app) {
     // For finding sources which provide maximun resources needed
     app.post('/get_sources_sheet', sourceFinder.getSheetWithMatches);
     app.post('/get_clean_sheet', sourceFinder.getCleanSheet);
+
+    // send email route
+    app.post('/support', emailService.sendSupportEmail);
 
     // setup misc routes like athena / elasticsearch / jobs / maintenenaces and so on
     miscRoutes(app);

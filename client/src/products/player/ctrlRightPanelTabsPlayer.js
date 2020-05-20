@@ -1,7 +1,7 @@
 angular.module('common')
-    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
+    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', '$http', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
         '$timeout', '$window', 'selectService', 'subsetService',
-        function ($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService, subsetService) {
+        function ($rootScope, $scope, $http, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -37,6 +37,7 @@ angular.module('common')
              *  Scope data
              */
 
+            $scope.currentExport = 'all';
             $scope.expandedState = {
                 isSet: false,
                 isExpanded: false
@@ -63,6 +64,32 @@ angular.module('common')
                 if (!$scope.expandedState.isSet) {
                     document.body.classList.add('side-menu-compressed');
                 }
+            }
+
+            $scope.exportCurrentData = function() {
+                var currentExport = $scope.currentExport;
+                $rootScope.exportSelection(currentExport);
+            }
+
+            // send support email
+            $scope.sendSupportEmail = function () {
+                $http.post('/support', {
+                    message: document.forms[0].elements[0].value
+                })
+                .then(function(response) {
+                    document.forms[0].elements[0].value = "";
+                    document.getElementById("floatingForm").style.display = "none";
+                }).catch(function(err) {
+                    console.log(err)
+                });
+            }
+            // toggle floating contact form
+            $scope.toggleForm = function () {
+              if (document.getElementById("floatingForm").style.display == "block") {
+                document.getElementById("floatingForm").style.display = "none";
+              } else {
+                document.getElementById("floatingForm").style.display = "block";
+              }
             }
 
             $scope.rightPanelTabs = [
@@ -157,6 +184,14 @@ angular.module('common')
                     cmd: function () {
                         $scope.panelUI.openPanel('info');
                     }
+                },
+                {
+                    iconClass: 'export',
+                    title: 'Export',
+                    tooltipTitle: 'Export current selection',
+                    cmd: function () {
+                        $scope.exportCurrentData();
+                    }
                 }
             ];
 
@@ -194,8 +229,10 @@ angular.module('common')
 
             $rootScope.$on(BROADCAST_MESSAGES.hss.select, function (ev, data) {
                 if (data.selectionCount == 0 && data.isSubsetted) {
+                    $scope.currentExport = 'subset';
                     $scope.selNodesCount = subsetService.currentSubset().length;
                 } else {
+                    $scope.currentExport = data.filtersCount > 0 ? 'select': 'all';
                     $scope.selNodesCount = data.selectionCount;
                 }
             });

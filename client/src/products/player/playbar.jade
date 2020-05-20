@@ -1,4 +1,4 @@
-.playbar.play-toolbar
+.playbar.play-toolbar(ng-class="{'play-toolbar_opened': showSearch}")
   .play-toolbar__buttons
     .button-group.button-group_type_play-toolbar
       .button-group__item
@@ -69,7 +69,7 @@
 
 
   .play-toolbar__search(
-    ng-if="player.settings.showSearch !== false"
+    ng-if="player.settings.showSearch && showSearch"
     ng-controller="SearchPanelCtrl"
     ng-include=' "#{server_prefix}#{view_path}/components/project/panels/search/search.html" '
   )

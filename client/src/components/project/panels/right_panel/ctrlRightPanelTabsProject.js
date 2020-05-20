@@ -1,6 +1,7 @@
 angular.module('common')
     .controller('RightPanelTabsProjectCtrl', [
         '$scope',
+        '$http',
         '$rootScope',
         'graphSelectionService',
         'BROADCAST_MESSAGES',
@@ -11,7 +12,7 @@ angular.module('common')
         'FilterPanelService',
         'selectService',
         'subsetService',
-        function($scope, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService, subsetService) {
+        function($scope, $http, $rootScope, graphSelectionService, BROADCAST_MESSAGES, dataGraph, $uibModal, ngIntroService, $timeout, FilterPanelService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -52,6 +53,32 @@ angular.module('common')
                 if (!$scope.expandedState.isSet) {
                     document.body.classList.add('side-menu-compressed');
                 }
+            }
+
+            $scope.collapsePanel = function () {
+                if (!$scope.expandedState.isSet) {
+                    document.body.classList.add('side-menu-compressed');
+                }
+            }
+            // send support email
+            $scope.sendSupportEmail = function () {
+                $http.post('/support', {
+                    message: document.forms[0].elements[0].value
+                })
+                .then(function(response) {
+                    document.forms[0].elements[0].value = "";
+                    document.getElementById("floatingForm").style.display = "none";
+                }).catch(function(err) {
+                    console.log(err)
+                });
+            }
+            // toggle floating contact form
+            $scope.toggleForm = function () {
+              if (document.getElementById("floatingForm").style.display == "block") {
+                document.getElementById("floatingForm").style.display = "none";
+              } else {
+                document.getElementById("floatingForm").style.display = "block";
+              }
             }
 
             $scope.rightPanelTabs = [

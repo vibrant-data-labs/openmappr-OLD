@@ -614,6 +614,14 @@ angular.module('common')
                         tooltip: 'The Template for Rendering the Overlay',
                         enabled: true
                     },{
+                        key: 'nodeFocusTextLength',
+                        title: 'Max word limit',
+                        type: 'input',
+                        parents: {drawNodes: true, nodeFocusShow: true, nodeFocusRenderTemplate: 'node-right-panel'},
+                        tooltip: 'Max word limit for long texts in 2nd section of right panel',
+                        class: 'node-setting',
+                        enabled: true
+                    },{
                         key: 'nodeFocusShowNeighbors',
                         title: 'Show Neighbor Grid',
                         type: 'bool',

@@ -51,6 +51,7 @@ angular.module('common')
                     labelAttr: labelAttr,
                     panelMode: null, //4 modes - node, cluster, selection, network
                     genericSelNodes: [], //Selection.length > 2 and not a defined group,
+                    genericSelLinks: [],
                     nodeNeighbors: [], // Neighbor nodes of selected nodes
                     interactionType: null, //select or hover
                     refreshSelInfo: _.size(graphSelectionService.getSelectedNodes()) > 0 ? false : true, //If there was a previous selection in place, don't refresh selection info(on hover mostly) unless another selection made
@@ -146,13 +147,19 @@ angular.module('common')
                     // CHECKPOINT
                     if (!selNodes.length) selNodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes: dataGraph.getAllNodes();
                     $scope.groupsAndClusters = infoPanelService.getAllNodeGroups($scope.mapprSettings.nodeColorAttr);
-                    refresh(selNodes);
+                    if (selNodes.length == dataGraph.getAllNodes().length) {
+                        refresh(selNodes, dataGraph.getAllEdges());
+                    } else {
+                        refresh(selNodes);  
+                    }
+
                     console.log('All node groups -> ', $scope.groupsAndClusters);
                 }
 
-                function refresh(selNodes) {
+                function refresh(selNodes, selLinks) {
                     var panelMode = $scope.selInfo.panelMode = infoPanelService.getPanelMode(selNodes, $scope.mapprSettings.nodeColorAttr);
                     $scope.selInfo.genericSelNodes = _.clone(selNodes);
+                    $scope.selInfo.genericSelLinks = selLinks || dataGraph.getEdgesByNodes(selNodes);
                     $scope.selInfo.selectedGroups = [];
                     $scope.selInfo.linkInfoAttrIds = [];
                     $scope.selInfo.nodeColorAttr = $scope.mapprSettings.nodeColorAttr;

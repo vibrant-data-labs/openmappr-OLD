@@ -12,6 +12,7 @@
     "test": "./node_modules/mocha/bin/mocha --recursive"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.1.1",
     "aws-sdk": "^2.2.23",
     "bcrypt": "^0.8.5",
     "bitly": "^4.1.1",
@@ -22,6 +23,7 @@
     "connect-mongo": "^1.2.0",
     "cookie-parser": "^1.4.0",
     "csv-parser": "^1.9.3",
+    "dotenv": "^8.2.0",
     "ejs": "^2.3.4",
     "elasticsearch": "^14.0.0",
     "express": "^4.13.3",
@@ -31,6 +33,7 @@
     "gexf": "^0.2.5",
     "goo.gl": "^0.1.4",
     "gridfs-stream": "^1.1.1",
+    "grunt-cache-bust": "^1.7.0",
     "has-glob": "^0.1.1",
     "ioredis": "^1.15.1",
     "is-glob": "^2.0.1",

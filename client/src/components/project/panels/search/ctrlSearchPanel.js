@@ -31,7 +31,8 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         nodeLabelAttr: 'OriginalLabel',
         processingQuery: false,
         overlayOpen: false,
-        showInfoIcon: false
+        showInfoIcon: false,
+        numShowGroups: numShowGroups
     };
 
     $scope.filterAttrVMs = [];
@@ -57,9 +58,14 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
     };
 
     $scope.showMore = function() {
-        numShowGroups++;
-        $scope.ui.showLimit = Math.min(numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);
+        $scope.ui.numShowGroups++;
+        $scope.ui.showLimit = Math.min($scope.ui.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);
     };
+
+    $scope.showLess = function() {
+        $scope.ui.numShowGroups = 0;
+        $scope.ui.showLimit = Math.min($scope.ui.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);   
+    }
 
     $scope.hoverNode = function(node) {
         hoverService.hoverNodes({ ids: [node.id]});
@@ -133,7 +139,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
             : $scope.player.dataset.ref;
 
         // Run search only on attrs in search list, instead of '_all'
-        var filterAttrIds = _.map(_.filter($scope.filterAttrVMs, 'checked'), 'id');
+        var filterAttrIds = $scope.selectedSearchValue ? [$scope.selectedSearchValue.id] : [];
         if (filterAttrIds.length === 0) {
             filterAttrIds = _.map($scope.filterAttrVMs, 'id');
         }

@@ -12,7 +12,10 @@ services:
     volumes:
       - "./server:/usr/src/mappr/server"
     environment:
-      - dbHost=${DB_HOST}
+      - DB_HOST=${DB_HOST}
+      - EMAIL_TO=${EMAIL_TO}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     logging:
       driver: "json-file"
       options:
