@@ -87,7 +87,11 @@
                     .user {
                         display: flex;
                         align-items: center;
-                        padding: 5px 0;
+
+                        &:not(:last-child) {
+                            margin-bottom: 10px;
+                        }
+
                         .info-user {
                             margin: 0 5px;
                             padding: 0 10px;
