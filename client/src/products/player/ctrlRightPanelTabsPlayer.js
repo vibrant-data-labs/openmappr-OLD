@@ -1,7 +1,7 @@
 angular.module('common')
-    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
+    .controller('RightPanelTabsPlayerCtrl', ['$rootScope', '$scope', '$http', 'graphSelectionService', 'BROADCAST_MESSAGES', 'ngIntroService', 'FilterPanelService',
         '$timeout', '$window', 'selectService', 'subsetService',
-        function ($rootScope, $scope, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService, subsetService) {
+        function ($rootScope, $scope, $http, graphSelectionService, BROADCAST_MESSAGES, ngIntroService, FilterPanelService, $timeout, $window, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -69,6 +69,27 @@ angular.module('common')
             $scope.exportCurrentData = function() {
                 var currentExport = $scope.currentExport;
                 $rootScope.exportSelection(currentExport);
+            }
+
+            // send support email
+            $scope.sendSupportEmail = function () {
+                $http.post('/support', {
+                    message: document.forms[0].elements[0].value
+                })
+                .then(function(response) {
+                    document.forms[0].elements[0].value = "";
+                    document.getElementById("floatingForm").style.display = "none";
+                }).catch(function(err) {
+                    console.log(err)
+                });
+            }
+            // toggle floating contact form
+            $scope.toggleForm = function () {
+              if (document.getElementById("floatingForm").style.display == "block") {
+                document.getElementById("floatingForm").style.display = "none";
+              } else {
+                document.getElementById("floatingForm").style.display = "block";
+              }
             }
 
             $scope.rightPanelTabs = [

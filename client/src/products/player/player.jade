@@ -24,6 +24,7 @@
 						div(ng-controller="NodePopCtrl", ng-include=' "#{server_prefix}#{view_path}/components/project/overlays/node_pop/nodePop.html" ')
 						dir-ext-user-overlay(ng-if="appUi.openExtUserOverlay && mapprSettings", load-info="extUserInfo" mappr-settings="mapprSettings" share-title="{{player.settings.shareTitleCompare}}" facebook-share="player.settings.facebookShare" twitter-share="player.settings.twitterShare")
 						div(ng-controller="RightPanelTabsPlayerCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/rightPanelTabs.html" ')
+						div(ng-controller="RightPanelTabsPlayerCtrl" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/floatingForm.html" ')
 						div(ng-controller="RightPanelCtrl" ng-include=' "#{server_prefix}#{view_path}/player/rightPanel.html" ')
 						//- div#panels-holder(ng-controller="LegendPanelCtrl")
 						//- 	#legend-panel.vert-panel.animate-fade-out(ng-class="{'lower':(player.settings.showHeader && player.settings.headerType != 'simple')}" ng-include=' "#{server_prefix}#{view_path}/partials/player/play_nodedetail.html" ', ng-controller="RightPanelCtrl")
