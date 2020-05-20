@@ -1,6 +1,7 @@
   
   /* The popup form - hidden by default */
   .form-popup {
+    max-width: 400px;
     display: none;
     position: fixed;
     bottom: 50px;
