@@ -46,6 +46,8 @@ function(BROADCAST_MESSAGES, hoverService, selectService, subsetService, FilterP
         scope.numShowGroups = 0;
         scope.viewLimit = Math.min(ITEMS_TO_SHOW_INITIALLY, scope.nodes.length);
 
+        scope.singleNode = selectService.singleNode;
+
         var hasSelection = selectService.getSelectedNodes() && selectService.getSelectedNodes().length;
         var hasSubset = subsetService.currentSubset() && subsetService.currentSubset().length;
 

@@ -13,8 +13,7 @@
 				li.filter-list__item(
 					ng-repeat="attr in ui.filteredAttrs = (nodeDistrAttrs | filter: {title : ui.statsSearchKey}) track by attr.id",
 					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1), 'chart-first-item': attr.isFirstChart, 'tags-first-item': attr.isFirstTag}",
-					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)',
-					ng-style="{'display': 'block', 'margin-bottom':'15px', 'height': 'auto'}"
+					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)'
 				)
 					section.card.card_type_filter(data-attr="{{attr.id}}")
 						header.card__header(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true")

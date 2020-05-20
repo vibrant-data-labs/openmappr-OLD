@@ -1,6 +1,7 @@
 .play-toolbar {
   position: absolute;
   right: 20px;
+  left: $side-menu-width + $right-panel-width + 20px;
   top: 20px;
   padding-left: 20px;
 
@@ -25,5 +26,62 @@
       display: block;
       visibility: visible;
     }
+  }
+
+  &__content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30px;
+  }
+
+  .selected,
+  .total {
+    display: inline-block;
+    font: 400 12px/18px 'Poppins';
+    padding: 0 5px;
+    border-radius: 18px;
+    color: #fff;
+  }
+
+  .selected {
+    background: #BC3364;
+  }
+
+  .total {
+    background: #6A707E;
+  }
+}
+
+.play-toolbar-bottom {
+  position: absolute;
+  left: $side-menu-width + $right-panel-width + 20px;
+  bottom: 20px;
+  padding-left: 20px;
+}
+
+.play-toolbar-list {
+  background: #F5F6F8;
+  border: 1px solid #E8E8E8;
+  border-radius: 6px;
+  padding: 4px;
+
+  &__item {
+    box-shadow: 0 0 3px rgba(#000, .3);
+    border-radius: 4px;
+
+    &:not(:last-child) {
+      margin-bottom: 4px;
+    }
+
+    &_selected {
+      background: #fff;
+    }
+  }
+
+  &__header {
+    padding: 9px 10px;
+    font: 400 12px/18px 'Poppins';
+    color: rgba(#555555, .8);
   }
 }

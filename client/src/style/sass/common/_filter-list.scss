@@ -1,12 +1,15 @@
 .filter-list {
   margin: 0;
-  padding: 20px 0 0;
+  padding: 10px 0 0;
   list-style: none;
   background: #fff;
 
   &__item {
+    display: block;
+    height: auto;
+
     &:not(:last-child) {
-      margin-bottom: 40px;
+      margin-bottom: 10px;
     }
   }
 }
@@ -32,10 +35,10 @@
       .card__header {
         display: flex;
         align-items: center;
-        padding: 15px 0 0;
+        padding: 0;
 
         + .card__body {
-          margin-top: 10px;
+          margin-top: 4px;
           padding: 0;
         }
       }
@@ -153,7 +156,7 @@
       }
 
       .card-pagination {
-        font-size: 14px;
+        font-size: 12px;
         line-height: 16px;
         display: flex;
         align-items: center;
@@ -165,6 +168,14 @@
         &__button {
           color: #C02D62;
           cursor: pointer;
+
+          &:first-child {
+            margin-right: .5em;
+          }
+
+          &:last-child {
+            margin-left: .5em;
+          }
 
           &:hover {
             color: darken(#C02D62, 10%);
