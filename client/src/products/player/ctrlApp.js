@@ -256,7 +256,7 @@ angular.module('player')
                     //MODAL
                     //if($scope.player.settings.showModal){
                     $scope.hasModal = true;
-                    $scope.panelUI.openPanel('modal');
+                    $scope.panelUI.openPanel($scope.player.settings.showModal ? 'modal' : 'slides');
                     if(!$window.localStorage.modal)
                         $timeout(function () {
                             ngIntroService.setOptions(
@@ -304,6 +304,8 @@ angular.module('player')
                     loadSuccess(dataset);
                 }).then(function(){
                     $scope.$broadcast(BROADCAST_MESSAGES.player.load);
+
+                    
 
                     if($scope.player.isEditable === true) {
                         var x = $scope.$on(BROADCAST_MESSAGES.sigma.rendered, function() {

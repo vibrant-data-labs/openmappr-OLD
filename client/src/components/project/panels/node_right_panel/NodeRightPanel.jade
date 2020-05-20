@@ -90,7 +90,7 @@
             .section__content.section__info.section__short-strings
               dl#information.section-info(ng-repeat="number in nodeRightInfo.sectionShortTags")
                 dt.section-info__label {{number.key}}
-                dd(ng-repeat="val in number.values", ng-class="{'tag-list__item': val.isTag}")
+                dd.section-info__value(ng-repeat="val in number.values", ng-class="{'tag-list__item': val.isTag}")
                   .cat-list.tag-cloud(ng-if="val.isTag")
                     .cat-item(
                       dir-elem-ready="onTagLoad(val, $event)"

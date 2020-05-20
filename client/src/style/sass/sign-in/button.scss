@@ -4,6 +4,12 @@
   text-transform: uppercase;
   border-radius: 4px;
   transition: all .25s;
+  cursor: pointer;
+
+  &:disabled {
+    pointer-events: none;
+    opacity: .7;
+  }
 
   &_wide {
     display: block;
@@ -46,6 +52,17 @@
       font-size: 0;
       position: relative;
       background-color: #fff;
+      border-radius: 2px;
+
+      &.button_with-text {
+        width: auto;
+        font: 400 13px/26px 'Poppins';
+        padding: 0 10px 0 20px;
+
+        &::before {
+          width: 20px;
+        }
+      }
 
       &:hover {
         background-color: lighten(lighten(#000, 90%), 8);

@@ -12,7 +12,7 @@
 
     &_compact {
       .section__content {
-        margin-bottom: -20px;
+        margin-bottom: -10px;
       }
     }
 
@@ -129,7 +129,7 @@
     }
 
     &__content {
-      padding: 20px;
+      padding: 10px 20px;
     }
 
     &__info {
@@ -217,7 +217,7 @@
           margin: 0;
 
           &:not(:last-child) {
-            margin-bottom: 10px;
+            margin-bottom: 4px;
           }
         }
       }
@@ -227,7 +227,6 @@
       font: 400 12px/18px 'Poppins';
       color: #BC3364;
       display: inline-block;
-      margin-bottom: 10px;
 
       &:hover {
         color: darken(#BC3364, 16);
@@ -265,6 +264,7 @@
   .tag-list {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: -4px;
 
     &__item {
       padding: 0 10px;
@@ -303,7 +303,7 @@
     color: #0C0C0C;
     font-family: 'Poppins';
     box-sizing: border-box;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     &:nth-child(odd) {
       padding-right: 5px;
@@ -311,6 +311,13 @@
 
     &:nth-child(even) {
       padding-left: 5px;
+    }
+
+    &__label,
+    &__value {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &__label {

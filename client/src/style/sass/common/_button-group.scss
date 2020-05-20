@@ -3,14 +3,21 @@
 
   &_type {
     &_play-toolbar {
+      position: relative;
 
       &:not(:last-child) {
-        margin-right: 8px;
+        //margin-right: 8px;
+        border-radius: 3px 0 0 3px;
+        border-right: 0;
+      }
+
+      &:last-child {
+        border-radius: 0 3px 3px 0;
+        border-left: 0;
       }
 
       border: 1px solid $gray-light;
       border-radius: 3px;
-      overflow: hidden;
       box-shadow: 0 1px 0 $gray-light;
 
       .button-group__item {
@@ -18,6 +25,56 @@
 
         &:not(:last-child) {
           border-right: 1px solid $gray-light;
+        }
+      }
+
+      .button-group__select {
+        padding: 0 25px 0 10px;
+        font: 400 12px/26px 'Poppins';
+        background: #fff;
+        color: rgba(#323C47, .8);
+        position: relative;
+        cursor: pointer;
+        transition: background-color .2s;
+
+        &.opened::after {
+          width: 8px;
+          height: 5px;
+          background: url('../img/search/arrow-down.svg') 50% no-repeat;
+          position: absolute;
+          content: '';
+          top: 50%;
+          transform: translateY(-50%);
+          right: 10px;
+        }
+
+        &.closed::after {
+          width: 8px;
+          height: 5px;
+          background: url('../img/search/arrow-down.svg') 50% no-repeat;
+          position: absolute;
+          content: '';
+          top: 50%;
+          transform: translateY(-50%) rotate(180deg);
+          right: 10px;
+        }
+
+        &:hover {
+          background-color: #fafafa;
+        }
+      }
+
+      &.button-group_vertical {
+        flex-direction: column;
+        border-radius: 3px;
+        border: 1px solid $gray-light;
+
+        .button-group__item {
+          border-right: 0;
+
+          &:not(:last-child) {
+            border-bottom: 1px solid $gray-light;
+          }
         }
       }
     }

@@ -40,6 +40,11 @@
     left: $side-menu-compressed + $right-panel-width + 20px;
   }
 
+  .play-toolbar,
+  .play-toolbar-bottom {
+    left: $side-menu-compressed + $right-panel-width + 20px;
+  }
+
   .side-menu__logo {
     padding-left: 0;
     padding-right: 0;
