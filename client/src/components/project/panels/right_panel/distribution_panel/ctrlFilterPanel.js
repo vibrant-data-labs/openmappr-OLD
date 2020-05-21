@@ -86,6 +86,13 @@ angular.module('common')
                 }
             }
 
+            $scope.onAttrHeaderLoad = function(attr, $event) {
+                var elem = $event.target[0]
+                if (elem.scrollWidth > elem.clientWidth) {
+                    attr.headerPopupText = attr.title;
+                }
+            };
+
             /*************************************
     ********* Initialise *****************
     **************************************/
