@@ -33,8 +33,14 @@
       span.search-dropdown__button(role="button") {{selectedSearchValue ? selectedSearchValue.title : 'All'}}
 
       ul.search-dropdown__list
-        li.search-dropdown__item(ng-click="toggleSearchItem(null)" ng-class="{ 'selected': !selectedSearchValue }") All
-        li.search-dropdown__item(ng-click="toggleSearchItem(attrVM)" ng-repeat="attrVM in filterAttrVMs" ng-class="{ 'selected': selectedSearchValue && selectedSearchValue.id == attrVM.id }") {{attrVM.title}}
+        li.search-dropdown__item(
+          ng-click="toggleSearchItem(null)" ng-class="{ 'search-dropdown__item_selected': !selectedSearchValue }"
+        ) All
+        li.search-dropdown__item(
+          ng-click="toggleSearchItem(attrVM)"
+          ng-repeat="attrVM in filterAttrVMs"
+          ng-class="{ 'search-dropdown__item_selected': selectedSearchValue && selectedSearchValue.id == attrVM.id }"
+        ) {{attrVM.title}}
 
     .search-input
       input.search-box__input(

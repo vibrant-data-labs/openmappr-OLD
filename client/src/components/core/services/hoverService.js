@@ -127,6 +127,7 @@ angular.module('common')
                 _.each(this.hoveredNodes, function(n) {
                     var node = findNodeWithId(n);
                     node.specialHighlight = false;
+                    node.inHoverNeighbor = false;
                 });
 
                 this.hoveredNodes = [];
