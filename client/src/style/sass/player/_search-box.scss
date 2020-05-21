@@ -2,8 +2,9 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 16px #E0E2E4;
-  width: calc(100% - 345px);
   height: auto;
+  width: 100%;
+  box-sizing: border-box;
 
   &__input-wrap {
     position: relative;
