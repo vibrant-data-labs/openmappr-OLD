@@ -83,5 +83,14 @@
     padding: 9px 10px;
     font: 400 12px/18px 'Poppins';
     color: rgba(#555555, .8);
+
+    .button_icon_cancel {
+      background-image: url('/img/play-toolbar/cancel.svg');
+      background-repeat: no-repeat;
+      width: 8px;
+      height: 8px;
+      float: right;
+      margin-top: 5px;
+    }
   }
 }

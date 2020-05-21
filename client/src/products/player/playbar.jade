@@ -68,6 +68,8 @@
               | nodes
               =' '
               b selected
+
+              button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
             header.play-toolbar-list__header(ng-if="operation.type == 'subset'")
               span.selected {{operation.nodesCount}}
               = ' '
@@ -79,7 +81,7 @@
               =' '
               b subsetted              
 
-              button.button_icon_cancel
+              button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
 
     .button-group.button-group_type_play-toolbar.search
       .button-group__item

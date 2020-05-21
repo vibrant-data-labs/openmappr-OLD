@@ -91,6 +91,22 @@ angular.module('common')
                 $scope.operations.opened = false;
             };
 
+            $scope.resetOperation = function() {
+                var prevOperation = removeOperation();
+                var operation = $scope.operations.last();
+                
+                if (prevOperation.type == 'subset') {
+                    subsetService.unsubset();
+                    if (operation.type == 'subset') {
+                        removeOperation(true);
+                        selectService.applyFilters(operation.filters);
+                        subsetService.subset();
+                    }
+                } else if (prevOperation.type == 'select') {
+                    selectService.unselect();
+                }
+            }
+
             $scope.subsetFilters = function subsetFilters() {
                 subsetService.subset();
             };
@@ -133,7 +149,9 @@ angular.module('common')
             });
 
             $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (e, data) {
-                updateOperation('subset');
+                if (data.subsetCount > 0) {
+                    updateOperation('subset');
+                }
             })
 
             $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function () {
@@ -212,6 +230,7 @@ angular.module('common')
                         } else {
                             $scope.operations.list.push({
                                 type: 'select',
+                                filters: _.clone(selectService.filters),
                                 nodesCount: selectedNodes.length,
                                 totalNodes: totalNodes
                             });
@@ -222,10 +241,13 @@ angular.module('common')
                     }
                     case 'subset': {
                         // As subset occurs only on selected nodes
-                        var prevNodesCount = removeOperation().totalNodes;
+                        var prevOperation = removeOperation(true);
+                        var prevNodesCount = prevOperation.totalNodes;
+                        var prevFilters = prevOperation.filters;
                         $scope.operations.list.push({
                             type: 'subset',
                             nodesCount: subsetService.currentSubset().length,
+                            filters: prevFilters,
                             totalNodes: prevNodesCount
                         });
                         break;
@@ -234,7 +256,11 @@ angular.module('common')
                 }
             }
 
-            function removeOperation() {
+            function removeOperation(preserve) {
+                if (!preserve && $scope.operations.list.length == 2) {
+                    $scope.operations.opened = false;
+                }
+
                 return $scope.operations.list.pop();
             }
 
