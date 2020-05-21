@@ -269,7 +269,7 @@ angular.module('player')
                                     ]
                                 }
                             );
-                            ngIntroService.start();
+                            //ngIntroService.start();
                         }, 100);
                     //}
 
