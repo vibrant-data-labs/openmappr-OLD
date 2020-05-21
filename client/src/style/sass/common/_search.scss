@@ -100,6 +100,7 @@
     width: 100%;
     padding: 24px;
     border-top: 1px solid #EBEFF2;
+    max-height: 80vh;
 
     &__header,
     &__list,
@@ -137,6 +138,7 @@
         margin: 0;
         padding: 0;
         list-style: none;
+        overflow-y: auto;
     }
 
     &__list-item {
