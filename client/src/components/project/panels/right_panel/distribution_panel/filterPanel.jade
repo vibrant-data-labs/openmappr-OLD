@@ -17,7 +17,11 @@
 				)
 					section.card.card_type_filter(data-attr="{{attr.id}}")
 						header.card__header(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' ", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true")
-							h2.card__title {{::attr.title}}
+							h2.card__title(dir-elem-ready="onAttrHeaderLoad(attr, $event)"
+								uib-tooltip="{{attr.headerPopupText}}", 
+                    			tooltip-placement="right", 
+                    			tooltip-append-to-body="true"
+								) {{::attr.title}}
 
 							button.card__action-sort(
 								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", 

@@ -207,6 +207,16 @@ angular.module('common')
 
             $scope.darken = window.mappr.utils.darkenColor;
 
+            $scope.$watch(function() {
+                return $scope.showOverlay;
+            }, function() {
+                if ($scope.showOverlay) {
+                    document.body.classList.add('node-right-panel_opened');
+                } else {
+                    document.body.classList.remove('node-right-panel_opened');
+                }
+            })
+
             /*************************************
             ********* Initialise *****************
             **************************************/
@@ -557,7 +567,7 @@ angular.module('common')
                         key: attr.title ? attr.title : attr.id, 
                         value: values[attr.id], 
                         text: attr.renderType === 'text' ? { 
-                            isExpanded: false,
+                            isExpanded: values[attr.id].split(' ').length <= $scope.mapprSettings.nodeFocusTextLength,
                             shortValue: values[attr.id].split(' ').splice(0, $scope.mapprSettings.nodeFocusTextLength).join(' '), 
                             couldExpand: values[attr.id].split(' ').length > $scope.mapprSettings.nodeFocusTextLength
                          } : null });

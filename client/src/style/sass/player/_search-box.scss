@@ -2,7 +2,7 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 16px #E0E2E4;
-  width: 100%;
+  width: calc(100% - 345px);
   height: auto;
 
   &__input-wrap {
@@ -156,7 +156,7 @@
       color: darken(#323C47, 16);
     }
 
-    &.selected {
+    &_selected {
       background: url('../img/search/check.svg') 0 50% no-repeat;
     }
   }
