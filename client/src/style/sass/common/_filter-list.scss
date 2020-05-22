@@ -8,6 +8,10 @@
     display: block;
     height: auto;
 
+    h6.title {
+      color: #BC3364;
+    }
+
     &:not(:last-child) {
       margin-bottom: 10px;
     }
@@ -151,7 +155,7 @@
       }
 
       .card__body {
-        padding: 20px 0;
+        padding: 20px 0 0;
       }
 
       .card__footer {
