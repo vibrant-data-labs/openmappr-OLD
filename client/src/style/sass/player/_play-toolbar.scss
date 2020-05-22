@@ -25,6 +25,8 @@
     .play-toolbar__search {
       display: block;
       visibility: visible;
+      position: absolute;
+      width: calc(100% - 1em);
     }
   }
 
