@@ -63,6 +63,25 @@ angular.module('common')
                     }
 
                     return {};
+                },
+                filters: function(idx) {
+                    var operation = $scope.operations.list[idx];
+                    if (!operation || !operation.filters) return [];
+                    var result = [];
+
+                    var keys = Object.keys(operation.filters);
+                    keys.forEach(function(key) {
+                        var filter = operation.filters[key];
+                        if (!filter.isEnabled || !filter.selector) return;
+                        var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(filter.attrId);
+
+                        result.push({
+                            attrInfo: attrInfo,
+                            values: filter.selector.toString()
+                        });
+                    });
+
+                    return result;
                 }
             };
 
@@ -98,9 +117,16 @@ angular.module('common')
                 if (prevOperation.type == 'subset') {
                     subsetService.unsubset();
                     if (operation.type == 'subset') {
-                        removeOperation(true);
-                        selectService.applyFilters(operation.filters);
-                        subsetService.subset();
+                        // in this case the all previous operations are subset also
+                        var operations = _.clone($scope.operations.list);
+                        $scope.operations.list = $scope.operations.list.splice(0, 1);
+                        _.each(operations, function(op) {
+                            if (op.type == 'init') return;
+                            selectService.applyFilters(op.filters);
+                            subsetService.subset();
+                        });
+
+                        operations = null;
                     }
                 } else if (prevOperation.type == 'select') {
                     selectService.unselect();
@@ -254,6 +280,8 @@ angular.module('common')
                     }
                     default: throw new Error("Unknown operation");
                 }
+
+                console.log("OPERATIONS", $scope.operations.filters($scope.operations.list.length -1));
             }
 
             function removeOperation(preserve) {

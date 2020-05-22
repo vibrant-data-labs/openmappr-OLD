@@ -35,6 +35,9 @@ angular.module('common')
                 this.type = 'ATTR_VALUE';
                 this.attrId = attrId;
                 this.attrVal = attrVal;
+                this.stringify = function() {
+                    return [{ values: [this.attrVal] }];
+                };
                 return this;
             };
             NodeSelector.prototype.ofAttrRange = function(attrId, attrValMin, attrValMax) {
@@ -42,50 +45,107 @@ angular.module('common')
                 this.attrId = attrId;
                 this.attrValMin = attrValMin;
                 this.attrValMax = attrValMax;
+
+                this.stringify = function() {
+                    var isNumber = function(val) { return !Number.isNaN(Number(val)); };
+                    var values = _.filter([this.attrValMin, this.attrValMax], _.identity());
+                    var description = '';
+                    if (isNumber(this.attrValMin) && isNumber(this.attrValMax)) {
+                        description = 'btw';
+                    } else if (isNumber(this.attrValMin)) {
+                        description = 'ht';
+                    } else {
+                        description = 'lt';
+                    }
+
+                    return [{ values: values, description: description }];
+                };
+
                 return this;
             };
             NodeSelector.prototype.ofMultiAttrRange = function(attrId, attrRanges) {
                 this.type = 'MULTI_ATTR_RANGE';
                 this.attrId = attrId;
                 this.attrRanges = attrRanges;
+                this.stringify = function() {
+                    var isNumber = function(val) { return !Number.isNaN(Number(val))}
+                    return _.reduce(this.attrRanges, function(acc, cv) {
+                        var description = '';
+                        if (isNumber(cv.min) && isNumber(cv.max)) {
+                            description = 'btw';
+                        } else if (isNumber(cv.min)) {
+                            description = 'ht';
+                        } else {
+                            description = 'lt';
+                        }
+
+                        acc.push({ values: _.filter([cv.min, cv.max], _.identity()), description: '' });
+                    
+                        return acc;
+                    }, []);
+                }
                 return this;
             };
             NodeSelector.prototype.ofCluster = function(clusterAttrId, clusterAttrVal) {
                 this.type = 'CLUSTER';
                 this.attrId = clusterAttrId;
                 this.attrVal = clusterAttrVal;
+                this.stringify = function() {
+                    return [{ values: [this.attrVal] }];
+                };
+
                 return this;
             };
             NodeSelector.prototype.ofNode = function(nodeId) {
                 this.type = 'NODE';
                 this.entityId = nodeId;
+                this.stringify = function() {
+                    return [{ values: [this.entityId] }];
+                };
+
                 return this;
             };
             NodeSelector.prototype.ofDataPoint = function(dataPointId) {
                 this.type = 'DATAPOINT';
                 this.entityId = dataPointId;
+
+                this.stringify = function() {
+                    return [{ values: [this.entityId] }];
+                };
                 return this;
             };
             NodeSelector.prototype.ofMultipleAttrValues = function(attrId, attrVals) {
                 this.type = 'MULTI_ATTR_VALUE';
                 this.attrId = attrId;
                 this.attrVals = attrVals;
+                this.stringify = function() {
+                    return [{ values: this.attrVals }];
+                };
                 return this;
             };
             NodeSelector.prototype.ofMultipleNodes = function(nodeIds) {
                 this.type = 'MULTI_NODES';
                 this.entityIds = nodeIds;
+                this.stringify = function() {
+                    return [{ values: this.entityIds }];
+                };
                 return this;
             };
             NodeSelector.prototype.ofMultipleDataPoints = function(dataPointIds) {
                 this.type = 'MULTI_DATAPOINTS';
                 this.entityIds = dataPointIds;
+                this.stringify = function() {
+                    return [{ values: this.entityIds }];
+                };
                 return this;
             };
             // empty selector
             NodeSelector.prototype.ofNone = function(attrId) {
                 this.type = 'NONE';
                 this.attrId = attrId || this.attrId;
+                this.stringify = function() {
+                    return [{ values: []}];
+                };
                 return this;
             };
 
