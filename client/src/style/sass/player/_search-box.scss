@@ -1,10 +1,11 @@
 .search-box {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 16px #E0E2E4;
   height: auto;
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid $gray-light;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 $gray-light;
 
   &__input-wrap {
     position: relative;
@@ -16,24 +17,25 @@
   }
 
   &__input {
-    height: 60px;
+    height: 26px;
     width: 100%;
-    padding: 0 54px;
+    min-width: 350px;
+    padding: 0 24px;
     border: 0;
-    font: 400 16px/25px 'Poppins', sans-serif;
+    font: 400 14px/25px 'Poppins', sans-serif;
     color: #000;
-    border-radius: 32px;
-    background: url('/img/play-toolbar/search-purple.svg') 24px 50% no-repeat;
+    border-radius: 3px;
+    background: url('/img/play-toolbar/search-purple.svg') 4px 50% no-repeat;
   }
 
   &__close {
     background: url('/img/play-toolbar/cancel-grey.svg') 50% no-repeat;
     position: absolute;
-    right: 10px;
-    top: 14px;
+    right: 0;
+    top: 0;
     font-size: 0;
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
     padding: 0;
 
     &:hover {
@@ -43,7 +45,7 @@
 
   .search-results {
     float: none;
-    max-width: none;
+    max-width: 500px;
     box-shadow: none;
     margin: 0;
   }
@@ -61,7 +63,7 @@
     }
 
     .search-dropdown__button {
-      max-width: 220px;
+      max-width: 200px;
 
       &::after {
         display: none;
@@ -72,14 +74,14 @@
   &__button {
     display: block;
     height: 100%;
-    padding: 0 44px;
-    font: 400 15px/60px 'Poppins';
+    padding: 0 20px;
+    font: 400 13px/26px 'Poppins';
     color: #616161;
     cursor: pointer;
     position: relative;
     white-space: nowrap;
     z-index: 30;
-    max-width: 240px;
+    max-width: 140px;
     text-overflow: ellipsis;
     overflow: hidden;
 
@@ -95,14 +97,14 @@
       width: 12px;
       height: 9px;
       background: url('../img/search/check.svg') 50% no-repeat;
-      left: 24px;
+      left: 4px;
     }
 
     &::after {
       width: 8px;
       height: 5px;
       background: url('../img/search/arrow-down.svg') 50% no-repeat;
-      right: 20px;
+      right: 4px;
     }
   }
 
@@ -110,35 +112,35 @@
     display: none;
     visibility: hidden;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -5px;
+    left: -5px;
     right: 0;
     z-index: 20;
     margin: 0;
-    padding: 70px 24px 10px 24px;
+    padding: 40px 10px 10px 10px;
     list-style: none;
     background: #fff;
     box-shadow: 0 8px 16px #E0E2E4;
-    border-radius: 16px;
-    min-width: 216px;
+    border-radius: 4px;
+    min-width: 180px;
 
     &::before {
       position: absolute;
       content: '';
-      top: 0;
-      height: 60px;
+      top: 5px;
+      height: 24px;
       width: 8px;
-      right: 20px;
+      right: 8px;
       background: url('../img/search/arrow-down.svg') 50% no-repeat;
       transform: scaleY(-1);
     }
 
     &::after {
       position: absolute;
-      top: 60px;
+      top: 31px;
       content: '';
       background: #EBEFF2;
-      height: 1px;
+      height: 2px;
       left: 0;
       width: 100%;
     }

@@ -6,7 +6,10 @@
   padding-left: 20px;
 
   &__buttons {
-    display: flex;
+    display: inline-flex;
+    position: relative;
+    border-radius: 3px;
+    background: #fff;
   }
 
   &__search {
@@ -25,8 +28,12 @@
     .play-toolbar__search {
       display: block;
       visibility: visible;
-      position: absolute;
-      width: calc(100% - 1em);
+      order: -1;
+    }
+    .button-group_type_play-toolbar.search,
+    .button-group {
+      visibility: hidden;
+      display: none;
     }
   }
 
@@ -211,6 +218,5 @@
         }
       }
     }
-
   }
 }
