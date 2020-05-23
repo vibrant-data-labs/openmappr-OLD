@@ -55,7 +55,7 @@
 
       .play-toolbar__content(ng-if="operations.opened")
         .play-toolbar-list
-          section.play-toolbar-list__item(ng-repeat="operation in operations.list",
+          section.play-toolbar-list__item.play-toolbar-list__item_opened(ng-repeat="operation in operations.list",
             ng-if="operation.type != 'init'"
             ng-class="{'play-toolbar-list__item_subsetted' : operation.type == 'subset', 'play-toolbar-list__item_selected': operation.type == 'select'}")
             header.play-toolbar-list__header(ng-if="operation.type == 'select'")
@@ -70,6 +70,53 @@
               b selected
 
               button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
+
+            .play-toolbar-list__content
+              dl.filter-section
+                dt.filter-section__label
+                  | Keywords
+                  span.count
+                    | (
+                    b 6
+                    | )
+                  | :
+
+                dd.filter-section__content
+                  ul.filter-section__list
+                    li.filter-section__item business
+                    li.filter-section__item science
+                    li.filter-section__item art language
+                    li.filter-section__item literature
+
+                  | or
+                  = ' '
+                  span.filter-section__item math
+
+              dl.filter-section
+                dt.filter-section__label
+                  | Events
+                  | :
+
+                dd.filter-section__content
+                  ul.filter-section__list
+                    li.filter-section__item TED 2016
+
+                  | or
+                  = ' '
+                  span.filter-section__item TED 2017
+
+              dl.filter-section
+                dt.filter-section__label
+                  | Views:
+
+                dd.filter-section__content
+                  ul.filter-section__list
+                    li.filter-section__item between 500K
+
+                  | and
+                  = ' '
+                  span.filter-section__item 1,250K
+
             header.play-toolbar-list__header(ng-if="operation.type == 'subset'")
               span.selected {{operation.nodesCount}}
               = ' '
