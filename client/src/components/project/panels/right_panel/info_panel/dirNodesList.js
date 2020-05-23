@@ -14,6 +14,7 @@ function(BROADCAST_MESSAGES, hoverService, selectService, subsetService, FilterP
             links: '=',
             labelAttr: '=',
             nodeColorAttr: '=',
+            nodeColorAttrTitle: '=',
             panelMode: '=',
             selectedGroups: '=',
             sortTypes: '=',
