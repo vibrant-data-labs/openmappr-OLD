@@ -36,7 +36,7 @@ angular.module('common')
                 this.attrId = attrId;
                 this.attrVal = attrVal;
                 this.stringify = function() {
-                    return [{ values: [this.attrVal] }];
+                    return { values: [this.attrVal] };
                 };
                 return this;
             };
@@ -58,7 +58,7 @@ angular.module('common')
                         description = 'lt';
                     }
 
-                    return [{ values: values, description: description }];
+                    return { values: values, description: description };
                 };
 
                 return this;
@@ -79,7 +79,7 @@ angular.module('common')
                             description = 'lt';
                         }
 
-                        acc.push({ values: _.filter([cv.min, cv.max], _.identity()), description: '' });
+                        acc.push({ values: _.filter([cv.min, cv.max], _.identity()), description: description });
                     
                         return acc;
                     }, []);
@@ -91,7 +91,7 @@ angular.module('common')
                 this.attrId = clusterAttrId;
                 this.attrVal = clusterAttrVal;
                 this.stringify = function() {
-                    return [{ values: [this.attrVal] }];
+                    return { values: [this.attrVal] };
                 };
 
                 return this;
@@ -100,7 +100,7 @@ angular.module('common')
                 this.type = 'NODE';
                 this.entityId = nodeId;
                 this.stringify = function() {
-                    return [{ values: [this.entityId] }];
+                    return { values: [this.entityId] };
                 };
 
                 return this;
@@ -110,7 +110,7 @@ angular.module('common')
                 this.entityId = dataPointId;
 
                 this.stringify = function() {
-                    return [{ values: [this.entityId] }];
+                    return { values: [this.entityId] };
                 };
                 return this;
             };
@@ -119,7 +119,7 @@ angular.module('common')
                 this.attrId = attrId;
                 this.attrVals = attrVals;
                 this.stringify = function() {
-                    return [{ values: this.attrVals }];
+                    return { values: this.attrVals };
                 };
                 return this;
             };
@@ -127,7 +127,7 @@ angular.module('common')
                 this.type = 'MULTI_NODES';
                 this.entityIds = nodeIds;
                 this.stringify = function() {
-                    return [{ values: this.entityIds }];
+                    return { values: this.entityIds };
                 };
                 return this;
             };
@@ -135,7 +135,7 @@ angular.module('common')
                 this.type = 'MULTI_DATAPOINTS';
                 this.entityIds = dataPointIds;
                 this.stringify = function() {
-                    return [{ values: this.entityIds }];
+                    return { values: this.entityIds };
                 };
                 return this;
             };
@@ -144,7 +144,7 @@ angular.module('common')
                 this.type = 'NONE';
                 this.attrId = attrId || this.attrId;
                 this.stringify = function() {
-                    return [{ values: []}];
+                    return { values: []};
                 };
                 return this;
             };

@@ -36,29 +36,22 @@
           span.total {{operations.last().totalNodes}}
           = ' '
           | nodes
-        span(ng-if="operations.last().type == 'select'")
+        span(ng-if="operations.last().type == 'select' || operations.last().type == 'subset'")
           span.selected {{operations.last().nodesCount}}
           = ' '
           | of
           = ' '
           span.total {{operations.last().totalNodes}}
           = ' '
-          b selected
-        span(ng-if="operations.last().type == 'subset'")
-          span.selected {{operations.last().nodesCount}}
-          = ' '
-          | of
-          = ' '
-          span.total {{operations.last().totalNodes}}
-          = ' '
-          b subsetted
+          b(ng-if="operations.last().type == 'select'") selected
+          b(ng-if="operations.last().type == 'subset'") subsetted
 
-      .play-toolbar__content(ng-if="operations.opened")
+      .play-toolbar__content(ng-if="operations.list.length > 1 && (operations.isFirstOpened || operations.opened)")
         .play-toolbar-list
           section.play-toolbar-list__item.play-toolbar-list__item_opened(ng-repeat="operation in operations.list",
             ng-if="operation.type != 'init'"
             ng-class="{'play-toolbar-list__item_subsetted' : operation.type == 'subset', 'play-toolbar-list__item_selected': operation.type == 'select'}")
-            header.play-toolbar-list__header(ng-if="operation.type == 'select'")
+            header.play-toolbar-list__header(ng-if="operation.type == 'select' || operation.type == 'subset'", ng-click="operations.toggleOperation(operation)")
               span.selected {{operation.nodesCount}}
               = ' '
               | of
@@ -67,68 +60,71 @@
               = ' '
               | nodes
               =' '
-              b selected
+              b(ng-if="operation.type == 'select'") selected
+              b(ng-if="operation.type == 'subset'") subsetted
 
               button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
 
-            .play-toolbar-list__content
-              dl.filter-section
+            .play-toolbar-list__content(ng-if="operation.filters && operation.isOpened")
+              dl.filter-section(ng-repeat="filter in operations.filterArray(operation)")
                 dt.filter-section__label
-                  | Keywords
+                  | {{filter.attrInfo.attr.title}}
                   span.count
                     | (
-                    b 6
+                    b(ng-if="!operations.isNumeric(filter.attrInfo)") {{filter.values.values.length}}
+                    b(ng-if="operations.isNumeric(filter.attrInfo)") {{filter.values.length}}
                     | )
                   | :
 
                 dd.filter-section__content
-                  ul.filter-section__list
-                    li.filter-section__item business
-                    li.filter-section__item science
-                    li.filter-section__item art language
-                    li.filter-section__item literature
+                  ul.filter-section__list(ng-if="!operations.isNumeric(filter.attrInfo)")
+                    li.filter-section__item(ng-repeat="val in filter.values.values")
+                      span(ng-if="filter.values.values.length > 1 && $index == filter.values.values.length -1") &nbsp;or&nbsp;
+                      span {{val}}
+                  ul.filter-section__list(ng-if="operations.isNumeric(filter.attrInfo)")
+                    li.filter-section__item(ng-repeat="val in filter.values")
+                      span(ng-if="filter.values.length > 1 && $index == filter.values.length -1") &nbsp;or&nbsp;
+                      span(ng-if="val.description == 'btw'&& (filter.attrInfo.attr.attrType != 'year' && filter.attrInfo.attr.attrType != 'timestamp')") between {{val.values[0] | number:2}} and {{val.values[1] | number:2}}
+                      span(ng-if="val.description == 'btw' && (filter.attrInfo.attr.attrType == 'year')") between {{val.values[0]}} and {{val.values[1]}}
+                      span(ng-if="val.description == 'btw' && (filter.attrInfo.attr.attrType == 'timestamp')") between {{operations.formatTime(val.values[0])}} and {{operations.formatTime(val.values[1])}}
 
-                  | or
-                  = ' '
-                  span.filter-section__item math
+                      span(ng-if="val.description == 'ht' && (filter.attrInfo.attr.attrType == 'year')") after {{val.values[0]}}
+                      span(ng-if="val.description == 'ht' && (filter.attrInfo.attr.attrType == 'timestamp')") after {{operations.formatTime(val.values[0])}}
+                      span(ng-if="val.description == 'ht' && (filter.attrInfo.attr.attrType != 'year' && filter.attrInfo.attr.attrType != 'timestamp')") higher than {{val.values[0] | number:2}}
 
-              dl.filter-section
-                dt.filter-section__label
-                  | Events
-                  | :
+                      span(ng-if="val.description == 'lt' && (filter.attrInfo.attr.attrType == 'year')") before {{val.values[0]}}
+                      span(ng-if="val.description == 'lt' && (filter.attrInfo.attr.attrType == 'timestamp')") before {{operations.formatTime(val.values[0])}}
+                      span(ng-if="val.description == 'lt' && (filter.attrInfo.attr.attrType != 'year' && filter.attrInfo.attr.attrType != 'timestamp')") lower than {{val.values[0] | number:2}}
+                      span(ng-if="val.description == 'eq'") {{val.values[0]}}
 
-                dd.filter-section__content
-                  ul.filter-section__list
-                    li.filter-section__item TED 2016
+                //-   | or
+                //-   = ' '
+                //-   span.filter-section__item math
 
-                  | or
-                  = ' '
-                  span.filter-section__item TED 2017
+              //- dl.filter-section
+              //-   dt.filter-section__label
+              //-     | Events
+              //-     | :
 
-              dl.filter-section
-                dt.filter-section__label
-                  | Views:
+              //-   dd.filter-section__content
+              //-     ul.filter-section__list
+              //-       li.filter-section__item TED 2016
 
-                dd.filter-section__content
-                  ul.filter-section__list
-                    li.filter-section__item between 500K
+              //-     | or
+              //-     = ' '
+              //-     span.filter-section__item TED 2017
 
-                  | and
-                  = ' '
-                  span.filter-section__item 1,250K
+              //- dl.filter-section
+              //-   dt.filter-section__label
+              //-     | Views:
 
-            header.play-toolbar-list__header(ng-if="operation.type == 'subset'")
-              span.selected {{operation.nodesCount}}
-              = ' '
-              | of
-              = ' '
-              span.total {{operation.totalNodes}}
-              = ' '
-              | nodes
-              =' '
-              b subsetted              
+              //-   dd.filter-section__content
+              //-     ul.filter-section__list
+              //-       li.filter-section__item between 500K
 
-              button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
+              //-     | and
+              //-     = ' '
+              //-     span.filter-section__item 1,250K
 
     .button-group.button-group_type_play-toolbar.search
       .button-group__item
