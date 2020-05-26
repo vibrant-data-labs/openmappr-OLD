@@ -54,7 +54,6 @@ angular.module('common')
                 opened: true,
                 isFirstOpened: true,
                 togglePanel: function () {
-                    $scope.operations.isFirstOpened = false;
                     if ($scope.operations.list.length > 1) {
                         $scope.operations.opened = !$scope.operations.opened;
                     }
