@@ -261,20 +261,10 @@
     margin-top: 1px;
 
     .info-item {
-      border-bottom: 5px solid $panel-border;
-      border-top: 5px solid $panel-border;
       overflow: hidden;
       padding: 10px 20px;
       position: relative;
-
-      &:first-child {
-        border-top: 0;
-      }
-
-      &:last-child {
-        border-bottom: 10px solid $panel-border;
-        border-top: 0;
-      }
+      background: #fff;
 
       .node {
         position: relative;

@@ -47,9 +47,9 @@
 			.row.vert-align.truncate(uib-tooltip-html="getNodeTooltipHtml(node)" tooltip-placement="right" tooltip-append-to-body="true")
 				.col-xs-2
 					.big-circle(style="background: {{::getNodeColor(node)}};")
-				.col-xs-8
-					h6.less-gutter	{{node.attr[labelAttr]}}
-				.col-xs-2
+				.col-xs-10
+					h6.less-gutter.list-item__title.truncate	{{node.attr[labelAttr]}}
+
 
 	ul.list-unstyled.panel-list.m-t-10
 		li.panel-item.list-item.no-hover
