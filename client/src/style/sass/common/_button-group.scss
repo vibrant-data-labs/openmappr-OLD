@@ -30,7 +30,9 @@
 
       .button-group__select {
         padding: 0 25px 0 10px;
-        font: 400 12px/26px 'Poppins';
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 26px;
         background: #fff;
         color: rgba(#323C47, .8);
         position: relative;

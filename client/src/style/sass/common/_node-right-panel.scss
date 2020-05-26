@@ -32,8 +32,8 @@
     }
 
     &__title {
-      font: 400 15px/21px 'Poppins';
-      color: #323C47;
+      font: 400 15px/23px 'Poppins';
+      color: #BC3364;
       margin: 0;
     }
 
@@ -150,8 +150,7 @@
           white-space: nowrap;
           width: auto;
           height: 28px;
-          font-size: 13px;
-          font-weight: 500;
+          font: 500 13px/28px 'Poppins';
           padding: 0 18px;
           color: #818890;
           border-radius: 5px 5px 0 0;
@@ -321,9 +320,8 @@
     }
 
     &__label {
-      opacity: .5;
-      font-size: 12px;
-      font-weight: 400;
+      font: 400 13px/20px 'Poppins';
+      color: #BC3364;
     }
 
     &__value {

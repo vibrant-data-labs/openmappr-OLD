@@ -47,7 +47,9 @@
   .selected,
   .total {
     display: inline-block;
-    font: 400 12px/18px 'Poppins';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
     padding: 0 5px;
     border-radius: 18px;
     color: #fff;
@@ -105,7 +107,9 @@
 
   &__header {
     padding: 9px 32px 9px 10px;
-    font: 400 12px/18px 'Poppins';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
     color: rgba(#555555, .8);
     cursor: pointer;
     position: relative;
@@ -223,6 +227,10 @@
         content: ' ' !important;
         white-space: normal;
       }
+    }
+
+    &__divider {
+      color: #939698;
     }
   }
 }
