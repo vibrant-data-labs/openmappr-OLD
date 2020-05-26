@@ -55,6 +55,10 @@
       border-radius: 2px;
       text-transform: none;
 
+      &:disabled {
+        opacity: .3;
+      }
+
       &.button_with-text {
         width: auto;
         font-weight: 400;

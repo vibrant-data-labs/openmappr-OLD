@@ -10,6 +10,7 @@
     position: relative;
     border-radius: 3px;
     background: #fff;
+    min-width: 360px;
   }
 
   &__search {
@@ -184,7 +185,8 @@
     &__label {
       margin: 0;
       display: inline;
-      font-weight: 300;
+      font: 400 13px/20px 'Poppins';
+      color: #BC3364;
 
       span {
         color: #939698;
@@ -226,6 +228,17 @@
       &:nth-last-child(2)::after {
         content: ' ' !important;
         white-space: normal;
+      }
+
+      &_array {
+        cursor: default;
+        span {
+          color: #BC3364;
+        }
+
+        .filter-section__divider {
+          color: #939698;
+        }
       }
     }
 
