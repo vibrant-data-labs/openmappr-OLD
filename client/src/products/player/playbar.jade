@@ -43,8 +43,8 @@
           = ' '
           span.total {{operations.last().totalNodes}}
           = ' '
-          b(ng-if="operations.last().type == 'select'") selected
-          b(ng-if="operations.last().type == 'subset'") subsetted
+          span(ng-if="operations.last().type == 'select'") selected
+          span(ng-if="operations.last().type == 'subset'") subsetted
 
       .play-toolbar__content(ng-if="operations.list.length > 1 && (operations.isFirstOpened || operations.opened)")
         .play-toolbar-list
@@ -79,7 +79,9 @@
                 dd.filter-section__content
                   ul.filter-section__list(ng-if="!operations.isNumeric(filter.attrInfo)")
                     li.filter-section__item(ng-repeat="val in filter.values.values")
-                      span(ng-if="filter.values.values.length > 1 && $index == filter.values.values.length -1") &nbsp;or&nbsp;
+                      span.filter-section__divider(
+                        ng-if="filter.values.values.length > 1 && $index == filter.values.values.length -1"
+                      ) &nbsp;or&nbsp;
                       span {{val}}
                   ul.filter-section__list(ng-if="operations.isNumeric(filter.attrInfo)")
                     li.filter-section__item(ng-repeat="val in filter.values")

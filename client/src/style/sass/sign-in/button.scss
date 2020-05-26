@@ -53,10 +53,13 @@
       position: relative;
       background-color: #fff;
       border-radius: 2px;
+      text-transform: none;
 
       &.button_with-text {
         width: auto;
-        font: 400 13px/26px 'Poppins';
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 26px;
         padding: 0 10px 0 20px;
 
         &::before {
