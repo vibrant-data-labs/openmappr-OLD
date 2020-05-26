@@ -30,7 +30,7 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
     //var events = ['move'];//['zoomstart', 'drag', 'viewreset', 'resize'];
     //var events = ['zoomstart', 'drag','dragend', 'viewreset', 'resize'];
     var mouseEvents = ['click', 'mouseup','mousemove', 'mouseout', 'dblclick', 'viewreset', 'zoomstart', 'move', 'moveend'];
-    var leftPanelWidth = 390;
+    var leftPanelWidth = 412;
 
 
 
@@ -41,7 +41,7 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
     **************************************/
     function ControllerFn($scope) {
         if($scope.plotType === "geo") {
-            $('.angular-leaflet-map').height($('#project-layout').height()).width($('#project-layout').width());
+            $('.angular-leaflet-map').height($('#project-layout').height());
 
             var mapID = $scope.mapprSettings.mapboxMapID || 'vibrantdata.j5c7ofm2';
             //added for custom mapbox styling
@@ -210,12 +210,12 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
         });
         scope.$watch('windowWidth', function(newVal, oldVal) {
             if(newVal !== oldVal) {
-                $('.angular-leaflet-map').height($('#project-layout').height()).width($('#project-layout').width());
+                $('.angular-leaflet-map').height($('#project-layout').height()).width(window.innerWidth - leftPanelWidth);
             }
         });
         scope.$watch('windowHeight', function(newVal, oldVal) {
             if(newVal !== oldVal) {
-                $('.angular-leaflet-map').height($('#project-layout').height()).width($('#project-layout').width());
+                $('.angular-leaflet-map').height($('#project-layout').height()).width(window.innerWidth - leftPanelWidth);
             }
         });
     }
