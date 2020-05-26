@@ -250,7 +250,7 @@ angular.module('common')
                     $scope.showSearch = false;
                 }
 
-                if (!data.nodes.length && $scope.operations.last().type == 'select') {
+                if (!data.nodes.length && $scope.operations.last().type == 'select' && !data.filtersCount) {
                     removeOperation();
                 } else if ($scope.operations.last().type == 'select') {
                     $scope.operations.last().filterArray = null;
