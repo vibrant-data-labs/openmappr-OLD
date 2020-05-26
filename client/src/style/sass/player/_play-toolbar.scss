@@ -218,14 +218,9 @@
 
       &:not(:last-child) {
         &::after {
-          content: ', ';
+          content: '; ';
           white-space: pre;
         }
-      }
-
-      &:nth-last-child(2)::after {
-        content: ' ' !important;
-        white-space: normal;
       }
     }
 

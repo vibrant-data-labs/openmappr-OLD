@@ -69,10 +69,9 @@
               dl.filter-section(ng-repeat="filter in operations.filterArray(operation)")
                 dt.filter-section__label
                   | {{filter.attrInfo.attr.title}}
-                  span.count
-                    | (
-                    b(ng-if="!operations.isNumeric(filter.attrInfo)") {{filter.values.values.length}}
-                    b(ng-if="operations.isNumeric(filter.attrInfo)") {{filter.values.length}}
+                  span.count(ng-if="!operations.isNumeric(filter.attrInfo)")
+                    | &nbsp;(
+                    b {{filter.values.values.length}}
                     | )
                   | :
 
@@ -81,7 +80,7 @@
                     li.filter-section__item(ng-repeat="val in filter.values.values")
                       span.filter-section__divider(
                         ng-if="filter.values.values.length > 1 && $index == filter.values.values.length -1"
-                      ) &nbsp;or&nbsp;
+                      ) or&nbsp;
                       span {{val}}
                   ul.filter-section__list(ng-if="operations.isNumeric(filter.attrInfo)")
                     li.filter-section__item(ng-repeat="val in filter.values")
