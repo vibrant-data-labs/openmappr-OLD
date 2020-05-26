@@ -54,7 +54,6 @@ angular.module('common')
                 opened: true,
                 isFirstOpened: true,
                 togglePanel: function () {
-                    $scope.operations.isFirstOpened = false;
                     if ($scope.operations.list.length > 1) {
                         $scope.operations.opened = !$scope.operations.opened;
                     }
@@ -251,7 +250,7 @@ angular.module('common')
                     $scope.showSearch = false;
                 }
 
-                if (!data.nodes.length && $scope.operations.last().type == 'select') {
+                if (!data.nodes.length && $scope.operations.last().type == 'select' && !data.filtersCount) {
                     removeOperation();
                 } else if ($scope.operations.last().type == 'select') {
                     $scope.operations.last().filterArray = null;
