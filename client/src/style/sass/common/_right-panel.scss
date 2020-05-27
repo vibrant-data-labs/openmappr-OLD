@@ -201,7 +201,23 @@
   }
 
   .list-panel-header {
-    justify-content: space-evenly;
+    //justify-content: space-evenly;
+    margin-bottom: 8px;
+
+    &__nodes {
+      flex: 0 0 60%;
+    }
+
+    &__links {
+      flex: 0 0 40%;
+      text-align: right;
+      padding-left: 10px;
+    }
+
+    &__select {
+      flex: 1 0 auto;
+      padding: 0 10px;
+    }
   }
 
   .style-panel-item {
