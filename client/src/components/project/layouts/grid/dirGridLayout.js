@@ -233,51 +233,41 @@ angular.module('common')
                     resetCollection();
                 });
 
-                $scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
-                    $scope.showAllNodes = false;
+                $scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    console.warn('===> $scope.$on(BROADCAST_MESSAGES.hss.select');
+                });
 
-                    if (manualSelection) {
-                        manualSelection = false;
-                        console.warn(logPrefix + 'selection manually made through grid, leaving collection intact');
-                        return;
-                    }
-                    if (data.extendingSelection) {
-                        listCompareIds = _.union(listCompareIds, data.nodeIds);
-                        $scope.selectedNodeIds = _.union($scope.selectedNodeIds, data.nodeIds);
-                    } else {
-                        listCompareIds = _.clone(data.nodeIds);
-                        $scope.selectedNodeIds = _.clone(data.nodeIds);
-                    }
+                $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
+                    console.warn('===> $rootScope.$on(BROADCAST_MESSAGES.hss.select');
+
+                    // $scope.showAllNodes = false;
+
+                    // if (manualSelection) {
+                    //     manualSelection = false;
+                    //     console.warn(logPrefix + 'selection manually made through grid, leaving collection intact');
+                    //     return;
+                    // }
+
+                    var newNodeIds = _.map(data.nodes, function(node) {
+                        return node.id;
+                    });
+
+                    console.warn('*** [$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] newNodeIds =>', newNodeIds);
+
+                    listCompareIds = _.clone(newNodeIds);
+                    $scope.selectedNodeIds = _.clone(newNodeIds);
+
+                    console.warn('[$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] listCompareIds =>', listCompareIds);
+                    console.warn('[$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] $scope.selectedNodeIds =>', $scope.selectedNodeIds);
 
                     showCompareNotification();
-                    console.log('refreshing collection from selectNodes')
+                    console.log('refreshing collection from selectNodes');
                     refreshCollection();
 
-                    /* TODO: --- IT'S TEMPORARY COMMENT --- */
-                    // $timeout(function() {
-                    //     $scope.resetScrollPosition();
-                    // }, 1200);
-
-                    /* TODO: --- IT'S TEMPORARY COMMENT --- */
-                    //TODO: may need to react to selections by, for instance scrolling to node
-                    //
-                    // manualSelection = false;
-                    // // var nodesInSelection = _.filter(renderGraphfactory.getGraph().nodes(), function(nodeObj) {
-                    // //     return data.nodeIds.indexOf(nodeObj.id) > -1;
-                    // // });
-                    //
-                    // refreshCollection();
-                    // $scope.selectedNodeIds = [];
-                    //
-                    // _.each($scope.nodesObj, function(nodeObj) {
-                    //     nodeObj.isSelected = true;
-                    //     $scope.selectedNodeIds.push(nodeObj.id);
-                    // });
-
-                    // Event broadcasted outside digest
-                    if (!$scope.$$phase && !$rootScope.$$phase) {
-                        $scope.$apply();
-                    }
+                    // // Event broadcasted outside digest
+                    // if (!$scope.$$phase && !$rootScope.$$phase) {
+                    //     $scope.$apply();
+                    // }
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function(event, graph) {
