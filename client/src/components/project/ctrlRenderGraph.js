@@ -250,7 +250,7 @@ angular.module('common')
                     $scope.showSearch = false;
                 }
 
-                if (!data.nodes.length && $scope.operations.last().type == 'select' && !data.filtersCount) {
+                if (!data.nodes.length && $scope.operations.last().type == 'select') {
                     removeOperation();
                 } else if ($scope.operations.last().type == 'select') {
                     $scope.operations.last().filterArray = null;
@@ -375,10 +375,6 @@ angular.module('common')
             }
 
             function removeOperation(preserve) {
-                if (!preserve && $scope.operations.list.length == 2) {
-                    $scope.operations.opened = false;
-                }
-
                 return $scope.operations.list.pop();
             }
 

@@ -65,12 +65,12 @@
 
             .play-toolbar-list__content(ng-if="operation.filters && operation.isOpened")
               .filter-section-wrap(ng-repeat="filter in operations.filterArray(operation)")
-                dl.filter-section
-                  dt.filter-section__label {{filter.attrInfo.attr.title}}
-                    span.count
-                      | (
-                      b(ng-if="!operations.isNumeric(filter.attrInfo)") {{filter.values.values.length}}
-                      b(ng-if="operations.isNumeric(filter.attrInfo)") {{filter.values.length}}
+                dl.filter-section(ng-repeat="filter in operations.filterArray(operation)")
+                  dt.filter-section__label
+                    | {{filter.attrInfo.attr.title}}
+                    span.count(ng-if="!operations.isNumeric(filter.attrInfo)")
+                      | &nbsp;(
+                      b {{filter.values.values.length}}
                       | )
                     | :
 
