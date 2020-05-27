@@ -233,41 +233,25 @@ angular.module('common')
                     resetCollection();
                 });
 
-                $scope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
-                    console.warn('===> $scope.$on(BROADCAST_MESSAGES.hss.select');
-                });
-
                 $rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data) {
-                    console.warn('===> $rootScope.$on(BROADCAST_MESSAGES.hss.select');
-
-                    // $scope.showAllNodes = false;
-
-                    // if (manualSelection) {
-                    //     manualSelection = false;
-                    //     console.warn(logPrefix + 'selection manually made through grid, leaving collection intact');
-                    //     return;
-                    // }
-
                     var newNodeIds = _.map(data.nodes, function(node) {
                         return node.id;
                     });
 
-                    console.warn('*** [$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] newNodeIds =>', newNodeIds);
-
                     listCompareIds = _.clone(newNodeIds);
                     $scope.selectedNodeIds = _.clone(newNodeIds);
-
-                    console.warn('[$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] listCompareIds =>', listCompareIds);
-                    console.warn('[$rootScope.$on(BROADCAST_MESSAGES.hss.select, function(ev, data)] $scope.selectedNodeIds =>', $scope.selectedNodeIds);
 
                     showCompareNotification();
                     console.log('refreshing collection from selectNodes');
                     refreshCollection();
+                });
 
-                    // // Event broadcasted outside digest
-                    // if (!$scope.$$phase && !$rootScope.$$phase) {
-                    //     $scope.$apply();
-                    // }
+                $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(ev, data) {
+                    var subsetNodes = data.nodes;
+                    var listSubsetIds = _.map(data.nodes, 'id');
+
+                    addComparedNodes(subsetNodes);
+                    selectNodesInGraph(listSubsetIds);
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function(event, graph) {
