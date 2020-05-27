@@ -201,15 +201,10 @@
   }
 
   .list-panel-header {
-    //justify-content: space-evenly;
+    justify-content: space-between;
     margin-bottom: 8px;
 
-    &__nodes {
-      flex: 0 0 60%;
-    }
-
     &__links {
-      flex: 0 0 40%;
       text-align: right;
       padding-left: 10px;
     }
