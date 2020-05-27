@@ -65,7 +65,7 @@
 
             .play-toolbar-list__content(ng-if="operation.filters && operation.isOpened")
               .filter-section-wrap(ng-repeat="filter in operations.filterArray(operation)")
-                dl.filter-section(ng-repeat="filter in operations.filterArray(operation)")
+                dl.filter-section
                   dt.filter-section__label
                     | {{filter.attrInfo.attr.title}}
                     span.count(ng-if="!operations.isNumeric(filter.attrInfo)")
