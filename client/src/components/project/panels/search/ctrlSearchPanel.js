@@ -287,7 +287,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         var highlight = {};
         for (var i = 0; i < node.highlights.length; i++) {
             highlight = node.highlights[i];
-            html += '<li class="h7 truncate">'
+            html += '<li class="h7">'
                     + '<span><b>' + highlight.attrName + '</b></span> : '
                     + '<span>&ldquo;&hellip;' + highlight.text + '&hellip;&rdquo;</span>'
                     + '</li>';

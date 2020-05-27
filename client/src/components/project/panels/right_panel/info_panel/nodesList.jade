@@ -1,13 +1,15 @@
 .info-item
 	ul.list-unstyled.panel-list
 		li.panel-item.list-item.no-hover.nodes-list__selected-info(ng-if="nodes.length > 1")
-			.vert-align.list-panel-header
-				span.dark-grey-font {{nodes.length}} {{nodesStatus}}
-				span.m-l-auto.m-r-5 Sorted By:
-				dir-sort-menu(sort-types="sortTypes" sort-config="sortInfo")
-			.vert-align
-				span.dark-grey-font(ng-if="links") {{links.length}} {{linksStatus}}
+			.vert-align.list-panel-header.truncate
+				span.dark-grey-font.list-panel-header__nodes.truncate {{nodes.length}} {{nodesStatus}}
+
+				span.dark-grey-font.list-panel-header__links.truncate(ng-if="links") {{links.length}} {{linksStatus}}
 				span.dark-drey-font(ng-if="!links") ...
+			.vert-align
+				span Sorted By:
+				dir-sort-menu.list-panel-header__select.truncate(sort-types="sortTypes" sort-config="sortInfo")
+
 				//- dir-export()
 		li.panel-item.list-item(ng-if="viewLimit < nodes.length || numShowGroups !== 0")
 			.row.vert-align
@@ -47,15 +49,15 @@
 			.row.vert-align.truncate(uib-tooltip-html="getNodeTooltipHtml(node)" tooltip-placement="right" tooltip-append-to-body="true")
 				.col-xs-2
 					.big-circle(style="background: {{::getNodeColor(node)}};")
-				.col-xs-8
-					h6.less-gutter	{{node.attr[labelAttr]}}
-				.col-xs-2
+				.col-xs-10
+					h6.less-gutter.list-item__title.truncate	{{node.attr[labelAttr]}}
+
 
 	ul.list-unstyled.panel-list.m-t-10
 		li.panel-item.list-item.no-hover
 			.row.vert-align
 				.col-xs-12
-					h6.groups-title {{nodeColorAttr}}:
+					h6.groups-title {{nodeColorAttrTitle}}:
 		li.panel-item.list-item.pointable-cursor.no-animate(ng-repeat="group in selectedGroups" ng-click="selectGroup(group, $event)" ng-mouseenter="hoverGroup(group, $event)" ng-mouseleave="unHoverGroup(group, $event)")
 			.row.vert-align
 				.col-xs-2

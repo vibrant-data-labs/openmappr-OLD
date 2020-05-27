@@ -51,11 +51,16 @@ angular.module('common')
             $scope.enableRedo = false;
             $scope.operations = {
                 list: [],
-                opened: false,
+                opened: true,
+                isFirstOpened: true,
                 togglePanel: function () {
                     if ($scope.operations.list.length > 1) {
                         $scope.operations.opened = !$scope.operations.opened;
                     }
+                },
+                toggleOperation: function(operation) {
+                    $scope.operations.isFirstOpened = false;
+                    operation.isOpened = !operation.isOpened;
                 },
                 last: function () {
                     if ($scope.operations.list.length) {
@@ -63,6 +68,104 @@ angular.module('common')
                     }
 
                     return {};
+                },
+                isNumeric: function (attrInfo) {
+                    const { attr } = attrInfo;
+                    return attr.attrType == 'integer' ||
+                        attr.attrType == 'float' ||
+                        attr.attrType == 'boolean' ||
+                        attr.attrType == 'year' ||
+                        attr.attrType == 'timestamp';
+                },
+                formatTime(val) {
+                    return moment(val * 1000).format('DD-MMM-YYYY');
+                },
+                filterArray: function (operation) {
+                    if (!operation || !operation.filters) return [];
+                    if (operation.filterArray) return operation.filterArray;
+                    var result = [];
+
+                    var keys = Object.keys(operation.filters);
+                    keys.forEach(function (key) {
+                        var filter = operation.filters[key];
+                        if (!filter.isEnabled || !filter.selector) return;
+                        var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(filter.attrId);
+
+                        var selector = filter.selector.stringify();
+
+                        if ($scope.operations.isNumeric(attrInfo) && Array.isArray(selector)) {
+                            selector.sort(function(a, b) {
+                                return a.values[0] < b.values[0] ? -1 : 1;
+                            });
+                            selector = _.reduce(selector, function(acc, cv) {
+                                if (acc.length == 0) {
+                                    acc.push(cv);
+                                    return acc;
+                                }
+
+                                var prevItem = acc[acc.length - 1];
+                                var isEqual = function(a, b) {
+                                    if(attrInfo.attr.attrType == 'year') {
+                                        return _.first(b) == _.last(a);
+                                    }
+
+                                    if (attrInfo.attr.attrType == 'timestamp') {
+                                        var { bins } = attrInfo;
+                                        var binStart = bins.findIndex(function(x) { return x.max == _.last(a) });
+                                        if (binStart > -1 && binStart < bins.length - 1) {
+                                            var binEnd = bins[binStart + 1];
+                                            if (binEnd.min == _.first(b)) return true;
+                                        }
+
+                                        return _.first(b) - _.last(a) < 86400; // difference less than day
+                                    }
+
+                                    return _.first(b) - _.last(a) < 0.009; // difference less than rounded value
+                                };
+
+                                if (isEqual(prevItem.values,cv.values)) {
+                                    if (prevItem.values.length == 2) {
+                                        prevItem.values[1] = _.last(cv.values);
+                                    } else {
+                                        prevItem.values.push(_.last(cv.values));
+                                    }
+                                } else {
+                                    acc.push(cv);
+                                }
+
+                                return acc;
+                            }, []);
+                            _.each(selector, function (val) {
+                                // year
+                                if (val.values.length == 2 && val.values[0] === val.values[1]) {
+                                    val.values = [val.values[0]]
+                                    val.description = 'eq';
+                                }
+
+                                // numeric
+                                if (val.values.length == 2) {
+                                    if (val.values[0] == attrInfo.stats.min) {
+                                        val.values = [val.values[1]];
+                                        val.description = 'lt';
+                                    } 
+                                    
+                                    if (val.values[1] == attrInfo.stats.max) {
+                                        val.values = [val.values[0]];
+                                        val.description = 'ht';
+                                    }
+                                }
+                            });
+                        }
+
+                        result.push({
+                            attrInfo: attrInfo,
+                            values: selector
+                        });
+                    });
+
+                    operation.filterArray = result;
+                    console.log("FILTERARRAY", result);
+                    return operation.filterArray;
                 }
             };
 
@@ -91,6 +194,29 @@ angular.module('common')
                 $scope.operations.opened = false;
             };
 
+            $scope.resetOperation = function () {
+                var prevOperation = removeOperation();
+                var operation = $scope.operations.last();
+
+                if (prevOperation.type == 'subset') {
+                    subsetService.unsubset();
+                    if (operation.type == 'subset') {
+                        // in this case the all previous operations are subset also
+                        var operations = _.clone($scope.operations.list);
+                        $scope.operations.list = $scope.operations.list.splice(0, 1);
+                        _.each(operations, function (op) {
+                            if (op.type == 'init') return;
+                            selectService.applyFilters(op.filters);
+                            subsetService.subset();
+                        });
+
+                        operations = null;
+                    }
+                } else if (prevOperation.type == 'select') {
+                    selectService.unselect();
+                }
+            }
+
             $scope.subsetFilters = function subsetFilters() {
                 subsetService.subset();
             };
@@ -116,6 +242,7 @@ angular.module('common')
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function (e, data) {
+
                 $scope.ui.activeFilterCount = data.filtersCount + (data.isSubsetted ? 1 : 0) + (data.filtersCount == 0 && data.selectionCount > 0 ? 1 : 0);
                 $scope.ui.subsetEnabled = data.selectionCount > 0;
 
@@ -126,6 +253,7 @@ angular.module('common')
                 if (!data.nodes.length && $scope.operations.last().type == 'select') {
                     removeOperation();
                 } else if ($scope.operations.last().type == 'select') {
+                    $scope.operations.last().filterArray = null;
                     updateOperation('select', true);
                 } else {
                     updateOperation('select');
@@ -133,7 +261,9 @@ angular.module('common')
             });
 
             $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (e, data) {
-                updateOperation('subset');
+                if (data.subsetCount > 0) {
+                    updateOperation('subset');
+                }
             })
 
             $scope.$on(BROADCAST_MESSAGES.sigma.clickStage, function () {
@@ -210,31 +340,41 @@ angular.module('common')
                             _.last($scope.operations.list).nodesCount = selectedNodes.length;
                             _.last($scope.operations.list).totalNodes = totalNodes;
                         } else {
-                            $scope.operations.list.push({
+                            var operation = {
                                 type: 'select',
+                                filters: _.clone(selectService.filters),
                                 nodesCount: selectedNodes.length,
+                                isOpened: $scope.operations.isFirstOpened,
                                 totalNodes: totalNodes
-                            });
+                            };
+                            $scope.operations.list.push(operation);
                         }
-
 
                         break;
                     }
                     case 'subset': {
                         // As subset occurs only on selected nodes
-                        var prevNodesCount = removeOperation().totalNodes;
-                        $scope.operations.list.push({
+                        var prevOperation = removeOperation(true);
+                        var prevNodesCount = prevOperation.totalNodes;
+                        var prevFilters = prevOperation.filters;
+
+                        var operation = {
                             type: 'subset',
                             nodesCount: subsetService.currentSubset().length,
+                            filters: prevFilters,
+                            isOpened: prevOperation.isOpened,
                             totalNodes: prevNodesCount
-                        });
+                        };
+                        $scope.operations.list.push(operation);
                         break;
                     }
                     default: throw new Error("Unknown operation");
                 }
+
+                //console.log("OPERATIONS", $scope.operations.filters($scope.operations.list.length -1));
             }
 
-            function removeOperation() {
+            function removeOperation(preserve) {
                 return $scope.operations.list.pop();
             }
 

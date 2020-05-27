@@ -8,6 +8,11 @@
     display: block;
     height: auto;
 
+    h6.title {
+      color: #BC3364;
+      font: 400 13px/20px 'Poppins';
+    }
+
     &:not(:last-child) {
       margin-bottom: 10px;
     }
@@ -46,7 +51,7 @@
       .card__title {
         margin: 0;
         color: #BC3364;
-        font: 700 18px/42px 'Poppins';
+        font: 500 15px/24px 'Poppins';
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -77,12 +82,12 @@
 
       .card__action-sort {
         cursor: pointer;
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
         font-size: 0;
         background: url('/img/filter-panel/sort.svg') 50% no-repeat;
         background-size: 16px;
-        margin-right: 10px;
+        margin-right: 9px;
         padding: 0;
         opacity: .8;
         transition: opacity .2s;
@@ -151,7 +156,7 @@
       }
 
       .card__body {
-        padding: 20px 0;
+        padding: 20px 0 0;
       }
 
       .card__footer {

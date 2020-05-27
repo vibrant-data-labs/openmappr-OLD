@@ -338,6 +338,7 @@
             margin: 0;
             position: relative;
             width: 100%;
+            overflow: visible;
 
             &-horizontal.active .ui-slider-handle:before {
                 content: " ";

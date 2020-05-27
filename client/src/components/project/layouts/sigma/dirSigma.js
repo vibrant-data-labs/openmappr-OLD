@@ -33,7 +33,7 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
     };
 
     var __rendering_in_progress__ = false;
-    var leftPanelWidth = 390;
+    var leftPanelWidth = 412;
 
 
 
