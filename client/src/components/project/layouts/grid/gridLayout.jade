@@ -3,7 +3,8 @@
         ng-class="{highlighted: nodesInHover}"
     )
         .compared(
-            ng-click="$event.stopPropagation();" ng-show="comparingNodes"
+            ng-click="$event.stopPropagation();"
+            ng-show="comparingNodes"
         )
             h7.text-uppercase.pull-left
                 strong Selection
@@ -24,10 +25,7 @@
                         ng-repeat="node in nodes"
                         ng-mouseenter="setHover(node)"
                         ng-mouseleave="setHover()",
-                        ng-class="{
-                            'highlighted': node.inHover,
-                            'selected': selectedNodeIds.indexOf(node.id) !== -1
-                        }"
+                        ng-class="{highlighted: node.inHover, 'selected': selectedNodeIds.indexOf(node.id) !== -1}"
                         data-nodeid="{{node.id}}",
                         dir-grid-card=""
                         ng-click="clickCard(node);"
@@ -59,10 +57,7 @@
                         ng-repeat="node in nodes"
                         ng-mouseenter="setHover(node)"
                         ng-mouseleave="setHover()",
-                        ng-class="{
-                            'highlighted': node.inHover,
-                            'selected': selectedNodeIds.indexOf(node.id) !== -1}
-                        "
+                        ng-class="{highlighted: node.inHover, 'selected': selectedNodeIds.indexOf(node.id) !== -1}"
                         data-nodeid="{{node.id}}",
                         dir-grid-card=""
                         ng-click="clickCard(node);"

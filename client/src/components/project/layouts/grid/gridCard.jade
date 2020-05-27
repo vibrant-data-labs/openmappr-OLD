@@ -1,15 +1,6 @@
 .rendered-attr
     div(
-        ng-if="
-            node.selectedAttr.attrType == 'string' && (
-                !node.selectedAttr.renderType ||
-                node.selectedAttr.renderType == 'default' ||
-                node.selectedAttr.renderType == 'text' ||
-                node.selectedAttr.renderType == 'densitybar' ||
-                node.selectedAttr.renderType == 'barchart' ||
-                node.selectedAttr.renderType == 'piechart'
-            )
-        "
+        ng-if="node.selectedAttr.attrType == 'string' && (!node.selectedAttr.renderType || node.selectedAttr.renderType == 'default' || node.selectedAttr.renderType == 'text' || node.selectedAttr.renderType == 'densitybar' || node.selectedAttr.renderType == 'barchart' || node.selectedAttr.renderType == 'piechart')"
     )
         h5.text-attr-content(
             ng-text-truncate="node.selectedAttr.value"
@@ -33,14 +24,9 @@
         )
 
     .content-overlay.vert-align.pointable-cursor(
-        ng-if="
-            node.selectedAttr.attrType != 'audio_stream' &&
-            node.selectedAttr.attrType != 'video_stream' &&
-            node.selectedAttr.attrType != 'video'
-        "
+        ng-if="node.selectedAttr.attrType != 'audio_stream' && node.selectedAttr.attrType != 'video_stream' && node.selectedAttr.attrType != 'video'"
     )
 
-        //- TODO: --- IT'S TEMPORARY COMMENT ---
         //- .btn-container
         //-     .card-btn(ng-click="openRightPanel(node, $event);")
         //-         i.fa.fa-bar-chart.fa-3x
@@ -52,13 +38,16 @@
 )
     .vert-align.pull-left.height-100
         .background
+
         .circle(
             style="background-color:{{::node.colorStr}}; border-color: {{::node.darkColorStr}}"
         )
+
         h6.truncate {{::node.attr[mapprSettings.labelAttr]}}
 
     .btns.pull-right.height-100.vert-align(
-        ng-click="$event.stopPropagation()" ng-class="{hovered: (node.inHover || node.isCompared)}"
+        ng-click="$event.stopPropagation()"
+        ng-class="{hovered: (node.inHover || node.isCompared)}"
     )
         .toggle-icon.dropdown(
             ng-if="MAPP_EDITOR_OPEN"
@@ -81,6 +70,7 @@
                 .uib-dropdown-click-close(
                     ng-click="clearMaintainHover();"
                 )
+
                 //inline style to center dropdowns
                 .uib-dropdown-flex-content(
                     style="margin-left: 7px;"
@@ -89,8 +79,7 @@
                     .uib-dropdown-flex.center
                         ul.dd-list.list-unstyled
                             li.row.vert-align.pointable-cursor(
-                                ng-repeat="group in selectionVMs"
-                                ng-click="toggleNodeInGroup(node, group); clearMaintainHover();"
+                                ng-repeat="group in selectionVMs" ng-click="toggleNodeInGroup(node, group); clearMaintainHover();"
                             )
                                 div.vert-align.width-100(
                                     ng-if="group.dpIDs.indexOf(node.id) == -1"
@@ -99,6 +88,7 @@
                                 )
                                     .col-xs-12
                                         h6.no-margin.truncate {{group.selName}}
+
                                 div.vert-align.width-100(
                                     ng-if="group.dpIDs.indexOf(node.id) != -1"
                                     uib-tooltip="Remove from Group"
@@ -106,8 +96,10 @@
                                 )
                                     .col-xs-10
                                         h6.active.no-margin.truncate {{group.selName}}
+
                                     .col-xs-2.blue-text-btn
                                         i.fa.fa-times
+
                             li.row.vert-align.pointable-cursor(
                                 ng-if="selectionVMs.length == 0"
                                 ng-click="panelUI.openPanel('selection');"
@@ -115,6 +107,7 @@
                                 .vert-align.width-100 
                                     .col-xs-12 
                                         h6.no-margin Create Group
+
         .tag-checkbox(
             uib-tooltip="{{node.isCompared ? 'Remove from Selection' : 'Add to Selection'}}"
             tooltip-append-to-body="true"
@@ -125,6 +118,7 @@
                 ng-model="node.isCompared"
                 ng-change="compareChange(node)"
             )
+
             label(
                 for="{{node.id}}"
             )
