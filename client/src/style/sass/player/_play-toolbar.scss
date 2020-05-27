@@ -162,9 +162,13 @@
     line-height: 16px;
   }
 
-  .filter-section {
-    margin: 0;
-    padding: 16px 10px 16px 20px;
+  .filter-section-wrap {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 8px 8px 20px;
     position: relative;
 
     &:not(:last-child) {
@@ -179,8 +183,14 @@
       background: #CDCDCD;
       border-radius: 50%;
       left: 10px;
-      top: 24px;
+      top: 16px;
     }
+  }
+
+  .filter-section {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
 
     &__label {
       margin: 0;
@@ -227,9 +237,6 @@
 
       &_array {
         cursor: default;
-        span {
-          color: #BC3364;
-        }
 
         .filter-section__divider {
           color: #939698;
