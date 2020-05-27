@@ -23,6 +23,7 @@ angular.module('common')
             this.init = init;
             this.filters = null;
             this._filter = filter;
+            this.applyFilters = applyFilters;
             this.createMultipleFilter = createMultipleFilter;
             this.createMinMaxFilter = createMinMaxFilter;
             this.attrs = null;
@@ -148,6 +149,12 @@ angular.module('common')
                     isSubsetted: currentSubset.length > 0,
                     nodes: nodes,
                 });
+            }
+
+            function applyFilters(filters) {
+                this.unselect();
+                this.filters = _.clone(filters);
+                this.selectNodes({});
             }
 
             function filter(data, subset) {

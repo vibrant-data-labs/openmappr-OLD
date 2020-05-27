@@ -57,6 +57,7 @@ angular.module('common')
                     refreshSelInfo: _.size(graphSelectionService.getSelectedNodes()) > 0 ? false : true, //If there was a previous selection in place, don't refresh selection info(on hover mostly) unless another selection made
                     selectionBrowsing: false, //Whether browsing through mixed selection(non-cluster)
                     nodeColorAttr: null,
+                    nodeColorAttrTitle: null,
                     selectedGroups: [], //Nodes groups sorted in descending order for generic selection,
                     linkInfoAttrs: [], //Informational link attrs such as 'similarity'
                     sortTypes: [], //Collection of sort attr/types(numeric attrs & Label attr) - {id: 'OriginalLabel', title: 'Name'}
@@ -173,6 +174,8 @@ angular.module('common')
                     $scope.selInfo.selectedGroups = [];
                     $scope.selInfo.linkInfoAttrIds = [];
                     $scope.selInfo.nodeColorAttr = $scope.mapprSettings.nodeColorAttr;
+                    var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId($scope.mapprSettings.nodeColorAttr);
+                    $scope.selInfo.nodeColorAttrTitle = attrInfo.attr.title;
 
                     if(panelMode == 'node') {
                         $scope.selInfo.principalNode = _.first(selNodes);

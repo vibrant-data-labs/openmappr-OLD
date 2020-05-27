@@ -201,7 +201,18 @@
   }
 
   .list-panel-header {
-    justify-content: space-evenly;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    &__links {
+      text-align: right;
+      padding-left: 10px;
+    }
+
+    &__select {
+      flex: 1 0 auto;
+      padding: 0 10px;
+    }
   }
 
   .style-panel-item {
@@ -261,20 +272,10 @@
     margin-top: 1px;
 
     .info-item {
-      border-bottom: 5px solid $panel-border;
-      border-top: 5px solid $panel-border;
       overflow: hidden;
       padding: 10px 20px;
       position: relative;
-
-      &:first-child {
-        border-top: 0;
-      }
-
-      &:last-child {
-        border-bottom: 10px solid $panel-border;
-        border-top: 0;
-      }
+      background: #fff;
 
       .node {
         position: relative;

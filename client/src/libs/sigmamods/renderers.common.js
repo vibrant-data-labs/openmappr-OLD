@@ -11,7 +11,7 @@
   sigma.utils.pkg('sigma.renderers.common');
   sigma.utils.pkg('sigma.labels');
 
-  var leftPanelWidth = 390;
+  var leftPanelWidth = 412;
 
   //
   // Label Functions

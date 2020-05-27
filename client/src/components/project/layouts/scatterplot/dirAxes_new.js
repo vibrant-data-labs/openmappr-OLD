@@ -12,12 +12,6 @@ function ($compile, $timeout, renderGraphfactory, layoutService, leafletData, da
         // WARN: there is a hardcode of 50 offset for both top and left in the drawMarker to counter CSS margins.
         //
         '<div id="axes" class="axis-container">'+
-            '<div class="graph-type">'+
-                '<div ng-click="zoomInfo.zoomExtents()" class="circle" tooltip="Reset Graph" tooltip-placement="right">'+
-                    '<i class="fa fa-circle-o fa-2x"/>'+
-                '</div>'+
-                //'<i class="icon-{{player.activeSnap.layout.plotType}}"/>'+
-            '</div>'+
             '<div ng-show="yshow" class="yaxis-tit"><div><h4 class="truncate no-text-transform" uib-tooltip="{{mapprSettings.yAxTooltip}}" tooltip-placement="right"><span>{{mapprSettings.yAxLabel || yAxisTitle}}</span></h4></div></div>'+
             '<div ng-show="yshow" class="yaxis-bkgrnd"></div>'+
             '<div ng-show="yshow && mapprSettings.yAxTickShow" class="yaxis"></div>'+

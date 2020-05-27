@@ -157,6 +157,11 @@ angular.module('common')
 
                         return cat;
                     });
+
+                    var sortOps = scope.attrToRender.sortConfig;
+                    scope.catListData.data = sortTagData(scope.catListData.data, 
+                        sortOps && sortOps.sortType || 'frequency', 
+                        sortOps && sortOps.sortOrder || 'desc', false);
                     setupFilterClasses(scope.catListData, false);
                     scope.selNodesCount = data.nodes.length;
 
@@ -173,7 +178,7 @@ angular.module('common')
 
                 scope.$watch('attrToRender.sortConfig', function (sortOps) {
                     console.log('dirTagCloud: sortConfig', sortOps);
-                    sortType = sortOps && sortOps.sortType || 'statistical';
+                    sortType = sortOps && sortOps.sortType || 'frequency';
                     sortOrder = sortOps && sortOps.sortOrder || 'desc';
                     scope.catListData.data = sortTagData(scope.catListData.data, sortType, sortOrder, scope.catListData.highlightedCats.length > 0);
                 }, true);
@@ -411,7 +416,7 @@ angular.module('common')
                 if (sortType === 'alphabetical') { sortFn = function (cat) { return cat.text.toLowerCase(); }; }
                 if (sortType === 'frequency') {
                     sortFn = function (cat) {
-                        return inSelection ? cat.selTagFreq : cat.globalTagFreq;
+                        return subsetService.currentSubset().length > 0 ? cat.selTagFreq : cat.globalTagFreq;
                     };
                 }
                 var sortedCatData = _.sortBy(catData, sortFn);
