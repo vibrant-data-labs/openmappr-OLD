@@ -1,6 +1,6 @@
 angular.module('common')
- .directive('dirGridLayout', ['$rootScope', '$timeout', '$window', 'renderGraphfactory', 'dataGraph', 'AttrInfoService', 'nodeSelectionService', 'inputMgmtService', 'graphSelectionService', 'SelectionSetService', 'snapshotService', 'uiService', 'BROADCAST_MESSAGES',
-function ($rootScope, $timeout, $window, renderGraphfactory,dataGraph, AttrInfoService, nodeSelectionService, inputMgmtService, graphSelectionService, SelectionSetService, snapshotService, uiService, BROADCAST_MESSAGES) {
+ .directive('dirGridLayout', ['$rootScope', '$timeout', '$window', 'renderGraphfactory', 'dataGraph', 'AttrInfoService', 'nodeSelectionService', 'inputMgmtService', 'graphSelectionService', 'selectService', 'SelectionSetService', 'snapshotService', 'uiService', 'BROADCAST_MESSAGES',
+function ($rootScope, $timeout, $window, renderGraphfactory,dataGraph, AttrInfoService, nodeSelectionService, inputMgmtService, graphSelectionService, selectService, SelectionSetService, snapshotService, uiService, BROADCAST_MESSAGES) {
     'use strict';
 
     /*************************************
@@ -172,21 +172,21 @@ function ($rootScope, $timeout, $window, renderGraphfactory,dataGraph, AttrInfoS
         };
 
         $scope.clickCard = function(node) {
-          // node.isCompared = true;
-          var $card = $('.grid-layout .card[data-nodeid="'+node.id+'"]');
-          var off = $card.find('.node').offset();
-          node.gridSize = $card.find('.node .circle').height();
-          node.gridX = off.left + node.gridSize - 375;
-          node.gridY = off.top + node.gridSize + 20;
-          node.color = node.color;
-          clickedGridNode = true;
-          //save current selection before selecting node
-          prevSelectedNodeIds = _.map(graphSelectionService.getSelectedNodes(), 'id');
-          manualSelection = true;
-          selectNodesInGraph([node.id]);
-          $rootScope.$broadcast(BROADCAST_MESSAGES.grid.clickNode, {
-              node: node
-          });
+            // node.isCompared = true;
+            var $card = $('.grid-layout .card[data-nodeid="'+node.id+'"]');
+            var off = $card.find('.node').offset();
+            node.gridSize = $card.find('.node .circle').height();
+            node.gridX = off.left + node.gridSize - 375;
+            node.gridY = off.top + node.gridSize + 20;
+            node.color = node.color;
+            clickedGridNode = true;
+            //save current selection before selecting node
+            prevSelectedNodeIds = _.map(graphSelectionService.getSelectedNodes(), 'id');
+            manualSelection = true;
+            selectService.selectSingleNode(node.id);
+            $rootScope.$broadcast(BROADCAST_MESSAGES.grid.clickNode, {
+                node: node
+            });
         }
 
 
