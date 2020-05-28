@@ -247,9 +247,16 @@ angular.module('common')
                     showCompareNotification();
                     console.log('refreshing collection from selectNodes');
                     refreshCollection();
+
+                    if (data.nodes.length === 1) {
+                        $rootScope.$broadcast(BROADCAST_MESSAGES.grid.clickNode, {
+                            node: data.nodes[0]
+                        });
+                    }
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(ev, data) {
+                    $scope.isSubsetApplied = false;
                     $scope.currentSubsetNodes = data.nodes;
                 });
 
@@ -289,6 +296,7 @@ angular.module('common')
 
                 function resetCollection() {
                     $scope.showAllNodes = true;
+                    $scope.isSubsetApplied = false;
                     graphSelectionService.clickStageHander('clickStage', {}, inputMgmtService.inputMapping().clickStage);
 
                     //deselect all nodes
