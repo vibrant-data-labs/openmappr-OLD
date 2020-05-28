@@ -592,7 +592,6 @@ angular.module('common')
                     .scale(y)
                     .ticks(opts.yTickCount)
                     .tickFormat(function (yVal) {
-                        console.log("YVAL", yVal, histoMax);
                         return (yVal / histoMax * 100).toFixed(0) + '%';
                     })
                     .orient("left");
