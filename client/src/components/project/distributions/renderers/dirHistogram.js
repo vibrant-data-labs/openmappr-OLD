@@ -32,7 +32,7 @@ angular.module('common')
                 marginTop: 10,
                 marginBottom: 15,
                 catMarginBottom: 75,
-                marginLeft: 20,
+                marginLeft: 30,
                 marginRight: 10,
                 // barColor: '#555555',
                 barColor: '#D8D8D8',
@@ -44,7 +44,7 @@ angular.module('common')
                 highlightColor: '#666',
                 strokeWidth: 0.5,
                 histWidth: 300,
-                histHeight: 100,
+                histHeight: 75,
                 categoricalHeight: 200,
                 binCount: 18,
                 maxBinCount: 18,
@@ -587,11 +587,13 @@ angular.module('common')
                     })
                     .orient("bottom");
 
+                var histoMax = _.max(histoData.d3Data, function(d) { return d.y}).y;
                 var yAxis = d3.svg.axis()
                     .scale(y)
                     .ticks(opts.yTickCount)
                     .tickFormat(function (yVal) {
-                        return formatNumber(yVal);
+                        console.log("YVAL", yVal, histoMax);
+                        return (yVal / histoMax * 100).toFixed(0) + '%';
                     })
                     .orient("left");
 
