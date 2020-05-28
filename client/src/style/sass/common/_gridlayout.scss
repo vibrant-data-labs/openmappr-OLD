@@ -18,7 +18,7 @@
 .grid-layout {
     background: $body-bg;
     bottom: 0;
-    left: 390px;
+    left: 412px;
     position: absolute;
     right: 5px;
     top: 40px;
@@ -43,6 +43,7 @@
     .compared,
     .nodes {
         margin-top: 50px;
+        min-width: 95%;
     }
 
     .nodes .cards {

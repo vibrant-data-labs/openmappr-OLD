@@ -433,7 +433,9 @@ angular.module('common')
                     }
                 });
 
-                $scope.canvasPanX = zoomService.nodeFocus($scope.focusNode);
+                if($scope.focusNode.id && $scope.focusNode.dataPointId) {
+                    $scope.canvasPanX = zoomService.nodeFocus($scope.focusNode);
+                }
             }
 
             function animateGraphToOverlay() {
