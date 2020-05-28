@@ -587,10 +587,11 @@ angular.module('common')
                     })
                     .orient("bottom");
 
-                var histoMax = _.max(histoData.d3Data, function(d) { return d.y}).y;
+                var histoMax = d3.max(data, function (d) { return d.y; });
+                var histoStep = histoMax * 0.25;
                 var yAxis = d3.svg.axis()
                     .scale(y)
-                    .ticks(opts.yTickCount)
+                    .tickValues(d3.range(0, histoMax + histoStep, histoStep ))
                     .tickFormat(function (yVal) {
                         return (yVal / histoMax * 100).toFixed(0) + '%';
                     })
