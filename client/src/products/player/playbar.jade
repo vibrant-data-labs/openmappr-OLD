@@ -63,8 +63,19 @@
 
               button(ng-if="$index == operations.list.length -1", ng-click="resetOperation()").button_icon_cancel
 
-            .play-toolbar-list__content(ng-if="operation.filters && operation.isOpened")
-              .filter-section-wrap(ng-repeat="filter in operations.filterArray(operation)")
+            .play-toolbar-list__content(ng-if="(operation.searchText || operation.filters) && operation.isOpened")
+              .filter-section-wrap(ng-if="operation.searchText")
+                  dl.filter-section
+                    dt.filter-section__label
+                      | Search Results  
+                      span(ng-if="operation.searchAttr") &nbsp;({{operation.searchAttr.title}})
+                      | :
+
+                    dd.filter-section__content
+                      ul.filter-section__list
+                        li.filter-section__item
+                          span {{operation.searchText}}            
+              .filter-section-wrap(ng-repeat="filter in operations.filterArray(operation)", ng-if="operation.filters")
                 dl.filter-section
                   dt.filter-section__label
                     | {{filter.attrInfo.attr.title}}

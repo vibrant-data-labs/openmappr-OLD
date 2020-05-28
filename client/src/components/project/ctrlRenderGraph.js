@@ -191,7 +191,8 @@ angular.module('common')
                 delete $scope.operations.list;
                 $scope.operations.list = [];
                 updateOperation('init');
-                $scope.operations.opened = false;
+                $scope.operations.opened = true;
+                $scope.operations.isFirstOpened = true;
             };
 
             $scope.resetOperation = function () {
@@ -206,8 +207,10 @@ angular.module('common')
                         $scope.operations.list = $scope.operations.list.splice(0, 1);
                         _.each(operations, function (op) {
                             if (op.type == 'init') return;
-                            selectService.applyFilters(op.filters);
-                            subsetService.subset();
+                            selectService.applyFilters(op.filters, op.searchText, op.searchAttr, $scope)
+                                .then(function() {
+                                    subsetService.subset();
+                                });
                         });
 
                         operations = null;
@@ -254,9 +257,9 @@ angular.module('common')
                     removeOperation();
                 } else if ($scope.operations.last().type == 'select') {
                     $scope.operations.last().filterArray = null;
-                    updateOperation('select', true);
+                    updateOperation('select', true, data.searchText, data.searchAttr);
                 } else {
-                    updateOperation('select');
+                    updateOperation('select', false, data.searchText, data.searchAttr);
                 }
             });
 
@@ -322,12 +325,12 @@ angular.module('common')
                 }
             }
 
-            function updateOperation(type, replace) {
+            function updateOperation(type, replace, searchText, searchAttr) {
                 switch (type) {
                     case 'init': {
                         $scope.operations.list.push({
                             type: 'init',
-                            totalNodes: dataGraph.getAllNodes().length
+                            totalNodes: dataGraph.getAllNodes().length,
                         });
                         break;
                     }
@@ -339,12 +342,16 @@ angular.module('common')
                         if (replace) {
                             _.last($scope.operations.list).nodesCount = selectedNodes.length;
                             _.last($scope.operations.list).totalNodes = totalNodes;
+                            _.last($scope.operations.list).searchText = searchText;
+                            _.last($scope.operations.list).searchAttr = searchAttr;
                         } else {
                             var operation = {
                                 type: 'select',
                                 filters: _.clone(selectService.filters),
+                                searchText: searchText,
+                                searchAttr: searchAttr,
                                 nodesCount: selectedNodes.length,
-                                isOpened: $scope.operations.isFirstOpened,
+                                isOpened: $scope.operations.list.length == 1 ? true : _.last($scope.operations.list).isOpened,
                                 totalNodes: totalNodes
                             };
                             $scope.operations.list.push(operation);
@@ -357,11 +364,15 @@ angular.module('common')
                         var prevOperation = removeOperation(true);
                         var prevNodesCount = prevOperation.totalNodes;
                         var prevFilters = prevOperation.filters;
+                        var prevSearchText = prevOperation.searchText;
+                        var prevSearchAttr = prevOperation.searchAttr;
 
                         var operation = {
                             type: 'subset',
                             nodesCount: subsetService.currentSubset().length,
                             filters: prevFilters,
+                            searchText: prevSearchText,
+                            searchAttr: prevSearchAttr,
                             isOpened: prevOperation.isOpened,
                             totalNodes: prevNodesCount
                         };
