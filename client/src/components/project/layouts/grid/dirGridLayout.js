@@ -1,6 +1,6 @@
 angular.module('common')
-    .directive('dirGridLayout', ['$rootScope', '$timeout', '$window', 'renderGraphfactory', 'dataGraph', 'AttrInfoService', 'nodeSelectionService', 'inputMgmtService', 'graphSelectionService', 'selectService', 'SelectionSetService', 'snapshotService', 'uiService', 'BROADCAST_MESSAGES',
-        function ($rootScope, $timeout, $window, renderGraphfactory,dataGraph, AttrInfoService, nodeSelectionService, inputMgmtService, graphSelectionService, selectService, SelectionSetService, snapshotService, uiService, BROADCAST_MESSAGES) {
+    .directive('dirGridLayout', ['$rootScope', '$timeout', '$window', 'renderGraphfactory', 'dataGraph', 'AttrInfoService', 'nodeSelectionService', 'inputMgmtService', 'graphSelectionService', 'selectService', 'subsetService', 'SelectionSetService', 'snapshotService', 'uiService', 'BROADCAST_MESSAGES',
+        function ($rootScope, $timeout, $window, renderGraphfactory,dataGraph, AttrInfoService, nodeSelectionService, inputMgmtService, graphSelectionService, selectService, subsetService, SelectionSetService, snapshotService, uiService, BROADCAST_MESSAGES) {
             'use strict';
 
             /*************************************
@@ -33,6 +33,9 @@ angular.module('common')
                 var processSelection = true;
                 var oldNumSelected = 0;
                 var prevSelectedNodeIds;
+
+                $scope.isSubsetApplied = false;
+                $scope.currentSubsetNodes = [];
 
                 $scope.cardsInRow = 3;
                 $scope.curNumCards = 0;
@@ -247,11 +250,7 @@ angular.module('common')
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function(ev, data) {
-                    var subsetNodes = data.nodes;
-                    var listSubsetIds = _.map(data.nodes, 'id');
-
-                    addComparedNodes(subsetNodes);
-                    selectNodesInGraph(listSubsetIds);
+                    $scope.currentSubsetNodes = data.nodes;
                 });
 
                 $scope.$on(BROADCAST_MESSAGES.renderGraph.loaded, function(event, graph) {
@@ -367,7 +366,17 @@ angular.module('common')
 
                     var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId($scope.gridAttr).attr;
                     var nodeObj, selectedAttr;
-                    var nodes = renderGraphfactory.getGraph().nodes();
+
+                    var nodes = [];
+                    var currentSubsetNodes = $scope.currentSubsetNodes;
+
+                    if (currentSubsetNodes.length) {
+                        nodes = currentSubsetNodes;
+                        $scope.isSubsetApplied = true;
+                    } else {
+                        nodes = renderGraphfactory.getGraph().nodes();
+                        $scope.isSubsetApplied = false;
+                    }
 
                     //build array of node obj with attrInfo for selected attr and node info needed
                     $scope.renderLimit = renderCount;
