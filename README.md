@@ -48,3 +48,4 @@ curl sSl https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_
 ```
 curl sSl https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-win-local-environment.sh | bash
 ```
+
