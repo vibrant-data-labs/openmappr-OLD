@@ -1,5 +1,5 @@
-# OpenMappr
-> 📊 Data Visualization
+# OpenMappr 📊
+> Data Visualization
 
 ## Running Locallly
 First, you need to install the following prerequisites.  The installation instructions may vary based on your operating system.
