@@ -32,6 +32,6 @@ docker-compose -f docker-compose.local.yml up -d
 ```
 After it finishes, you can start the server with:
 ```bash
-./run_local_mode
+./run_local_mode.sh
 ```
 And navigate to [localhost:8080](http://localhost:8080) with your web browser.
