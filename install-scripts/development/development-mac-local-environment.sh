@@ -58,7 +58,7 @@ brew install git
 
 # Clone openmappr Github Repository
 echo "Cloning openmappr Repository from Github"
-git clone https://github.com/selfhostedofficial/openmappr
+git clone https://github.com/selfhostedworks/openmappr.git
 cd openmappr
 
 # Install Ruby
@@ -84,7 +84,7 @@ echo "Building application"
 grunt
 
 # Run the Docker based components
-docker-compose -f docker-compose-local.yml up -d
+docker-compose -f docker-compose.local.yml up -d
 
 # Sleep to be sure everything in docker up and running
 sleep 10

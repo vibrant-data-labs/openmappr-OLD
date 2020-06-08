@@ -39,7 +39,7 @@ echo "Switching to Node v 8.12.0"
 nvm use 8.12.0
 # Clone openMappr repo
 echo "Cloning openmappr repo"
-git clone https://github.com/selfhostedofficial/openmappr
+git clone https://github.com/selfhostedworks/openmappr
 cd openmappr
 # install yo bower grunt-cli (from  directory root)
 echo
@@ -59,7 +59,7 @@ grunt
 echo
 echo "Bring up all the docker services."
 echo
-docker-compose -f docker-compose-local.yml up -d
+docker-compose -f docker-compose.local.yml up -d
 sleep 10
 
 # Start Application

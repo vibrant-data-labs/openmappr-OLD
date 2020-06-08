@@ -47,7 +47,7 @@ nvm use 8.12.0
 
 # Clone openMappr repo
 echo "Cloning openmappr repo"
-git clone https://github.com/selfhostedofficial/openmappr
+git clone https://github.com/selfhostedworks/openmappr
 cd openmappr
 
 
@@ -75,7 +75,7 @@ echo "running server at PORT: http://localhost:8080"
 curl -sSL URL_HERE | bash 
 
 
-curl.exe -sSL https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-windows-10-local-environment.sh | bash
+curl.exe -sSL https://raw.githubusercontent.com/selfhostedworks/openmappr/master/_install-scripts-local/development-windows-10-local-environment.sh | bash
 
 
 
@@ -105,7 +105,7 @@ Click [here](https://aka.ms/wsl-ubuntu-1804)
 curl.exe -L -o ubuntu-1604.appx https://aka.ms/wsl-ubuntu-1804 
 
 # Then run
-curl sSl https://raw.githubusercontent.com/selfhostedofficial/openmappr/master/_install-scripts-local/development-ubuntu-local-environment.sh | bash
+curl sSl https://raw.githubusercontent.com/selfhostedworks/openmappr/master/_install-scripts-local/development-ubuntu-local-environment.sh | bash
 
 # or 
 curl -sSl https://rebrand.ly/ubuntu18 | bash
