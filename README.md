@@ -6,7 +6,9 @@ First you need to install the following prerequisites.  The installation instruc
 * Git
 * Docker & Docker Compose
 * Node.js 8.12.0 ([nvm](https://github.com/nvm-sh/nvm) is recommended)
+* NPM along with `yo`, `bower`, and `grunt-cli`
 * Ruby along with the `sass` and `compass` gems
+
 
 Then you will want to download or clone the project, and open up a terminal inside the project folder.
 ```bash
@@ -15,11 +17,7 @@ cd openmappr
 ```
 After doing so, run the following commands to install all the dependencies:
 ```bash
-# install global NPM modules necessary to build the app
-npm install -g yo bower grunt-cli
-# install local NPM modules
 npm install
-# install local Bower modules
 bower install
 ```
 To build the client and perform JS ops, run:
