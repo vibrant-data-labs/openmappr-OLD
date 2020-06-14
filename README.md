@@ -33,3 +33,6 @@ After it finishes, you can start the server with:
 ./run_local_mode.sh
 ```
 And navigate to [localhost:8080](http://localhost:8080) with your web browser.
+
+## Exiting Local Development
+To shut down the development server, press `ctrl`+`c` to exit, and then run `docker-compose down` to shut down the docker stack.
