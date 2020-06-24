@@ -6,7 +6,7 @@
 * [Prerequisites Install Guide for macOS](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-macOS)
 * [Prerequisites Install Guide for Ubuntu](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Ubuntu)
 * [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
-* [Validating Local Dependencies](https://github.com/selfhostedworks/openmappr/wiki/Validating-Local-Dependencies)
+* [How to validate prerequisites are installed](https://github.com/selfhostedworks/openmappr/wiki/How-to-validate-prerequisites-are-installed)
 
 > Windows is not officially supported at this time.
 
