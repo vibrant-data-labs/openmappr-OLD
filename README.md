@@ -17,7 +17,7 @@
 * [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
 * [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
 
-## Running Locally
+## How to develop locally
 First you need to install the following prerequisites.  The installation instructions may vary based on your operating system.  Please review the prerequisite install guides listed above.
 * Git
 * Docker & Docker Compose
