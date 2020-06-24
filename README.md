@@ -47,5 +47,5 @@ After it finishes, you can start the server with:
 ```
 And navigate to [localhost:8080](http://localhost:8080) with your web browser.
 
-## Exiting local development 💨
+## Exiting local development 💤
 To shut down the development server, press `ctrl`+`c` to exit, and then run `docker-compose down` to shut down the docker stack.
