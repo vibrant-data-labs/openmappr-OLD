@@ -2,12 +2,16 @@
 > Data Visualization
 
 ## Documentation
-* [How to connect to an OpenMappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-OpenMappr-server)
-* [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
-* [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
-* [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
+### Development Guides
 * [Prerequisites Install Guide for macOS](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-macOS)
+* [Prerequisites Install Guide for Ubuntu](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Ubuntu)
+* [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
 * [Validating Local Dependencies](https://github.com/selfhostedworks/openmappr/wiki/Validating-Local-Dependencies)
+### Deployment Guides
+* [How to connect to an Openmappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
+* [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
+* [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
+* [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
 
 ## Running Locally
 First you need to install the following prerequisites.  The installation instructions may vary based on your operating system, but a guide for macOS can be found [here](https://github.com/selfhostedworks/openmappr/wiki/macOS-Prerequisites-Install-Guide).
