@@ -19,8 +19,9 @@ if [[ "$key" != "y" && "$key" != "Y" ]] ; then
 	exit
 fi
 
+# Call sudo to have user enter their password
 tput setaf $MAGENTA; echo "
->> Asking for sudo password..."
+>> Asking for a sudo password..."
 sudo whoami >>/dev/null
 
 sleep 2 

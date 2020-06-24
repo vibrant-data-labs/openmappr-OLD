@@ -5,55 +5,94 @@
 #
 #
 #
+# Assign Color Variables
+BLACK=0
+RED=1
+GREEN=2
+YELLOW=3
+BLUE=4
+MAGENTA=5
+CYAN=6
+WHITE=7
+
+tput setaf $CYAN; read -n1 -p "Press Y/y to set up Openmappr for production >> "  key
+
+if [[ "$key" != "y" && "$key" != "Y" ]] ; then
+  tput setaf $RED; echo ">> Exiting! "
+  tput setaf $WHITE;
+	exit
+fi
+
+# Call sudo to have user enter their password
+tput setaf $MAGENTA; echo "
+>> Asking for sudo password..."
+sudo whoami >>/dev/null
+
 # Get all updates (unattended)
+tput setaf $MAGENTA; echo ">> Configuring apt..."
 export DEBIAN_FRONTEND=noninteractive
 export DEBIAN_PRIORITY=critical
-sudo -E apt-get -qy update
-sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade
-sudo -E apt-get -qy autoclean
-# remove old versions of docker dependencies
-apt remove docker docker-engine docker.io containerd runc -y
-# Install dependencies
-apt update -y
-# Install docker
-## curl -fsSL https://get.docker.com -o get-docker.sh
-## sh get-docker.sh
-curl -fsSL https://get.docker.com -o get-docker.sh &&
-sudo sh get-docker.sh &&
-rm -rf get-docker.sh
-# Install docker-compose
-curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-# Start Docker automatically
-sudo systemctl start docker && sudo systemctl enable docker
-###
-# Install NGINX
-sudo apt remove nginx nginx-common nginx-full nginx-core &&
-sudo add-apt-repository ppa:nginx/stable &&
-sudo apt update -y &&
-sudo apt install nginx -y
-# Enable and Start NGINX
-sudo systemctl start nginx && sudo systemctl enable nginx
-read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
-# Set NGNX self-signed certificates
-### CHANGE --- old part --- TO BE DELETED ### openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout \
-### CHANGE --- old part --- TO BE DELETED ### /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
-### CHANGE --- below is the (openssl) slef-signed cert NO PROMPT script
-openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=US/ST=SelfSigned/L=Springfield/O=Dis/CN=self-signed.xyz" -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt 
+tput setaf $YELLOW;
+sudo -E apt-get -qy update >>/dev/null
+sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade >>/dev/null
+sudo -E apt-get -qy autoclean >>/dev/null
+
+# Remove any old versions of docker
+tput setaf $MAGENTA; echo ">> Removing old docker versions..."
+tput setaf $YELLOW;
+sudo apt remove docker docker-engine docker.io containerd runc -y >>/dev/null
+
+# Update apt sources
+tput setaf $MAGENTA; echo ">> Updating apt sources..."
+tput setaf $YELLOW;
+sudo apt update >>/dev/null
+
+# Install docker via apt
+tput setaf $MAGENTA; echo ">> Installing docker..."
+tput setaf $YELLOW;
+curl -sSL https://get.docker.com | sudo bash
+
+# Start and enable the docker service
+tput setaf $MAGENTA; echo ">> Setting up the docker service..."
+tput setaf $YELLOW;
+sudo systemctl start docker >>/dev/null
+sudo systemctl enable docker >>/dev/null
+
+# Install docker compose
+tput setaf $MAGENTA; echo ">> Installing docker-compose..."
+tput setaf $YELLOW;
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Install Nginx
+tput setaf $MAGENTA; echo ">> Installing Nginx..."
+tput setaf $YELLOW;
+sudo add-apt-repository ppa:nginx/stable >>/dev/null
+sudo apt update >>/dev/null
+sudo apt install nginx -y >>/dev/null
+
+# Start and enable Nginx
+tput setaf $MAGENTA; echo ">> Setting up the Nginx service..."
+tput setaf $YELLOW;
+sudo systemctl start nginx >>/dev/null
+sudo systemctl enable nginx >>/dev/null
+
+# Set Nginx self-signed certificates
+tput setaf $MAGENTA; echo ">> Setting a self-signed certificate..."
+tput setaf $YELLOW;
+sudo openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=US/ST=SelfSigned/L=Springfield/O=Dis/CN=self-signed.xyz" -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt >>/dev/null
+
 # Generate a strong key
-openssl dhparam -out /etc/nginx/dhparam.pem 4096
-# Create Params file with
-# Create directory, -p 
-sudo mkdir -p /etc/nginx/snippets/
-sudo touch /etc/nginx/snippets/ssl-params.conf
-# Create Params file with
-# Create directory, -p 
-sudo mkdir -p /etc/nginx/snippets/
-### CHANGE --- No ned it since we will create with with 'cat 'EOF' later
-#sudo touch /etc/nginx/snippets/ssl-params.conf
-# Add in Parameters
-### CHANGE --- made >> to > since will be new file
-cat <<EOT > /etc/nginx/snippets/ssl-params.conf
+tput setaf $MAGENTA; echo ">> Generating a strong Diffie Hellman key..."
+tput setaf $YELLOW;
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096 >>/dev/null
+
+# Create SSL params file
+tput setaf $MAGENTA; echo ">> Creating the SSL params file..."
+tput setaf $YELLOW;
+sudo mkdir -p /etc/nginx/snippets/ >>/dev/null
+sudo touch /etc/nginx/snippets/ssl-params.conf >>/dev/null
+cat <<'EOF' > /etc/nginx/snippets/ssl-params.conf
 ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers on;
 ssl_dhparam /etc/nginx/dhparam.pem;
@@ -71,19 +110,11 @@ resolver_timeout 5s;
 add_header X-Frame-Options DENY;
 add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
-EOT
-# Create NGINX domain 
-sudo mkdir -p /etc/nginx/sites-available/
-### CHANGE --- no need because we will create this file with EOF ### sudo touch /etc/nginx/sites-available/openmappr.conf
-# Prompt for Domain
-### CHANGE --- prompt (below) for domain moved before setting thee conf
-#read -p 'Please enter your domain name as "example.com", "sub.example.com" or "*.example.com": ' nginx_conf_domain
-# check the domain is valid!
-### CHANGE #### to be remooved ### PATTERN="^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
-PATTERN="^((\*)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((\*\.)?([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,63}?))$"
-if [[ "$nginx_conf_domain" =~ $PATTERN ]]; then
-	nginx_conf_domain=`echo $nginx_conf_domain | tr '[A-Z]' '[a-z]'`
-### CHANGE --- I've edited the EOT as EOF as more common and also templated it as @@@nginx_conf_domain@@@ and added sed to replace the nginx_conf_domain with the value it should be
+EOF
+
+# Create Nginx config file
+tput setaf $MAGENTA; echo ">> Creating Nginx configuration file for OpenMappr..."
+tput setaf $YELLOW;
 cat <<'EOF' > /etc/nginx/sites-available/openmappr.conf
 server {
 listen 80;
@@ -114,28 +145,87 @@ location / {
 }
 }
 EOF
-# Replacing 
+
+# Get OpenMappr domain from user
+while [[ -z "$nginx_conf_domain" ]]
+do
+    tput setaf $CYAN; read -p "OpenMappr Domain (example.com, *.example.com) >> " nginx_conf_domain
+done
+# Validate domain formatting
+tput setaf $MAGENTA; echo ">> Validating domain format..."
+tput setaf $YELLOW;
+PATTERN="^((\*)|((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|((\*\.)?([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,63}?))$"
+if [[ "$nginx_conf_domain" =~ $PATTERN ]]; then
+	nginx_conf_domain=`echo $nginx_conf_domain | tr '[A-Z]' '[a-z]'`
+# Replacing placeholder value
+tput setaf $MAGENTA; echo ">> Setting Nginx domain..."
+tput setaf $YELLOW;
 sed -i "s/@@@nginx_conf_domain@@@/${nginx_conf_domain}/g" /etc/nginx/sites-available/openmappr.conf
 else
-	echo "invalid domain name"
-	exit 1
+    tput setaf $RED; echo ">> Invalid Domain!"
+    tput setaf $WHITE;
+    exit 1
 fi
 # Create a symlink
-ln -s /etc/nginx/sites-available/openmappr.conf /etc/nginx/sites-enabled/openmappr.conf
-# Reload NGINX
-service nginx restart
+tput setaf $MAGENTA; echo ">> Creating Nginx symlink..."
+tput setaf $YELLOW;
+ln -s /etc/nginx/sites-available/openmappr.conf /etc/nginx/sites-enabled/openmappr.conf >>/dev/null
+
+# Restart Nginx
+tput setaf $MAGENTA; echo ">> Restarting Nginx..."
+tput setaf $YELLOW;
+systemctl restart nginx >>/dev/null
+
 # Start Watchtower for automatic upgrades
+tput setaf $MAGENTA; echo ">> Starting Watchtower docker container..."
+tput setaf $YELLOW;
 docker run -d --restart=always --name watchtower -v \
-/var/run/docker.sock:/var/run/docker.sock containrrr/watchtower
-# Clone openMappr repo
-git clone https://github.com/selfhostedworks/openmappr
-cd openmappr
-# Grab environment from user
-read -p 'Please enter your environment (latest,staging,etc): ' environ
-# Grab dbHost from user
-read -p 'Please enter a remote database hostname or IP (db.openmappr.org,etc): ' mongo_host
+/var/run/docker.sock:/var/run/docker.sock containrrr/watchtower >>/dev/null
+
+# Clone Github Repository
+tput setaf $MAGENTA; echo ">> Cloning Openmappr repository from Github..."
+if [ -d "./openmappr" ] ; then
+  tput setaf $GREEN; echo "Repository is already cloned!"
+  cd openmappr
+else
+  tput setaf $YELLOW;
+  git clone https://github.com/selfhostedworks/openmappr.git
+  cd openmappr
+fi
+
+# Grab environment variables from user
+tput setaf $CYAN; 
+while [[ -z "$ENVIRONMENT" ]]
+do
+    read -p "Please enter your environment (latest,staging,etc): " ENVIRONMENT
+done
+while [[ -z "$DB_HOST" ]]
+do
+    read -p 'Please enter a remote database hostname or IP (db.openmappr.org,etc): ' DB_HOST
+done
+while [[ -z "$EMAIL_TO" ]]
+do
+    read -p "Please specify the email to send feedback to >> " EMAIL_TO
+done
+while [[ -z "$EMAIL_FROM" ]]
+do
+    read -p "Please specify the sender email for feedback >> " EMAIL_FROM
+done
+while [[ -z "$SENDGRID_API_KEY" ]]
+do
+    read -p "Please enter your Sendgrid API key >> " SENDGRID_API_KEY
+done
+tput setaf $MAGENTA; echo ">> Setting environment variables..."
+tput setaf $YELLOW;
 cp .env.sample .env
-sed -i "s/ENVIRONMENT=latest/ENVIRONMENT=${environ}/g" .env
-sed -i "s/DB_HOST=/DB_HOST=${mongo_host}/g" .env
+sed -i "s/ENVIRONMENT=latest/ENVIRONMENT=${ENVIRONMENT}/g" .env
+sed -i "s/DB_HOST=/DB_HOST=${DB_HOST}/g" .env
+sed -i "s/EMAIL_TO=/EMAIL_TO=${EMAIL_TO}/g" .env
+sed -i "s/EMAIL_FROM=/EMAIL_FROM=${EMAIL_FROM}/g" .env
+sed -i "s/SENDGRID_API_KEY=/SENDGRID_API_KEY=${SENDGRID_API_KEY}/g" .env
+
 # Start server
-docker-compose -f docker-compose.remote.yml up -d
+sudo docker-compose up -d
+
+# Set default color back to white
+tput setaf $WHITE;

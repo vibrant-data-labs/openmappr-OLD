@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+#                 The only thing you need to install here is cURL.
+#                          `sudo apt install curl -y`
+#
+#
+#
 # Not yet tested on Fedora
 
 # Assign Color Variables
@@ -22,12 +28,12 @@ if [[ "$key" != "y" && "$key" != "Y" ]] ; then
 fi
 
 tput setaf $MAGENTA; echo "
->> Asking for sudo password..."
+>> Asking for a sudo password..."
 sudo whoami >>/dev/null
 
 tput setaf $MAGENTA; echo ">> Updating sources..."
 tput setaf $YELLOW;
-sudo dnf update && sudo dnf upgrade -y >>/dev/null
+sudo dnf update >>/dev/null
 
 sleep 2
 
@@ -43,7 +49,7 @@ sudo dnf remove docker \
                   docker-logrotate \
                   docker-selinux \
                   docker-engine-selinux \
-                  docker-engine -y
+                  docker-engine -y >>/dev/null
 
 # Install OpenMappr dependencies via dnf
 tput setaf $MAGENTA; echo ">> Installing OpenMappr dependencies..."
@@ -61,7 +67,7 @@ gem install sass compass >>/dev/null
 sleep 2
 
 # Install Docker via dnf
-tput setaf $MAGENTA; echo ">> Installing Docker..."
+tput setaf $MAGENTA; echo ">> Installing docker..."
 tput setaf $YELLOW;
 sudo dnf install dnf-plugins-core -y >>/dev/null
 sudo dnf config-manager \
@@ -70,13 +76,13 @@ sudo dnf config-manager \
 sudo dnf install docker-ce docker-ce-cli containerd.io -y >>/dev/null
 
 # Start and enable the docker service
-tput setaf $MAGENTA; echo ">> Setting up the Docker service..."
+tput setaf $MAGENTA; echo ">> Setting up the docker service..."
 tput setaf $YELLOW;
 sudo systemctl start docker
 sudo systemctl enable docker
 
 # Install Docker Compose
-tput setaf $MAGENTA; echo ">> Installing Docker Compose..."
+tput setaf $MAGENTA; echo ">> Installing docker-compose..."
 tput setaf $YELLOW;
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
 sudo chmod +x /usr/local/bin/docker-compose
