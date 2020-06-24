@@ -128,7 +128,7 @@ service nginx restart
 docker run -d --restart=always --name watchtower -v \
 /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower
 # Clone openMappr repo
-git clone https://github.com/selfhostedofficial/openmappr
+git clone https://github.com/selfhostedworks/openmappr
 cd openmappr
 # Grab environment from user
 read -p 'Please enter your environment (latest,staging,etc): ' environ
