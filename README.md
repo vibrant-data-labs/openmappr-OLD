@@ -8,7 +8,7 @@
 * [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
 * [Validating Local Dependencies](https://github.com/selfhostedworks/openmappr/wiki/Validating-Local-Dependencies)
 
-> Windows is not supported officially at this time.
+> Windows is not officially supported at this time.
 
 ### Deployment Guides
 * [How to connect to an Openmappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
