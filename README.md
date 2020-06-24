@@ -17,7 +17,7 @@
 * [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
 
 ## Running Locally
-First you need to install the following prerequisites.  The installation instructions may vary based on your operating system, but a guide for macOS can be found [here](https://github.com/selfhostedworks/openmappr/wiki/macOS-Prerequisites-Install-Guide).
+First you need to install the following prerequisites.  The installation instructions may vary based on your operating system.  Please review the prerequisite install guides listed above.
 * Git
 * Docker & Docker Compose
 * Node.js 8.12.0 ([nvm](https://github.com/nvm-sh/nvm) is recommended)
