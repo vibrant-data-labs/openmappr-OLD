@@ -1,5 +1,6 @@
 # OpenMappr 📊
 ## [Documentation 📄](https://github.com/selfhostedworks/openmappr/wiki)
+#### [Install Scripts](https://github.com/selfhostedworks/openmappr/wiki/Install-Scripts)
 #### Development
 > Windows is not officially supported at this time.
 
@@ -13,8 +14,6 @@
 * [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
 * [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
 * [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
-
-#### [Install Scripts](https://github.com/selfhostedworks/openmappr/wiki/Install-Scripts)
 
 ## Starting local development 👨‍💻
 First you need to install the following prerequisites.  The installation instructions may vary based on your operating system.  Please review the prerequisite install guides listed above.
