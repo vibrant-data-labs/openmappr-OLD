@@ -19,7 +19,7 @@ First you need to install the following prerequisites.  The installation instruc
 * Git
 * Docker & Docker Compose
 * Node.js 8.12.0 ([nvm](https://github.com/nvm-sh/nvm) is recommended)
-* NPM along with `yo`, `bower`, and `grunt-cli`
+* NPM along with the `yo`, `bower`, and `grunt-cli` packages
 * Ruby along with the `sass` and `compass` gems
 
 
