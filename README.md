@@ -1,8 +1,6 @@
 # OpenMappr 📊
-> Data Visualization
-
 ## [Documentation](https://github.com/selfhostedworks/openmappr/wiki)
-### Development Guides
+#### Development Guides
 
 > Windows is not officially supported at this time.
 
@@ -11,7 +9,7 @@
 * [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
 * [How to validate prerequisites are installed](https://github.com/selfhostedworks/openmappr/wiki/How-to-validate-prerequisites-are-installed)
 
-### Deployment Guides
+#### Deployment Guides
 * [How to connect to an Openmappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
 * [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
 * [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
