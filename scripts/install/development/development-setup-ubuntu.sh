@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+#                 The only thing you need to install here is cURL.
+#                          `sudo apt install curl -y`
+#
+#
+#
 # Not yet tested on Ubuntu
 
 # Assign Color Variables
@@ -22,7 +28,7 @@ if [[ "$key" != "y" && "$key" != "Y" ]] ; then
 fi
 
 tput setaf $MAGENTA; echo "
->> Asking for sudo password..."
+>> Asking for a sudo password..."
 sudo whoami >>/dev/null
 
 tput setaf $MAGENTA; echo ">> Updating sources..."
@@ -34,12 +40,12 @@ sleep 2
 # Remove any old versions of docker
 tput setaf $MAGENTA; echo ">> Removing old docker versions..."
 tput setaf $YELLOW;
-sudo apt remove docker docker-engine docker.io containerd runc -y
+sudo apt remove docker docker-engine docker.io containerd runc -y >>/dev/null
 
 # Install OpenMappr dependencies via apt
 tput setaf $MAGENTA; echo ">> Installing OpenMappr dependencies..."
 tput setaf $YELLOW;
-sudo apt install curl build-essential ruby-full git python -y >>/dev/null
+sudo apt install build-essential ruby-full git python -y >>/dev/null
 
 sleep 2
 
@@ -50,19 +56,19 @@ sudo gem install sass compass >>/dev/null
 
 sleep 2
 
-# Install Docker via apt
-tput setaf $MAGENTA; echo ">> Installing Docker..."
+# Install docker via apt
+tput setaf $MAGENTA; echo ">> Installing docker..."
 tput setaf $YELLOW;
 curl -sSL https://get.docker.com | sudo bash
 
 # Start and enable the docker service
-tput setaf $MAGENTA; echo ">> Setting up the Docker service..."
+tput setaf $MAGENTA; echo ">> Setting up the docker service..."
 tput setaf $YELLOW;
 sudo systemctl start docker
 sudo systemctl enable docker
 
-# Install Docker Compose
-tput setaf $MAGENTA; echo ">> Installing Docker Compose..."
+# Install docker compose
+tput setaf $MAGENTA; echo ">> Installing docker-compose..."
 tput setaf $YELLOW;
 sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
 sudo chmod +x /usr/local/bin/docker-compose
