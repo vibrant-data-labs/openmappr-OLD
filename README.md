@@ -1,5 +1,5 @@
-# OpenMappr 📊
-### [Documentation](https://github.com/selfhostedworks/openmappr/wiki)
+# 📊 OpenMappr
+### 📄 [Documentation](https://github.com/selfhostedworks/openmappr/wiki)
 #### Development
 > Windows is not officially supported at this time.
 
@@ -8,13 +8,13 @@
 * [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
 * [How to validate prerequisites are installed](https://github.com/selfhostedworks/openmappr/wiki/How-to-validate-prerequisites-are-installed)
 
-#### Deployment
+#### 🖥️ Deployment
 * [How to connect to an Openmappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
 * [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
 * [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
 * [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
 
-## How to develop locally
+##  👨‍💻 How to develop locally
 First you need to install the following prerequisites.  The installation instructions may vary based on your operating system.  Please review the prerequisite install guides listed above.
 * Git
 * Docker & Docker Compose
@@ -47,5 +47,5 @@ After it finishes, you can start the server with:
 ```
 And navigate to [localhost:8080](http://localhost:8080) with your web browser.
 
-## Exiting Local Development
+## 💨 Exiting Local Development
 To shut down the development server, press `ctrl`+`c` to exit, and then run `docker-compose down` to shut down the docker stack.
