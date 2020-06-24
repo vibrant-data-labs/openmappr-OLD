@@ -1,7 +1,7 @@
 # OpenMappr 📊
 > Data Visualization
 
-## Documentation
+## [Documentation](https://github.com/selfhostedworks/openmappr/wiki)
 ### Development Guides
 * [Prerequisites Install Guide for macOS](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-macOS)
 * [Prerequisites Install Guide for Ubuntu](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Ubuntu)
