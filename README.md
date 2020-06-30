@@ -1,5 +1,6 @@
 # OpenMappr 📊
 ## [Documentation 📄](https://github.com/selfhostedworks/openmappr/wiki)
+#### [Install Scripts](https://github.com/selfhostedworks/openmappr/wiki/Install-Scripts)
 #### Development
 > Windows is not officially supported at this time.
 
