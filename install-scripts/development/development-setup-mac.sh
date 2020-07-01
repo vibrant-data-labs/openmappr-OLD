@@ -29,14 +29,25 @@ sudo whoami >/dev/null
 
 sleep 2
 
+# Install xcode command line tools
+
+tput setaf $MAGENTA; echo ">>> xcode"
+tput setaf $CYAN; echo "> Checking for xcode command line tools..."
+if xcode-select -p 1>/dev/null;echo $? | grep -q "0" >/dev/null ; then
+  tput setaf $GREEN; echo "> xcode is already installed!"
+else
+  tput setaf $CYAN; echo "> Installing xcode...";
+  xcode-select --install
+fi
+
 # Install homebrew package manager
 tput setaf $MAGENTA; echo ">>> homebrew"
 tput setaf $CYAN; echo "> Checking for homebrew..."
-if brew -v | grep -q "Homebrew"  &2>/dev/null ; then
+if brew -v | grep -q "Homebrew"  >/dev/null ; then
   tput setaf $GREEN; echo "> homebrew is already installed!" &2>/dev/null
 else
   tput setaf $CYAN; echo "> Installing homebrew...";
-  ${SHELL} -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &2>/dev/null
+  ${SHELL} -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" >/dev/null
 fi
 
 sleep 2
@@ -130,7 +141,7 @@ sleep 2
 
 # Install ruby gem: compass
 tput setaf $CYAN; echo "> Checking for ruby gem: compass..."
-if compass -v | grep -q "Compass"  &2>/dev/null ; then
+if compass -v | grep -q "Compass"  >/dev/null ; then
   tput setaf $GREEN; echo "> compass is already installed!"
 else
   tput setaf $CYAN; echo "> Installing ruby gem: compass..."
