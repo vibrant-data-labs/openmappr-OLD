@@ -29,11 +29,11 @@ fi
 
 tput setaf $MAGENTA; echo "
 >> Asking for a sudo password..."
-sudo whoami >>/dev/null
+sudo whoami >/dev/null
 
 tput setaf $MAGENTA; echo ">> Updating sources..."
 tput setaf $YELLOW;
-sudo dnf update >>/dev/null
+sudo dnf update >/dev/null
 
 sleep 2
 
@@ -49,31 +49,31 @@ sudo dnf remove docker \
                   docker-logrotate \
                   docker-selinux \
                   docker-engine-selinux \
-                  docker-engine -y >>/dev/null
+                  docker-engine -y >/dev/null
 
 # Install OpenMappr dependencies via dnf
 tput setaf $MAGENTA; echo ">> Installing OpenMappr dependencies..."
 tput setaf $YELLOW;
 sudo dnf install nodejs npm git-all python2 gcc @development-tools \
-    ruby ruby-devel rubygems rubygem-sass -y >>/dev/null
+    ruby ruby-devel rubygems rubygem-sass -y >/dev/null
 
 sleep 2
 
 # Install Ruby gems
 tput setaf $MAGENTA; echo ">> Installing Ruby gems..."
 tput setaf $YELLOW;
-gem install sass compass >>/dev/null
+gem install sass compass >/dev/null
 
 sleep 2
 
 # Install Docker via dnf
 tput setaf $MAGENTA; echo ">> Installing docker..."
 tput setaf $YELLOW;
-sudo dnf install dnf-plugins-core -y >>/dev/null
+sudo dnf install dnf-plugins-core -y >/dev/null
 sudo dnf config-manager \
     --add-repo \
-    https://download.docker.com/linux/fedora/docker-ce.repo >>/dev/null
-sudo dnf install docker-ce docker-ce-cli containerd.io -y >>/dev/null
+    https://download.docker.com/linux/fedora/docker-ce.repo >/dev/null
+sudo dnf install docker-ce docker-ce-cli containerd.io -y >/dev/null
 
 # Start and enable the docker service
 tput setaf $MAGENTA; echo ">> Setting up the docker service..."
@@ -84,7 +84,7 @@ sudo systemctl enable docker
 # Install Docker Compose
 tput setaf $MAGENTA; echo ">> Installing docker-compose..."
 tput setaf $YELLOW;
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >/dev/null
 sudo chmod +x /usr/local/bin/docker-compose
 
 sleep 2
@@ -106,7 +106,7 @@ sleep 2
 # Installing yo, bower, and grunt
 tput setaf $MAGENTA; echo ">> Installing global NPM packages: yo, bower, and grunt..."
 tput setaf $YELLOW;
-npm install -g yo bower grunt-cli >>/dev/null
+npm install -g yo bower grunt-cli >/dev/null
 
 sleep 2
 
@@ -125,13 +125,13 @@ sleep 2
 
 tput setaf $CYAN; echo "Running npm and bower install steps..."
 tput setaf $YELLOW; 
-npm install >>/dev/null
-bower install >>/dev/null
+npm install >/dev/null
+bower install >/dev/null
 
 # Build the application
 tput setaf $CYAN; echo "Building the application with grunt..."
 tput setaf $YELLOW; 
-grunt >>/dev/null
+grunt >/dev/null
 
 sleep 2
 

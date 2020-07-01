@@ -29,30 +29,45 @@ fi
 
 tput setaf $MAGENTA; echo "
 >> Asking for a sudo password..."
-sudo whoami >>/dev/null
+sudo whoami >/dev/null
 
 tput setaf $MAGENTA; echo ">> Updating sources..."
 tput setaf $YELLOW;
-sudo apt update >>/dev/null
+sudo apt-get update -qq >/dev/null
 
 sleep 2
 
 # Remove any old versions of docker
 tput setaf $MAGENTA; echo ">> Removing old docker versions..."
 tput setaf $YELLOW;
-sudo apt remove docker docker-engine docker.io containerd runc -y >>/dev/null
+sudo apt-get remove docker docker-engine docker.io containerd runc -y >/dev/null
 
 # Install OpenMappr dependencies via apt
 tput setaf $MAGENTA; echo ">> Installing OpenMappr dependencies..."
 tput setaf $YELLOW;
-sudo apt install build-essential ruby-full git python -y >>/dev/null
+sudo apt-get install build-essential ruby-full git python -y >/dev/null
 
 sleep 2
 
-# Install Ruby gems
-tput setaf $MAGENTA; echo ">> Installing Ruby gems..."
-tput setaf $YELLOW;
-sudo gem install sass compass >>/dev/null
+# Install Ruby gem: Sass
+tput setaf $MAGENTA; echo ">> Checking for Ruby gem: sass..."
+if sass -v | grep -q "Ruby Sass" >/dev/null ; then
+  tput setaf $GREEN; echo "Sass is already installed!"
+else
+  tput setaf $CYAN; echo "Installing Ruby gem: sass..."
+  sudo gem install sass >/dev/null
+fi
+
+sleep 2
+
+# Install Ruby gem: Compass
+tput setaf $MAGENTA; echo ">> Checking for Ruby gem: compass..."
+if compass -v | grep -q "Compass" >/dev/null ; then
+  tput setaf $GREEN; echo "Compass is already installed!"
+else
+  tput setaf $CYAN; echo "Installing Ruby gem: compass..."
+  sudo gem install compass
+fi
 
 sleep 2
 
@@ -70,29 +85,33 @@ sudo systemctl enable docker
 # Install docker compose
 tput setaf $MAGENTA; echo ">> Installing docker-compose..."
 tput setaf $YELLOW;
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >/dev/null
 sudo chmod +x /usr/local/bin/docker-compose
 
 sleep 2
 
 # Install Node Version Manager
-tput setaf $MAGENTA; echo ">> Installing Node Version Manager..."
-tput setaf $YELLOW;
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Switch to Node 8.12.0
-tput setaf $CYAN; echo "Installing and switching to Node v8.12.0..."
-tput setaf $YELLOW;
-nvm install 8.12.0
-nvm use 8.12.0
+tput setaf $MAGENTA; echo ">> Checking for Node v8.12.0..."
+if node -v | grep -q "v8.12.0" ; then
+  tput setaf $GREEN; echo "Node v8.12.0 is already installed!"
+else
+  tput setaf $CYAN; echo "Installing Node Version Manager v0.35.3..."
+  tput setaf $YELLOW;
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  # Install Node 8.12.0
+  tput setaf $CYAN; echo "Installing and switching to Node v8.12.0..."
+  tput setaf $YELLOW;
+  nvm install 8.12.0
+  nvm use 8.12.0
+fi
 
 sleep 2
 
 # Installing yo, bower, and grunt
 tput setaf $MAGENTA; echo ">> Installing global NPM packages: yo, bower, and grunt..."
 tput setaf $YELLOW;
-npm install -g yo bower grunt-cli >>/dev/null
+npm install -g yo bower grunt-cli >/dev/null
 
 sleep 2
 
@@ -111,13 +130,13 @@ sleep 2
 
 tput setaf $CYAN; echo "Running npm and bower install steps..."
 tput setaf $YELLOW; 
-npm install >>/dev/null
-bower install >>/dev/null
+npm install >/dev/null
+bower install >/dev/null
 
 # Build the application
 tput setaf $CYAN; echo "Building the application with grunt..."
 tput setaf $YELLOW; 
-grunt >>/dev/null
+grunt >/dev/null
 
 sleep 2
 

@@ -26,26 +26,26 @@ fi
 # Call sudo to have user enter their password
 tput setaf $MAGENTA; echo "
 >> Asking for sudo password..."
-sudo whoami >>/dev/null
+sudo whoami >/dev/null
 
 # Get all updates (unattended)
 tput setaf $MAGENTA; echo ">> Configuring apt..."
 export DEBIAN_FRONTEND=noninteractive
 export DEBIAN_PRIORITY=critical
 tput setaf $YELLOW;
-sudo -E apt-get -qy update >>/dev/null
-sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade >>/dev/null
-sudo -E apt-get -qy autoclean >>/dev/null
+sudo -E apt-get -qy update >/dev/null
+sudo -E apt-get -qy -o "Dpkg::Options::=--force-confdef" -o "Dpkg::Options::=--force-confold" upgrade >/dev/null
+sudo -E apt-get -qy autoclean >/dev/null
 
 # Remove any old versions of docker
 tput setaf $MAGENTA; echo ">> Removing old docker versions..."
 tput setaf $YELLOW;
-sudo apt remove docker docker-engine docker.io containerd runc -y >>/dev/null
+sudo apt-get remove docker docker-engine docker.io containerd runc -y >/dev/null
 
 # Update apt sources
 tput setaf $MAGENTA; echo ">> Updating apt sources..."
 tput setaf $YELLOW;
-sudo apt update >>/dev/null
+sudo apt-get update -qq >/dev/null
 
 # Install docker via apt
 tput setaf $MAGENTA; echo ">> Installing docker..."
@@ -55,43 +55,57 @@ curl -sSL https://get.docker.com | sudo bash
 # Start and enable the docker service
 tput setaf $MAGENTA; echo ">> Setting up the docker service..."
 tput setaf $YELLOW;
-sudo systemctl start docker >>/dev/null
-sudo systemctl enable docker >>/dev/null
+sudo systemctl start docker >/dev/null
+sudo systemctl enable docker >/dev/null
 
 # Install docker compose
 tput setaf $MAGENTA; echo ">> Installing docker-compose..."
 tput setaf $YELLOW;
-sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >>/dev/null
+sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose >/dev/null
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Install Nginx
 tput setaf $MAGENTA; echo ">> Installing Nginx..."
 tput setaf $YELLOW;
-sudo add-apt-repository ppa:nginx/stable >>/dev/null
-sudo apt update >>/dev/null
-sudo apt install nginx -y >>/dev/null
+sudo add-apt-repository ppa:nginx/stable >/dev/null
+sudo apt-get update >/dev/null
+sudo apt-get install nginx -y >/dev/null
 
 # Start and enable Nginx
 tput setaf $MAGENTA; echo ">> Setting up the Nginx service..."
 tput setaf $YELLOW;
-sudo systemctl start nginx >>/dev/null
-sudo systemctl enable nginx >>/dev/null
+sudo systemctl start nginx >/dev/null
+sudo systemctl enable nginx >/dev/null
+
+# Configuring ufw rules and enabling ufw service
+tput setaf $MAGENTA; echo ">> Checking the status of ufw..."
+if ufw status | head -1 | grep -q "inactive" ; then
+  tput setaf $CYAN; echo "Adding some ufw rules and enabling the ufw service..."
+  tput setaf $YELLOW;
+  sudo ufw allow 'Nginx Full'
+  sudo ufw allow OpenSSH
+  sudo ufw enable <<EOF
+y
+EOF
+else
+  tput setaf $GREEN; echo "ufw is already enabled!"
+fi
 
 # Set Nginx self-signed certificates
 tput setaf $MAGENTA; echo ">> Setting a self-signed certificate..."
 tput setaf $YELLOW;
-sudo openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=US/ST=SelfSigned/L=Springfield/O=Dis/CN=self-signed.xyz" -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt >>/dev/null
+sudo openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 -subj "/C=US/ST=SelfSigned/L=Springfield/O=Dis/CN=self-signed.xyz" -keyout /etc/nginx/nginx-selfsigned.key -out /etc/nginx/nginx-selfsigned.crt >/dev/null
 
 # Generate a strong key
 tput setaf $MAGENTA; echo ">> Generating a strong Diffie Hellman key..."
 tput setaf $YELLOW;
-sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096 >>/dev/null
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 4096 >/dev/null
 
 # Create SSL params file
 tput setaf $MAGENTA; echo ">> Creating the SSL params file..."
 tput setaf $YELLOW;
-sudo mkdir -p /etc/nginx/snippets/ >>/dev/null
-sudo touch /etc/nginx/snippets/ssl-params.conf >>/dev/null
+sudo mkdir -p /etc/nginx/snippets/ >/dev/null
+sudo touch /etc/nginx/snippets/ssl-params.conf >/dev/null
 cat <<'EOF' > /etc/nginx/snippets/ssl-params.conf
 ssl_protocols TLSv1.2 TLSv1.3;
 ssl_prefer_server_ciphers on;
@@ -169,18 +183,18 @@ fi
 # Create a symlink
 tput setaf $MAGENTA; echo ">> Creating Nginx symlink..."
 tput setaf $YELLOW;
-ln -s /etc/nginx/sites-available/openmappr.conf /etc/nginx/sites-enabled/openmappr.conf >>/dev/null
+ln -s /etc/nginx/sites-available/openmappr.conf /etc/nginx/sites-enabled/openmappr.conf >/dev/null
 
 # Restart Nginx
 tput setaf $MAGENTA; echo ">> Restarting Nginx..."
 tput setaf $YELLOW;
-systemctl restart nginx >>/dev/null
+systemctl restart nginx >/dev/null
 
 # Start Watchtower for automatic upgrades
 tput setaf $MAGENTA; echo ">> Starting Watchtower docker container..."
 tput setaf $YELLOW;
 docker run -d --restart=always --name watchtower -v \
-/var/run/docker.sock:/var/run/docker.sock containrrr/watchtower >>/dev/null
+/var/run/docker.sock:/var/run/docker.sock containrrr/watchtower >/dev/null
 
 # Clone Github Repository
 tput setaf $MAGENTA; echo ">> Cloning Openmappr repository from Github..."

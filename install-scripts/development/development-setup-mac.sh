@@ -22,11 +22,11 @@ fi
 # Call sudo to have user enter their password
 tput setaf $MAGENTA; echo "
 >> Asking for a sudo password..."
-sudo whoami >>/dev/null
+sudo whoami >/dev/null
 
 sleep 2 
 
-# Installing Homebrew Package Manager
+# Install Homebrew Package Manager
 tput setaf $MAGENTA; echo ">> Checking for Homebrew..."
 if brew -v | grep -q "Homebrew"  &2>/dev/null ; then
   tput setaf $GREEN; echo "Homebrew is already installed!" &2>/dev/null
@@ -37,7 +37,7 @@ fi
 
 sleep 2 
 
-# Installing Node Version Manager
+# Install Node Version Manager
 tput setaf $MAGENTA; echo ">> Checking for Node v8.12.0..."
 if node -v | grep -q "v8.12.0" ; then
   tput setaf $GREEN; echo "Node v8.12.0 is already installed!"
@@ -104,7 +104,7 @@ else
   brew install ruby
 fi
 
-# Install Ruby Gem Sass
+# Install Ruby gem: Sass
 tput setaf $MAGENTA; echo ">> Checking for Ruby gem: sass..."
 if sass -v | grep -q "Ruby Sass"  &2>/dev/null ; then
   tput setaf $GREEN; echo "Sass is already installed!"
@@ -115,7 +115,7 @@ fi
 
 sleep 2 
 
-# Install Ruby Gem Compass
+# Install Ruby gem: Compass
 tput setaf $MAGENTA; echo ">> Checking for Ruby gem: compass..."
 if compass -v | grep -q "Compass"  &2>/dev/null ; then
   tput setaf $GREEN; echo "Compass is already installed!"
@@ -134,7 +134,7 @@ sleep 2
 
 # Installing yo, bower, and grunt
 tput setaf $CYAN; echo "Installing global NPM packages: yo, bower, and grunt..."
-sudo npm install -g yo bower grunt-cli >>/dev/null
+sudo npm install -g yo bower grunt-cli >/dev/null
 
 sleep 2 
 
@@ -151,13 +151,13 @@ fi
 sleep 2 
 
 tput setaf $CYAN; echo "Running npm and bower install steps..."
-npm install  >>/dev/null
-bower install  >>/dev/null
+npm install  >/dev/null
+bower install  >/dev/null
 
 # Build the application
 tput setaf $CYAN; echo "Building the application with grunt..."
 tput setaf $YELLOW; 
-grunt  >>/dev/null
+grunt  >/dev/null
 
 sleep 2 
 
