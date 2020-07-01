@@ -30,13 +30,13 @@ sudo whoami >/dev/null
 sleep 2
 
 # Install xcode command line tools
-
 tput setaf $MAGENTA; echo ">>> xcode"
 tput setaf $CYAN; echo "> Checking for xcode command line tools..."
 if xcode-select -p 1>/dev/null;echo $? | grep -q "0" >/dev/null ; then
   tput setaf $GREEN; echo "> xcode is already installed!"
 else
   tput setaf $CYAN; echo "> Installing xcode...";
+  tput setaf $YELLOW;
   xcode-select --install
 fi
 
@@ -47,6 +47,7 @@ if brew -v | grep -q "Homebrew"  >/dev/null ; then
   tput setaf $GREEN; echo "> homebrew is already installed!" &2>/dev/null
 else
   tput setaf $CYAN; echo "> Installing homebrew...";
+  tput setaf $YELLOW;
   ${SHELL} -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" >/dev/null
 fi
 
@@ -59,9 +60,11 @@ if node -v | grep -q "v8.12.0" ; then
   tput setaf $GREEN; echo "> node v8.12.0 is already installed!"
 else
   tput setaf $CYAN; echo "> Installing node version manager v0.35.3..."
+  tput setaf $YELLOW;
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | ${SHELL}
   # Install node v8.12.0
   tput setaf $CYAN; echo "> Installing and switching to node v8.12.0..."
+  tput setaf $YELLOW;
   nvm install 8.12.0
   nvm use 8.12.0
 fi
