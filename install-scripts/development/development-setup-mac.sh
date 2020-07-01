@@ -11,48 +11,54 @@ MAGENTA=5
 CYAN=6
 WHITE=7
 
-tput setaf $CYAN; read -n1 -p "Press Y/y to set up Openmappr for development on macOS >> "  key
+# Prompt user to start setup
+tput setaf $MAGENTA; read -n1 -p ">>> Press Y/y to set up OpenMappr for development > " key
 
+# Exit if not Y/y
 if [[ "$key" != "y" && "$key" != "Y" ]] ; then
-  tput setaf $RED; echo ">> Exiting! "
+  tput setaf $RED; echo ">>> Exiting! "
   tput setaf $WHITE;
-	exit
+  exit
 fi
 
-# Call sudo to have user enter their password
-tput setaf $MAGENTA; echo "
->> Asking for a sudo password..."
+# Trigger a sudo call for authentication
+tput setaf $MAGENTA; echo "";
+echo ">>> Asking for a sudo password..."
+tput setaf $YELLOW;
 sudo whoami >/dev/null
 
-sleep 2 
+sleep 2
 
-# Install Homebrew Package Manager
-tput setaf $MAGENTA; echo ">> Checking for Homebrew..."
+# Install homebrew package manager
+tput setaf $MAGENTA; echo ">>> homebrew"
+tput setaf $CYAN; echo "> Checking for homebrew..."
 if brew -v | grep -q "Homebrew"  &2>/dev/null ; then
-  tput setaf $GREEN; echo "Homebrew is already installed!" &2>/dev/null
+  tput setaf $GREEN; echo "> homebrew is already installed!" &2>/dev/null
 else
-  tput setaf $CYAN; echo "Installing Homebrew...";
+  tput setaf $CYAN; echo "> Installing homebrew...";
   ${SHELL} -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" &2>/dev/null
 fi
 
-sleep 2 
+sleep 2
 
-# Install Node Version Manager
-tput setaf $MAGENTA; echo ">> Checking for Node v8.12.0..."
+# Install node version manager
+tput setaf $MAGENTA; echo ">>> node"
+tput setaf $CYAN; echo "> Checking for node v8.12.0..."
 if node -v | grep -q "v8.12.0" ; then
-  tput setaf $GREEN; echo "Node v8.12.0 is already installed!"
+  tput setaf $GREEN; echo "> node v8.12.0 is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Node Version Manager v0.35.3..."
+  tput setaf $CYAN; echo "> Installing node version manager v0.35.3..."
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | ${SHELL}
-  # Install Node 8.12.0
-  tput setaf $CYAN; echo "Installing Node v8.12.0..."
+  # Install node v8.12.0
+  tput setaf $CYAN; echo "> Installing and switching to node v8.12.0..."
   nvm install 8.12.0
+  nvm use 8.12.0
 fi
 
-sleep 2 
+sleep 2
 
 # Reload system environment
-tput setaf $CYAN; echo "Reloading system environment..."
+tput setaf $MAGENTA; echo ">>> Reloading system environment..."
 case ${SHELL} in
   "/bin/bash" )
     source ~/.bash_profile
@@ -65,118 +71,131 @@ case ${SHELL} in
   ;;
 esac
 
-sleep 2 
+sleep 2
 
-# Install Docker
-tput setaf $MAGENTA; echo ">> Checking for Docker..."
+# Install and set up docker
+tput setaf $MAGENTA; echo ">>> docker"
+tput setaf $CYAN; echo "> Checking for docker..."
 DOCKER_PATH=/Applications/Docker.app
 if [ -d ${DOCKER_PATH} ] ; then
-  tput setaf $GREEN; echo "Docker is already installed!"
+  tput setaf $GREEN; echo "> docker is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Docker..."
+  tput setaf $CYAN; echo "> Installing docker via homebrew..."
   tput setaf $YELLOW;
-  brew cask install docker
+  brew cask install docker >/dev/null
 fi
 
-# Open Docker, it needs to be up during install
-tput setaf $CYAN; echo "Opening Docker..."
+# Start docker so we can use it later
+tput setaf $CYAN; echo "> Opening docker..."
+tput setaf $YELLOW;
 open /Applications/Docker.app
 
-sleep 2 
+sleep 2
 
-# Install Git
-tput setaf $MAGENTA; echo ">> Checking for Git..."
+# Install git
+tput setaf $MAGENTA; echo ">>> git"
+tput setaf $CYAN; echo "> Checking for git..."
 if git --version | grep -q "git version" ; then
-  tput setaf $GREEN; echo "Git is already installed!"
+  tput setaf $GREEN; echo "> git is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Git..."
-  brew install git
+  tput setaf $CYAN; echo "> Installing git via homebrew..."
+  tput setaf $YELLOW;
+  brew install git >/dev/null
 fi
 
-sleep 2 
+sleep 2
 
-# Install Ruby
-tput setaf $MAGENTA; echo ">> Checking for Ruby..."
+# Install ruby
+tput setaf $MAGENTA; echo ">>> ruby"
+tput setaf $CYAN; echo "> Checking for ruby..."
 if ruby -v | grep -q "ruby" ; then
-  tput setaf $GREEN; echo "Ruby is already installed!"
+  tput setaf $GREEN; echo "> ruby is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Ruby..."
-  brew install ruby
+  tput setaf $CYAN; echo "> Installing ruby via homebrew..."
+  tput setaf $YELLOW;
+  brew install ruby >/dev/null
 fi
 
-# Install Ruby gem: Sass
-tput setaf $MAGENTA; echo ">> Checking for Ruby gem: sass..."
-if sass -v | grep -q "Ruby Sass"  &2>/dev/null ; then
-  tput setaf $GREEN; echo "Sass is already installed!"
+# Install ruby gem: sass
+tput setaf $CYAN; echo "> Checking for ruby gem: sass..."
+if sass -v | grep -q "Ruby Sass" >/dev/null ; then
+  tput setaf $GREEN; echo "> sass is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Ruby gem: sass..."
-  sudo gem install sass
+  tput setaf $CYAN; echo "> Installing ruby gem: sass..."
+  tput setaf $YELLOW;
+  sudo gem install sass >/dev/null
 fi
 
 sleep 2 
 
-# Install Ruby gem: Compass
-tput setaf $MAGENTA; echo ">> Checking for Ruby gem: compass..."
+# Install ruby gem: compass
+tput setaf $CYAN; echo "> Checking for ruby gem: compass..."
 if compass -v | grep -q "Compass"  &2>/dev/null ; then
-  tput setaf $GREEN; echo "Compass is already installed!"
+  tput setaf $GREEN; echo "> compass is already installed!"
 else
-  tput setaf $CYAN; echo "Installing Ruby gem: compass..."
-  sudo gem install compass
+  tput setaf $CYAN; echo "> Installing ruby gem: compass..."
+  tput setaf $YELLOW;
+  sudo gem install compass >/dev/null
 fi
 
-sleep 2 
-
-# Switch to Node 8.12.0
-tput setaf $CYAN; echo "Switching to Node v8.12.0..."
-nvm use 8.12.0
-
-sleep 2 
+sleep 2
 
 # Installing yo, bower, and grunt
-tput setaf $CYAN; echo "Installing global NPM packages: yo, bower, and grunt..."
-sudo npm install -g yo bower grunt-cli >/dev/null
+tput setaf $MAGENTA; echo ">>> global npm packages"
+tput setaf $CYAN; echo "> Installing yo, bower, and grunt..."
+tput setaf $YELLOW;
+npm install -g yo bower grunt-cli >/dev/null
 
-sleep 2 
+sleep 2
 
 # Clone Github Repository
-tput setaf $CYAN; echo "Cloning Openmappr repository from Github..."
+tput setaf $MAGENTA;
+echo ">>> OpenMappr repository"
+tput setaf $CYAN; echo "> Checking for existing OpenMappr files..."
 if [ -d "./openmappr" ] ; then
-  tput setaf $GREEN; echo "Repository is already cloned!"
+  tput setaf $GREEN; echo "> OpenMappr is already cloned!"
   cd openmappr
 else
-  git clone https://github.com/selfhostedworks/openmappr.git
+  tput setaf $CYAN; echo "> Cloning OpenMappr repository from Github..."
+  tput setaf $YELLOW;
+  git clone https://github.com/selfhostedworks/openmappr.git >/dev/null
   cd openmappr
 fi
 
-sleep 2 
+sleep 2
 
-tput setaf $CYAN; echo "Running npm and bower install steps..."
-npm install  >/dev/null
-bower install  >/dev/null
+# Install project dependencies
+tput setaf $CYAN; echo "> Running npm and bower install steps..."
+tput setaf $YELLOW;
+npm install >/dev/null
+bower install >/dev/null
 
 # Build the application
-tput setaf $CYAN; echo "Building the application with grunt..."
-tput setaf $YELLOW; 
-grunt  >/dev/null
+tput setaf $CYAN; echo "> Building the application with grunt..."
+tput setaf $YELLOW;
+grunt >/dev/null
 
-sleep 2 
+sleep 2
 
 # Start the docker-compose stack
-tput setaf $MAGENTA; echo ">> Checking for an existing docker compose stack..."
-if docker ps -a | grep -q "openmappr_" &2>/dev/null ; then
-  tput setaf $GREEN; echo "The docker compose stack is already running. Let's remove it and start over..."
-  docker-compose down &1>/dev/null
-  docker-compose -f docker-compose.local.yml up -d
+tput setaf $MAGENTA; echo ">>> docker-compose stack"
+tput setaf $CYAN; echo "> Checking for an existing docker compose stack..."
+if sudo docker ps -a | grep -q "openmappr_" >/dev/null ; then
+  tput setaf $GREEN; echo "> The docker compose stack is already running. Let's remove it and start over..."
+  tput setaf $YELLOW;
+  sudo docker-compose down >/dev/null
+  sudo docker-compose -f docker-compose.local.yml up -d
 else
-  tput setaf $CYAN; echo "Starting local development stack via Docker Compose..."
-  docker-compose -f docker-compose.local.yml up -d
+  tput setaf $CYAN; echo "> Starting local development stack via docker compose..."
+  sudo docker-compose -f docker-compose.local.yml up -d
 fi
 
-sleep 2 
+sleep 2
 
 # Start the server
-tput setaf $CYAN; echo "Running server at http://localhost:8080 ..."
-${SHELL} ./run_local_mode.sh
+tput setaf $MAGENTA; echo ">>> Running server at http://localhost:8080 ..."
+  tput setaf $YELLOW;
+./run_local_mode.sh
 
 # Set default color back to white
 tput setaf $WHITE;

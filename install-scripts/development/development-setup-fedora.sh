@@ -62,7 +62,7 @@ sudo dnf install nodejs npm git-all python2 gcc @development-tools \
 
 sleep 2
 
-# Install Ruby gem: sass
+# Install ruby gem: sass
 tput setaf $MAGENTA; echo ">>> Ruby gem: sass"
 tput setaf $CYAN; echo "> Checking for sass..."
 if sass -v | grep -q "Ruby Sass" >/dev/null ; then
@@ -74,7 +74,7 @@ fi
 
 sleep 2
 
-# Install Ruby gem: compass
+# Install ruby gem: compass
 tput setaf $MAGENTA; echo ">>> Ruby gem: compass"
 tput setaf $CYAN; echo "> Checking for compass..."
 if compass -v | grep -q "Compass" >/dev/null ; then

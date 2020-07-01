@@ -54,7 +54,7 @@ sudo apt-get install build-essential ruby-full git python -y >/dev/null
 
 sleep 2
 
-# Install Ruby gem: sass
+# Install ruby gem: sass
 tput setaf $MAGENTA; echo ">>> Ruby gem: sass"
 tput setaf $CYAN; echo "> Checking for sass..."
 if sass -v | grep -q "Ruby Sass" >/dev/null ; then
@@ -66,7 +66,7 @@ fi
 
 sleep 2
 
-# Install Ruby gem: compass
+# Install ruby gem: compass
 tput setaf $MAGENTA; echo ">>> Ruby gem: compass"
 tput setaf $CYAN; echo "> Checking for compass..."
 if compass -v | grep -q "Compass" >/dev/null ; then
@@ -121,7 +121,7 @@ else
   tput setaf $YELLOW;
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
   export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  # Install Node 8.12.0
+  # Install node v8.12.0
   tput setaf $CYAN; echo "> Installing and switching to node v8.12.0..."
   tput setaf $YELLOW;
   nvm install 8.12.0
