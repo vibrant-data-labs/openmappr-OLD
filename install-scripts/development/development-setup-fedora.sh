@@ -69,6 +69,7 @@ if sass -v | grep -q "Ruby Sass" >/dev/null ; then
   tput setaf $GREEN; echo "> sass is already installed!"
 else
   tput setaf $CYAN; echo "> Installing Ruby gem: sass..."
+tput setaf $YELLOW;
   sudo gem install sass >/dev/null
 fi
 
@@ -81,7 +82,8 @@ if compass -v | grep -q "Compass" >/dev/null ; then
   tput setaf $GREEN; echo "> compass is already installed!"
 else
   tput setaf $CYAN; echo "> Installing Ruby gem: compass..."
-  sudo gem install compass
+tput setaf $YELLOW;
+  sudo gem install compass >/dev/null
 fi
 
 sleep 2
