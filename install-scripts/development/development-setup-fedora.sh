@@ -36,7 +36,7 @@ sleep 2
 # Update dnf sources
 tput setaf $MAGENTA; echo ">>> Updating dnf sources..."
 tput setaf $YELLOW;
-sudo dnf update >/dev/null
+sudo dnf update -y >/dev/null
 
 sleep 2
 
