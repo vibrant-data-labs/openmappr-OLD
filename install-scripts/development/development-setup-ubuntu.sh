@@ -1,11 +1,9 @@
 #!/bin/bash
 #
 #                 The only thing you need to install here is cURL.
-#                          `sudo apt install curl -y`
+#                           sudo apt install curl -y
 #
-#
-#
-# Not yet tested on Ubuntu
+# Tested on Ubuntu 18.04
 
 # Assign Color Variables
 BLACK=0
@@ -18,7 +16,7 @@ CYAN=6
 WHITE=7
 
 # Prompt user to start setup
-tput setaf $MAGENTA; read -n1 -p "Press Y/y to set up OpenMappr for development on Ubuntu >> "  key
+tput setaf $MAGENTA; read -n1 -p ">>> Press Y/y to set up OpenMappr for development > " key
 
 # Exit if not Y/y
 if [[ "$key" != "y" && "$key" != "Y" ]] ; then
@@ -27,6 +25,7 @@ if [[ "$key" != "y" && "$key" != "Y" ]] ; then
   exit
 fi
 
+# Trigger a sudo call for authentication
 tput setaf $MAGENTA; echo "";
 echo ">>> Asking for a sudo password..."
 tput setaf $YELLOW;
@@ -34,6 +33,7 @@ sudo whoami >/dev/null
 
 sleep 2
 
+# Update apt sources
 tput setaf $MAGENTA; echo ">>> Updating apt sources..."
 tput setaf $YELLOW;
 sudo apt-get update -qq >/dev/null
@@ -54,7 +54,7 @@ sudo apt-get install build-essential ruby-full git python -y >/dev/null
 
 sleep 2
 
-# Install Ruby gem: Sass
+# Install Ruby gem: sass
 tput setaf $MAGENTA; echo ">>> Ruby gem: sass"
 tput setaf $CYAN; echo "> Checking for sass..."
 if sass -v | grep -q "Ruby Sass" >/dev/null ; then
@@ -66,7 +66,7 @@ fi
 
 sleep 2
 
-# Install Ruby gem: Compass
+# Install Ruby gem: compass
 tput setaf $MAGENTA; echo ">>> Ruby gem: compass"
 tput setaf $CYAN; echo "> Checking for compass..."
 if compass -v | grep -q "Compass" >/dev/null ; then
@@ -78,12 +78,13 @@ fi
 
 sleep 2
 
-# Install docker via apt
-tput setaf $MAGENTA; echo ">>> Docker"
+# Install and set up docker
+tput setaf $MAGENTA; echo ">>> docker"
 tput setaf $CYAN; echo "> Checking for docker..."
 if docker -v | grep -q "Docker" >/dev/null ; then
   tput setaf $GREEN; echo "> docker is already installed!"
 else
+  # Install docker via install script
   tput setaf $CYAN; echo "> Installing docker..."
   tput setaf $YELLOW;
   curl -sSL https://get.docker.com | sudo bash
@@ -96,7 +97,7 @@ fi
 
 sleep 2
 
-# Install docker compose
+# Install docker-compose
 tput setaf $MAGENTA; echo ">>> docker-compose"
 tput setaf $CYAN; echo "> Checking for docker-compose..."
 if docker-compose -v | grep -q "docker-compose" >/dev/null ; then
@@ -110,7 +111,7 @@ fi
 
 sleep 2
 
-# Install Node Version Manager
+# Install node version manager
 tput setaf $MAGENTA; echo ">>> nvm, node, npm"
 tput setaf $CYAN; echo "> Checking for node v8.12.0..."
 if node -v | grep -q "v8.12.0" ; then
@@ -130,7 +131,7 @@ fi
 sleep 2
 
 # Installing yo, bower, and grunt
-tput setaf $MAGENTA; echo ">>> npm global packages"
+tput setaf $MAGENTA; echo ">>> global npm packages"
 tput setaf $CYAN; echo "> Installing yo, bower, and grunt..."
 tput setaf $YELLOW;
 npm install -g yo bower grunt-cli >/dev/null
@@ -153,6 +154,7 @@ fi
 
 sleep 2
 
+# Install project dependencies
 tput setaf $CYAN; echo "> Running npm and bower install steps..."
 tput setaf $YELLOW;
 npm install >/dev/null
