@@ -144,6 +144,11 @@ angular.module('common')
                     }
                 });
 
+
+                $rootScope.canShowChartsBtn = function(){
+                    return $scope.nodeDistrAttrs.some(function(attr){ return attr.attrType == 'integer' || attr.attrType == 'float' || attr.attrType == 'boolean' || attr.attrType == 'year' || attr.attrType == 'timestamp'});
+                }
+
                 var tagAttrs = $scope.nodeDistrAttrs.filter(function(x) { return groups.tag.includes(x.renderType);});
                 var visibleTagAttrs = tagAttrs.filter(function(x) {
                     return x.visible;
