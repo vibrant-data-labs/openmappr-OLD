@@ -132,8 +132,8 @@ angular.module('common')
                         valMax = max === binCount ? attrMax : attrMin + max * step;
 
                     return {
-                        min: valMin,
-                        max: valMax
+                        min: attrInfo.isInteger ? Math.ceil(valMin) : valMin,
+                        max: attrInfo.isInteger ? Math.floor(valMax) : valMax
                     };
                 }
             }
