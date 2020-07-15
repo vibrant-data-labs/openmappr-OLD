@@ -88,6 +88,11 @@ angular.module('common')
                         service.filters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');
                         service.unselect();
                     });
+                    $rootScope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, data) {
+                        if (data.subsetCount === 0) {
+                            service.unselect();
+                        }
+                    });
                 })(this);
             }
 
