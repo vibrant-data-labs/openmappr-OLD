@@ -264,6 +264,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
 
     function selectAllNodes(showSearchResults) {
         selectService.selectNodes({ ids: _.map($scope.searchResults, 'id'), searchText: $scope.globalSearch.text, searchAttr: $scope.selectedSearchValue, scope: $scope});
+        $scope.searchToggle();
         if(!showSearchResults) {
             $scope.hideSearchResults();
         }
