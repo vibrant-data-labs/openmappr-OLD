@@ -167,6 +167,10 @@ angular.module('common')
 
                     distrData.numShownCats = Math.min(distrData.numShowGroups * ITEMS_TO_SHOW + initVisItemCount, scope.catListData.data.length);
                 });
+
+                scope.$on(BROADCAST_MESSAGES.hss.subset.init, function (ev) {
+                    scope.showFirstPage();
+                });
                 /**
          * watch filters being enabled disabled
          */
