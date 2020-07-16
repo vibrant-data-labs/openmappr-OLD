@@ -421,9 +421,9 @@ function($q, dataGraph, renderGraphfactory,AttrInfoService, leafletData, partiti
             nodePopReleaseContext: 'hover-out', //'hover-out', 'click-out'
             nodePopRepositionNeighbors: false,
             //Focus
-            nodeFocusShow: false,
+            nodeFocusShow: true,
             nodeFocusContext: 'click',
-            nodeFocusRenderTemplate: 'content',     //'orbit', 'scroll', 'slideshow', 'content'
+            nodeFocusRenderTemplate: 'node-right-panel',     //'orbit', 'scroll', 'slideshow', 'content'
             nodeFocusShowNeighbors: true,
             nodeFocusNeighborsButton: true,
             nodeFocusNeighborsBefore: null,

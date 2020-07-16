@@ -19,7 +19,7 @@ class LayoutClustered(AlgorithmBase):
             'max': 1,
             'multiplier': 1,
             'value': 'Number',
-            'default': 0.3,
+            'default': 0,
             'isRequired': True
         },
         {
@@ -31,7 +31,7 @@ class LayoutClustered(AlgorithmBase):
             'max': 5000,
             'multiplier': 10,
             'value': 'Number',
-            'default': 500,
+            'default': 1000,
             'isRequired': True
         },
         {

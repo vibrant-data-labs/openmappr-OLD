@@ -221,10 +221,10 @@ function($rootScope, $q, $http, dataService, networkService, $routeParams, projF
     function generateClusterLayout(networkId) {
         var ops = {
             byAttribute: false,
-            clumpiness: 0.3,
+            clumpiness: 0,
             clustering: "Original",
             layoutName: "Original",
-            maxSteps: 500
+            maxSteps: 1000
         };
         return fetchAlgos()
             .then(function() {
