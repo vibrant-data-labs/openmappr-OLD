@@ -71,7 +71,7 @@ angular.module('common')
                 var histoBars; // Ref for histo svg bars
                 var mappTheme = projFactory.getProjectSettings().theme || 'light';
                 var attrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id));
-                scope.attrInfo=attrInfo;
+                scope.attrInfo = attrInfo;
                 var histElem = element[0].childNodes[0];
                 var tooltip = element.find(".d3-tip");
 
@@ -157,10 +157,10 @@ angular.module('common')
 
                 scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, payload) {
                     attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
-                    scope.attrInfo=attrInfo;
+                    scope.attrInfo = attrInfo;
                     animateRemoval(histElem, histoData);
-                    
-                    $timeout(function() {
+
+                    $timeout(function () {
                         while (histElem.firstChild) {
                             histElem.removeChild(histElem.lastChild);
                         }
@@ -293,6 +293,17 @@ angular.module('common')
                         result[nodeVal].nodeIds.push(node.id);
                     }
                 });
+
+                var max = _.reduce(Object.keys(result), function (acc, cv) {
+                    var elem = result[cv];
+                    if (acc < elem.count) acc = elem.count;
+
+                    return acc;
+                }, 0);
+
+                _.each(Object.keys(result), function (r) {
+                    result[r].count = max > 0 ? result[r].count / max * 100 : result[r].count;
+                })
                 return result;
             }
 
@@ -498,7 +509,7 @@ angular.module('common')
                 d3.select(histElem)
                     .selectAll('.bar')
                     .selectAll('rect')
-                    .each(function() {
+                    .each(function () {
                         var barElem = d3.select(this);
                         var newBarHeight = 0;
                         var selY = sanitizeYPosn(histoData.yScaleFunc(0), histoData.height, histoData.opts);
@@ -591,9 +602,13 @@ angular.module('common')
                 var histoStep = histoMax * 0.25;
                 var yAxis = d3.svg.axis()
                     .scale(y)
-                    .tickValues(d3.range(0, histoMax + histoStep, histoStep ))
+                    .tickValues(d3.range(0, histoMax + histoStep, histoStep))
                     .tickFormat(function (yVal) {
-                        return (yVal / histoMax * 100).toFixed(0) + '%';
+                        if (nodes) {
+                            return (yVal / nodes.length * 100).toFixed(0) + '%';
+                        }
+
+                        return (yVal / renderCtrl.getTotalNodesCount() * 100).toFixed(0) + '%';
                     })
                     .orient("left");
 
@@ -646,15 +661,15 @@ angular.module('common')
                     .attr("width", barWidth)
                     .attr("height", 0);
 
-                    $timeout(function(b) {
-                        b.select('[data-main-bar="true"]')
+                $timeout(function (b) {
+                    b.select('[data-main-bar="true"]')
                         .transition()
                         .duration(1000)
                         .attr("y", function (d) {
                             return y(d.y);
                         })
                         .attr("height", function (d) { return height - y(d.y); });
-                    }, 100, null, bar);
+                }, 100, null, bar);
                 // Attach listeners on parent of overlapping bars i.e 'g' element
                 bar.on('mouseover', onBarHover)
                     .on('mouseout', onBarUnHover)
@@ -785,19 +800,6 @@ angular.module('common')
                         nodeVal = principalNode.attr[attrInfo.attr.id];
                         valInRange = _.inRange(nodeVal, selectionCountsList[i].min, selectionCountsList[i].max);
 
-                        // if (i === 0) {
-                        //     // First bar
-                        //     if (nodeVal >= 0 && nodeVal < selectionCountsList[i].min) {
-                        //         valInRange = true;
-                        //     }
-                        // }
-                        // else if (i === bar[0].length - 1) {
-                        //     // Last bar
-                        //     if (nodeVal > 0 && nodeVal >= selectionCountsList[i].max) {
-                        //         valInRange = true;
-                        //     }
-                        // }
-
                         if (valInRange) {
                             barElem.insert("rect", '[data-selection="true"]')
                                 .attr("x", function () { return getBarXPosn(d, i, binType, histoData.barWidth); })
@@ -806,8 +808,6 @@ angular.module('common')
                                 .attr("width", histoData.barWidth)
                                 .attr("height", 0)
                                 .attr('fill', opts.barColor);
-                            // opacity = 1;
-                            // globalBar.attr('opacity', 0.7);
                             globalBar.style({
                                 fill: selectionColor
                             });
@@ -842,6 +842,7 @@ angular.module('common')
                             .transition()
                             .duration(1000)
                             .attr("height", newBarHeight)
+                            .style('opacity', 0.5)
                             .attr("y", selY);
                     }
 
@@ -885,6 +886,7 @@ angular.module('common')
                             .transition()
                             .duration(1000)
                             .attr("height", newBarHeight)
+                            .style('opacity', 0.5)
                             .attr("y", filtY);
                     }
 
