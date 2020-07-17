@@ -12,7 +12,8 @@ angular.module('common')
                 template: '<div class="histogram" ng-mouseleave="outBar()" ng-mousemove="overBar($event)">' +
                     '<div class="tooltip-positioner" uib-tooltip="{{tooltipText}}" tooltip-append-to-body="true" tooltip-is-open="openTooltip"></div>' +
                     '</div>' +
-                    '<dir-range-filter ng-if="showFilter" ng-class="{disableFilter: disableFilter}" attr="attrInfo"></dir-range-filter>',
+                    '<dir-range-filter ng-if="showFilter" ng-class="{disableFilter: disableFilter}" attr="attrInfo"></dir-range-filter>' +
+                    '<input type="checkbox" ng-change="toggleLogScale()" ng-model="isLogScale"/>',
                 link: postLinkFn
             };
 
@@ -70,8 +71,12 @@ angular.module('common')
             function postLinkFn(scope, element, attrs, renderCtrl) {
                 var histoBars; // Ref for histo svg bars
                 var mappTheme = projFactory.getProjectSettings().theme || 'light';
-                var attrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id));
-                scope.attrInfo=attrInfo;
+                var attrInfo;
+                var defaultAttrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id));
+                var logAttrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForLogId(scope.attrToRender.id));
+                attrInfo = defaultAttrInfo;
+                scope.attrInfo = defaultAttrInfo;
+                scope.isLogScale = false;
                 var histElem = element[0].childNodes[0];
                 var tooltip = element.find(".d3-tip");
 
@@ -98,25 +103,7 @@ angular.module('common')
                     binCount: 0,
                     opts: _.clone(defaultOpts),
                     intVarData: {},
-                    binType: (function () {
-                        if (attrInfo.isNumeric) {
-                            if (attrInfo.isInteger || attrInfo.attr.attrType == 'year') {
-                                if (attrInfo.nBins < defaultOpts.binCount
-                                    && _.every(attrInfo.bins, function (bin) { return bin.max === bin.min; })) {
-                                    return 'int_unique'; // 1 value per bin
-                                }
-                                else {
-                                    return 'int_variable'; // Multiple values per bin
-                                }
-                            }
-                            else {
-                                return 'default'; // Float values
-                            }
-                        }
-                        else {
-                            return 'categorical'; // Categorical values
-                        }
-                    }()),
+                    binType: getBinType(attrInfo),
                     xAxisType: (function () {
                         var attrType = attrInfo.attr.attrType;
                         if (attrType == 'timestamp') { return 'dateTime'; }
@@ -156,19 +143,17 @@ angular.module('common')
                 });
 
                 scope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, payload) {
-                    attrInfo = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
-                    scope.attrInfo=attrInfo;
-                    animateRemoval(histElem, histoData);
-                    
-                    $timeout(function() {
-                        while (histElem.firstChild) {
-                            histElem.removeChild(histElem.lastChild);
-                        }
-                        histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, payload.nodes);
-                        $timeout(function () {
-                            updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
-                        }, 500);
-                    }, 500);
+                    var infoMap = AttrInfoService.buildAttrInfoMap(scope.attrToRender, payload.nodes);
+                    defaultAttrInfo = infoMap.infoObj;
+                    logAttrInfo = infoMap.logInfoObj;
+                    if (scope.isLogScale) {
+                        scope.attrInfo = logAttrInfo;
+                        attrInfo = logAttrInfo;
+                    } else {
+                        scope.attrInfo = defaultAttrInfo;
+                        attrInfo = defaultAttrInfo;
+                    }
+                    redrawHistogram(attrInfo, payload.nodes);
                 });
 
                 // Create global distributions & selection bars
@@ -189,6 +174,17 @@ angular.module('common')
                     console.error(logPrefix + "creating global distribution throws error", e.stack, e);
                 }
 
+                scope.toggleLogScale = function () {
+                    if (scope.isLogScale) {
+                        scope.attrInfo = logAttrInfo;
+                        attrInfo = logAttrInfo;
+                    } else {
+                        scope.attrInfo = defaultAttrInfo;
+                        attrInfo = defaultAttrInfo;
+                    }
+                    redrawHistogram(attrInfo);
+                }
+
                 scope.outBar = function () {
                     $timeout(function () {
                         scope.openTooltip = false;
@@ -206,6 +202,21 @@ angular.module('common')
                         scope.openTooltip = true;
                     }, 100);
                 };
+
+                function redrawHistogram(attrInfo, nodes) {
+                    animateRemoval(histElem, histoData);
+                    
+                    $timeout(function() {
+                        while (histElem.firstChild) {
+                            histElem.removeChild(histElem.lastChild);
+                        }
+                        histoData.binType = getBinType(attrInfo);
+                        histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, nodes);
+                        $timeout(function () {
+                            updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
+                        }, 500);
+                    }, 500);
+                }
             }
 
 
@@ -216,6 +227,26 @@ angular.module('common')
             // Number formatting
             var SIFormatter = d3.format("s");
             var floatFormatter = d3.format(",.2f");
+
+            function getBinType(attrInfo) {
+                if (attrInfo.isNumeric) {
+                    if (attrInfo.isInteger || attrInfo.attr.attrType == 'year') {
+                        if (attrInfo.nBins < defaultOpts.binCount
+                            && _.every(attrInfo.bins, function (bin) { return bin.max === bin.min; })) {
+                            return 'int_unique'; // 1 value per bin
+                        }
+                        else {
+                            return 'int_variable'; // Multiple values per bin
+                        }
+                    }
+                    else {
+                        return 'default'; // Float values
+                    }
+                }
+                else {
+                    return 'categorical'; // Categorical values
+                }
+            }
 
             function sanitizeYPosn(y, histoHeight, opts) {
                 if (histoHeight - y >= opts.minSelectionHeight) {
