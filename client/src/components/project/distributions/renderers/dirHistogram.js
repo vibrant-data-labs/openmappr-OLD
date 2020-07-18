@@ -13,7 +13,10 @@ angular.module('common')
                     '<div class="tooltip-positioner" uib-tooltip="{{tooltipText}}" tooltip-append-to-body="true" tooltip-is-open="openTooltip"></div>' +
                     '</div>' +
                     '<dir-range-filter ng-if="showFilter" ng-class="{disableFilter: disableFilter}" attr="attrInfo"></dir-range-filter>' +
-                    '<input type="checkbox" ng-change="toggleLogScale()" ng-model="isLogScale"/>',
+                    `<div ng-show="hasLogScale" class="log-scale-toggle">
+                        <input type="checkbox" ng-change="toggleLogScale()" ng-model="isLogScale"/>
+                        <label>log</label>
+                    </div>`,
                 link: postLinkFn
             };
 
@@ -74,6 +77,7 @@ angular.module('common')
                 var attrInfo;
                 var defaultAttrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForId(scope.attrToRender.id));
                 var logAttrInfo = _.cloneDeep(AttrInfoService.getNodeAttrInfoForRG().getForLogId(scope.attrToRender.id));
+                scope.hasLogScale = !!logAttrInfo;
                 attrInfo = defaultAttrInfo;
                 scope.attrInfo = defaultAttrInfo;
                 scope.isLogScale = false;
