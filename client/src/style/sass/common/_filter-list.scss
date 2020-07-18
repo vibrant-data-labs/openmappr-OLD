@@ -37,6 +37,13 @@
         }
       }
 
+      &.attr-visibility.truncate {
+        padding: 0;
+        margin-left: -5px;
+        display: flex;
+        align-items: center;
+      }
+
       .card__header {
         display: flex;
         align-items: center;

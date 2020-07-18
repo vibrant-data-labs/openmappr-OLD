@@ -1,4 +1,4 @@
-.attr-visibility.truncate
+.attr-visibility.truncate.card_type_filter
 	//- div.uib-dropdown(uib-dropdown dropdown-append-to-body is-open="ui.menuOpen")
 	//- 	span.uib-dropdown-toggle(uib-dropdown-toggle uib-tooltip="Sort Options", tooltip-placement="right", tooltip-append-to-body="true" auto-close="disabled")
 	//- 		span.pull-right {{sortConfig.sortType}} &nbsp;
@@ -27,9 +27,13 @@
 	//- 							span &nbsp;{{::sortType.title}}
 	//- 					li.row.divider
 	//- 			.uib-dropdown-flexer
-	button(type="button", ng-click="setSortOrder(sortConfig.sortOrder, $event)" uib-tooltip="Reverse Order" tooltip-placement="bottom-left" tooltip-append-to-body="true")
-		i.fa.fa-long-arrow-down.text-link.no-underline(ng-if="sortConfig.sortOrder === 'desc'")
-		i.fa.fa-long-arrow-up.text-link.no-underline(ng-if="sortConfig.sortOrder === 'asc'")
+	button.card__action-sort(
+		ng-class="{ 'up': sortConfig && sortConfig.sortOrder === 'asc' }", 
+		ng-click="setSortOrder(sortConfig.sortOrder, $event)"
+		uib-tooltip="Reverse Order",
+		tooltip-placement="bottom-left", 
+		tooltip-append-to-body="true"
+	)
 
 	span(uib-dropdown dropdown-append-to-body)
 		span(uib-dropdown-toggle auto-close="outsideClick" ng-click="keepDrawerOpen = true;" uib-tooltip="Sort Options", tooltip-placement="right" tooltip-append-to-body="true")
