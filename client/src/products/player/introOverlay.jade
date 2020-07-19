@@ -1,12 +1,11 @@
 #firstLoad.intro-overlay.animate-fade(ng-if="panelUI.modalPanelOpen")
   .hero
+    button(ng-click="panelUI.openPanel('slides')")
+      | Explore Map
     .hero__background
     .hero__content
       h1.hero__title {{player.settings.modalTitle}}
       .subtitle(ng-bind-html="player.settings.modalSubtitle | trustHtml")
 
       .content(ng-bind-html="player.settings.modalDescription | trustHtml")
-
-      button(ng-click="panelUI.openPanel('slides')")
-        | Explore Map
 
