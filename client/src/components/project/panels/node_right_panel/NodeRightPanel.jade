@@ -84,8 +84,8 @@
                     .cat-item(style="cursor:pointer", ng-mouseover="onSectionHover(sections, tag)", ng-mouseleave="onSectionLeave()", ng-click="onSectionSelect(sections, tag)")
                       .cat-highlight(style="opacity: 0;")
                       .vert-align.cat-text-container
-                        div
-                          .cat-text.no-margin.truncate {{tag}}
+                        div.cat-text.no-margin.truncate
+                          {{tag}}
 
           section.section.section_compact(ng-if="nodeRightInfo.sectionShortTags.length")
             .section__content.section__info.section__short-strings
@@ -103,8 +103,8 @@
                       tooltip-placement="left", 
                       tooltip-append-to-body="true")
                       .vert-align.cat-text-container
-                        div
-                          .cat-text.no-margin.truncate {{val.value}}
+                        div.cat-text.no-margin.truncate
+                          {{val.value}}
                   span.section-info__value(ng-if="!val.isTag") {{val.value}}
 
           section.section.section_compact(ng-if="nodeRightInfo.section4.length")

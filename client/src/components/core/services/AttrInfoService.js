@@ -103,11 +103,18 @@ angular.module('common')
                     throw new Error("AttrInfo not found for this attr:" + attrId);
                 }
                 if( _.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
-                    this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, val.entities);
+                    var infoMap = buildAttrInfoMap(val.attr, val.entities);
+                    this.__cache[attrId].infoObj = infoMap.infoObj;
+                    this.__cache[attrId].logInfoObj = infoMap.logInfoObj;
                     this.__cache[attrId].__refresh__ = false;
                 }
                 return this.__cache[attrId].infoObj;
             };
+            AttrInfo.prototype.getForLogId = function(attrId) {
+                this.getForId(attrId);
+                return this.__cache[attrId].logInfoObj;
+            }
+
             AttrInfo.prototype.forId = function(attrId) {
                 return this.getForId(attrId);
             };
@@ -331,14 +338,20 @@ angular.module('common')
                 }, []);
 
                 if(attr.isNumeric) {
+                    var logInfoObj = {...infoObj, isInteger: false};
                     getNumericAttrInfo(values, infoObj);
+                    if (infoObj.stats.min > 0 && !attr.id.includes('log10') && (attr.attrType === 'float' || attr.attrType === 'integer')) {
+                        var logValues = _.map(values, (val) => +Math.log10(val).toFixed(2));                        
+                        getNumericAttrInfo(logValues, logInfoObj);
+                        return { infoObj, logInfoObj };
+                    }
                 } else if(attr.isTag) {
                     getTagAttrInfo(entities, attribId, infoObj);
                 } else {
                     getNonNumericAttrInfo(values, infoObj);
                 }
                 // console.log("Attr Info for attr: %s : %O", attribId, infoObj);
-                return infoObj;
+                return { infoObj };
             }
 
             function getNumericAttrInfo(values, destination) {

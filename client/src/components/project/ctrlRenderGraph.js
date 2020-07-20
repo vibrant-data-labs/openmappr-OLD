@@ -205,12 +205,15 @@ angular.module('common')
                         // in this case the all previous operations are subset also
                         var operations = _.clone($scope.operations.list);
                         $scope.operations.list = $scope.operations.list.splice(0, 1);
+                        var chain = Promise.resolve();
                         _.each(operations, function (op) {
                             if (op.type == 'init') return;
-                            selectService.applyFilters(op.filters, op.searchText, op.searchAttr, $scope)
-                                .then(function() {
-                                    subsetService.subset();
-                                });
+                            chain = chain.then(function() {
+                                selectService.applyFilters(op.filters, op.searchText, op.searchAttr, $scope)
+                            })
+                            .then(function() {
+                                subsetService.subset();
+                            });
                         });
 
                         operations = null;
