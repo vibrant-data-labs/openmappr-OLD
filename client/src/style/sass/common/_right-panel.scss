@@ -79,14 +79,10 @@
       width: 31%;
 
       &.active {
-        i {
-          color: #BC3364;
-        }
+        background-color: #e0e0e0;
       }
       &.cat-item-subsetted {
-        i {
-          color: #BC3364;
-        }
+        background-color: #c0c0c0;
       }
       &:hover {
         border-color: darken(#E2E2E2, 16);
