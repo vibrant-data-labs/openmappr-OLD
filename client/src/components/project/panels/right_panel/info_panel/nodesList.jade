@@ -7,7 +7,6 @@
 				span.dark-grey-font.list-panel-header__links.truncate(ng-if="links") {{links.length}} {{linksStatus}}
 				span.dark-drey-font(ng-if="!links") ...
 			.vert-align
-				span Sorted By:
 				dir-sort-menu.list-panel-header__select.truncate(sort-types="sortTypes" sort-config="sortInfo")
 
 				//- dir-export()
