@@ -1,6 +1,6 @@
 angular.module('common')
-.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService', 'subsetService',
-function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService, subsetService) {
+.controller('SearchPanelCtrl', ['$scope', '$rootScope', '$timeout', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService', 'subsetService',
+function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService, subsetService) {
     'use strict';
 
     /*************************************
@@ -32,7 +32,8 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         processingQuery: false,
         overlayOpen: false,
         showInfoIcon: false,
-        numShowGroups: numShowGroups
+        numShowGroups: numShowGroups,
+        hoveredId: null
     };
 
     $scope.filterAttrVMs = [];
@@ -67,8 +68,19 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         $scope.ui.showLimit = Math.min($scope.ui.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);   
     }
 
-    $scope.hoverNode = function(node) {
-        hoverService.hoverNodes({ ids: [node.id]});
+    var hoverAction;
+
+    $scope.hoverNode = function(node, event) {
+        var directionKey = hoverService.getHoverDirection(event, event.currentTarget);
+        if (hoverAction) {
+            $timeout.cancel(hoverAction);
+        }
+        if (directionKey === -1) {
+            hoverAction = $timeout(function() {
+                $scope.hoveredId = node.id;
+                hoverService.hoverNodes({ ids: [node.id]});
+            }, 200);
+        }
     };
 
     $scope.hideSearchResults = function() {
