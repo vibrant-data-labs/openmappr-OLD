@@ -5,8 +5,8 @@
      Will need change if 'false' use-case is required.
 */
 angular.module('common')
-    .directive('dirAttrRenderer', ['$timeout', 'FilterPanelService', 'nodeSelectionService', 'hoverService', 'graphSelectionService', 'layoutService', 'AttrInfoService', 'projFactory', 'networkService', 'BROADCAST_MESSAGES',
-        function($timeout, FilterPanelService, nodeSelectionService, hoverService, graphSelectionService, layoutService, AttrInfoService, projFactory, networkService, BROADCAST_MESSAGES) {
+    .directive('dirAttrRenderer', ['$timeout', 'FilterPanelService', 'nodeSelectionService', 'hoverService', 'graphSelectionService', 'layoutService', 'AttrInfoService', 'projFactory', 'networkService', 'BROADCAST_MESSAGES', 'dataGraph',
+        function($timeout, FilterPanelService, nodeSelectionService, hoverService, graphSelectionService, layoutService, AttrInfoService, projFactory, networkService, BROADCAST_MESSAGES, dataGraph) {
             'use strict';
 
             /*************************************
@@ -138,6 +138,10 @@ angular.module('common')
                 this.isCompareView = function() {
                     return this.isExtUser === 'true' || this.isExtUser === true;
                 };
+
+                this.getTotalNodesCount = function() {
+                    return dataGraph.getAllNodes().length;
+                }
 
                 this.getClusterMeta = function() {
                     if($scope.attrToRender.id != 'Cluster') throw new Error('Called for non-cluster attr');
