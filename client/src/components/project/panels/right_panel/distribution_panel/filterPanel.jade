@@ -2,7 +2,7 @@
 	.flex-vert-container.flex-transclude.panel-container.width-100
 		.filter-header
 			ul.filter-header__list
-				li.filter-header__item.tag.filter-header__item_current(ng-click="navigateTo('.tags-first-item')")
+				li.filter-header__item.tag.filter-header__item_current(ng-click="navigateTo('.tags-first-item')", ng-if="canShowTagsBtn()")
 					span.filter-header__link Tags
 				li.filter-header__item.chart(ng-click="navigateTo('.chart-first-item')", ng-if="canShowChartsBtn()")
 					span.filter-header__link Charts

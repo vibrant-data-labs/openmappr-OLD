@@ -145,6 +145,12 @@
         &:not(:last-child) {
             margin-bottom: 10px;
         }
+
+        &:hover .search-results-item__sublabel {
+            .highlight-list {
+                opacity: 1;
+            }
+        }
     }
 
     .search-results-item {
@@ -165,6 +171,11 @@
 
         &__sublabel {
             font: 400 12px/20px 'Poppins';
+
+            .highlight-list {
+                opacity: 0;
+                @include transition(opacity 0.2s linear);
+            }
         }
     }
 

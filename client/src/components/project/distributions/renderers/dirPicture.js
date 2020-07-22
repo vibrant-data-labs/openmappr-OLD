@@ -56,6 +56,14 @@ function($rootScope, $sce, $window, BROADCAST_MESSAGES) {
             scope.activeImg = null;
         };
 
+        scope.getSizeStyle = function() {
+            return {
+                display: 'block',
+                width: 275,
+                height: 275
+            }
+        };
+
         //reassign because if changes in parent then will reset
         // var renderWidth = scope.renderWidth;
         // if(scope.isSmall == 'true') {
