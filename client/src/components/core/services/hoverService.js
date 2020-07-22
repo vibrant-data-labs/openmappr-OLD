@@ -13,7 +13,6 @@ angular.module('common')
             this.hoverNodes = hoverNodes;
             this.unhover = unhover;
             this.sigBinds = sigBinds;
-            this.getHoverDirection = getHoverDirection;
 
             /*************************************
             ********* Local Data *****************
@@ -76,13 +75,6 @@ angular.module('common')
 
                 _hoverHelper(this.hoveredNodes, hoverData.degree, hoverData.withNeighbors);
             }
-
-            // return -1 for top-down, 1 for bottom-up
-            function getHoverDirection(ev, elem) {
-                const { width, height, top, left } = elem.getBoundingClientRect();
-                const y = ev.offsetY - height / 2;
-                return Math.sign(y);
-            };
 
             function filter(data, subset) {
                 var filters = selectService.copyFilters();

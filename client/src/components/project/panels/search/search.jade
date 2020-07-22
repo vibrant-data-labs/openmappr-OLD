@@ -99,11 +99,12 @@
         ng-repeat="node in searchResults | limitTo: ui.showLimit track by node.id"
         ng-click="selectNode(node); $event.stopPropagation();"
         ng-mouseenter="hoverNode(node, $event); $event.stopPropagation();"
+        ng-mouseleave="leaveNode(node); $event.stopPropagation();"
       )
         .search-results-item
           span.search-results-item__color(style="background:{{node.colorStr}};")
           span.search-results-item__label {{node.attr[ui.nodeLabelAttr]}}
-        span.search-results-item__sublabel(ng-if="hoveredId === node.id" ng-bind-html="getSearchHighlights(node)")
+        span.search-results-item__sublabel(ng-if="isNodeDescShown(node)" ng-bind-html="getSearchHighlights(node)")
 
     .search-results__footer
       span.more(ng-click='showMore()' ng-if="searchResults && searchResults.length > ui.showLimit") Show more results

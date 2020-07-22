@@ -33,7 +33,7 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
         overlayOpen: false,
         showInfoIcon: false,
         numShowGroups: numShowGroups,
-        hoveredId: null
+        hoveredIds: []
     };
 
     $scope.filterAttrVMs = [];
@@ -68,19 +68,23 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
         $scope.ui.showLimit = Math.min($scope.ui.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);   
     }
 
-    var hoverAction;
+    $scope.leaveNode = function(node) {
+        $timeout(function() {
+            $scope.ui.hoveredIds = _.filter($scope.ui.hoveredIds, function(id) {
+                return node.id !== id;
+            });
+        }, 400);
+    }
+
+    $scope.isNodeDescShown = function(node) {
+        return _.some($scope.ui.hoveredIds, function(id) {
+            return node.id === id;
+        })
+    }
 
     $scope.hoverNode = function(node, event) {
-        var directionKey = hoverService.getHoverDirection(event, event.currentTarget);
-        if (hoverAction) {
-            $timeout.cancel(hoverAction);
-        }
-        if (directionKey === -1) {
-            hoverAction = $timeout(function() {
-                $scope.hoveredId = node.id;
-                hoverService.hoverNodes({ ids: [node.id]});
-            }, 200);
-        }
+        hoverService.hoverNodes({ ids: [node.id]});
+        $scope.ui.hoveredIds.push(node.id);
     };
 
     $scope.hideSearchResults = function() {
