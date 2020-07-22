@@ -14,7 +14,7 @@ angular.module('common')
     **************************************/
             var dirDefn = {
                 restrict: 'AE',
-                template: '<div class="attr-renderers" ng-style="getSizeStyle()" ng-if="shouldRender && renderer.renderTemplate" ng-include="renderer.renderTemplate"></div>',
+                template: '<div class="attr-renderers" ng-if="shouldRender && renderer.renderTemplate" ng-include="renderer.renderTemplate"></div>',
 
                 // Values passed to scope will serve as RENDER OPTIONS for child render directives
                 scope: {
@@ -174,13 +174,6 @@ angular.module('common')
                 scope.shouldRender = true;
                 setupScope(scope.attrToRender.id);
                 scope.renderer.renderTemplate = getRenderTemplate(scope.attrToRender, scope.isSized);
-
-                scope.getSizeStyle = function() {
-                    return {
-                        width: scope.renderWidth,
-                        height: scope.renderHeight
-                    }
-                };
 
                 scope.$on(BROADCAST_MESSAGES.selectNodes, function(e, data) {
                     if(!_.isArray(_.get(data, 'nodes'))) {
