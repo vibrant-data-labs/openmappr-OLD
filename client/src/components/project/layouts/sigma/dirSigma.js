@@ -150,7 +150,9 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
                 });
                 selectionDivEnabled = false;
                 selectionDiv.hidden = true;
-                selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+                setTimeout(function() {
+                    selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+                }, 100);
             }
         }
 
