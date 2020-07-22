@@ -1,6 +1,6 @@
 angular.module('common')
-    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService',
-        function ($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES, hoverService, selectService, subsetService) {
+    .directive('dirHistogram', ['$timeout', 'AttrInfoService', 'projFactory', 'FilterPanelService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService', 'dataGraph',
+        function ($timeout, AttrInfoService, projFactory, FilterPanelService, BROADCAST_MESSAGES, hoverService, selectService, subsetService, dataGraph) {
             'use strict';
 
             /*************************************
@@ -62,6 +62,8 @@ angular.module('common')
                 yearLabelHeight: 18
             };
 
+            var maxTickValue = 0;
+            var initAxis = null;
 
             /*************************************
             ******** Controller Function *********
@@ -142,7 +144,7 @@ angular.module('common')
 
                 scope.$on(BROADCAST_MESSAGES.hss.select, function (ev, payload) {
                     var nodes = selectService.selectedNodes.length == subsetService.currentSubset().length ? [] : payload.nodes;
-                    updateSelectionBars(histoBars, nodes, attrInfo, histoData, mappTheme, false);
+                    updateSelectionBars(histoBars, nodes, attrInfo, histoData, mappTheme, false, histElem);
                     updateFiltSelBars(histoBars, nodes, attrInfo, histoData);
                 });
 
@@ -166,13 +168,13 @@ angular.module('common')
                     histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData);
 
                     if (!_.isEmpty(initialSelection)) {
-                        updateSelectionBars(histoBars, initialSelection, attrInfo, histoData, mappTheme, initialSelection.length === 1);
+                        updateSelectionBars(histoBars, initialSelection, attrInfo, histoData, mappTheme, initialSelection.length === 1, histElem);
                         if (initialSelection.length > 1) {
                             updateFiltSelBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData);
                         }
                     }
                     else {
-                        updateSelectionBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData, mappTheme, false);
+                        updateSelectionBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData, mappTheme, false, histElem);
                     }
                 } catch (e) {
                     console.error(logPrefix + "creating global distribution throws error", e.stack, e);
@@ -209,15 +211,15 @@ angular.module('common')
 
                 function redrawHistogram(attrInfo, nodes) {
                     animateRemoval(histElem, histoData);
-                    
-                    $timeout(function() {
+
+                    $timeout(function () {
                         while (histElem.firstChild) {
                             histElem.removeChild(histElem.lastChild);
                         }
                         histoData.binType = getBinType(attrInfo);
                         histoBars = createGlobalDistribution(histElem, tooltip, attrInfo, renderCtrl, histoData, nodes);
                         $timeout(function () {
-                            updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false);
+                            updateSelectionBars(histoBars, [], attrInfo, histoData, mappTheme, false, histElem);
                         }, 500);
                     }, 500);
                 }
@@ -315,6 +317,22 @@ angular.module('common')
 
             function getSelectionValuesMap(nodes, attrId) {
                 var result = {};
+                // var totalResult = {};
+                // var totalNodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes : dataGraph.getAllNodes();
+                // _.each(totalNodes, function (node) {
+                //     var nodeVal = node.attr[attrId];
+                //     if (totalResult[nodeVal] == null) {
+                //         totalResult[nodeVal] = {
+                //             count: 1,
+                //             nodeIds: [node.id]
+                //         };
+                //     }
+                //     else {
+                //         totalResult[nodeVal].count++;
+                //         totalResult[nodeVal].nodeIds.push(node.id);
+                //     }
+                // });
+
                 _.each(nodes, function (node) {
                     var nodeVal = node.attr[attrId];
                     if (result[nodeVal] == null) {
@@ -329,16 +347,6 @@ angular.module('common')
                     }
                 });
 
-                var max = _.reduce(Object.keys(result), function (acc, cv) {
-                    var elem = result[cv];
-                    if (acc < elem.count) acc = elem.count;
-
-                    return acc;
-                }, 0);
-
-                _.each(Object.keys(result), function (r) {
-                    result[r].count = max > 0 ? result[r].count / max * 100 : result[r].count;
-                })
                 return result;
             }
 
@@ -391,6 +399,26 @@ angular.module('common')
                         });
                     });
                 }
+
+                var max = _.reduce(histoRangeList, function (acc, cv) {
+                    if (acc < cv.selectionCount) acc = cv.selectionCount;
+
+                    return acc;
+                }, 0);
+
+
+                // var totalMax = _.reduce(Object.keys(totalResult), function (acc, cv) {
+                //     var elem = totalResult[cv];
+                //     if (acc < elem.count) acc = elem.count;
+
+                //     return acc;
+                // }, 0);
+
+                // var totalCount = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes.length : dataGraph.getAllNodes().length;
+                _.each(histoRangeList, function (r) {
+                    r.selectionCount = max > 0 ? (r.selectionCount / max * maxTickValue) : r.selectionCount;
+                    // result[r].totalCount = totalCount
+                });
 
                 return histoRangeList;
             }
@@ -635,7 +663,8 @@ angular.module('common')
 
                 var histoMax = d3.max(data, function (d) { return d.y; });
                 var histoStep = histoMax * 0.25;
-                var yAxis = d3.svg.axis()
+                maxTickValue = histoMax;
+                var yAxis = initAxis = d3.svg.axis()
                     .scale(y)
                     .tickValues(d3.range(0, histoMax + histoStep, histoStep))
                     .tickFormat(function (yVal) {
@@ -788,7 +817,7 @@ angular.module('common')
                 return bar;
             }
 
-            function updateSelectionBars(bar, selectedNodes, attrInfo, histoData, mappTheme, showClusterNodes) {
+            function updateSelectionBars(bar, selectedNodes, attrInfo, histoData, mappTheme, showClusterNodes, histElem) {
 
                 _log(logPrefix + 'rebuilding selections');
                 var principalNode = null;
@@ -805,6 +834,51 @@ angular.module('common')
                 _log(logPrefix + 'selection values map data: ', selectionValuesMap);
                 _log(logPrefix + 'selection counts list: ', selectionCountsList);
                 var selectionColor = getSelectionColor(selectedNodes, opts);
+
+                var selectionData = _.map(selectionCountsList, function (r) { return { y: r.selectionCount } });
+                var yScaleFunc = generateYScale(attrInfo, histoData.height, selectionData);
+                if (selectService.selectedNodes && selectService.selectedNodes.length) {
+                    var selectionMax = d3.max(selectionData, function (d) { return d.y; });
+                    var selectionStep = selectionMax * 0.25;
+                    var total = _.reduce(selectionData, function (acc, cv) { return acc + cv.y; }, 0);
+                    var yAxis = d3.svg.axis()
+                        .scale(yScaleFunc)
+                        .tickValues(d3.range(0, selectionMax + selectionStep, selectionStep))
+                        .tickFormat(function (yVal) {
+                            return (yVal / total * 100).toFixed(0) + '%';
+                        })
+                        .orient("left");
+
+                    var svg = d3.select(histElem).select("svg");
+                    svg.select('g.yaxis').remove();
+                    svg.append("g")
+                        .attr("class", "yaxis")
+                        .attr("transform", "translate(30,10)")
+                        .call(yAxis);
+                }
+                else if (histoData.d3Data && histoData.d3Data.length) {
+                    var histoMax = d3.max(histoData.d3Data, function (d) { return d.y; });
+                    var histoStep = histoMax * 0.25;
+                    var nodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes.length : null;
+                    var yAxis = initAxis = d3.svg.axis()
+                        .scale(histoData.yScaleFunc)
+                        .tickValues(d3.range(0, histoMax + histoStep, histoStep))
+                        .tickFormat(function (yVal) {
+                            if (nodes) {
+                                return (yVal / nodes.length * 100).toFixed(0) + '%';
+                            }
+
+                            return (yVal / dataGraph.getAllNodes().length * 100).toFixed(0) + '%';
+                        })
+                        .orient("left");
+
+                    var svg = d3.select(histElem).select("svg");
+                    svg.select('g.yaxis').remove();
+                    svg.append("g")
+                        .attr("class", "yaxis")
+                        .attr("transform", "translate(30,10)")
+                        .call(yAxis);
+                }
 
                 bar.each(function (d, i) {
                     var barElem = d3.select(this);
@@ -831,7 +905,7 @@ angular.module('common')
                     var valInRange = false;
                     var nodeVal;
                     if (principalNode) {
-                        opacity = 0.4;
+                        opacity = 0.3;
                         nodeVal = principalNode.attr[attrInfo.attr.id];
                         valInRange = _.inRange(nodeVal, selectionCountsList[i].min, selectionCountsList[i].max);
 
@@ -851,9 +925,9 @@ angular.module('common')
                     selectionBars.attr('opacity', opacity);
 
                     var newBarHeight;
-                    var selY = sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
+                    var selY = sanitizeYPosn(yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
                     if (selectionCountsList[i].selectionCount >= 1) {
-                        newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
+                        newBarHeight = histoData.height - sanitizeYPosn(yScaleFunc(selectionCountsList[i].selectionCount), histoData.height, opts);
 
                         selectionBars
                             .attr("x", function () { return getBarXPosn(d, i, binType, histoData.barWidth); })
@@ -877,7 +951,7 @@ angular.module('common')
                             .transition()
                             .duration(1000)
                             .attr("height", newBarHeight)
-                            .style('opacity', 0.5)
+                            .style('opacity', 0.3)
                             .attr("y", selY);
                     }
 
@@ -894,6 +968,7 @@ angular.module('common')
                 _log(logPrefix + 'filtered selection counts list: ', filtSelectionCountsList);
                 var selectionColor = getSelectionColor(selectedNodes, opts);
 
+                var yScaleFunc = generateYScale(attrInfo, histoData.height, _.map(filtSelectionCountsList, function (r) { return { y: r.selectionCount } }));
                 bar.each(function (d, i) {
                     var barElem = d3.select(this);
                     var selectionBars = barElem.selectAll('[data-selection="true"]');
@@ -902,9 +977,9 @@ angular.module('common')
                     selectionBars.attr('opacity', 0.3);
 
                     var newBarHeight;
-                    var filtY = sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
+                    var filtY = sanitizeYPosn(yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
                     if (filtSelectionCountsList[i].selectionCount > 0) {
-                        newBarHeight = histoData.height - sanitizeYPosn(histoData.yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
+                        newBarHeight = histoData.height - sanitizeYPosn(yScaleFunc(filtSelectionCountsList[i].selectionCount), histoData.height, opts);
                         filteredSelBars
                             .style({
                                 fill: selectionColor
@@ -921,7 +996,7 @@ angular.module('common')
                             .transition()
                             .duration(1000)
                             .attr("height", newBarHeight)
-                            .style('opacity', 0.5)
+                            .style('opacity', 0.3)
                             .attr("y", filtY);
                     }
 
