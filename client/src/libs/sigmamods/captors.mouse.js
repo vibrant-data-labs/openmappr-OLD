@@ -100,7 +100,7 @@
           y: sigma.utils.getY(e) - e.target.clientHeight / 2
         });
 
-      if (_settings('mouseEnabled') && _isMouseDown) {
+      if (_settings('mouseEnabled') && _isMouseDown && !e.shiftKey) {
         _isMoving = true;
 
         if (_movingTimeoutId)
@@ -201,7 +201,7 @@
      * @param {event} e A mouse event.
      */
     function _downHandler(e) {
-      if (_settings('mouseEnabled')) {
+      if (_settings('mouseEnabled') && !e.shiftKey) {
         _isMouseDown = true;
         _isDragEnd = false;
 

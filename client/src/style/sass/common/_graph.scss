@@ -116,6 +116,11 @@
         }
     }
 
+    .sig-selection {
+        border: 1px dotted #000;
+        position: absolute;
+    }
+
     // bug fix for ipad extra height
     @media (orientation:landscape) {
         html.ipad.ios7 > body {
