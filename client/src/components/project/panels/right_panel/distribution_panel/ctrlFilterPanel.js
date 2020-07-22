@@ -144,6 +144,11 @@ angular.module('common')
                     }
                 });
 
+                $rootScope.canShowTagsBtn = function() {
+                    return $scope.nodeDistrAttrs.some(function(attr) { 
+                        return attr.visible && attr.renderType == 'tag-cloud'
+                    });
+                }
 
                 $rootScope.canShowChartsBtn = function() {
                     return $scope.nodeDistrAttrs.some(function(attr) { 
