@@ -340,8 +340,11 @@ angular.module('common')
                 if(attr.isNumeric) {
                     var logInfoObj = {...infoObj, isInteger: false};
                     getNumericAttrInfo(values, infoObj);
-                    if (infoObj.stats.min > 0 && !attr.id.includes('log10') && (attr.attrType === 'float' || attr.attrType === 'integer')) {
-                        var logValues = _.map(values, (val) => +Math.log10(val).toFixed(2));                        
+                    if (infoObj.stats.min >= 0 && !attr.id.includes('log10') && (attr.attrType === 'float' || attr.attrType === 'integer')) {
+                        if (infoObj.stats.min === 0) {
+                            values = _.map(values, (val) => val + 0.1);
+                        }
+                        var logValues = _.map(values, (val) => +Math.log10(val).toFixed(2));
                         getNumericAttrInfo(logValues, logInfoObj);
                         return { infoObj, logInfoObj };
                     }
