@@ -64,6 +64,7 @@ angular.module('common')
 
             var maxTickValue = 0;
             var initAxis = null;
+            var isLogScale = false;
 
             /*************************************
             ******** Controller Function *********
@@ -190,6 +191,7 @@ angular.module('common')
                         scope.attrInfo = defaultAttrInfo;
                         attrInfo = defaultAttrInfo;
                     }
+                    attrInfo.isLogScale = isLogScale = scope.isLogScale;
                     redrawHistogram(attrInfo);
                 }
 
@@ -319,21 +321,6 @@ angular.module('common')
 
             function getSelectionValuesMap(nodes, attrId) {
                 var result = {};
-                // var totalResult = {};
-                // var totalNodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes : dataGraph.getAllNodes();
-                // _.each(totalNodes, function (node) {
-                //     var nodeVal = node.attr[attrId];
-                //     if (totalResult[nodeVal] == null) {
-                //         totalResult[nodeVal] = {
-                //             count: 1,
-                //             nodeIds: [node.id]
-                //         };
-                //     }
-                //     else {
-                //         totalResult[nodeVal].count++;
-                //         totalResult[nodeVal].nodeIds.push(node.id);
-                //     }
-                // });
 
                 _.each(nodes, function (node) {
                     var nodeVal = node.attr[attrId];
@@ -358,8 +345,8 @@ angular.module('common')
 
                 if (isNumeric) {
                     _.each(histoData, function (barData, i) {
-                        var min = barData.x;
-                        var max = barData.x + barData.dx;
+                        var min = isLogScale ? Math.pow(10, barData.x) : barData.x;
+                        var max = isLogScale ? Math.pow(10, barData.x + barData.dx) : (barData.x + barData.dx);
                         var valsInRange = _.filter(selectionValues, function (val) {
                             if (histoData.length == i + 1)
                                 return val >= min && val <= max;
@@ -786,7 +773,11 @@ angular.module('common')
                         if (isOrdinal) {
                             hoverService.hoverNodes({ attr: attrInfo.attr.id, value: segment.label });
                         }
-                        else {
+                        else if (isLogScale) {
+                            var min = Math.pow(10, segment.x);
+                            var max = Math.pow(10, _.last(segment));
+                            hoverService.hoverNodes({ attr: attrInfo.attr.id, min: min, max: max });
+                        } else {
                             hoverService.hoverNodes({ attr: attrInfo.attr.id, min: segment.x, max: _.last(segment) });
                         }
                     }
@@ -809,6 +800,11 @@ angular.module('common')
                     setColor.call(this, opts.clickColor);
                     if (isOrdinal) {
                         selectService.selectNodes({ attr: attrInfo.attr.id, value: segment.label });
+                    }
+                    else if (isLogScale) {
+                        var min = Math.pow(10, segment.x);
+                        var max = Math.pow(10, _.last(segment));
+                        selectService.selectNodes({ attr: attrInfo.attr.id, min: min, max: max });
                     }
                     else {
                         selectService.selectNodes({ attr: attrInfo.attr.id, min: segment.x, max: _.last(segment) });

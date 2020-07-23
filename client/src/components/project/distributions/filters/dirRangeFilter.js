@@ -11,7 +11,7 @@ angular.module('common')
                 require: '?^dirAttrRenderer',
                 templateUrl: '#{server_prefix}#{view_path}/components/project/distributions/filters/rangeFilter.html',
                 scope: {
-                    attr: '='
+                    attr: '=',
                 },
                 link: postLinkFn
             };
@@ -82,6 +82,8 @@ angular.module('common')
                         var valueRange = getValueRangeFilterRange(scope.filterRange[0], scope.filterRange[1]);
                         if (valueRange.min == attrInfo.stats.min && valueRange.max == attrInfo.stats.max) {
                             selectService.selectNodes({ attr: attrInfo.attr.id, forceDisable: true });
+                        } else if (attrInfo.isLogScale) {
+                            selectService.selectNodes({ attr: attrInfo.attr.id, min: Math.pow(10, valueRange.min), max: Math.pow(10, valueRange.max), force: true});
                         } else {
                             selectService.selectNodes({ attr: attrInfo.attr.id, min: valueRange.min, max: valueRange.max, force: true});
                         }
