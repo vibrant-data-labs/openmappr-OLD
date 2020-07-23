@@ -21,6 +21,8 @@ function ($compile, $timeout, renderGraphfactory, layoutService, leafletData, da
             '<div ng-show="xshow && mapprSettings.xAxTickShow" class="xaxis"></div>'+
             '</div>'+
             '<div ng-show="xshow && yshow" class="axes-square"></div>'+
+            '<div ng-show="xshow && yshow" class="x-end-axe-square"></div>'+
+            '<div ng-show="xshow && yshow" class="y-end-axe-square"></div>'+
         '</div>',
         restrict: 'EA',
         scope: true,
