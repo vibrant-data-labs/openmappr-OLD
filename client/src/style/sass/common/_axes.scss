@@ -148,8 +148,25 @@
         z-index: 1;
     }
 
+    .x-end-axe-square {
+        background-color: $body-bg;
+        bottom: 0;
+        right: 0;
+        height: 100px;
+        position: absolute;
+        width: 5%;
+        z-index: 1;
+    }
 
-
+    .y-end-axe-square {
+        background-color: $body-bg;
+        top: 0;
+        left: 0;
+        height: 5%;
+        position: absolute;
+        width: 100px;
+        z-index: 1;
+    }
 
     .xaxis-tit {
 
