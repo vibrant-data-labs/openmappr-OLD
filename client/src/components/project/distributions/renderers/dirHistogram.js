@@ -47,7 +47,7 @@ angular.module('common')
                 selectionDefaultColor: '#315F6B',
                 highlightColor: '#666',
                 strokeWidth: 0.5,
-                histWidth: 300,
+                histWidth: 320,
                 histHeight: 75,
                 categoricalHeight: 200,
                 binCount: 18,
@@ -850,34 +850,15 @@ angular.module('common')
                         .orient("left");
 
                     var svg = d3.select(histElem).select("svg");
-                    svg.select('g.yaxis').remove();
+                    svg.select('g.yaxis.right').remove();
                     svg.append("g")
-                        .attr("class", "yaxis")
-                        .attr("transform", "translate(30,10)")
+                        .attr("class", "yaxis right")
+                        .attr("transform", "translate(275,10)")
                         .call(yAxis);
                 }
-                else if (histoData.d3Data && histoData.d3Data.length) {
-                    var histoMax = d3.max(histoData.d3Data, function (d) { return d.y; });
-                    var histoStep = histoMax * 0.25;
-                    var nodes = subsetService.subsetNodes && subsetService.subsetNodes.length ? subsetService.subsetNodes.length : null;
-                    var yAxis = initAxis = d3.svg.axis()
-                        .scale(histoData.yScaleFunc)
-                        .tickValues(d3.range(0, histoMax + histoStep, histoStep))
-                        .tickFormat(function (yVal) {
-                            if (nodes) {
-                                return (yVal / nodes.length * 100).toFixed(0) + '%';
-                            }
-
-                            return (yVal / dataGraph.getAllNodes().length * 100).toFixed(0) + '%';
-                        })
-                        .orient("left");
-
+                else {
                     var svg = d3.select(histElem).select("svg");
-                    svg.select('g.yaxis').remove();
-                    svg.append("g")
-                        .attr("class", "yaxis")
-                        .attr("transform", "translate(30,10)")
-                        .call(yAxis);
+                    svg.select('g.yaxis.right').remove();
                 }
 
                 bar.each(function (d, i) {
