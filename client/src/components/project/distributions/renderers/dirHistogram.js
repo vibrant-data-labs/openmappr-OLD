@@ -176,6 +176,8 @@ angular.module('common')
                     else {
                         updateSelectionBars(histoBars, FilterPanelService.getCurrentSelection(), attrInfo, histoData, mappTheme, false, histElem);
                     }
+
+                    redrawHistogram(attrInfo);
                 } catch (e) {
                     console.error(logPrefix + "creating global distribution throws error", e.stack, e);
                 }
