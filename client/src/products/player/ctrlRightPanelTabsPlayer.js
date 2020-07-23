@@ -120,36 +120,10 @@ angular.module('common')
                 {
                     iconClass: 'snapshots',
                     title: 'Snapshots',
-                    panel: 'slides',
+                    panel: 'snapshots',
                     tooltipTitle: 'See snapshot information and change views if there are more than one',
                     cmd: function () {
-                        $scope.panelUI.openPanel('slides');
-                        if (!$window.localStorage.slides)
-                            $timeout(function () {
-                                ngIntroService.setOptions(
-                                    {
-                                        steps: [
-                                            {
-                                                element: '#slideNavigator',
-                                                intro: 'Slide Navigator'
-                                            },
-                                            {
-                                                element: '#slideDescription',
-                                                intro: 'Slide Description'
-                                            },
-                                            {
-                                                element: '#mainCanvas',
-                                                intro: 'Main Canvas'
-                                            },
-                                            {
-                                                element: '#nodeZoom',
-                                                intro: 'Zoom in to node'
-                                            }
-                                        ]
-                                    },
-                                );
-                                //ngIntroService.start();
-                            }, 100);
+                        $scope.panelUI.openPanel('snapshots');
                     }
                 },
                 {

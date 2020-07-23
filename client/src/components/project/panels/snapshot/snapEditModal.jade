@@ -33,6 +33,10 @@ form.modal-body
 			input.form-control(ng-model="currSnapshot.snapName" dir-select-all)
 	.row
 		.col-xs-12
+			h3 Subtitle
+			input.form-control(ng-model="currSnapshot.subtitle" dir-select-all)
+	.row
+		.col-xs-12
 			h3 Description
 			//descr
 			.ui-editor(text-angular, ng-model="currSnapshot.descr")
