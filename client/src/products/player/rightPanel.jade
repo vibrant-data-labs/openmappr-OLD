@@ -15,4 +15,4 @@
 		.accordion-panel.panel-container.flex-transclude.flex-fill(ng-show="panelUI.summaryPanelOpen" ng-controller="DataPresentationCtrl" ng-include=' "#{server_prefix}#{view_path}/player/playerSummary.html" ')
 		// change ng-style to ng-class and work on data-dir-virtual-scroll rendering
 		.accordion-panel.filter-panel.flex-transclude.flex-fill(ng-style="panelUI.filterPanelOpen ? { 'height': 'auto', 'opacity': 1, 'flex': 1, 'min-height': 31 } : { 'height': 0, 'opacity': 0, 'flex':'none', 'min-height': 0 }" ng-include=' "#{server_prefix}#{view_path}/components/project/panels/right_panel/distribution_panel/filterPanel.html" ')
-		.accordion-panel.filter-panel.flex-transclude.flex-fill(ng-show="panelUI.slidesPanelOpen" ng-controller="SlidePanelCtrl" ng-include=' "#{server_prefix}#{view_path}/player/slidesPanel.html" ')
+		.accordion-panel.filter-panel.flex-transclude.flex-fill(ng-show="panelUI.snapshotPanelOpen" ng-controller="SnapshotSidePanelCtrl" ng-include=' "#{server_prefix}#{view_path}/player/snapshotSidePanel.html" ')

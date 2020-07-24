@@ -1,0 +1,19 @@
+.snap-side-panel.flex-transclude.height-100
+    .panel-container.flex-vert-container.width-100
+        .snap-header
+            .snap-title {{currentSnap.snapName}}
+        .line-row
+            .line
+            .line-active(ng-style="getLineWidth()")
+        .panel-scroll.flex-fill.flex-vert-container
+            div.snap-item(ng-repeat="snap in snapshots | filter: {isEnabled: true} track by snap.id" ng-click="setSnapActive(snap, $index)")
+                .snap-summary(ng-class="{'snap-summary-active': snap.id === currentSnap.id}")
+                    img(ng-if="snapshots.length > 1" ng-src="{{'https://i.ibb.co/mFJ3BFJ/watch.png'}}")
+                    .snap-info
+                        .snap-info-title {{snap.snapName}}
+                        .snap-info-subtitle {{snap.subtitle}}
+                .snap-desc(ng-if="snap.id === currentSnap.id" dir-elem-ready="onDescShow($event)" ng-style="getDescHeight()")
+                    .snap-desc-text(ng-bind-html="snap.descr")
+                    .text-height-toggle(ng-if="isLongDescr" ng-click="toggleDescrHeight()")
+                        .h6 
+                            em {{isMoreEnabled ? 'Less' : 'More' }}
