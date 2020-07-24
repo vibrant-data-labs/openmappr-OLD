@@ -8,7 +8,7 @@
         .panel-scroll.flex-fill.flex-vert-container
             div.snap-item(ng-repeat="snap in snapshots | filter: {isEnabled: true} track by snap.id" ng-click="setSnapActive(snap, $index)")
                 .snap-summary(ng-class="{'snap-summary-active': snap.id === currentSnap.id}")
-                    img(ng-if="snapshots.length > 1" ng-src="{{'https://i.ibb.co/mFJ3BFJ/watch.png'}}")
+                    img(ng-if="snapshots.length > 1" ng-src="{{snap.summaryImg}}")
                     .snap-info
                         .snap-info-title {{snap.snapName}}
                         .snap-info-subtitle {{snap.subtitle}}

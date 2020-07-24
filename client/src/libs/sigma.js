@@ -6549,8 +6549,8 @@
     canvas = document.createElement('canvas');
     try {
       webgl = !!(
-        canvas.getContext('webgl') ||
-        canvas.getContext('experimental-webgl')
+        canvas.getContext('webgl', { preserveDrawingBuffer: true }) ||
+        canvas.getContext('experimental-webgl', { preserveDrawingBuffer: true })
       );
     } catch (e) {
       webgl = false;

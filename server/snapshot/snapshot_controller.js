@@ -62,6 +62,8 @@ var api = {
         var updatedSnap = {
             id           : p.id,
             snapName     : p.snapName || 'snapshot',
+            subtitle     : p.subtitle || '',
+            summaryImg   : p.summaryImg || '',
             descr        : p.descr || '',
             audio        : p.audio || '',
             picture      : p.picture || '',

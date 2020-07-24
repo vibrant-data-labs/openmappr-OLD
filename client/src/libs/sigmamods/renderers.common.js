@@ -66,7 +66,7 @@
     if(!sigma.renderers.webglcanvas) {
       sigma.renderers.webglcanvas = document.createElement('canvas');
     }
-    var gl = sigma.renderers.webglcanvas.getContext('webgl');
+    var gl = sigma.renderers.webglcanvas.getContext('webgl', { preserveDrawingBuffer: true });
     gl.clear(gl.COLOR_BUFFER_BIT);
     return sigma.renderers.webglcanvas;
   };
@@ -266,7 +266,7 @@
           } else {  // webgl canvas
             elem.setAttribute('width', (w * this.displayScale * this.settings('webglOversamplingRatio')) + 'px');
             elem.setAttribute('height', (h * this.displayScale * this.settings('webglOversamplingRatio')) + 'px');
-            var gl = elem.getContext('webgl');
+            var gl = elem.getContext('webgl', { preserveDrawingBuffer: true });
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
           }
         }

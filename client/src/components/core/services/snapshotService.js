@@ -310,12 +310,11 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
         } else if (plotType === 'list') {
             canvasElem = '.list-layout-content';
         }
+
         if (canvasElem) {
             return new Promise(function(resolve, reject) {
-                html2canvas($(canvasElem), {
+                html2canvas(document.querySelector(canvasElem), {
                     onrendered: function(canvas) {
-                        // document.body.appendChild(canvas);
-                        // canvas.style.display = 'none';
                         canvasToSave = canvas.toDataURL();
                         snap.summaryImg = canvasToSave;
                         _updateSnapshot(snap, updateGraph).then(function(res) {
@@ -325,8 +324,9 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
                 });
             });
         } else {
-            canvasToSave = $('.sigma-scene')[0].toDataURL();
-            snap.summaryImg = canvasToSave;
+            var sig = renderGraphfactory.sig();
+
+            snap.summaryImg = sig.renderers.graph.snapshot({background: 'white'});
             return _updateSnapshot(snap, updateGraph);
         }
     }

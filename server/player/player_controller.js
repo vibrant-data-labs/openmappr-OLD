@@ -50,6 +50,7 @@ module.exports = {
     renderPlayer:function(req, res) {
         var skipVerString = !!req.query.skipver;
         var playerParams = req.params[0].split('/');
+        console.log('playerParams');
         playerModel.listByPlayerUrl(playerParams[0], function(err, docs) {
 
             if (err || typeof docs === "undefined" || docs.length === 0) {
@@ -109,7 +110,7 @@ module.exports = {
                 }),
                 playerTitle: title,
                 backgroundColor: bkgrndColor,
-                colorTheme: playerObj.settings.colorTheme
+                colorTheme: playerObj.settings.colorTheme,
             };
 
             console.log("[player_controller.renderPlayer] skipVerString: ", skipVerString);
