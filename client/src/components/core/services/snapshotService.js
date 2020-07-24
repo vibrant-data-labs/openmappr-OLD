@@ -301,32 +301,34 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
 
     function updateSnapshot(snap, updateGraph) {
         console.group('[ctrlSnapshot] Updating Snapshot');
-        var currProject, newSnap;
-
-        return projFactory.currProject()
-        .then(function(proj) {
-            currProject = proj;
-            if(updateGraph) {
-                return _createNewSnapFromExisting(snap)
-                .then(function(createdSnap){
-                    newSnap = createdSnap;
-                    newSnap.id = createdSnap.id;
-                    console.log('[ctrlSnapshot] updating snapshot %O', newSnap);
-                    return projFactory.updateSnapshot(currProject.org.ref, currProject._id, newSnap);
+        var plotType = layoutService.getCurrentIfExists().plotType;
+        var canvasToSave, canvasElem;
+        if (plotType === 'geo') {
+            canvasElem = '.angular-leaflet-map';
+        } else if (plotType === 'grid') {
+            canvasElem = '.grid-layout';
+        } else if (plotType === 'list') {
+            canvasElem = '.list-layout-content';
+        }
+        if (canvasElem) {
+            return new Promise(function(resolve, reject) {
+                html2canvas($(canvasElem), {
+                    onrendered: function(canvas) {
+                        // document.body.appendChild(canvas);
+                        // canvas.style.display = 'none';
+                        canvasToSave = canvas.toDataURL();
+                        snap.summaryImg = canvasToSave;
+                        _updateSnapshot(snap, updateGraph).then(function(res) {
+                            resolve(res);
+                        });
+                    }
                 });
-            }
-            else {
-                return projFactory.updateSnapshot(currProject.org.ref, currProject._id, snap);
-            }
-        }).then(function(updatedSnap) {
-            var mappSnap = _.find(mappSnapshots, {'id': updatedSnap.id});
-            _.assign(mappSnap, updatedSnap);
-            $rootScope.$broadcast(BROADCAST_MESSAGES.snapshot.updated, {updatedSnap: _.clone(updatedSnap)});
-            console.log('Snapshot updated %O', updatedSnap);
-            console.groupEnd();
-            return mappSnap;
-        });
-
+            });
+        } else {
+            canvasToSave = $('.sigma-scene')[0].toDataURL();
+            snap.summaryImg = canvasToSave;
+            return _updateSnapshot(snap, updateGraph);
+        }
     }
 
     function removeSnapshot(snapId) {
@@ -441,6 +443,33 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
     /*************************************
     ********* Local Functions ************
     **************************************/
+
+   function _updateSnapshot(snap, updateGraph) {
+        var currProject, newSnap;
+       return projFactory.currProject()
+        .then(function(proj) {
+            currProject = proj;
+            if(updateGraph) {
+                return _createNewSnapFromExisting(snap)
+                .then(function(createdSnap){
+                    newSnap = createdSnap;
+                    newSnap.id = createdSnap.id;
+                    console.log('[ctrlSnapshot] updating snapshot %O', newSnap);
+                    return projFactory.updateSnapshot(currProject.org.ref, currProject._id, newSnap);
+                });
+            }
+            else {
+                return projFactory.updateSnapshot(currProject.org.ref, currProject._id, snap);
+            }
+        }).then(function(updatedSnap) {
+            var mappSnap = _.find(mappSnapshots, {'id': updatedSnap.id});
+            _.assign(mappSnap, updatedSnap);
+            $rootScope.$broadcast(BROADCAST_MESSAGES.snapshot.updated, {updatedSnap: _.clone(updatedSnap)});
+            console.log('Snapshot updated %O', updatedSnap);
+            console.groupEnd();
+            return mappSnap;
+        });
+   }
 
     /**
      * Serializes snapshot information so that it can be saved for later use.
@@ -604,6 +633,7 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
         });
     }
 
+    
 
 }
 ]);

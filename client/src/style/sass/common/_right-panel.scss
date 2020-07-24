@@ -848,10 +848,14 @@
 
       &-active {
         background: linear-gradient(135deg, #BA3665 0%, #94408D 100%);
+        
+        .snap-info, &.snap-summary .snap-info-title {
+          color: #ffffff;
+        }
       }
 
       img {
-        padding: 10px 16px 10px 10px;
+        margin: 10px 16px 10px 10px;
         width: 110px;
         height: 80px;
       }
@@ -880,6 +884,11 @@
     .snap-desc {
       border-radius: 8px;
       background-color: #F5F6F8;
+
+      &-text {
+        color: #323C47;
+        padding: 10px;
+      }
     }
   }
 }

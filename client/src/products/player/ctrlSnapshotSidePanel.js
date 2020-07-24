@@ -3,65 +3,58 @@ angular.module('player')
 function ($q, $timeout, $scope, $rootScope, snapshotService, BROADCAST_MESSAGES) {
     'use strict';
 
-    $scope.activeSnapId = '';
-
     // Snaps object with methods
     $scope.snapshots = null;
     $scope.currentSnap = null;
+    $scope.currentSnapIndex = 0;
+    $scope.currentSnapPreview = null;
+    $scope.isLongDescr = false;
+    $scope.isMoreEnabled = false;
 
-    $scope.setSnapActive = function(snap) {
-        $scope.snapInfo.curSnapInd = _.findIndex($scope.snapshots, {id: snap.id});
-        if(!snap) {
-            console.warn('no snapshot to load! given Id:' + snap.id);
-        }
-
-        // if(!snap.descr) {
-        //     $scope.isDescriptionClosed = true;
-        // }
-
-        $scope.snapInfo.oldSnapId = $scope.snapInfo.activeSnap.id;
-        //set up class for animating in snap desc
-        var oldSnapInd = _.findIndex($scope.snapshots, {id: $scope.snapInfo.oldSnapId});
-        var fromBottom = $scope.snapInfo.curSnapInd > oldSnapInd;
-        $scope.snapDescClass = fromBottom ? 'animate-from-bottom' : 'animate-from-top' ;
-        $timeout(function() {
-            $scope.snapInfo.activeSnap = snap;
-            switch (snap.type) {
+    $scope.setSnapActive = function(snap, index) {
+        $scope.currentSnapIndex = index;
+        $scope.currentSnap = snap;
+        switch (snap.type) {
             case 'network':
             default:
                 $scope.switchSnapshot(snap.id);
-            }
-
-            var snapInd = _.findIndex($scope.snapshots, {'id': $scope.snapInfo.activeSnap.id});
-            $scope.currentTime = $scope.settings.snapDuration*snapInd*1000;
-
-            //set old snap id
-            $scope.snapInfo.curSnapId = $scope.snapInfo.activeSnap.id;
-        });
-
-
+        }
     }
 
-    $scope.$on(BROADCAST_MESSAGES.dataGraph.loaded, initPanel); // Init snap bar
+    $scope.onDescShow = function($event) {
+        var elem = $($event.target[0]).find('div')[0];//elem.clientWidth
+        console.log('elem', elem.scrollHeight, elem.clientHeight)
+        if (elem.clientHeight > 200) {
+            $scope.isLongDescr = true;
+        }
+    }
+
+    $scope.toggleDescrHeight = function() {
+        $scope.isMoreEnabled = !$scope.isMoreEnabled;
+    }
+
+    $scope.getDescHeight = function() {
+        return {
+            height: $scope.isMoreEnabled ? 'unset' : '200px'
+        };
+    }
+
+    $scope.getLineWidth = function() {
+        return {
+            width: 100 * ($scope.currentSnapIndex + 1) / $scope.snapshots.length + '%'
+        };
+    }
+
+    $scope.$on(BROADCAST_MESSAGES.dataGraph.loaded, initPanel);
 
     initPanel();
 
     function initPanel() {
-        console.log('initPanel', $scope.player);
         $scope.snapshots = $scope.player.snapshots;
         if($scope.snapshots.length > 0) {
             $scope.currentSnap = $scope.snapshots[0];
+            $scope.currentSnapIndex = 0;
         }
-        // snapshotService.getSnapshots()
-        // .then(function(snaps) {
-        //     if(!_.isArray(snaps)) {
-        //         throw new Error('Array expected for snapshots');
-        //     }
-        //     $scope.snapshots = snaps;
-        //     if(snaps.length > 0) {
-        //         $scope.currentSnap = snaps[0];
-        //     }
-        // });
     }
 }
 ]);
