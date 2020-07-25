@@ -36,7 +36,7 @@ services:
     ports:
       - "11300:11300"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
     restart: unless-stopped
     environment:
       - node.name=mappr_prod
@@ -45,7 +45,6 @@ services:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
       - "action.auto_create_index=true"
-      - "index.mapping.single_type=false"
     ulimits:
       memlock:
         soft: -1

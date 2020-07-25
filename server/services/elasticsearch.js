@@ -80,6 +80,7 @@ function createIndex (client) {
                     index : es_index,
                     body : {
                         "settings": {
+                            "index.mapping.single_type": false,
                             "analysis": {
                                 "filter": {
                                     "my_en_stop": {
