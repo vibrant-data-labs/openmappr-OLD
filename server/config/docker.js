@@ -12,7 +12,7 @@ module.exports = {
     'elasticSearchConfig': {
         host: 'elasticsearch:9200',
         log: 'error',
-        apiVersion: '2.4'
+        apiVersion: '6.2'
     },
     'athena' : {
         url : 'athena:5000'

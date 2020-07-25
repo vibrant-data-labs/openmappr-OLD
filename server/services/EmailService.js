@@ -6,7 +6,7 @@ var _            = require('lodash'),
     sgMail       = require('@sendgrid/mail');
 var config = require("./AppConfig").get();
 
-var supportTransport = nodemailer.createTransport('SMTP', config.email);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function sendFromSupport(to, sub, templateName, htmlData) {
     var logPrefix = '[EmailService: ] ';
@@ -18,24 +18,16 @@ function sendFromSupport(to, sub, templateName, htmlData) {
         compiledFn = _.template(templateContent),
         html = compiledFn(htmlData);
 
-    var mailOptions = {
-        from: "Vibrant Data <admin@vibrantdata.io>",//"support@vibrantdata.is>", //"admn@mappr.io",
-        to: to,
-        subject: sub,
-        html: html
-    };
-
-    return new Promise(function(resolve, reject) {
-        supportTransport.sendMail(mailOptions, function(err, response) {
-            if (err) {
-                console.error(logPrefix + 'could not sent email', err);
-                reject('Mail unsuccessful!');
-            }
-            else {
-                console.log(logPrefix + 'email sent to ' + to);
-                resolve('Mail sent!');
-            }
-        });
+        return new Promise(function(resolve, reject) {
+        var msg = {
+            to: to,
+            from: process.env.EMAIL_FROM,
+            subject: sub,
+            html: html,
+        };
+        sgMail.send(msg, (error, info) =>
+            error ? reject(error) : resolve(info)
+        )
     });
 }
 
@@ -43,8 +35,7 @@ function sendSupportEmail(req, res) {
     var logPrefix = '[EmailService: ] ';
     _.templateSettings.interpolate = /{{([\s\S]+?)}}/g;
     console.log(logPrefix + 'sending email');
-    return new Promise((resolve, reject) => {
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    return new Promise(function(resolve, reject) {
         var msg = {
             to: process.env.EMAIL_TO,
             from: process.env.EMAIL_FROM,
