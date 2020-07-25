@@ -31,6 +31,7 @@ services:
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
       - "action.auto_create_index=true"
+      - "index.mapping.single_type=false"
     ulimits:
       memlock:
         soft: -1
