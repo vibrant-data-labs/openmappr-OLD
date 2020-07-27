@@ -64,7 +64,7 @@ angular.module('common')
 
             var maxTickValue = 0;
             var initAxis = null;
-            var isLogScale = false;
+            var isLogScaleById = {};
 
             /*************************************
             ******** Controller Function *********
@@ -83,6 +83,7 @@ angular.module('common')
                 scope.hasLogScale = !!logAttrInfo;
                 attrInfo = defaultAttrInfo;
                 scope.attrInfo = defaultAttrInfo;
+                isLogScaleById[scope.attrToRender.id] = false;
                 scope.isLogScale = false;
                 var histElem = element[0].childNodes[0];
                 var tooltip = element.find(".d3-tip");
@@ -191,7 +192,7 @@ angular.module('common')
                         scope.attrInfo = defaultAttrInfo;
                         attrInfo = defaultAttrInfo;
                     }
-                    attrInfo.isLogScale = isLogScale = scope.isLogScale;
+                    attrInfo.isLogScale = isLogScaleById[attrInfo.attr.id] = scope.isLogScale;
                     redrawHistogram(attrInfo);
                 }
 
@@ -339,14 +340,14 @@ angular.module('common')
                 return result;
             }
 
-            function mapSelectionToBars(selectionDataMap, histoData, isNumeric) {
+            function mapSelectionToBars(attrId, selectionDataMap, histoData, isNumeric) {
                 var histoRangeList = [];
                 var selectionValues = _.keys(selectionDataMap);
 
                 if (isNumeric) {
                     _.each(histoData, function (barData, i) {
-                        var min = isLogScale ? Math.pow(10, barData.x) : barData.x;
-                        var max = isLogScale ? Math.pow(10, barData.x + barData.dx) : (barData.x + barData.dx);
+                        var min = isLogScaleById[attrId] ? Math.pow(10, barData.x) : barData.x;
+                        var max = isLogScaleById[attrId] ? Math.pow(10, barData.x + barData.dx) : (barData.x + barData.dx);
                         var valsInRange = _.filter(selectionValues, function (val) {
                             if (histoData.length == i + 1)
                                 return val >= min && val <= max;
@@ -773,7 +774,7 @@ angular.module('common')
                         if (isOrdinal) {
                             hoverService.hoverNodes({ attr: attrInfo.attr.id, value: segment.label });
                         }
-                        else if (isLogScale) {
+                        else if (isLogScaleById[attrInfo.attr.id]) {
                             var min = Math.pow(10, segment.x);
                             var max = Math.pow(10, _.last(segment));
                             hoverService.hoverNodes({ attr: attrInfo.attr.id, min: min, max: max });
@@ -801,7 +802,7 @@ angular.module('common')
                     if (isOrdinal) {
                         selectService.selectNodes({ attr: attrInfo.attr.id, value: segment.label });
                     }
-                    else if (isLogScale) {
+                    else if (isLogScaleById[attrInfo.attr.id]) {
                         var min = Math.pow(10, segment.x);
                         var max = Math.pow(10, _.last(segment));
                         selectService.selectNodes({ attr: attrInfo.attr.id, min: min, max: max });
@@ -828,7 +829,7 @@ angular.module('common')
 
                 var opts = histoData.opts;
                 var selectionValuesMap = getSelectionValuesMap(selectedNodes, attrInfo.attr.id);
-                var selectionCountsList = histoData.selectionCountsList = mapSelectionToBars(selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
+                var selectionCountsList = histoData.selectionCountsList = mapSelectionToBars(attrInfo.attr.id, selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
                 _log(logPrefix + 'selection values map data: ', selectionValuesMap);
                 _log(logPrefix + 'selection counts list: ', selectionCountsList);
                 var selectionColor = getSelectionColor(selectedNodes, opts);
@@ -942,7 +943,7 @@ angular.module('common')
                 _log(logPrefix + 'rebuilding selections');
                 var opts = histoData.opts;
                 var selectionValuesMap = getSelectionValuesMap(selectedNodes, attrInfo.attr.id);
-                var filtSelectionCountsList = mapSelectionToBars(selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
+                var filtSelectionCountsList = mapSelectionToBars(attrInfo.attr.id, selectionValuesMap, histoData.d3Data, !histoData.isOrdinal, attrInfo);
                 _log(logPrefix + 'filtered selection values map data: ', selectionValuesMap);
                 _log(logPrefix + 'filtered selection counts list: ', filtSelectionCountsList);
                 var selectionColor = getSelectionColor(selectedNodes, opts);
