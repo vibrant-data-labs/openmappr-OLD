@@ -14,6 +14,7 @@ function ($q, $timeout, $scope, $rootScope, snapshotService, BROADCAST_MESSAGES)
     $scope.setSnapActive = function(snap, index) {
         $scope.currentSnapIndex = index;
         $scope.currentSnap = snap;
+        $scope.isMoreEnabled = false;
         switch (snap.type) {
             case 'network':
             default:
@@ -22,11 +23,8 @@ function ($q, $timeout, $scope, $rootScope, snapshotService, BROADCAST_MESSAGES)
     }
 
     $scope.onDescShow = function($event) {
-        var elem = $($event.target[0]).find('div')[0];//elem.clientWidth
-        console.log('elem', elem.scrollHeight, elem.clientHeight)
-        if (elem.clientHeight > 200) {
-            $scope.isLongDescr = true;
-        }
+        var elem = $($event.target[0]).find('div')[0];
+        $scope.isLongDescr = elem.scrollHeight > 200;
     }
 
     $scope.toggleDescrHeight = function() {

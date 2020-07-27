@@ -884,12 +884,24 @@
     .snap-desc {
       border-radius: 8px;
       background-color: #F5F6F8;
-      height: 200px;
-      overflow: hidden;
 
       &-text {
         color: #323C47;
         padding: 10px;
+        overflow: hidden;
+      }
+
+      .text-height-toggle {
+        .h6 {
+          display: flex;
+          justify-content: flex-end;
+          margin-right: 10px;
+        }
+
+        em {
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
     }
   }
