@@ -45,7 +45,8 @@
         _isMouseDown,
         _isMoving,
         _isDragEnd = false, // click event fired only when this is false
-        _movingTimeoutId;
+        _movingTimeoutId,
+        _isShiftKeyPressed = false
 
     sigma.classes.dispatcher.extend(this);
 
@@ -92,7 +93,7 @@
           y,
           pos;
 
-      if(_settings('panLock')) return;
+      if(_settings('panLock') || _isShiftKeyPressed) return;
       // Dispatch event:
       if (_settings('mouseEnabled'))
         _self.dispatchEvent('mousemove', {
@@ -100,7 +101,7 @@
           y: sigma.utils.getY(e) - e.target.clientHeight / 2
         });
 
-      if (_settings('mouseEnabled') && _isMouseDown && !e.shiftKey) {
+      if (_settings('mouseEnabled') && _isMouseDown) {
         _isMoving = true;
 
         if (_movingTimeoutId)
@@ -201,7 +202,11 @@
      * @param {event} e A mouse event.
      */
     function _downHandler(e) {
-      if (_settings('mouseEnabled') && !e.shiftKey) {
+      if (e.shiftKey) {
+        _isShiftKeyPressed = true;
+        return;
+      }
+      if (_settings('mouseEnabled')) {
         _isMouseDown = true;
         _isDragEnd = false;
 
@@ -239,8 +244,10 @@
      * @param {event} e A mouse event.
      */
     function _clickHandler(e) {
-//      self.shiftKey = e.shiftKey;
-//      _settings('isShiftKey', e.shiftKey);
+      if (_isShiftKeyPressed) {
+        _isShiftKeyPressed = false;
+        return;
+      }
       if ((_settings('mouseEnabled') || _settings('mouseClickEnabled')) && !_isDragEnd)
         _self.dispatchEvent('click', {
           x: sigma.utils.getX(e) - e.target.clientWidth / 2,
