@@ -201,10 +201,13 @@ module.exports = {
     },
 
     index: function(document, callback) {
-
+        
     },
 
     storeDataSet: function(dataSetId, attrList, nodeList, callback) {
+        // verify that index is created.
+        createIndex(elasticSearchClientFactory())
+        // continue with normal function
         var dsId = dataSetId.toString != null ? dataSetId.toString() : dataSetId;
         // chunking data otherwise it becomes too large
         var nodeChunks = _.chunk(nodeList, 500);
