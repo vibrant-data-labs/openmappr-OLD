@@ -63,18 +63,21 @@ module.exports = {
                 console.log('[player_controller.readByUrl] player disabled');
                 return res.render('404.jade');
             }
-            if(!docs.isPrivate) { return renderIndex(docs); }
-            if(!docs.directAccess) { return renderIndex(docs); }
-            // Direct access via URL which has access key
-            if(!req.query.access_token || req.query.access_token != docs.access_token) {
-                // Wrong access key or no access key for direct access
-                res.render('404.jade');
-            } else {
-                renderIndex(docs);
-            }
+
+            projModel.listByIdAsync(docs.project.ref).then((proj) =>{
+                if(!docs.isPrivate) { return renderIndex(docs, proj); }
+                if(!docs.directAccess) { return renderIndex(docs, proj); }
+                // Direct access via URL which has access key
+                if(!req.query.access_token || req.query.access_token != docs.access_token) {
+                    // Wrong access key or no access key for direct access
+                    res.render('404.jade');
+                } else {
+                    renderIndex(docs, proj);
+                }
+            });
         });
 
-        function renderIndex(playerObj) {
+        function renderIndex(playerObj, projectObj) {
             var role = 'anon',
                 _id = '',
                 playerBuildVer = playerObj.buildVer || '';
@@ -111,6 +114,7 @@ module.exports = {
                 playerTitle: title,
                 backgroundColor: bkgrndColor,
                 colorTheme: playerObj.settings.colorTheme,
+                snapshotImg: projectObj.snapshots[0].summaryImg || '/img/openmappr_socialmedia.png',
             };
 
             console.log("[player_controller.renderPlayer] skipVerString: ", skipVerString);
