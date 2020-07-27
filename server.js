@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 var express = require('express');
 var serverInit = require('./server/main_server');
 var assert = require('assert');

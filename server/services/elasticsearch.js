@@ -60,11 +60,9 @@ function _getSearchQuery(searchText, filterAttrIds) {
     var highlightFields = (filterAttrIds.length > 0) ? _.map(filterAttrIds, function(atId){var ob = {}; ob[atId] = {type: "plain"}; return ob; }) : [{_all: {type: "plain"}}];
 
     var highlightObj = {
-        highlight: {
-            pre_tags: ["<em>"],
-            post_tags: ["</em>"],
-            fields: highlightFields
-        }
+        pre_tags: ["<em>"],
+        post_tags: ["</em>"],
+        fields: highlightFields
     };
 
     // console.log(logPrefix + 'search query: ', JSON.stringify(queryObj));
@@ -82,6 +80,7 @@ function createIndex (client) {
                     index : es_index,
                     body : {
                         "settings": {
+                            "index.mapping.single_type": false,
                             "analysis": {
                                 "filter": {
                                     "my_en_stop": {
@@ -216,13 +215,13 @@ module.exports = {
         _.each(attrList, function processAttrs(attr, index){
             switch (attr.attrType) {
             case "id":
-                props[attr.id] = {type:"string", index: "analyzed"};
+                props[attr.id] = {type:"text", index: "true"};
                 break;
             case "string":
-                props[attr.id] = {type:"string", index: "analyzed", analyzer: "custom_string_analyzer"};
+                props[attr.id] = {type:"text", index: "true", analyzer: "custom_string_analyzer"};
                 break;
             case "liststring":
-                props[attr.id] = {type:"string", index: "analyzed", analyzer: "custom_string_analyzer"};
+                props[attr.id] = {type:"text", index: "true", analyzer: "custom_string_analyzer"};
                 break;
             case "number":
             case "integer":
@@ -230,19 +229,19 @@ module.exports = {
                 //ignore numeric attrs for elastic search
                 break;
             default:
-                props[attr.id] = {type:"string", index: "analyzed", analyzer: "custom_string_analyzer"};
+                props[attr.id] = {type:"text", index: "true", analyzer: "custom_string_analyzer"};
             }
         });
 
         //create the mapping req body. add _all analyzer. important.
         var body = {};
         body[dsId] = {
-            _all:{
-                type: "string",
-                index: "analyzed",
-                analyzer: "custom_string_analyzer",
-                store: true
-            },
+            // _all:{
+            //     type: "text",
+            //     index: "true",
+            //     analyzer: "custom_string_analyzer",
+            //     store: true
+            // },
             properties : props
         };
 

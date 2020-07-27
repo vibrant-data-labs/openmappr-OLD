@@ -7,7 +7,7 @@ module.exports = {
     'elasticSearchConfig': {
         host: 'localhost:9200',
         log: 'error',
-        apiVersion: '2.4'
+        apiVersion: '5.6'
     },
     'athena' : {
         url : 'localhost:5000'
