@@ -201,7 +201,7 @@ module.exports = {
     },
 
     index: function(document, callback) {
-
+        
     },
 
     storeDataSet: function(dataSetId, attrList, nodeList, callback) {
