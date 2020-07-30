@@ -34,7 +34,6 @@ services:
       - PYTHONUNBUFFERED=1
       - dbHost=${DB_HOST}
     depends_on:
-      - "mongo"
       - "beanstalk"
   beanstalk:
     image: kusmierz/beanstalkd
