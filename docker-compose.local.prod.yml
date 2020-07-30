@@ -45,8 +45,8 @@ services:
     restart: unless-stopped
     environment:
       - node.name=mappr_prod
-      # - bootstrap.memory_lock=true
-      # - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.type=single-node"
       - "xpack.security.enabled=false"
       - "action.auto_create_index=true"
