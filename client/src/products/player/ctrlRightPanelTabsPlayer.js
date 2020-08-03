@@ -19,14 +19,14 @@ angular.module('common')
             ngIntroService.setOptions({ showProgress: true })
 
             ngIntroService.onBeforeChange(function (targetElement) {
-                if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'slides') {
+                if (targetElement.id == '' && $scope.panelUI.currentPanelOpen == 'snapshots') {
                     var nodeID = graphSelectionService.dataGraph.getAllNodes()[0].id;
                     selectService.selectSingleNode(nodeID);
                     $scope.zoomInfo.zoomExtents();
                 }
             });
             ngIntroService.onExit(function () {
-                if ($scope.panelUI.currentPanelOpen == 'slides') {
+                if ($scope.panelUI.currentPanelOpen == 'snapshots') {
                     selectService.unselect();
                     $scope.zoomInfo.zoomReset();
                 }
