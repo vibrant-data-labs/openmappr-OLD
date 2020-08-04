@@ -174,27 +174,29 @@ angular.module('common')
                     filterAttrIds = _.map(filterAttrVMs, 'id');
                 }
 
-                return searchService.searchNodes(selectData.searchText, dataRef, filterAttrIds).then(function(hits) {
-                    var currentSubset = subsetService.currentSubset();
-                    if (currentSubset && currentSubset.length) {
-                        hits = _.filter(hits, function(hit) {
-                            return _.includes(currentSubset, hit._source.id);
-                        });
-                    }
+                var hits = searchService.searchNodes(selectData.searchText, dataRef, filterAttrIds);
 
-                    service.selectedNodes = _.union(service.selectedNodes || [], _.map(hits, function(h) {
-                        return h._source.id;
-                    }));
-
-                    $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
-                        filtersCount: service.getActiveFilterCount(),
-                        selectionCount: service.selectedNodes.length,
-                        isSubsetted: currentSubset.length > 0,
-                        nodes: service.getSelectedNodes(),
-                        searchText: selectData.searchText,
-                        searchAttr: selectData.searchAttr
+                var currentSubset = subsetService.currentSubset();
+                if (currentSubset && currentSubset.length) {
+                    hits = _.filter(hits, function (hit) {
+                        return _.includes(currentSubset, hit._source.id);
                     });
-                })
+                }
+
+                service.selectedNodes = _.union(service.selectedNodes || [], _.map(hits, function (h) {
+                    return h._source.id;
+                }));
+
+                $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                    filtersCount: service.getActiveFilterCount(),
+                    selectionCount: service.selectedNodes.length,
+                    isSubsetted: currentSubset.length > 0,
+                    nodes: service.getSelectedNodes(),
+                    searchText: selectData.searchText,
+                    searchAttr: selectData.searchAttr
+                });
+
+                return Promise.resolve();
             }
 
             function selectSingleNode(id) {

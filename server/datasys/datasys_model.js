@@ -8,8 +8,8 @@ var streamifier = require("streamifier"),
     _ = require('lodash'),
     onecolor = require('onecolor');
 
-var elasticSearchService = require('../services/elasticsearch'),
-    gfs = require('../schemas/gfs_schema.js'),
+//var elasticSearchService = require('../services/elasticsearch'),
+var gfs = require('../schemas/gfs_schema.js'),
     DataMapping = require('../schemas/dataMapping_schema.js'),
     DatasetRecord = require('../schemas/datasetRecord_schema.js'),
     NetworkRecord = require('../schemas/networkRecord_schema.js');
@@ -435,16 +435,16 @@ function saveDataset (dataset, skipDatapoints) {
         return saveDatasetRecord(dataset);
     })
         .then(() => dataset)
-        .tap(function(dataset) {
-            if(shouldIndex) {
-                return elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function (err){
-                    if(err) {
-                        return console.warn("[DSModel.saveDataset] error storing data to elasticsearch", err);
-                    }
-                    console.log("[DSModel.saveDataset] Successfully stored data to elasticsearch");
-                });
-            } else return null;
-        });
+        // .tap(function(dataset) {
+        //     if(shouldIndex) {
+        //         return elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function (err){
+        //             if(err) {
+        //                 return console.warn("[DSModel.saveDataset] error storing data to elasticsearch", err);
+        //             }
+        //             console.log("[DSModel.saveDataset] Successfully stored data to elasticsearch");
+        //         });
+        //     } else return null;
+        // });
     return onSaveP.tap(() => console.log(`[Dataset.saveDataset] Successfully saved dataset: ${dataset.name}`));
 
     // // var dataMap = new DataMapping({

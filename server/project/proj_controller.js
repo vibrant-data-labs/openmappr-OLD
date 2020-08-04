@@ -7,7 +7,7 @@ var projModel = require("./proj_model.js"),
     projCloner = require('./proj_cloner'),
     projDeleter = require('./proj_deleter'),
     DSModel = require("../datasys/datasys_model"),
-    elasticSearchService = require('../services/elasticsearch'),
+    //elasticSearchService = require('../services/elasticsearch'),
     logPrefix = '[projectController] ';
 
 // function projSaveCallback(err, projDoc, numbersAffected, fileId, req, res) {
@@ -286,17 +286,17 @@ module.exports = {
                     var dsId = proj.dataset.ref;
                     DSModel.readDataset(dsId)
                         .then(function(dataset) {
-                            elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function(err) {
-                                if (err) {
-                                    console.warn(logPrefix + "reIndexDataset : error storing data to elasticsearch", err);
-                                    return res.status(400).json(err.stack || err);
-                                }
-                                console.log(logPrefix + "reIndexDataset : successfully stored data to elasticsearch");
-                                res.status(200).json({
-                                    datasetId: dsId,
-                                    result: "successfully index dataset"
-                                });
-                            });
+                            // elasticSearchService.storeDataSet(dataset.id, dataset.attrDescriptors, dataset.datapoints, function(err) {
+                            //     if (err) {
+                            //         console.warn(logPrefix + "reIndexDataset : error storing data to elasticsearch", err);
+                            //         return res.status(400).json(err.stack || err);
+                            //     }
+                            //     console.log(logPrefix + "reIndexDataset : successfully stored data to elasticsearch");
+                            //     res.status(200).json({
+                            //         datasetId: dsId,
+                            //         result: "successfully index dataset"
+                            //     });
+                            // });
                         });
                 } else {
                     res.status(400).json({

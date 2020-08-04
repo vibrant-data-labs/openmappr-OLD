@@ -7,7 +7,7 @@ var express       = require('express'),
     fs            = require('fs'),
     process       = require('process'),
     Promise       = require('bluebird'),
-    elasticsearch = require('elasticsearch'),
+    //elasticsearch = require('elasticsearch'),
     moment        = require('moment'),
     AWS           = require('aws-sdk'),
     clim          = require("clim");
@@ -31,7 +31,7 @@ var globals              = require('./services/globals');
 var RecipeTracker        = require('./services/RecipeTracker');
 var PlayerTracker        = require('./services/PlayerTracker');
 var AthenaAPI            = require('./services/AthenaAPI');
-var ElasticSearchService = require('./services/elasticsearch');
+//var ElasticSearchService = require('./services/elasticsearch');
 var db_old               = require('./db_old.js');
 var mapping              = require('../mapping.json');
 var sc = require('./etl/script_runner.js');
@@ -137,13 +137,13 @@ function init (app) {
 
     // configure search ====================================
     // var esClient = new elasticsearch.Client(config.elasticSearchConfig);
-    ElasticSearchService.init(function () {
-        return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
-            defer: function () {
-                return Promise.defer();
-            }
-        }));
-    });
+    // ElasticSearchService.init(function () {
+    //     return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
+    //         defer: function () {
+    //             return Promise.defer();
+    //         }
+    //     }));
+    // });
 
     // configure passport ====================================
     require('./auth/passport')(passport);

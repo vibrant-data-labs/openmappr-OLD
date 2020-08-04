@@ -3,7 +3,7 @@ var path = require('path');
 
 var athenaController = require('./misc_controllers/athenaController');
 var svgRenderController = require('./misc_controllers/svgRenderController');
-var elasticSearchController = require('./misc_controllers/elasticSearchController');
+//var elasticSearchController = require('./misc_controllers/elasticSearchController');
 var jobController = require('./misc_controllers/jobController');
 var maintenanceController = require('./misc_controllers/maintenanceController');
 var shortUrlController = require('./misc_controllers/shortURLController');
@@ -33,11 +33,11 @@ function setup_misc_routes(router) {
         .post('/api/etl_scripts/extract_demo_for_entities', etlController.slice_extract_users_for_entity)
         .post('/api/etl_scripts/extract_cluster_users_entities', etlController.extract_cluster_users_entities);
 
-    router
-        .post('/api/elasticsearch/search_nodes', elasticSearchController.searchNodes)
-        .get('/api/elasticsearch/dataset/:dsid/search/:queryterm', elasticSearchController.searchTerm)
-        .get('/api/elasticsearch/ping', elasticSearchController.pingSearchServer)
-        .get('/api/elasticsearch/sanitycheck', elasticSearchController.searchSanityCheck);
+    // router
+    //     .post('/api/elasticsearch/search_nodes', elasticSearchController.searchNodes)
+    //     .get('/api/elasticsearch/dataset/:dsid/search/:queryterm', elasticSearchController.searchTerm)
+    //     .get('/api/elasticsearch/ping', elasticSearchController.pingSearchServer)
+    //     .get('/api/elasticsearch/sanitycheck', elasticSearchController.searchSanityCheck);
 
     router
         .get('/api/jobs', jobController.find)

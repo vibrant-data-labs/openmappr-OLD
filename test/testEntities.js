@@ -1,12 +1,12 @@
 'use strict';
 var _    = require('lodash'),
     mongoose = require('mongoose'),
-    elasticsearch = require('elasticsearch'),
+    //elasticsearch = require('elasticsearch'),
     Promise  = require("bluebird");
 
 var emptyOrgFixture = require('./emptyOrgFixture.js');
 var AthenaAPI = require('../server/services/AthenaAPI');
-var ElasticSearchService = require('../server/services/elasticsearch');
+//var ElasticSearchService = require('../server/services/elasticsearch');
 var dataUtils = require("../server/utils/dataUtils.js");
 var DSModel = require("../server/datasys/datasys_model");
 
@@ -74,13 +74,13 @@ module.exports = {
             host: 'localhost:9200',
             log: 'error'
         };
-        ElasticSearchService.init(function () {
-            return new elasticsearch.Client(_.extend(_.clone(esClientCfg), {
-                defer: function () {
-                    return Promise.defer();
-                }
-            }));
-        });
+        // ElasticSearchService.init(function () {
+        //     return new elasticsearch.Client(_.extend(_.clone(esClientCfg), {
+        //         defer: function () {
+        //             return Promise.defer();
+        //         }
+        //     }));
+        // });
 
         // }
         return AthenaAPI.init('localhost', 11300);
