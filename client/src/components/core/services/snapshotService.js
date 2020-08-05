@@ -347,19 +347,13 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
 
                             ctx.clearRect(0, 0, canvas.width, canvas.height);
                             ctx.putImageData(mergedData, 0, 0);
-                            console.log('resultImage', resultCanvas.toDataURL());
-
-                            snap.summaryImg = canvasToSave;
+                            
+                            snap.summaryImg = resultCanvas.toDataURL();
                             _updateSnapshot(snap, updateGraph).then(function (res) {
                                 resolve(res);
                             });
                         }
                         img.src = nodeData;
-                        // canvasToSave = canvas.toDataURL();
-                        // snap.summaryImg = canvasToSave;
-                        // _updateSnapshot(snap, updateGraph).then(function(res) {
-                        //     resolve(res);
-                        // });
                     }
                 });
             });
