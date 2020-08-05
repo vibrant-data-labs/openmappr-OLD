@@ -58,6 +58,9 @@ function ($q, $timeout, $scope, $rootScope, snapshotService, BROADCAST_MESSAGES)
             let activeSnapshotIdx = $scope.snapshots.findIndex(x => x.isCurrentSnap);
             $scope.currentSnap = activeSnapshotIdx > -1 ? $scope.snapshots[activeSnapshotIdx] : $scope.snapshots[0];
             $scope.currentSnapIndex = activeSnapshotIdx > -1 ? activeSnapshotIdx : 0;
+            if ($scope.snapshots.length === 1) {
+                $scope.isMoreEnabled = true;
+            }
         }
     }
 }

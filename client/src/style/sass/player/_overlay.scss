@@ -27,12 +27,11 @@
         display: flex;
 
         button {
-          position: fixed;
-          right: 20%;
-          top: 20px;
-          background: none;
+          align-self: center;
+          margin-right: -150px;
           border-radius: 20px;
-          color: $body-bg;
+          background-color: $body-bg;
+          color: $intro-overlay-bg;
           font-size: 14px;
           line-height: 21px;
           text-transform: uppercase;
@@ -85,6 +84,12 @@
       .subtitle {
         font-weight: 300;
       }
+    }
+
+    .hero__header {
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
     }
 
     .background {

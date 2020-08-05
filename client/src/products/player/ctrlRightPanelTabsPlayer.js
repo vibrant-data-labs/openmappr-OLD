@@ -38,33 +38,6 @@ angular.module('common')
              */
 
             $scope.currentExport = 'all';
-            $scope.expandedState = {
-                isSet: false,
-                isExpanded: false
-            };
-            $scope.togglePanel = function () {
-                if ($scope.expandedState.isSet) {
-                    if ($scope.expandedState.isExpanded) {
-                        document.body.classList.remove('side-menu-compressed');
-                    } else {
-                        document.body.classList.add('side-menu-compressed');
-                    }
-                }
-                $scope.expandedState.isSet = true;
-                $scope.expandedState.isExpanded = document.body.classList.contains('side-menu-compressed');
-            }
-
-            $scope.expandPanel = function () {
-                if (!$scope.expandedState.isSet) {
-                    document.body.classList.remove('side-menu-compressed');
-                }
-            }
-
-            $scope.collapsePanel = function () {
-                if (!$scope.expandedState.isSet) {
-                    document.body.classList.add('side-menu-compressed');
-                }
-            }
 
             $scope.exportCurrentData = function() {
                 var currentExport = $scope.currentExport;
@@ -85,47 +58,32 @@ angular.module('common')
             }
             // toggle floating contact form
             $scope.toggleForm = function () {
-              if (document.getElementById("floatingForm").style.display == "block") {
-                document.getElementById("floatingForm").style.display = "none";
-              } else {
-                document.getElementById("floatingForm").style.display = "block";
-              }
+                if (document.getElementById("floatingForm").style.display == "block") {
+                    document.getElementById("floatingForm").style.display = "none";
+                } else {
+                    document.getElementById("floatingForm").style.display = "block";
+                }
+            }
+
+            $scope.toggleInfo = function () {
+                $scope.panelUI.openPanel('modal');
+                if (!$window.localStorage.modal)
+                    $timeout(function () {
+                        ngIntroService.setOptions(
+                            {
+                                steps: [
+                                    {
+                                        element: '#firstLoad',
+                                        intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
+                                    }
+                                ]
+                            }
+                        );
+                        //ngIntroService.start();
+                    }, 100);
             }
 
             $scope.rightPanelTabs = [
-                {
-                    iconClass: 'info',
-                    title: 'Info',
-                    tooltipTitle: 'See project information',
-                    panel: 'modal',
-                    // highlighted: true,
-                    cmd: function () {
-                        $scope.panelUI.openPanel('modal');
-                        if (!$window.localStorage.modal)
-                            $timeout(function () {
-                                ngIntroService.setOptions(
-                                    {
-                                        steps: [
-                                            {
-                                                element: '#firstLoad',
-                                                intro: 'First Load just says Welcome to Mappr + a 250 wd max introduction'
-                                            }
-                                        ]
-                                    }
-                                );
-                                //ngIntroService.start();
-                            }, 100);
-                    },
-                },
-                {
-                    iconClass: 'snapshots',
-                    title: 'Snapshots',
-                    panel: 'snapshots',
-                    tooltipTitle: 'See snapshot information and change views if there are more than one',
-                    cmd: function () {
-                        $scope.panelUI.openPanel('snapshots');
-                    }
-                },
                 {
                     iconClass: 'filter',
                     title: 'Filters',
@@ -141,15 +99,6 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'legend',
-                    title: 'Legend',
-                    panel: 'summary',
-                    tooltipTitle: 'See color and sizing information',
-                    cmd: function () {
-                        $scope.panelUI.openPanel('summary');
-                    }
-                },
-                {
                     iconClass: 'list',
                     title: 'List',
                     showSelCount: true,
@@ -160,13 +109,23 @@ angular.module('common')
                     }
                 },
                 {
-                    iconClass: 'export',
-                    title: 'Export',
-                    tooltipTitle: 'Export current selection',
+                    iconClass: 'snapshots',
+                    title: 'Snapshots',
+                    panel: 'snapshots',
+                    tooltipTitle: 'See snapshot information and change views if there are more than one',
                     cmd: function () {
-                        $scope.exportCurrentData();
+                        $scope.panelUI.openPanel('snapshots');
                     }
-                }
+                },
+                {
+                    iconClass: 'legend',
+                    title: 'Legend',
+                    panel: 'summary',
+                    tooltipTitle: 'See color and sizing information',
+                    cmd: function () {
+                        $scope.panelUI.openPanel('summary');
+                    }
+                },
             ];
 
             /**
