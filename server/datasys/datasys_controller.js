@@ -980,7 +980,7 @@ function updateAttrData(existingAttrDescr, newAttrDesc) {
         if(newAttr) {
             entitiedUpdated = true;
             _.assign(attr, _.pick(newAttr, ['id', 'title', 'renderType', 'generatorType',
-                            'generatorOptions', 'metadata', 'visible', 'isStarred', 'searchable']));
+                            'generatorOptions', 'metadata', 'visible', 'isStarred', 'searchable', 'visibleInProfile']));
         }
     });
     return entitiedUpdated;
@@ -1015,7 +1015,7 @@ function updateAttrDescr(existingAttrDescr, newAttrDesc, entities) {
             }
 
             _.assign(attr, _.pick(newAttr, ['id', 'title', 'attrType', 'renderType', 'generatorType',
-                            'generatorOptions', 'metadata', 'visible', 'isStarred', 'searchable']));
+                            'generatorOptions', 'metadata', 'visible', 'isStarred', 'searchable', 'visibleInProfile']));
             console.log(`${logPrefix} Updated Attr:`, attr.id);
         }
     });

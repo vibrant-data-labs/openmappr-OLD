@@ -44,6 +44,7 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
         this.visible = this.attr.visible;
         this.isStarred = this.attr.isStarred;
         this.searchable = this.attr.searchable;
+        this.visibleInProfile = this.attr.visibleInProfile;
         this.title = this.attr.title;
         this.newMetaData = buildAttrMetaClone(this.attr.metadata);
     }
@@ -58,6 +59,9 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
     };
     AttrModifier.prototype.toggleSearchable = function() {
         this.searchable = !this.searchable;
+    };
+    AttrModifier.prototype.toggleVisibilityInProfile = function() {
+        this.visibleInProfile = !this.visibleInProfile;
     };
     AttrModifier.prototype.resetSearchable = function() {
         this.searchable = this.attr.searchable;
@@ -100,6 +104,7 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
             || this.visible !== this.attr.visible
             || this.isStarred !== this.attr.isStarred
             || this.searchable !== this.attr.searchable
+            || this.visibleInProfile !== this.attr.visibleInProfile
             || this.scopeChangeRequested()
             || this.metaInfoUpdated();
     };
@@ -118,6 +123,7 @@ function($q, $http, $rootScope, $timeout, networkService, dataService, AttrInfoS
         this.attr.visible = this.visible;
         this.attr.isStarred = this.isStarred;
         this.attr.searchable = this.searchable;
+        this.attr.visibleInProfile = this.visibleInProfile;
         this.attr.title = this.title;
         this.attr.renderType = this.new_render_type;
     };
