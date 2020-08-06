@@ -98,6 +98,7 @@ function AttrDescriptor (id, title, attrType, generatorType, generatorOptions, m
         visible         : "boolean"  == typeof visible ? visible : true,
         metadata        : _.isObject(metadata) ? metadata : {},
         isStarred       : false,
+        visibleInProfile: true,
         renderType      : getDefaultRenderTypeForAttrType(attrType),
         searchable      : ['integer', 'float'].indexOf(attrType) === -1 ? true : false
     };
@@ -181,7 +182,7 @@ Network.prototype.addLinkAttrDescr = function(id, title, attrType, generatorType
 };
 
 function getAttrProps() {
-    var attrProps = ['id', 'title', 'attrType', 'generatorType', 'generatorOptions', 'isStarred', 'visible', 'searchable'];
+    var attrProps = ['id', 'title', 'attrType', 'generatorType', 'generatorOptions', 'isStarred', 'visible', 'searchable', 'visibleInProfile'];
     return attrProps;
 }
 

@@ -536,7 +536,7 @@ angular.module('common')
                     var nodeAttrsObj = dataGraph.getNodeAttrs();
 
                     const filteredAttr = nodeAttrsObj.filter(attr => {
-                        return attr.visible && nodesa.attr[attr.id]
+                        return attr.visible && attr.visibleInProfile && nodesa.attr[attr.id]
                     });
 
                     console.log($scope.mapprSettings, 7778);
