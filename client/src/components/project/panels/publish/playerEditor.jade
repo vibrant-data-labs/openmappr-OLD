@@ -176,6 +176,11 @@
 									//- 		input.form-control(ng-model="playerTempObj.settings.modalLogo" ng-change = 'markAsDirty()' dir-select-all)
 									.panel-subitem
 										.form-group
+											h6 Search algorithm
+											.ui-select
+												select(ng-model="playerTempObj.settings.searchAlg" ng-options="opt.value as opt.name for opt in searchAlgs" ng-change = 'markAsDirty()')							
+									.panel-subitem
+										.form-group
 											h6 Title
 											input.form-control(ng-model="playerTempObj.settings.modalTitle" ng-change = 'markAsDirty()' dir-select-all)
 									.panel-subitem

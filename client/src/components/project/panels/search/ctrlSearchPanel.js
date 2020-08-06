@@ -163,35 +163,11 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
 
         $scope.ui.processingQuery = true;
 
-        $scope.$evalAsync(function () {
-            //added this in to show search panels
-            $scope.showSearchResults = true;
-            var hits;
-            try {
-                hits = searchService.searchNodes($scope.globalSearch.text, dataRef, filterAttrIds)
-            }
-            catch (error) {
-                $scope.searchResults = [];
-                $scope.ui.searchHelperText = 'Found None';
-                $scope.ui.processingQuery = false;
-
-                switch (error) {
-                    case 'noMatch':
-                        console.log(logPrefix + 'No match found for ' + $scope.globalSearch.text);
-                        // uiService.logError('No match found for ' + $scope.globalSearch.text);
-                        break;
-                    case 'searchFailed':
-                        console.log(logPrefix + 'Could not search for ' + $scope.globalSearch.text);
-                        $rootScope.$broadcast(BROADCAST_MESSAGES.searchFailure);
-                        break;
-                    default:
-                }
-
-                return;
-            }
+        searchService.searchNodes($scope.globalSearch.text, dataRef, filterAttrIds, $scope.player.settings.searchAlg)
+        .then(function(hits) {
             var subsetNodes = subsetService.currentSubset();
             if (subsetNodes && subsetNodes.length) {
-                hits = _.filter(hits, function (hit) {
+                hits = _.filter(hits, function(hit) {
                     return _.includes(subsetNodes, hit._source.id);
                 });
             }
@@ -199,23 +175,23 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
             var rgNodes = renderGraphfactory.getGraph().nodes();
             var dataPointIdNodeIdMap = dataGraph.getRawDataUnsafe().dataPointIdNodeIdMap;
             var validNodeIds = _(hits)
-                .map(function (hit) { return dataPointIdNodeIdMap[hit._source.id]; })
-                .compact()
-                .value();
+                                .map(function(hit) { return dataPointIdNodeIdMap[hit._source.id]; })
+                                .compact()
+                                .value();
 
-            $scope.searchResults = _.filter(rgNodes, function (node) {
+            $scope.searchResults = _.filter(rgNodes, function(node) {
                 return validNodeIds.indexOf(node.id) > -1;
             });
 
             //add highlights
             var highlightKeys = filterAttrIds.slice();
-            _.forEach($scope.searchResults, function (n) {
-                var hit = _.find(hits, function (h) {
+            _.forEach($scope.searchResults, function(n) {
+                var hit = _.find(hits, function(h) {
                     return h._source.id == n.id;
                 });
                 n.highlights = [];
-                _.forEach(highlightKeys, function (key) {
-                    if (hit.highlight[key]) {
+                _.forEach(highlightKeys, function(key) {
+                    if(hit.highlight[key]) {
                         n.highlights = n.highlights.concat({
                             attrName: key,
                             text: hit.highlight[key]
@@ -227,14 +203,14 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
             console.log(logPrefix + 'search results: ', $scope.searchResults);
 
             switch ($scope.searchResults.length) {
-                case 0:
-                    $scope.ui.searchHelperText = 'Found None';
-                    break;
-                case 1:
-                    $scope.ui.searchHelperText = 'Found 1 Node';
-                    break;
-                default:
-                    $scope.ui.searchHelperText = 'Found ' + $scope.searchResults.length + ' Nodes';
+            case 0:
+                $scope.ui.searchHelperText = 'Found None';
+                break;
+            case 1:
+                $scope.ui.searchHelperText = 'Found 1 Node';
+                break;
+            default:
+                $scope.ui.searchHelperText = 'Found ' + $scope.searchResults.length + ' Nodes';
             }
 
             $scope.ui.processingQuery = false;
@@ -244,7 +220,27 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
             $scope.ui.nodeLabelAttr = layout && layout.mapprSettings
                 ? layout.mapprSettings.labelAttr
                 : 'OriginalLabel';
+        })
+        .catch(function(error) {
+            $scope.searchResults = [];
+            $scope.ui.searchHelperText = 'Found None';
+            $scope.ui.processingQuery = false;
+
+            switch(error) {
+            case 'noMatch':
+                console.log(logPrefix + 'No match found for ' + $scope.globalSearch.text);
+                // uiService.logError('No match found for ' + $scope.globalSearch.text);
+                break;
+            case 'searchFailed':
+                console.log(logPrefix + 'Could not search for ' + $scope.globalSearch.text);
+                $rootScope.$broadcast(BROADCAST_MESSAGES.searchFailure);
+                break;
+            default:
+            }
         });
+
+        //added this in to show search panels
+        $scope.showSearchResults = true;
     }
 
     function watchSelectedAttrs(val) {
