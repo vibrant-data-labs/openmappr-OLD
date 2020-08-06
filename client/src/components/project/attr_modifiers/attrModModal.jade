@@ -35,7 +35,7 @@
 						i.fa.fa-fw.fa-2x(ng-class = "{true:'fa-search', false:'fa-search text-muted-light'}[attr.searchable]")
 					a.power-btn.secondary-btn.grey-btn(uib-tooltip="{{{true:'remove from profile', false:'include in profile'}[attr.visibleInProfile]}}"
 						ng-class="{'disabled': !attr.visible}" tooltip-append-to-body="true" type="button" ng-click="changeVisibleInProfile(attr_mod)") 
-						i.fa.fa-fw.fa-2x(ng-class = "{true:'fa-info', false:'fa-info text-muted-light'}[attr.visibleInProfile]")
+						i.fa.fa-fw.fa-2x(ng-class = "{true:'fa-info', false:'fa-info text-muted-light'}[attr.visibleInProfile && attr.visible]")
 					a.power-btn.secondary-btn.grey-btn(ng-if="rowActive" uib-tooltip="Edit Meta Info" tooltip-append-to-body="true" type="button", ng-click="editMetaInfo(attr_mod); makeAttrDirty(); attr_mod._isMetaEditing = true;") 
 						i.fa.fa-fw.fa-2x.fa-bars
 	.col-xs-3(ng-if="rowActive && attrsSelected()")
