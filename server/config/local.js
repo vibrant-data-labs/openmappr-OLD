@@ -1,23 +1,23 @@
 'use strict';
 
 module.exports = {
-    'dbUrl': 'mongodb://localhost:27017/MAPPRDB',
-    'oldDbUrl': 'mongodb://localhost:27017/MPTEST',
-    'sessiondbUrl': 'mongodb://localhost:27017/sessionDB',
+    'dbUrl': 'mongodb://192.168.99.100:27017/MAPPRDB',
+    'oldDbUrl': 'mongodb://192.168.99.100:27017/MPTEST',
+    'sessiondbUrl': 'mongodb://192.168.99.100:27017/sessionDB',
     'elasticSearchConfig': {
-        host: 'localhost:9200',
+        host: '192.168.99.100:9200',
         log: 'error',
         apiVersion: '5.6'
     },
     'athena' : {
-        url : 'localhost:5000'
+        url : '192.168.99.100:5000'
     },
     'beanstalk' : {
-        host : '127.0.0.1',
+        host : '192.168.99.100',
         port : 11300
     },
     'redis' : {
         // url : 'redis://user:password@redis-service.com:6379/'
-        url : 'redis://127.0.0.1:6380/0'
+        url : 'redis://192.168.99.100:6380/0'
     }
 };

@@ -519,21 +519,21 @@ var routes = [
     // @CHECKPOINT need to decide an appropriate route for this
     // and also appropriate access levels
     // Tested via POSTMAN and it works well
-    // {
-    //     path: '/api/elasticsearch/search_nodes',
-    //     httpMethod: 'GET',
-    //     middleware: [ projController.searchNodes ]
-    // },
-    // {
-    //     path: '/api/elasticsearch/ping',
-    //     httpMethod: 'GET',
-    //     middleware: [ projController.pingSearchServer ]
-    // },
-    // {
-    //     path: '/api/elasticsearch/reindex/:project_id',
-    //     httpMethod: 'GET',
-    //     middleware: [ DSModelController.reIndexDataset ]
-    // },
+    {
+        path: '/api/elasticsearch/search_nodes',
+        httpMethod: 'GET',
+        middleware: [ projController.searchNodes ]
+    },
+    {
+        path: '/api/elasticsearch/ping',
+        httpMethod: 'GET',
+        middleware: [ projController.pingSearchServer ]
+    },
+    {
+        path: '/api/elasticsearch/reindex/:project_id',
+        httpMethod: 'GET',
+        middleware: [ DSModelController.reIndexDataset ]
+    },
     {
         path: '/api/orgs/:oid([a-z0-9]{24})/projects/:pid([a-z0-9]{24})/dataset',
         httpMethod: 'GET',
