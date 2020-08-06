@@ -130,8 +130,10 @@ function($q, $rootScope, $timeout, AttrModifierService, AttrInfoService, dataSer
         };
 
         scope.changeVisibleInProfile = function(attr_mod) {
-            attr_mod.toggleVisibilityInProfile();
-            scope.setAttrDirty(attr_mod);
+            if (attr_mod.visible) {
+                attr_mod.toggleVisibilityInProfile();
+                scope.setAttrDirty(attr_mod);
+            }
         }
 
         scope.attrsSelected = function() {
