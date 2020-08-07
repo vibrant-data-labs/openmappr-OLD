@@ -110,6 +110,18 @@
         &.up {
           background-image: url('/img/filter-panel/sort-up.svg');
         }
+
+        &.disabled {
+          opacity: .5;
+        }
+
+        &-alphabet {
+          background: url('/img/filter-panel/alphabet-sort-asc.png') 50% no-repeat;
+
+          &.desc {
+            background-image: url('/img/filter-panel/alphabet-sort-desc.png')
+          }
+        }
       }
 
       .card__search-box {
