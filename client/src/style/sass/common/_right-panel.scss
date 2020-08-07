@@ -78,6 +78,10 @@
       margin: 0 4px 4px 0;
       width: 31%;
 
+      &-wide {
+        width: 100%;
+      }
+
       &.active {
         background-color: #e0e0e0;
       }

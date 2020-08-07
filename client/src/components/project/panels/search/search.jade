@@ -29,17 +29,17 @@
                     i.fa.fa-info-circle(ng-if="::attrVM.metadata.descr" uib-tooltip="{{::attrVM.metadata.descr}}" tooltip-placement="right" tooltip-append-to-body="true")
   .search-box__input-wrap
 
-    .search-box__dropdown.search-dropdown(ng-click="toggleSearchDropdown()", ng-class="{ 'search-dropdown_opened': searchDropdownVisible}")
-      span.search-dropdown__button(role="button") {{selectedSearchValue ? selectedSearchValue.title : 'All'}}
+    .search-box__dropdown.search-dropdown(ng-class="{ 'search-dropdown_opened': searchDropdownVisible}")
+      span.search-dropdown__button(role="button" ng-click="toggleSearchDropdown()") {{selectedSearchValue.length > 0 ? selectedSearchValueStr : 'All'}}
 
       ul.search-dropdown__list
         li.search-dropdown__item(
-          ng-click="toggleSearchItem(null)" ng-class="{ 'search-dropdown__item_selected': !selectedSearchValue }"
+          ng-click="toggleSearchItem(null)" ng-class="{ 'search-dropdown__item_selected': selectedSearchValue.length === 0 }"
         ) All
         li.search-dropdown__item(
           ng-click="toggleSearchItem(attrVM)"
           ng-repeat="attrVM in filterAttrVMs"
-          ng-class="{ 'search-dropdown__item_selected': selectedSearchValue && selectedSearchValue.id == attrVM.id }"
+          ng-class="{ 'search-dropdown__item_selected': isAttrSelected(attrVM) }"
         ) {{attrVM.title}}
 
     .search-input

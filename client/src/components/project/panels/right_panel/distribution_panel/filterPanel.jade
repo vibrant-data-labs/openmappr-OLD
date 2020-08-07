@@ -24,7 +24,7 @@
 								) {{::attr.title}}
 
 							button.card__action-sort(
-								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", 
+								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' || attr.renderType == 'wide-tag-cloud'",
 								ng-class="{ 'up': attr.sortConfig && attr.sortConfig.sortOrder === 'asc' }", 
 								ng-click="setSortOrder(attr)"
 								uib-tooltip="Sorted by frequency of occurrence",

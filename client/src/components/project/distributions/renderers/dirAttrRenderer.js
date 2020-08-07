@@ -352,6 +352,9 @@ angular.module('common')
                     case 'tag-cloud':
                         renderTemplate = 'tag_cloud.html';
                         break;
+                    case 'wide-tag-cloud':
+                        renderTemplate = 'wide_tag_cloud.html';
+                        break;
                     case 'row-tag-cloud':
                         renderTemplate = 'row_tag_cloud.html';
                         break;

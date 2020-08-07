@@ -178,7 +178,8 @@ angular.module('common')
             $scope.zoomInfo.zoomReset = zoomService.zoomReset;
             $scope.switchSnapshot = switchSnapshot; //A function for children to switch between snapshots and networks
 
-            $scope.selectedSearchValue = null;
+            $scope.selectedSearchValue = [];
+            $scope.selectedSearchValueStr = null;
 
             $scope.updatePlotType = function (plotType) {
                 $scope.plotType = plotType || 'original';
@@ -243,8 +244,23 @@ angular.module('common')
                 $scope.searchDropdownVisible = !$scope.searchDropdownVisible;
             }
 
+            $scope.isAttrSelected = function(attr) {
+                return _.some($scope.selectedSearchValue, 'id', attr.id);
+            }
+
             $scope.toggleSearchItem = function toggleSearchItem(value) {
-                $scope.selectedSearchValue = value;
+                if (value) {
+                    var item = _.find($scope.selectedSearchValue, 'id', value.id);
+                    if (!item) {
+                        $scope.selectedSearchValue.push(value);
+                    } else {
+                        _.remove($scope.selectedSearchValue, 'id', value.id);
+                    }
+                } else {
+                    $scope.selectedSearchValue = [];
+                    $scope.searchDropdownVisible = false;
+                }
+                $scope.selectedSearchValueStr = _.map($scope.selectedSearchValue, 'title').join(', ');
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function (e, data) {

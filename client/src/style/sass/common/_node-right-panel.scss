@@ -272,6 +272,14 @@
       border: 1px solid #E2E2E2;
       color: #616161;
       margin: 0 4px 4px 0;
+
+      &-wide {
+        width: 100%;
+
+        .cat-text {
+          text-align: center;
+        }
+      }
     }
 
     .cat-item {
@@ -282,6 +290,10 @@
   .section__short-strings {
     .section-info {
       max-width:50%;
+
+      &-wide {
+        max-width: 100%;
+      }
     }
     .tag-list__item {
       text-overflow: ellipsis;

@@ -653,7 +653,8 @@ angular.module('common')
 
             function getSectionTags(attr, values, result) {
                 const { attrType, renderType } = attr;
-                if (renderType !== 'tag-cloud') return;
+                const isWide = renderType === 'wide-tag-cloud';
+                if (renderType !== 'tag-cloud' && !isWide) return;
                 var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(attr.id);
                 if (attrType === 'liststring') {
                     if(attrInfo.isSingleton) {
@@ -667,18 +668,23 @@ angular.module('common')
                                     value: v,
                                     isTag: attrInfo.valuesCount[v] > 1
                                 }
-                            })});
+                            }),
+                            isWide
+                        });
                     } else {
-                        result.sectionTags.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id]});                        
+                        result.sectionTags.push({ key: attr.title || attr.id, id: attr.id, value: values[attr.id], isWide});                        
                     }
                 }
                 else if (attrType === 'string') {
                     var count = attrInfo.valuesCount[values[attr.id]];
                     result.sectionShortTags.push({
-                        key: attr.title || attr.id, id: attr.id, values: [{
+                        key: attr.title || attr.id, 
+                        id: attr.id, 
+                        values: [{
                             value: values[attr.id], 
                             isTag: count > 1
-                        }]
+                        }],
+                        isWide
                     });
                 }
             }
@@ -792,7 +798,7 @@ angular.module('common')
             }
             function mapToSectionThree(attr, values) {
                 const { attrType, renderType, valuesCount } = attr;
-                if (_.includes(['liststring', 'string'], attrType) && renderType === 'tag-cloud') {
+                if (_.includes(['liststring', 'string'], attrType) && (renderType === 'tag-cloud' || renderType === 'wide-tag-cloud')) {
                     console.log("RP ATTR" + attr.id, AttrInfoService.getNodeAttrInfoForRG().getForId(attr.id), values);
                     return valuesCount / $scope.totalCount > TAGS_FRACTION;
                 }
