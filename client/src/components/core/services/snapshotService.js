@@ -303,9 +303,7 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
         console.group('[ctrlSnapshot] Updating Snapshot');
         var plotType = layoutService.getCurrentIfExists().plotType;
         var canvasToSave, canvasElem;
-        if (plotType === 'geo') {
-            canvasElem = '.angular-leaflet-map';
-        } else if (plotType === 'grid') {
+        if (plotType === 'grid') {
             canvasElem = '.grid-layout';
         } else if (plotType === 'list') {
             canvasElem = '.list-layout-content';
@@ -314,6 +312,7 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
         if (canvasElem) {
             return new Promise(function(resolve, reject) {
                 html2canvas(document.querySelector(canvasElem), {
+                    useCORS: true,
                     onrendered: function(canvas) {
                         canvasToSave = canvas.toDataURL();
                         snap.summaryImg = canvasToSave;
@@ -323,12 +322,67 @@ function ($q, $http, $rootScope, $routeParams, layoutService, graphSelectionServ
                     }
                 });
             });
+        } else if (plotType === 'geo') {
+            return new Promise(function(resolve, reject) {
+                html2canvas(document.querySelector('.angular-leaflet-map'), {
+                    useCORS: true,
+                    onrendered: function(canvas) {
+                        var sig = renderGraphfactory.sig();
+
+                        var nodeData = sig.renderers.graph.snapshot({background: 'transparent'});
+
+                        var resultCanvas = document.createElement('canvas');
+                        resultCanvas.style.display = 'none';
+                        resultCanvas.width = canvas.width;
+                        resultCanvas.height = canvas.height;
+                        document.body.appendChild(resultCanvas);
+                        
+                        var img = new Image();
+                        img.onload = function() {
+                            var ctx = resultCanvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            var mergedData = mergeData(
+                                ctx.getImageData(0, 0, canvas.width, canvas.height), 
+                                canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height));
+
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.putImageData(mergedData, 0, 0);
+                            
+                            snap.summaryImg = resultCanvas.toDataURL();
+                            _updateSnapshot(snap, updateGraph).then(function (res) {
+                                resolve(res);
+                            });
+                        }
+                        img.src = nodeData;
+                    }
+                });
+            });
         } else {
             var sig = renderGraphfactory.sig();
 
             snap.summaryImg = sig.renderers.graph.snapshot({background: 'white'});
             return _updateSnapshot(snap, updateGraph);
         }
+    }
+
+    function mergeData(top, bottom){
+        var tD = top.data,
+            bD = bottom.data,
+            l = tD.length;
+        for(var i = 0; i < l; i += 4){
+            //source alpha
+            var alphaSrc = tD[i+3] / 255, //source alpha
+                alphaDst = bD[i+3] / 255, //destination alpha
+                alphaSrcO = 1 - alphaSrc, //(1 - x)
+                alpha = alphaSrc + alphaDst * alphaSrcO; //if destination alpha is opaque
+            //merge colors
+            bD[i] = ((tD[i]*alphaSrc) + (bD[i]*alphaDst*alphaSrcO)) / alpha,
+            bD[i+1] = ((tD[i+1]*alphaSrc) + (bD[i+1]*alphaDst*alphaSrcO)) / alpha,
+            bD[i+2] = ((tD[i+2]*alphaSrc) + (bD[i+2]*alphaDst*alphaSrcO)) / alpha,
+            bD[i+3] = 255*alpha;
+        }
+        //return bottom
+        return bottom;
     }
 
     function removeSnapshot(snapId) {

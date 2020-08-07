@@ -22,6 +22,7 @@ var PlayerSchema = new mongoose.Schema({
         simpleSplash:   {type:Boolean, default: true},
         modalIntroHtml: String,
         modalTitle:     String,
+        searchAlg:      String,
         modalSubtitle:  String,
         modalLogo:      String,
         modalBackground: String,
