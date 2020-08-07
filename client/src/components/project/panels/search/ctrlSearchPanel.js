@@ -155,9 +155,11 @@ function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiServ
             : $scope.player.dataset.ref;
 
         // Run search only on attrs in search list, instead of '_all'
-        var filterAttrIds = $scope.selectedSearchValue ? [$scope.selectedSearchValue.id] : [];
-        if (filterAttrIds.length === 0) {
+        var filterAttrIds;
+        if ($scope.selectedSearchValue.length === 0) {
             filterAttrIds = _.map($scope.filterAttrVMs, 'id');
+        } else {
+            filterAttrIds = _.map($scope.selectedSearchValue, 'id');
         }
         console.assert(dataRef, "Dataset must exist for this version");
 
