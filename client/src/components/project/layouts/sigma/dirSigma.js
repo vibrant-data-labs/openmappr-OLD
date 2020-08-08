@@ -11,8 +11,9 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
     **************************************/
     var dirDefn = {
         template:
-            '<div id="sig-holder" class="sig-holder">'+
+            '<div id="sig-holder" class="sig-holder" ng-mousemove="onMouseMoveSig($event)" ng-mouseup="onMouseUpSig($event)" ng-mousedown="onMouseDownSig($event)">'+
                 '<div id="mainCanvas" class="graph-container"></div>' +
+                '<div class="sig-selection" id="selection" hidden></div>' +
             '</div>',
         restrict: 'EA',
         scope: true,
@@ -35,7 +36,20 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
     var __rendering_in_progress__ = false;
     var leftPanelWidth = 412;
 
+    var selectionDiv;
+    var x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    var selectionDivEnabled = false;
 
+    function reCalc() {
+        var x3 = Math.min(x1,x2);
+        var x4 = Math.max(x1,x2);
+        var y3 = Math.min(y1,y2);
+        var y4 = Math.max(y1,y2);
+        selectionDiv.style.left = x3 + 'px';
+        selectionDiv.style.top = y3 + 'px';
+        selectionDiv.style.width = x4 - x3 + 'px';
+        selectionDiv.style.height = y4 - y3 + 'px';
+    }
 
 
     /*************************************
@@ -117,6 +131,40 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
                 // $(element).height($('#project-layout').height()).width($('#project-layout').width());
             }
         });
+
+        selectionDiv = document.getElementById('selection');
+
+        scope.onMouseMoveSig = function(ev) {
+            x2 = ev.clientX;
+            y2 = ev.clientY;
+            reCalc();
+        }
+
+        scope.onMouseUpSig = function(ev) {
+            if (selectionDivEnabled) {
+                const { bottom, left, top, right } = selectionDiv.getBoundingClientRect();
+                var allNodes = sig.graph.nodes();
+                var selectedNodes = _.filter(allNodes, function(node) {
+                    return node['camcam1:x'] + leftPanelWidth < right && node['camcam1:x'] + leftPanelWidth > left &&
+                    node['camcam1:y'] > top && node['camcam1:y'] < bottom;
+                });
+                selectionDivEnabled = false;
+                selectionDiv.hidden = true;
+                setTimeout(function() {
+                    selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+                }, 100);
+            }
+        }
+
+        scope.onMouseDownSig = function(ev) {
+            if (ev.shiftKey) {
+                selectionDivEnabled = true;
+                selectionDiv.hidden = false;
+                x1 = ev.clientX;
+                y1 = ev.clientY;
+                reCalc();
+            }
+        }
 
         function reloadAggrGraphsOnZoomEnd (event, data) {
             var rg = dataGraph.getRenderableGraph();

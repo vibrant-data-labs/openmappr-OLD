@@ -116,6 +116,11 @@
         }
     }
 
+    .sig-selection {
+        border: 1px dotted #000;
+        position: absolute;
+    }
+
     // bug fix for ipad extra height
     @media (orientation:landscape) {
         html.ipad.ios7 > body {
@@ -130,6 +135,18 @@
         height: 100%;
         width: 100%;
         left: $main-content-left;
+
+        .sig-selection {
+            z-index: 999;
+        }
+
+        .leaflet-tile {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
     }
 
 }

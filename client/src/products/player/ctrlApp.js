@@ -74,6 +74,7 @@ angular.module('player')
                 slidesPanelOpen: false,
                 modalPanelOpen: false,
                 persistFilterPanel: false,
+                snapshotPanelOpen: false,
                 currentPanelOpen: 'modal',
 
                 //hovers
@@ -103,6 +104,9 @@ angular.module('player')
                     case 'modal':
                         this.modalPanelOpen = true;
                         break;
+                    case 'snapshots':
+                        this.snapshotPanelOpen = true;
+                        break;
                     default:
                     }
                 },
@@ -113,6 +117,7 @@ angular.module('player')
                     this.hideInfoPanel = false;
                     this.slidesPanelOpen = false;
                     this.modalPanelOpen = false;
+                    this.snapshotPanelOpen = false;
                 },
                 togglePanel: function(pan) {
                     var tempBool;
@@ -256,7 +261,7 @@ angular.module('player')
                     //MODAL
                     //if($scope.player.settings.showModal){
                     $scope.hasModal = true;
-                    $scope.panelUI.openPanel($scope.player.settings.showModal ? 'modal' : 'slides');
+                    $scope.panelUI.openPanel($scope.player.settings.showModal ? 'modal' : 'snapshots');
                     if(!$window.localStorage.modal)
                         $timeout(function () {
                             ngIntroService.setOptions(

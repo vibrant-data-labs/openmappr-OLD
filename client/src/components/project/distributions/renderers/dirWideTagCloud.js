@@ -1,6 +1,6 @@
 /*globals d3,$  */
 angular.module('common')
-    .directive('dirTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService',
+    .directive('dirWideTagCloud', ['$timeout', '$q', 'FilterPanelService', 'dataGraph', 'AttrInfoService', 'SelectorService', 'BROADCAST_MESSAGES', 'hoverService', 'selectService', 'subsetService',
         function ($timeout, $q, FilterPanelService, dataGraph, AttrInfoService, SelectorService, BROADCAST_MESSAGES, hoverService, selectService, subsetService) {
             'use strict';
 
@@ -10,7 +10,7 @@ angular.module('common')
             var dirDefn = {
                 restrict: 'AE',
                 require: '?^dirAttrRenderer',
-                templateUrl: '#{server_prefix}#{view_path}/components/project/distributions/renderers/tagCloud.html',
+                templateUrl: '#{server_prefix}#{view_path}/components/project/distributions/renderers/wideTagCloud.html',
                 scope: true,
                 link: postLinkFn
             };
@@ -18,9 +18,9 @@ angular.module('common')
             /*************************************
     ************ Local Data **************
     **************************************/
-            var dirPrefix = '[dirTagCloud] ';
-            var ITEMS_TO_SHOW = 21;
-            var ITEMS_TO_SHOW_INITIALLY = 21;
+            var dirPrefix = '[dirWideTagCloud] ';
+            var ITEMS_TO_SHOW = 10;
+            var ITEMS_TO_SHOW_INITIALLY = 10;
             var totalNodes = 0;
 
 
@@ -36,7 +36,7 @@ angular.module('common')
                 var attrId = scope.attrToRender.id;
                 var filteringCatVals = [];
                 var isCompareView = renderCtrl.isCompareView();
-                var initVisItemCount = isCompareView ? 21 : ITEMS_TO_SHOW_INITIALLY;
+                var initVisItemCount = isCompareView ? 10 : ITEMS_TO_SHOW_INITIALLY;
                 var sortOrder = scope.attrToRender.sortOps.sortOrder;
                 var sortType = scope.attrToRender.sortOps.sortType;
 
@@ -181,7 +181,7 @@ angular.module('common')
                 });
 
                 scope.$watch('attrToRender.sortConfig', function (sortOps) {
-                    console.log('dirTagCloud: sortConfig', sortOps);
+                    console.log(dirPrefix + 'sortConfig', sortOps);
                     sortType = sortOps && sortOps.sortType || 'frequency';
                     sortOrder = sortOps && sortOps.sortOrder || 'desc';
                     scope.catListData.data = sortTagData(scope.catListData.data, sortType, sortOrder, scope.catListData.highlightedCats.length > 0);
@@ -249,7 +249,7 @@ angular.module('common')
 
                 function hoverSelectedNodes(event) {
                     var selectedValues = getSelectedValues() || [];
-                    console.log('dirTagCloud hoverSelectedNodes', selectedValues);
+                    console.log(dirPrefix + 'hoverSelectedNodes', selectedValues);
                     renderCtrl.hoverNodesByAttributes(attrId, selectedValues, event);
                 }
 

@@ -19,11 +19,11 @@ var elasticSearchService = require('../services/elasticsearch'),
 //   1) Change on client side(AttrInfoService.js) and athena(entities.py) as well on updation
 //   2) Each attr type gets first render type as default
 var attrRenderTypesMap = {
-    'string': ['tag-cloud' ,'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+    'string': ['tag-cloud', 'wide-tag-cloud','categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
     'json': ['medialist'],
     'twitter': ['twitterfeed'],
     'instagram': ['instagramfeed'],
-    'liststring': ['tag-cloud', 'tags'],
+    'liststring': ['tag-cloud', 'wide-tag-cloud', 'tags'],
     'boolean': ['categorybar', 'piechart', 'histogram'],
     'color': ['categorybar', 'piechart', 'histogram'],
     'integer': ['histogram', 'densitybar'],
@@ -98,6 +98,7 @@ function AttrDescriptor (id, title, attrType, generatorType, generatorOptions, m
         visible         : "boolean"  == typeof visible ? visible : true,
         metadata        : _.isObject(metadata) ? metadata : {},
         isStarred       : false,
+        visibleInProfile: true,
         renderType      : getDefaultRenderTypeForAttrType(attrType),
         searchable      : ['integer', 'float'].indexOf(attrType) === -1 ? true : false
     };
@@ -181,7 +182,7 @@ Network.prototype.addLinkAttrDescr = function(id, title, attrType, generatorType
 };
 
 function getAttrProps() {
-    var attrProps = ['id', 'title', 'attrType', 'generatorType', 'generatorOptions', 'isStarred', 'visible', 'searchable'];
+    var attrProps = ['id', 'title', 'attrType', 'generatorType', 'generatorOptions', 'isStarred', 'visible', 'searchable', 'visibleInProfile'];
     return attrProps;
 }
 

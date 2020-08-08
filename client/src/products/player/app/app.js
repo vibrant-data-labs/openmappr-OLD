@@ -16,7 +16,7 @@
 
     angular.module('errorLogger', []);
     angular.module('player', ['errorLogger']);
-    angular.module('common', []);
+    angular.module('common', ['chieffancypants.loadingBar']);
 
     angular.module('hcApp', [
         'common',

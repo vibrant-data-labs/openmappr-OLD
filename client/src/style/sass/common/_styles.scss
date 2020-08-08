@@ -455,12 +455,18 @@ a {
     }
 
     &.grey-btn {
+        padding: 7px 10px 6px;
+        
         &.secondary-btn {
             color: $link-color;
 
             &:hover {
                 color: $active-color;
             }
+        }
+
+        &.disabled {
+            cursor: default;
         }
 
     }

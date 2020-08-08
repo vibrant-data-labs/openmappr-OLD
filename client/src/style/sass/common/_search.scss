@@ -147,7 +147,9 @@
         }
 
         &:hover .search-results-item__sublabel {
-            display: block;
+            .highlight-list {
+                opacity: 1;
+            }
         }
     }
 
@@ -169,7 +171,11 @@
 
         &__sublabel {
             font: 400 12px/20px 'Poppins';
-            display: none;
+
+            .highlight-list {
+                opacity: 0;
+                @include transition(opacity 0.2s linear);
+            }
         }
     }
 

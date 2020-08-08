@@ -13,7 +13,8 @@ var attrSpec = {
     visible          : {type: Boolean, default: true },
     metadata         : {},
     isStarred        : {type: Boolean, default: false },
-    searchable       : {type: Boolean, default: true }
+    searchable       : {type: Boolean, default: true },
+    visibleInProfile : {type: Boolean, default: true }
 };
 
 module.exports = {

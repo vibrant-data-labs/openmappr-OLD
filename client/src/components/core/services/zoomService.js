@@ -126,7 +126,13 @@ function($q, $rootScope, $timeout, dataGraph, layoutService, renderGraphfactory,
         sigmaReset = function sigmaReset (newCam) {
             var pos = {};
             var cam = renderer.camera;
-            var ratio = newCam.ratio / cam.ratio;
+            var newRatio;
+            if (layoutService.getCurrentIfExists().plotType == 'scatterplot') {
+                newRatio = 1.5;
+            } else {
+                newRatio = newCam.ratio;
+            }
+            var ratio = newRatio / cam.ratio;
             var eventType = 'zoomReset';
             var rg = dataGraph.getRenderableGraph();
             //ratio *= rg.baseRatio;

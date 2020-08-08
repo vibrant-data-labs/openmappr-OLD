@@ -88,6 +88,11 @@ angular.module('common')
                         service.filters = _.indexBy(_buildFilters(dataGraph.getNodeAttrs()), 'attrId');
                         service.unselect();
                     });
+                    $rootScope.$on(BROADCAST_MESSAGES.hss.subset.changed, function (ev, data) {
+                        if (data.subsetCount === 0) {
+                            service.unselect();
+                        }
+                    });
                 })(this);
             }
 
@@ -169,7 +174,7 @@ angular.module('common')
                     filterAttrIds = _.map(filterAttrVMs, 'id');
                 }
 
-                return searchService.searchNodes(selectData.searchText, dataRef, filterAttrIds).then(function(hits) {
+                return searchService.searchNodes(selectData.searchText, dataRef, filterAttrIds, selectData.scope.player.settings.searchAlg).then(function(hits) {
                     var currentSubset = subsetService.currentSubset();
                     if (currentSubset && currentSubset.length) {
                         hits = _.filter(hits, function(hit) {

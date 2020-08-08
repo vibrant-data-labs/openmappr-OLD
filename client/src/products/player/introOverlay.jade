@@ -2,11 +2,11 @@
   .hero
     .hero__background
     .hero__content
-      h1.hero__title {{player.settings.modalTitle}}
+      h1.hero__header 
+        {{player.settings.modalTitle}}
+        button(ng-click="panelUI.openPanel('slides')")
+          | Explore Map
       .subtitle(ng-bind-html="player.settings.modalSubtitle | trustHtml")
 
       .content(ng-bind-html="player.settings.modalDescription | trustHtml")
-
-      button(ng-click="panelUI.openPanel('slides')")
-        | Explore Map
 

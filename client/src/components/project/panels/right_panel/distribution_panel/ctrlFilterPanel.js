@@ -9,6 +9,7 @@ angular.module('common')
             var logPrefix = '[ctrlFilterPanel: ] ';          
             var groups = {
                 tag: ['tag-cloud'],
+                widetag: ['wide-tag-cloud'],
                 charts: ['histogram']
             };
 
@@ -144,7 +145,19 @@ angular.module('common')
                     }
                 });
 
-                var tagAttrs = $scope.nodeDistrAttrs.filter(function(x) { return groups.tag.includes(x.renderType);});
+                $rootScope.canShowTagsBtn = function() {
+                    return $scope.nodeDistrAttrs.some(function(attr) { 
+                        return attr.visible && (attr.renderType == 'tag-cloud' || attr.renderType == 'wide-tag-cloud');
+                    });
+                }
+
+                $rootScope.canShowChartsBtn = function() {
+                    return $scope.nodeDistrAttrs.some(function(attr) { 
+                        return attr.visible && (attr.attrType == 'integer' || attr.attrType == 'float' || attr.attrType == 'year' || attr.attrType == 'timestamp')
+                    });
+                }
+
+                var tagAttrs = $scope.nodeDistrAttrs.filter(function(x) { return groups.tag.includes(x.renderType) || groups.widetag.includes(x.renderType);});
                 var visibleTagAttrs = tagAttrs.filter(function(x) {
                     return x.visible;
                 });
@@ -371,7 +384,7 @@ angular.module('common')
 
             function setSortForTags(attrs, selectionMode) {
                 _.each(attrs, function(attr) {
-                    if ((attr.renderType === 'tags' || attr.renderType === 'tag-cloud')
+                    if ((attr.renderType === 'tags' || attr.renderType === 'tag-cloud' || attr.renderType === 'wide-tag-cloud')
                 && _.get(attr, 'sortOps.sortType') !== 'alphabetical') {
                         attr.sortOps.sortType = selectionMode ? 'statistical' : 'frequency';
                     }

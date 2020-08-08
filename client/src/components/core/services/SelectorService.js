@@ -195,7 +195,7 @@ angular.module('common')
                 var attrInfo = null, attr = null;
                 if(attrId) {
                     attr = rd.getAttrInfo(attrId);
-                    attrInfo =  AttrInfoService.buildAttrInfoMap(attr, nodes);
+                    attrInfo =  AttrInfoService.buildAttrInfoMap(attr, nodes).infoObj;
                 }
                 switch(this.type) {
                 case 'CLUSTER':

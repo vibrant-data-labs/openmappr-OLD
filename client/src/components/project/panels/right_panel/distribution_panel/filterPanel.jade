@@ -2,9 +2,9 @@
 	.flex-vert-container.flex-transclude.panel-container.width-100
 		.filter-header
 			ul.filter-header__list
-				li.filter-header__item.tag.filter-header__item_current(ng-click="navigateTo('.tags-first-item')")
+				li.filter-header__item.tag.filter-header__item_current(ng-click="navigateTo('.tags-first-item')", ng-if="canShowTagsBtn()")
 					span.filter-header__link Tags
-				li.filter-header__item.chart(ng-click="navigateTo('.chart-first-item')")
+				li.filter-header__item.chart(ng-click="navigateTo('.chart-first-item')", ng-if="canShowChartsBtn()")
 					span.filter-header__link Charts
 
 		.panel-scroll.flex-fill.flex-vert-container(ng-controller="FilterPanelCtrl")
@@ -24,7 +24,7 @@
 								) {{::attr.title}}
 
 							button.card__action-sort(
-								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' ", 
+								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' || attr.renderType == 'wide-tag-cloud'",
 								ng-class="{ 'up': attr.sortConfig && attr.sortConfig.sortOrder === 'asc' }", 
 								ng-click="setSortOrder(attr)"
 								uib-tooltip="Sorted by frequency of occurrence",

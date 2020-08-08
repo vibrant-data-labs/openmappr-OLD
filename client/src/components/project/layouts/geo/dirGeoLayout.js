@@ -2,8 +2,8 @@
  * Layout based switching
  */
  angular.module('common')
- .directive('geolayout', ['$rootScope', 'renderGraphfactory', 'leafletData', 'layoutService', 'dataGraph', 'zoomService', 'BROADCAST_MESSAGES',
-function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph, zoomService, BROADCAST_MESSAGES) {
+ .directive('geolayout', ['$rootScope', 'renderGraphfactory', 'leafletData', 'layoutService', 'dataGraph', 'zoomService', 'selectService', 'BROADCAST_MESSAGES',
+function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph, zoomService, selectService, BROADCAST_MESSAGES) {
     'use strict';
 
     /*************************************
@@ -33,8 +33,30 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
     var leftPanelWidth = 412;
 
 
+    /*************************************
+    ************ Leaflet override ********
+    **************************************/
+    var onBoxZoomEnd = null;
+    L.Map.BoxZoom.prototype._onMouseUp = function (e) {
+        if ((e.which !== 1) && (e.button !== 1)) { return; }
+    
+        this._finish();
+    
+        if (!this._moved) { return; }
+        // Postpone to next JS tick so internal click event handling
+        // still see it as "moved".
+        this._resetStateTimeout = setTimeout(L.Util.bind(this._resetState, this), 0);
+    
+        var point = this._map.mouseEventToContainerPoint(e);
+        var bounds = new L.LatLngBounds(
+            this._map.containerPointToLatLng(this._startLayerPoint),
+            this._map.containerPointToLatLng(point)
+        );
 
-
+        if (typeof onBoxZoomEnd === 'function') {
+            onBoxZoomEnd(bounds);
+        }
+    };
 
     /*************************************
     ******** Controller Function *********
@@ -105,6 +127,17 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
         var disableViewReset = false;
 
         var mapID = scope.mapprSettings.mapboxMapID || 'vibrantdata.j5c7ofm2';
+        onBoxZoomEnd = function(bounds) {
+            var layout = layoutService.getCurrentIfExists();
+            var sig = renderGraphfactory.sig();
+            var allNodes = sig.graph.nodes();
+
+            var selectedNodes = _.filter(allNodes, function(node) {
+                return bounds.contains([node.attr[layout.attr.x], node.attr[layout.attr.y]]);
+            });
+            selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+        }
+
         scope.$watch('mapprSettings.mapboxMapID',function(newVal, oldVal) {
             if(newVal && newVal !== oldVal && newVal !== mapID) {
                 console.log('[dirGeo]mapboxMapID Changed! (%s -> %s)', oldVal, newVal);

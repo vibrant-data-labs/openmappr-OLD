@@ -422,7 +422,7 @@
   // If WebGL is enabled, set new default renderer
   if (!!window.WebGLRenderingContext) {
     var canvas = document.createElement('canvas');
-    if( !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) ) {
+    if( !!(canvas.getContext('webgl', { preserveDrawingBuffer: true }) || canvas.getContext('experimental-webgl', { preserveDrawingBuffer: true })) ) {
       sigma.renderers.def = sigma.renderers.webgl;
     }
   }

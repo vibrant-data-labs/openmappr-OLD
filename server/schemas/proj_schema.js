@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var SnapshotDescr = {
     id:             String,
     snapName:       String,
+    subtitle:       String,
+    summaryImg:     String,
     descr:          String,
     picture:        String,
     audio:          String,

@@ -1,6 +1,6 @@
 angular.module('common')
-.controller('SearchPanelCtrl', ['$scope', '$rootScope', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService', 'subsetService',
-function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService, subsetService) {
+.controller('SearchPanelCtrl', ['$scope', '$rootScope', '$timeout', 'searchService', 'BROADCAST_MESSAGES', 'uiService', 'dataService', 'dataGraph', 'renderGraphfactory', 'nodeSelectionService', 'layoutService', 'SelectionSetService', 'hoverService', 'selectService', 'subsetService',
+function($scope, $rootScope, $timeout, searchService, BROADCAST_MESSAGES, uiService, dataService, dataGraph, renderGraphfactory, nodeSelectionService, layoutService, SelectionSetService, hoverService, selectService, subsetService) {
     'use strict';
 
     /*************************************
@@ -32,7 +32,8 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         processingQuery: false,
         overlayOpen: false,
         showInfoIcon: false,
-        numShowGroups: numShowGroups
+        numShowGroups: numShowGroups,
+        hoveredIds: []
     };
 
     $scope.filterAttrVMs = [];
@@ -67,8 +68,23 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
         $scope.ui.showLimit = Math.min($scope.ui.numShowGroups * ITEMS_TO_SHOW + ITEMS_TO_SHOW_INITIALLY, $scope.searchResults.length);   
     }
 
-    $scope.hoverNode = function(node) {
+    $scope.leaveNode = function(node) {
+        $timeout(function() {
+            $scope.ui.hoveredIds = _.filter($scope.ui.hoveredIds, function(id) {
+                return node.id !== id;
+            });
+        }, 400);
+    }
+
+    $scope.isNodeDescShown = function(node) {
+        return _.some($scope.ui.hoveredIds, function(id) {
+            return node.id === id;
+        })
+    }
+
+    $scope.hoverNode = function(node, event) {
         hoverService.hoverNodes({ ids: [node.id]});
+        $scope.ui.hoveredIds.push(node.id);
     };
 
     $scope.hideSearchResults = function() {
@@ -139,15 +155,17 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
             : $scope.player.dataset.ref;
 
         // Run search only on attrs in search list, instead of '_all'
-        var filterAttrIds = $scope.selectedSearchValue ? [$scope.selectedSearchValue.id] : [];
-        if (filterAttrIds.length === 0) {
+        var filterAttrIds;
+        if ($scope.selectedSearchValue.length === 0) {
             filterAttrIds = _.map($scope.filterAttrVMs, 'id');
+        } else {
+            filterAttrIds = _.map($scope.selectedSearchValue, 'id');
         }
         console.assert(dataRef, "Dataset must exist for this version");
 
         $scope.ui.processingQuery = true;
 
-        searchService.searchNodes($scope.globalSearch.text, dataRef, filterAttrIds)
+        searchService.searchNodes($scope.globalSearch.text, dataRef, filterAttrIds, $scope.player.settings.searchAlg)
         .then(function(hits) {
             var subsetNodes = subsetService.currentSubset();
             if (subsetNodes && subsetNodes.length) {
@@ -264,6 +282,7 @@ function($scope, $rootScope, searchService, BROADCAST_MESSAGES, uiService, dataS
 
     function selectAllNodes(showSearchResults) {
         selectService.selectNodes({ ids: _.map($scope.searchResults, 'id'), searchText: $scope.globalSearch.text, searchAttr: $scope.selectedSearchValue, scope: $scope});
+        $scope.searchToggle();
         if(!showSearchResults) {
             $scope.hideSearchResults();
         }

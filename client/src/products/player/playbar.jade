@@ -50,7 +50,7 @@
             ng-if="operation.type != 'init'"
             ng-class="{'play-toolbar-list__item_subsetted' : operation.type == 'subset', 'play-toolbar-list__item_selected': operation.type == 'select', 'play-toolbar-list__item_opened': operation.isOpened }")
             header.play-toolbar-list__header(ng-if="operation.type == 'select' || operation.type == 'subset'", ng-click="operations.toggleOperation(operation)")
-              span.selected {{operation.nodesCount}}
+              span(ng-class="{'selected' : $last, 'total': !$last}") {{operation.nodesCount}}
               = ' '
               | of
               = ' '
@@ -78,12 +78,7 @@
               .filter-section-wrap(ng-repeat="filter in operations.filterArray(operation)", ng-if="operation.filters")
                 dl.filter-section
                   dt.filter-section__label
-                    | {{filter.attrInfo.attr.title}}
-                    span.count(ng-if="!operations.isNumeric(filter.attrInfo)")
-                      | &nbsp;(
-                      b {{filter.values.values.length}}
-                      | )
-                    | :
+                    | {{filter.attrInfo.attr.title}}:
 
                   dd.filter-section__content
                     ul.filter-section__list(ng-if="!operations.isNumeric(filter.attrInfo)")

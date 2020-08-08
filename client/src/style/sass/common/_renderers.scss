@@ -21,6 +21,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-align: center;
     }
 
     a {
@@ -257,6 +258,11 @@
         svg {
             padding-left: 5px;
         }
+    }
+
+    .log-scale-toggle {
+        position: absolute;
+        right: 0;
     }
 
     .xaxis,

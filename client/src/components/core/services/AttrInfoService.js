@@ -48,11 +48,11 @@ angular.module('common')
     //   1) Change on server side(datasys/datasys_model.js) and athena(entities.py) as well on updation
     //   2) Each attr type gets first render type as default
     var attrRenderTypesMap = {
-        'string': ['tag-cloud' ,'categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
+        'string': ['tag-cloud', 'wide-tag-cloud','categorylist' ,'categorybar', 'text', 'textlist', 'piechart', 'barchart', 'media', 'link', 'date', 'date-time', 'time', 'email', 'lat,lng', 'longtext'],
         'json': ['medialist'],
         'twitter': ['twitterfeed'],
         'instagram': ['instagramfeed'],
-        'liststring': ['tag-cloud', 'tags'],
+        'liststring': ['tag-cloud', 'wide-tag-cloud','tags'],
         'boolean': ['categorybar', 'piechart', 'histogram'],
         'color': ['categorybar', 'piechart', 'histogram'],
         'integer': ['histogram', 'densitybar'],
@@ -103,11 +103,18 @@ angular.module('common')
                     throw new Error("AttrInfo not found for this attr:" + attrId);
                 }
                 if( _.isObject(val) && val.__refresh__) { // if __refresh__ exists obj, then re-run the calc
-                    this.__cache[attrId].infoObj = buildAttrInfoMap(val.attr, val.entities);
+                    var infoMap = buildAttrInfoMap(val.attr, val.entities);
+                    this.__cache[attrId].infoObj = infoMap.infoObj;
+                    this.__cache[attrId].logInfoObj = infoMap.logInfoObj;
                     this.__cache[attrId].__refresh__ = false;
                 }
                 return this.__cache[attrId].infoObj;
             };
+            AttrInfo.prototype.getForLogId = function(attrId) {
+                this.getForId(attrId);
+                return this.__cache[attrId].logInfoObj;
+            }
+
             AttrInfo.prototype.forId = function(attrId) {
                 return this.getForId(attrId);
             };
@@ -331,14 +338,23 @@ angular.module('common')
                 }, []);
 
                 if(attr.isNumeric) {
+                    var logInfoObj = {...infoObj, isInteger: false};
                     getNumericAttrInfo(values, infoObj);
+                    if (infoObj.stats.min >= 0 && !attr.id.includes('log10') && (attr.attrType === 'float' || attr.attrType === 'integer')) {
+                        if (infoObj.stats.min === 0) {
+                            values = _.map(values, (val) => val + 0.1);
+                        }
+                        var logValues = _.map(values, (val) => +Math.log10(val).toFixed(2));
+                        getNumericAttrInfo(logValues, logInfoObj);
+                        return { infoObj, logInfoObj };
+                    }
                 } else if(attr.isTag) {
                     getTagAttrInfo(entities, attribId, infoObj);
                 } else {
                     getNonNumericAttrInfo(values, infoObj);
                 }
                 // console.log("Attr Info for attr: %s : %O", attribId, infoObj);
-                return infoObj;
+                return { infoObj };
             }
 
             function getNumericAttrInfo(values, destination) {

@@ -176,7 +176,7 @@ var api = {
         projDB.update({
             _id: projId,
             'snapshots.id':snap.id
-        }, {$set:{'snapshots.$':snap}}, {},
+        }, {$set:{'snapshots.$':snap}}, { strict: false },
         function(err) {
             if (err) {
                 console.log('[proj_model.updateSnapshot] Error updating : ' + err);

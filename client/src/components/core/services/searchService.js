@@ -2,8 +2,8 @@
 * Used to search nodes on whole dataset or some selected attributes
 */
 angular.module('common')
-.service('searchService', ['$q', '$http',
-function($q, $http) {
+.service('searchService', ['$q', '$http', 'dataGraph', 'cfpLoadingBar',
+function($q, $http, dataGraph, cfpLoadingBar) {
     "use strict";
 
 
@@ -23,13 +23,89 @@ function($q, $http) {
     ********* Core Functions *************
     **************************************/
 
-    function searchNodes(text, dataSetRef, filterAttrIds){
+    function searchNodes(text, dataSetRef, filterAttrIds, searchAlg){
         if(!filterAttrIds) {
             console.warn(logPrefix + 'filter attr Ids not passed, using empty arr');
             filterAttrIds = [];
         }
         if(!_.isArray(filterAttrIds)) {
             throw new Error('Array expected for attr Ids');
+        }
+
+        if (!searchAlg) {
+            searchAlg = 'elasticSearch';
+        }
+
+        var start = performance.now();
+        cfpLoadingBar.start();
+
+        // FUZZY SORT
+        var allNodes = dataGraph.getAllNodes();
+
+        // NAIVE SEARCH
+        if (searchAlg === 'naive') {
+            var idx = 0;
+            return new Promise(resolve => {
+                var data = _.reduce(allNodes, function (acc, cv) {
+                    cfpLoadingBar.set(idx / allNodes.length);
+                    var hitsData = _.reduce(Object.keys(cv.attr), function (attrAcc, attrCv) {
+                        if (cv.attr[attrCv] && _.contains(cv.attr[attrCv].toString().toLowerCase(), text.toLowerCase())) {
+                            attrAcc[attrCv] = cv.attr[attrCv];
+                        }
+
+                        return attrAcc;
+                    }, {});
+
+                    idx++;
+                    if (!Object.keys(hitsData).length) return acc;
+
+                    acc.push({
+                        _source: {
+                            id: cv.id,
+                        },
+                        highlight: {
+                            ...hitsData,
+                        }
+                    });
+
+                    return acc;
+                }, []);
+
+                cfpLoadingBar.complete();
+                resolve(data);
+            });
+        }
+
+        if (searchAlg == 'fuzzy') {
+            return new Promise(resolve => {
+                var hits = fuzzysort.go(text, allNodes, {
+                    keys: filterAttrIds,
+                    threshold: -100,
+                    nodes: true,
+                    allowTypo: true
+                });
+
+                var data = _.map(hits, function (n) {
+                    var highlights = _.reduce(n, function (acc, cv, i) {
+                        if (!cv) return acc;
+                        if (cv.score < -100) return acc;
+
+                        acc[filterAttrIds[i]] = fuzzysort.highlight(cv, '<i>', '</i>');
+
+                        return acc;
+                    }, {});
+
+                    return {
+                        _source: {
+                            id: n.obj.id
+                        },
+                        highlight: highlights
+                    };
+                })
+
+                cfpLoadingBar.complete();
+                resolve(data);
+            });
         }
 
         return $http.post('/api/elasticsearch/search_nodes', {

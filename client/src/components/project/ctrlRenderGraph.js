@@ -58,7 +58,7 @@ angular.module('common')
                         $scope.operations.opened = !$scope.operations.opened;
                     }
                 },
-                toggleOperation: function(operation) {
+                toggleOperation: function (operation) {
                     $scope.operations.isFirstOpened = false;
                     operation.isOpened = !operation.isOpened;
                 },
@@ -94,24 +94,24 @@ angular.module('common')
                         var selector = filter.selector.stringify();
 
                         if ($scope.operations.isNumeric(attrInfo) && Array.isArray(selector)) {
-                            selector.sort(function(a, b) {
+                            selector.sort(function (a, b) {
                                 return a.values[0] < b.values[0] ? -1 : 1;
                             });
-                            selector = _.reduce(selector, function(acc, cv) {
+                            selector = _.reduce(selector, function (acc, cv) {
                                 if (acc.length == 0) {
                                     acc.push(cv);
                                     return acc;
                                 }
 
                                 var prevItem = acc[acc.length - 1];
-                                var isEqual = function(a, b) {
-                                    if(attrInfo.attr.attrType == 'year') {
+                                var isEqual = function (a, b) {
+                                    if (attrInfo.attr.attrType == 'year') {
                                         return _.first(b) == _.last(a);
                                     }
 
                                     if (attrInfo.attr.attrType == 'timestamp') {
                                         var { bins } = attrInfo;
-                                        var binStart = bins.findIndex(function(x) { return x.max == _.last(a) });
+                                        var binStart = bins.findIndex(function (x) { return x.max == _.last(a) });
                                         if (binStart > -1 && binStart < bins.length - 1) {
                                             var binEnd = bins[binStart + 1];
                                             if (binEnd.min == _.first(b)) return true;
@@ -123,7 +123,7 @@ angular.module('common')
                                     return _.first(b) - _.last(a) < 0.009; // difference less than rounded value
                                 };
 
-                                if (isEqual(prevItem.values,cv.values)) {
+                                if (isEqual(prevItem.values, cv.values)) {
                                     if (prevItem.values.length == 2) {
                                         prevItem.values[1] = _.last(cv.values);
                                     } else {
@@ -147,8 +147,8 @@ angular.module('common')
                                     if (val.values[0] == attrInfo.stats.min) {
                                         val.values = [val.values[1]];
                                         val.description = 'lt';
-                                    } 
-                                    
+                                    }
+
                                     if (val.values[1] == attrInfo.stats.max) {
                                         val.values = [val.values[0]];
                                         val.description = 'ht';
@@ -178,7 +178,8 @@ angular.module('common')
             $scope.zoomInfo.zoomReset = zoomService.zoomReset;
             $scope.switchSnapshot = switchSnapshot; //A function for children to switch between snapshots and networks
 
-            $scope.selectedSearchValue = null;
+            $scope.selectedSearchValue = [];
+            $scope.selectedSearchValueStr = null;
 
             $scope.updatePlotType = function (plotType) {
                 $scope.plotType = plotType || 'original';
@@ -205,10 +206,13 @@ angular.module('common')
                         // in this case the all previous operations are subset also
                         var operations = _.clone($scope.operations.list);
                         $scope.operations.list = $scope.operations.list.splice(0, 1);
+                        var chain = Promise.resolve();
                         _.each(operations, function (op) {
                             if (op.type == 'init') return;
-                            selectService.applyFilters(op.filters, op.searchText, op.searchAttr, $scope)
-                                .then(function() {
+                            chain = chain.then(function () {
+                                selectService.applyFilters(op.filters, op.searchText, op.searchAttr, $scope)
+                            })
+                                .then(function () {
                                     subsetService.subset();
                                 });
                         });
@@ -240,8 +244,23 @@ angular.module('common')
                 $scope.searchDropdownVisible = !$scope.searchDropdownVisible;
             }
 
+            $scope.isAttrSelected = function(attr) {
+                return _.some($scope.selectedSearchValue, 'id', attr.id);
+            }
+
             $scope.toggleSearchItem = function toggleSearchItem(value) {
-                $scope.selectedSearchValue = value;
+                if (value) {
+                    var item = _.find($scope.selectedSearchValue, 'id', value.id);
+                    if (!item) {
+                        $scope.selectedSearchValue.push(value);
+                    } else {
+                        _.remove($scope.selectedSearchValue, 'id', value.id);
+                    }
+                } else {
+                    $scope.selectedSearchValue = [];
+                    $scope.searchDropdownVisible = false;
+                }
+                $scope.selectedSearchValueStr = _.map($scope.selectedSearchValue, 'title').join(', ');
             }
 
             $scope.$on(BROADCAST_MESSAGES.hss.select, function (e, data) {
@@ -342,8 +361,11 @@ angular.module('common')
                         if (replace) {
                             _.last($scope.operations.list).nodesCount = selectedNodes.length;
                             _.last($scope.operations.list).totalNodes = totalNodes;
-                            _.last($scope.operations.list).searchText = searchText;
-                            _.last($scope.operations.list).searchAttr = searchAttr;
+                            // Change search params, if they are in new operation
+                            if (searchText && searchAttr) {
+                                _.last($scope.operations.list).searchText = searchText;
+                                _.last($scope.operations.list).searchAttr = searchAttr;
+                            }
                         } else {
                             var operation = {
                                 type: 'select',
