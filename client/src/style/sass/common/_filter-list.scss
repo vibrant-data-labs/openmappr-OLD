@@ -24,6 +24,9 @@
 }
 
 .card {
+  &__chart {
+    padding: 0 !important;
+  }
   &_type {
     &_filter {
       padding: 0 20px;

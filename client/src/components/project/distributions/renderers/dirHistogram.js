@@ -590,7 +590,7 @@ angular.module('common')
                 // A formatter for counts.
                 // var formatCount = d3.format(",.0f");
                 var yAxisWidth, barWidth, width, height,
-                    containerWidth = histElem.clientWidth;
+                    containerWidth = histElem.clientWidth - 30;
 
                 if (binType == 'int_variable' || binType == 'int_unique') {
                     binThresholds = getBinThresholds(attrInfo, opts, histoData);
@@ -846,13 +846,13 @@ angular.module('common')
                         .tickFormat(function (yVal) {
                             return (yVal / total * 100).toFixed(0) + '%';
                         })
-                        .orient("left");
+                        .orient("right");
 
                     var svg = d3.select(histElem).select("svg");
                     svg.select('g.yaxis.right').remove();
                     svg.append("g")
                         .attr("class", "yaxis right")
-                        .attr("transform", "translate(275,10)")
+                        .attr("transform", "translate(273,10)")
                         .call(yAxis);
                 }
                 else {
