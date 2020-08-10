@@ -15,7 +15,7 @@
 					ng-if="attr.visible", ng-class="{'attr-hidden':!attr.visible, 'first': ($index == 1), 'chart-first-item': attr.isFirstChart, 'tags-first-item': attr.isFirstTag}",
 					ng-click='selectNodesByAttrib(attr.title, attr.value, $event)'
 				)
-					section.card.card_type_filter(data-attr="{{attr.id}}")
+					section.card.card_type_filter(data-attr="{{attr.id}}", ng-class="{'card__chart' : attr.attrType == 'integer' || attr.attrType == 'float' || attr.attrType == 'boolean' || attr.attrType == 'year' || attr.attrType == 'timestamp' }")
 						header.card__header(ng-if="attr.attrType != 'integer' && attr.attrType != 'float' && attr.attrType != 'boolean' && attr.attrType != 'year' && attr.attrType != 'timestamp'", uib-tooltip="{{::attr.metadata.descr}}" tooltip-placement='right' tooltip-append-to-body="true")
 							h2.card__title(dir-elem-ready="onAttrHeaderLoad(attr, $event)"
 								uib-tooltip="{{attr.headerPopupText}}", 
