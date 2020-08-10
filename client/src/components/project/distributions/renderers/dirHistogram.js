@@ -590,7 +590,7 @@ angular.module('common')
                 // A formatter for counts.
                 // var formatCount = d3.format(",.0f");
                 var yAxisWidth, barWidth, width, height,
-                    containerWidth = histElem.clientWidth - 30;
+                    containerWidth = 306; //histElem.clientWidth
 
                 if (binType == 'int_variable' || binType == 'int_unique') {
                     binThresholds = getBinThresholds(attrInfo, opts, histoData);
@@ -607,11 +607,11 @@ angular.module('common')
 
                 width = histoData.width = containerWidth - opts.marginLeft - opts.marginRight;
                 height = histoData.height = opts.histHeight - opts.marginTop - opts.marginBottom;
-                barWidth = histoData.barWidth = width / binCount - 2 * opts.barPadding;
+                barWidth = histoData.barWidth = (width - 20) / binCount - 2 * opts.barPadding;
 
 
                 // Generate histogram data
-                var x = histoData.xScaleFunc = generateXScale(attrInfo, width, !isOrdinal, binType, histoData.intVarData);
+                var x = histoData.xScaleFunc = generateXScale(attrInfo, width - 20, !isOrdinal, binType, histoData.intVarData);
                 var data = histoData.d3Data = generateD3Data(attrInfo, binCount, !isOrdinal, x, binThresholds, binType);
                 _log(logPrefix + 'histo d3 data: ', data);
 
