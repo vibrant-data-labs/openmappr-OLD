@@ -80,6 +80,11 @@
 
       &-wide {
         width: 100%;
+
+        .cat-list.tag-cloud {
+          text-align: left;
+          display: block;
+        }
       }
 
       &.active {
