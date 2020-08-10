@@ -116,7 +116,7 @@
         }
 
         &-alphabet {
-          background: url('/img/filter-panel/alphabet-sort-asc.png') 50% no-repeat;
+          background-image: url('/img/filter-panel/alphabet-sort-asc.png');
 
           &.desc {
             background-image: url('/img/filter-panel/alphabet-sort-desc.png')
