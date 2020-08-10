@@ -16,8 +16,7 @@
 		//- 	//- .cat-global-bar.transition(ng-if="catData.isCurrent" style="width:{{(catData.globalpercent - catData.selPercent).toFixed(2)}}%; background-color:{{catData.colorStr}};")
 		//- 	.cat-selfreq-bar.transition(style="width:{{catData.selPercent}}%; background-color:{{catData.colorStr}}")
 		.cat-list.tag-cloud
-			div
-				{{::catData.text}}
+			{{::catData.text}}
 
 		//.vert-align.cat-text-container.tag-checkbox-container(ng-click="onCatClick(catData, $event);")
 		//	.tag-checkbox(ng-if="showFilter" ng-class="{{catData.checkboxClass}}")

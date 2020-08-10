@@ -68,10 +68,16 @@ angular.module('common')
                 attr.searchQuery = null;
             }
 
-            $scope.setSortOrder = function setSortOrder(attr) {
-                var sortOrder = attr.sortConfig && attr.sortConfig.sortOrder || 'desc';
-                var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-                attr.sortConfig = attr.sortConfig || { sortType: 'frequency'};
+            $scope.setSortOrder = function setSortOrder(attr, sortType) {
+                var newSortOrder;
+                if (sortType === 'frequency' && (!attr.sortConfig || (attr.sortConfig && attr.sortConfig.sortType === 'alphabetical'))) {
+                    newSortOrder = 'desc';
+                } else if (sortType === 'alphabetical' && (!attr.sortConfig || (attr.sortConfig && attr.sortConfig.sortType === 'frequency'))) {
+                    newSortOrder = 'asc';
+                } else {
+                    newSortOrder = attr.sortConfig.sortOrder === 'asc' ? 'desc' : 'asc';
+                }
+                attr.sortConfig = { sortType };
                 attr.sortConfig.sortOrder = newSortOrder;
             }
 
