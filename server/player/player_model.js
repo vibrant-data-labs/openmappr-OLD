@@ -19,7 +19,7 @@ function genPlayerObj(projName) {
             fontClass: '',
             modalIntroHtml: '<h1>'+ projName +'</h1><div>Each of the 1000 nodes in this mapp represents ...</div><div>They are linked with each other if they are similar across the following attributes</div><div>a) Attribute 1</div><div>b) Attribute 2</div><h1></h1>',
             modalTitle: projName,
-            searchAlg: 'elasticsearch',
+            searchAlg: 'naive',
             modalSubtitle: '',
             modalLogo: '',
             modalBackground: '',
