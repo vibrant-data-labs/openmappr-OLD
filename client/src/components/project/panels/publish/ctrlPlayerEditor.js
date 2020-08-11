@@ -47,13 +47,13 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
 
     $scope.searchAlgs = [
         {
-            value: 'elasticsearch',
-            name: 'Elasticsearch'
-        }, 
-        {
             value: 'naive',
             name: 'Substring search'
-        }, 
+        },
+        {
+            value: 'elasticsearch',
+            name: 'Elasticsearch'
+        },
         {
             value: 'fuzzy',
             name: 'Approximate string matching (fuzzy)'
