@@ -99,7 +99,7 @@
         width: 16px;
         height: 16px;
         font-size: 0;
-        background: url('/img/filter-panel/sort.svg') 50% no-repeat;
+        background-image: url('/img/filter-panel/numeric-sort-desc.png');
         background-size: 16px;
         margin-right: 9px;
         padding: 0;
@@ -111,7 +111,7 @@
         }
 
         &.up {
-          background-image: url('/img/filter-panel/sort-up.svg');
+          background-image: url('/img/filter-panel/numeric-sort-asc.png');
         }
 
         &.disabled {
