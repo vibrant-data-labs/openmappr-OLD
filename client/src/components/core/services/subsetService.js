@@ -99,7 +99,7 @@ angular.module('common')
                     inHoverMode: false
                 });
 
-                var nodes = _.map(nodeIds, findNodeWithId);
+                var nodes = _.map(nodeIds, findNodeWithId).filter(node => !!node); // exclude nodes without lat,lng coordinates that not found on geo layout
                 _.forEach(nodes, function (val) {
                     val.isSubsetted = true;
                     val.inHover = false;
