@@ -48,13 +48,10 @@ function($q, $http, dataGraph, cfpLoadingBar) {
             return new Promise(resolve => {
                 var data = _.reduce(allNodes, function (acc, cv) {
                     cfpLoadingBar.set(idx / allNodes.length);
-                    var hitsData = _.reduce(Object.keys(cv.attr), function (attrAcc, attrCv) {
+                    var hitsData = _.reduce(filterAttrIds, function (attrAcc, attrCv) {
                         var sourceTxt = cv.attr[attrCv].toString().toLowerCase();
                         var searchTxt = text.toLowerCase();
                         if (cv.attr[attrCv] && _.contains(sourceTxt, searchTxt)) {
-                            if (attrCv === 'Keywords') {
-                                sourceTxt = sourceTxt.replace(/,/g, ' ');
-                            }
                             var sourceArr = sourceTxt.split(' ');
                             var index = _.findIndex(sourceArr, x => _.contains(x, searchTxt));
                             var highlightPart = sourceArr.slice(index > 5 ? index - 5 : 0, index + 6);
