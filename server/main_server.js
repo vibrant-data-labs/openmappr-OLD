@@ -22,8 +22,6 @@ var logger         = require('morgan'),
     multer         = require('multer'),
     serveStatic    = require('serve-static'),
     exp_promise    = require('express-promise');
-//  allow embeds
-    var frameguard = require('frameguard');
 
 // the 1st thing to load
 var AppConfig            = require('./services/AppConfig');
@@ -37,6 +35,7 @@ var ElasticSearchService = require('./services/elasticsearch');
 var db_old               = require('./db_old.js');
 var mapping              = require('../mapping.json');
 var sc = require('./etl/script_runner.js');
+
 // var GenNW = require("./migrators/CountGenNetworks");
 
 // vars
@@ -80,7 +79,7 @@ var forceSsl = function (req, res, next) {
 //
 // The main init function
 //
-function init (app) {
+function init (app, callback) {
     var config = AppConfig.init(app);
 
     console.log("Loaded config:", config);
@@ -97,12 +96,12 @@ function init (app) {
         app.set('view engine', 'jade');
     }
 
-    // configure app ====================================
+    //configure app ====================================
     app.set('title', 'Mappr');
-    // allow embeds
-    app.use(frameguard({ action: 'SAMEORIGIN' }))
+
     // all environments
     app.use(logger('dev'));
+
     app.engine('jade', require('jade').__express);
     app.engine('html', require('ejs').renderFile);
     app.use(cookieParser(process.env.COOKIE_SECRET || "Superdupersecret"));
@@ -138,13 +137,13 @@ function init (app) {
 
     // configure search ====================================
     // var esClient = new elasticsearch.Client(config.elasticSearchConfig);
-    ElasticSearchService.init(function () {
-        return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
-            defer: function () {
-                return Promise.defer();
-            }
-        }));
-    });
+    // ElasticSearchService.init(function () {
+    //     return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
+    //         defer: function () {
+    //             return Promise.defer();
+    //         }
+    //     }));
+    // });
 
     // configure passport ====================================
     require('./auth/passport')(passport);
@@ -153,7 +152,12 @@ function init (app) {
     require('./main_router')(app);
 
     // startup express server
-    var httpServer = app.listen(8080, () => { console.log("Express server started"); });
+    var httpServer = app.listen(8080, () => { 
+        console.log("Express server started");
+        if (typeof callback === 'function') {
+            callback();
+        }
+    });
     //configure globals ====================================
     AthenaAPI.init(config.beanstalk.host, config.beanstalk.port);
     sc.set_cluster()
@@ -177,7 +181,6 @@ function init (app) {
         RecipeTracker.setupTracker();
         PlayerTracker.setupTracker();
     });
-
 }
 
 module.exports = init;
