@@ -22,6 +22,8 @@ var logger         = require('morgan'),
     multer         = require('multer'),
     serveStatic    = require('serve-static'),
     exp_promise    = require('express-promise');
+//  allow embeds
+    var frameguard = require('frameguard');
 
 // the 1st thing to load
 var AppConfig            = require('./services/AppConfig');
@@ -35,7 +37,6 @@ var ElasticSearchService = require('./services/elasticsearch');
 var db_old               = require('./db_old.js');
 var mapping              = require('../mapping.json');
 var sc = require('./etl/script_runner.js');
-
 // var GenNW = require("./migrators/CountGenNetworks");
 
 // vars
@@ -96,12 +97,12 @@ function init (app) {
         app.set('view engine', 'jade');
     }
 
-    //configure app ====================================
+    // configure app ====================================
     app.set('title', 'Mappr');
-
+    // allow embeds
+    app.use(frameguard({ action: 'SAMEORIGIN' }))
     // all environments
     app.use(logger('dev'));
-
     app.engine('jade', require('jade').__express);
     app.engine('html', require('ejs').renderFile);
     app.use(cookieParser(process.env.COOKIE_SECRET || "Superdupersecret"));
