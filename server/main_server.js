@@ -79,7 +79,7 @@ var forceSsl = function (req, res, next) {
 //
 // The main init function
 //
-function init (app, callback) {
+function init (app) {
     var config = AppConfig.init(app);
 
     console.log("Loaded config:", config);
@@ -137,13 +137,13 @@ function init (app, callback) {
 
     // configure search ====================================
     // var esClient = new elasticsearch.Client(config.elasticSearchConfig);
-    // ElasticSearchService.init(function () {
-    //     return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
-    //         defer: function () {
-    //             return Promise.defer();
-    //         }
-    //     }));
-    // });
+    ElasticSearchService.init(function () {
+        return new elasticsearch.Client(_.extend(_.clone(config.elasticSearchConfig), {
+            defer: function () {
+                return Promise.defer();
+            }
+        }));
+    });
 
     // configure passport ====================================
     require('./auth/passport')(passport);
@@ -152,12 +152,7 @@ function init (app, callback) {
     require('./main_router')(app);
 
     // startup express server
-    var httpServer = app.listen(8080, () => { 
-        console.log("Express server started");
-        if (typeof callback === 'function') {
-            callback();
-        }
-    });
+    var httpServer = app.listen(8080, () => { console.log("Express server started"); });
     //configure globals ====================================
     AthenaAPI.init(config.beanstalk.host, config.beanstalk.port);
     sc.set_cluster()
@@ -181,6 +176,7 @@ function init (app, callback) {
         RecipeTracker.setupTracker();
         PlayerTracker.setupTracker();
     });
+
 }
 
 module.exports = init;
