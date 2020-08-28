@@ -121,7 +121,6 @@ resolver 1.1.1.1 1.0.0.1 valid=300s;
 resolver_timeout 5s;
 # We use Cloudflare for strict transport.
 # add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-add_header X-Frame-Options DENY;
 add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
 EOF
