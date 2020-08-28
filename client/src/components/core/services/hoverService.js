@@ -126,6 +126,8 @@ angular.module('common')
             function unhover() {
                 _.each(this.hoveredNodes, function(n) {
                     var node = findNodeWithId(n);
+                    if (!node) return;
+                    
                     node.specialHighlight = false;
                     node.inHoverNeighbor = false;
                 });
