@@ -145,7 +145,7 @@ angular.module('common')
                 $timeout(() => {
                     $scope.section2More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
                     $scope.section2Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
-                }, 200)
+                }, 200).then(() => adjustTabWidth(elem));
 
                 $(elem).find('.tabVisible').on('scroll', function () {
                     $timeout(() => {
@@ -160,7 +160,7 @@ angular.module('common')
                 $timeout(() => {
                     $scope.section3More = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').last()[0]);
                     $scope.section3Less = !isTabInView($(elem).find('.tabVisible').find('.tab:not(.more):not(.less)').first()[0]);
-                }, 200);
+                }, 200).then(() => adjustTabWidth(elem));;
 
                 $(elem).find('.tabVisible').on('scroll', function () {
                     $timeout(() => {
@@ -233,6 +233,26 @@ angular.module('common')
                 var elemRight = elemLeft + $(elem).width();
             
                 return (elemRight <= docViewRight) && (elemLeft >= docViewLeft);
+            }
+
+            function adjustTabWidth(sectionElem) {
+                var sectionWidth = $(sectionElem).width();
+                var tabs = sectionElem.querySelectorAll('.tab');
+                var tabTotalWidth = () => Array.prototype.reduce.call(tabs, (acc, x) => acc += $(x).width(), 0);
+
+                for(let i = 0; i < tabs.length; i++) {
+                    if (sectionWidth < tabTotalWidth()) {
+                        break;
+                    }
+
+                    var button = $(tabs[i]).find('button');
+                    var prevMaxWidth = button.css('max-width');
+                    button.css('max-width', '');
+
+                    if (sectionWidth < tabTotalWidth()) {
+                        button.css('max-width', prevMaxWidth);
+                    }
+                }
             }
 
             function onNodesSelect(e, data) {
