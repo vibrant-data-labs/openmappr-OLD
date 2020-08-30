@@ -4,7 +4,7 @@
     .hero__content
       h1.hero__header 
         {{player.settings.modalTitle}}
-        button(ng-click="panelUI.openPanel('snapshots')")
+        button(ng-click="panelUI.openPanel('filter')")
           | Explore Map
       .subtitle(ng-bind-html="player.settings.modalSubtitle | trustHtml")
 
