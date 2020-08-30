@@ -886,6 +886,7 @@
           -webkit-line-clamp: 2;
           overflow: hidden;
           text-overflow: ellipsis;
+          margin-right: 10px;
         }
       }
     }
@@ -905,6 +906,7 @@
           display: flex;
           justify-content: flex-end;
           margin-right: 10px;
+          padding-bottom: 10px;
         }
 
         em {
