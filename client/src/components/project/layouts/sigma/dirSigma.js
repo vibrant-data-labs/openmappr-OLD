@@ -144,14 +144,34 @@ function ($rootScope, renderGraphfactory, eventBridgeFactory, dataGraph, labelSe
             if (selectionDivEnabled) {
                 const { bottom, left, top, right } = selectionDiv.getBoundingClientRect();
                 var allNodes = sig.graph.nodes();
-                var selectedNodes = _.filter(allNodes, function(node) {
-                    return node['camcam1:x'] + leftPanelWidth < right && node['camcam1:x'] + leftPanelWidth > left &&
-                    node['camcam1:y'] > top && node['camcam1:y'] < bottom;
-                });
+                var appendNodesOnly = $(selectionDiv).width() == 0 && $(selectionDiv).height() == 0;
+                var selectedNodes = [];
+                if (appendNodesOnly) {
+                    selectedNodes = _.filter(allNodes, function(node) {
+                        const nodeBorders = {
+                            left: node['camcam1:x'] + leftPanelWidth - node['camcam1:size'],
+                            right: node['camcam1:x'] + leftPanelWidth + node['camcam1:size'],
+                            top: node['camcam1:y'] - node['camcam1:size'],
+                            bottom: node['camcam1:y'] + node['camcam1:size'],
+                        };
+
+                        return left >= nodeBorders.left && right <= nodeBorders.right && top >= nodeBorders.top && bottom <= nodeBorders.bottom;
+                    });
+                } else {
+                    selectedNodes = _.filter(allNodes, function(node) {
+                        return node['camcam1:x'] + leftPanelWidth < right && node['camcam1:x'] + leftPanelWidth > left &&
+                        node['camcam1:y'] > top && node['camcam1:y'] < bottom;
+                    });
+                }
                 selectionDivEnabled = false;
                 selectionDiv.hidden = true;
+
                 setTimeout(function() {
-                    selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+                    if (appendNodesOnly) {
+                        selectService.appendToSelection(_.map(selectedNodes, (node) => node.id));
+                    } else {
+                        selectService.selectNodes({ids: _.map(selectedNodes, (node) => node.id)});
+                    }
                 }, 100);
             }
         }

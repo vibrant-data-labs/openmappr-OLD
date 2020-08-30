@@ -12,6 +12,7 @@ angular.module('common')
             this.sigBinds = sigBinds;
             this.selectNodes = selectNodes;
             this.selectSingleNode = selectSingleNode;
+            this.appendToSelection = appendToSelection;
             this.singleNode = null;
             this.unselect = unselect;
             this.selectedNodes = [];
@@ -154,6 +155,29 @@ angular.module('common')
 
                     return Promise.resolve();
                 }
+            }
+
+            function appendToSelection(nodeIds) {
+                var currentSubset = subsetService.currentSubset();
+                var selectNodeIds = !currentSubset.length ? nodeIds : nodeIds.filter(x => currentSubset.indexOf(x) > -1);
+                
+                if (this.singleNode && this.selectedNodes.length == 0) this.selectedNodes = [this.singleNode.id];
+                this.selectedNodes = _.unique([...this.selectedNodes, ...selectNodeIds]);
+
+                if (this.selectedNodes.length == 1) {
+                    this.singleNode = this.selectedNodes[0];
+                } else {
+                    this.singleNode = null;
+                }
+
+                var nodes = this.selectedNodes.map(findNodeWithId);
+
+                $rootScope.$broadcast(BROADCAST_MESSAGES.hss.select, {
+                    filtersCount: this.getActiveFilterCount(),
+                    selectionCount: this.selectedNodes.length,
+                    isSubsetted: currentSubset.length > 0,
+                    nodes: nodes,
+                });
             }
 
             function searchNodes(selectData, service) {
