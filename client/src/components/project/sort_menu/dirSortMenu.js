@@ -5,7 +5,7 @@
 
 // Sort orders are common => ascending & descending
 angular.module('common')
-.directive('dirSortMenu', [function() {
+.directive('dirSortMenu', ['AttrInfoService', function(AttrInfoService) {
     'use strict';
 
     /*************************************
@@ -54,16 +54,38 @@ angular.module('common')
 
         scope.sortOrders = sortOrders;
 
+        scope.$watch('sortConfig.sortType', function() {
+            if (!scope.sortConfig) return;
+            var attrInfo = AttrInfoService.getNodeAttrInfoForRG().getForId(scope.sortConfig.sortType);
+
+            switch(attrInfo.attr.attrType) {
+                case 'integer':
+                case 'float': 
+                case 'year': 
+                case 'timestamp': {
+                    scope.isAbc = false;
+                    break;
+                }
+                default: {
+                    scope.isAbc = true;
+                    break;
+                }
+            }
+        });
+
         scope.setSortOrder = function setSortOrder(sortOrder, $event) {
             var newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
             scope.sortConfig = scope.sortConfig || {};
             scope.sortConfig.sortOrder = newSortOrder;
+            //attrInfo = ;
+            console.log('sortmenu setSortOder');
             $event.stopPropagation();
         }
     
         scope.setSortType = function setSortType(sortType, $event) {
             scope.sortConfig = scope.sortConfig || {};
             scope.sortConfig.sortType = sortType;
+            console.log('sortmenu setSortType');
             $event.stopPropagation();
         }
 

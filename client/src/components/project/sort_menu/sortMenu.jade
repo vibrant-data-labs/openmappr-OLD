@@ -1,34 +1,6 @@
 .attr-visibility.truncate.card_type_filter
-	//- div.uib-dropdown(uib-dropdown dropdown-append-to-body is-open="ui.menuOpen")
-	//- 	span.uib-dropdown-toggle(uib-dropdown-toggle uib-tooltip="Sort Options", tooltip-placement="right", tooltip-append-to-body="true" auto-close="disabled")
-	//- 		span.pull-right {{sortConfig.sortType}} &nbsp;
-	//- 			i.fa.fa.fa-sort-asc(ng-if="sortConfig.sortOrder==='asc'")
-	//- 			i.fa.fa.fa-sort-desc(ng-if="sortConfig.sortOrder==='desc'")
-	//- 	.uib-dropdown-menu.uib-dropdown-menu-flexing.pull-right(uib-dropdown-menu)
-	//- 		.uib-dropdown-click-close
-	//- 		.uib-dropdown-flex-content
-	//- 			.uib-dropdown-flex
-	//- 				ul.list-unstyled.dd-list.nowrap
-	//- 					li.row.pointable-cursor.vert-align(ng-click="$event.stopPropagation();")
-	//- 						.col-xs-10
-	//- 							.text-sm Sort Options:
-	//- 						.col-xs-2
-	//- 							button.close-btn(type="button", ng-click="ui.menuOpen = false;")
-	//- 								i.fa.fa-close
-	//- 					li.row.divider
-	//- 					li.row.pointable-cursor.vert-align(ng-repeat="sortOrder in sortOrders" ng-click="$event.stopPropagation();")
-	//- 						label.text-sm
-	//- 							input(type="radio", ng-model="sortConfig.sortOrder", value="{{sortOrder.id}}")
-	//- 							span &nbsp;{{::sortOrder.title}}
-	//- 					li.row.divider
-	//- 					li.row.pointable-cursor.vert-align(ng-repeat="sortType in sortTypes" ng-click="$event.stopPropagation();")
-	//- 						label.text-sm
-	//- 							input(type="radio", ng-model="sortConfig.sortType", value="{{sortType.id}}")
-	//- 							span &nbsp;{{::sortType.title}}
-	//- 					li.row.divider
-	//- 			.uib-dropdown-flexer
 	button.card__action-sort(
-		ng-class="{ 'up': sortConfig && sortConfig.sortOrder === 'asc' }", 
+		ng-class="{ 'up': sortConfig && sortConfig.sortOrder === 'asc', 'desc': sortConfig && sortConfig.sortOrder === 'desc', 'card__action-sort-alphabet': isAbc }", 
 		ng-click="setSortOrder(sortConfig.sortOrder, $event)"
 		uib-tooltip="Reverse Order",
 		tooltip-placement="bottom-left", 

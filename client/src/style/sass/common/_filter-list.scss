@@ -110,12 +110,12 @@
           opacity: 1;
         }
 
-        &.up {
+        &:not(.card__action-sort-alphabet).up {
           background-image: url('/img/filter-panel/numeric-sort-asc.png');
         }
 
         &.disabled {
-          opacity: .5;
+          opacity: .3;
         }
 
         &-alphabet {

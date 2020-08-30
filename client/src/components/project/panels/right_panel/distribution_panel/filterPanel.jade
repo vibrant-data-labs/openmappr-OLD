@@ -35,7 +35,7 @@
 								ng-if="attr.renderType == 'tags' || attr.renderType == 'categorylist' || attr.renderType == 'tag-cloud' || attr.renderType == 'wide-tag-cloud'",
 								ng-class="{ 'desc': attr.sortConfig && attr.sortConfig.sortType === 'alphabetical' && attr.sortConfig.sortOrder === 'desc', 'disabled': !attr.sortConfig || (attr.sortConfig && attr.sortConfig.sortType !== 'alphabetical') }", 
 								ng-click="setSortOrder(attr, 'alphabetical')"
-								uib-tooltip="Sort by alphabet",
+								uib-tooltip="Sorted alphabetically",
 								tooltip-placement="right", 
 								tooltip-append-to-body="true"
 								)
