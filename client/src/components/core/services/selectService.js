@@ -345,7 +345,7 @@ angular.module('common')
             };
 
             function getSelectedNodes() {
-                return _.map(this.selectedNodes, findNodeWithId);
+                return _.reject(_.map(this.selectedNodes, findNodeWithId), _.isNull);
             }
 
             function hasAttrId(attrId, value) {
