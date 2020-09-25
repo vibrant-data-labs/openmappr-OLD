@@ -49,7 +49,7 @@ function($q, $http, dataGraph, cfpLoadingBar) {
                 var data = _.reduce(allNodes, function (acc, cv) {
                     cfpLoadingBar.set(idx / allNodes.length);
                     var hitsData = _.reduce(filterAttrIds, function (attrAcc, attrCv) {
-                        var sourceTxt = cv.attr[attrCv].toString().toLowerCase();
+                        var sourceTxt = cv.attr[attrCv] ? cv.attr[attrCv].toString().toLowerCase() : '';
                         var searchTxt = text.toLowerCase();
                         if (cv.attr[attrCv] && _.contains(sourceTxt, searchTxt)) {
                             var sourceArr = sourceTxt.split(' ');
