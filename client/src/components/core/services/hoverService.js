@@ -241,6 +241,8 @@ angular.module('common')
                 var nodes = _.map(nodeIds, function (nodeId) {
                     var node = findNodeWithId(nodeId, sigRender.sig);
                     var isSelected = selectedNodes.indexOf(nodeId) > -1;
+                    if (!node) return null;
+
                     if (isSelected) {
                         node.isSelected = true;
                         node.inHover = false;
@@ -272,7 +274,7 @@ angular.module('common')
                         return node;
                     }
                 });
-                nodes = _.flatten(nodes);
+                nodes = _.reject(_.flatten(nodes), _.isNull);
 
                 var nodeId = window.mappr.utils.nodeId;
 
