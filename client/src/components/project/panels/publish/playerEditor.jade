@@ -144,6 +144,13 @@
 											.col-xs-7
 												.ui-select
 													select(ng-model="playerTempObj.settings.fontClass" ng-options="opt.class as opt.name for opt in fonts" ng-change = 'markAsDirty()')
+									.col-xs-12													
+										.row.vert-align
+											.col-xs-5
+												h6 Search algorithm
+											.col-xs-7
+												.ui-select
+													select(ng-model="playerTempObj.settings.searchAlg" ng-options="opt.value as opt.name for opt in searchAlgs" ng-change = 'markAsDirty()')											
 								.divider
 							.panel-item
 								.row.vert-align
@@ -173,12 +180,7 @@
 									//- .panel-subitem
 									//- 	.form-group
 									//- 		h6 Modal Logo
-									//- 		input.form-control(ng-model="playerTempObj.settings.modalLogo" ng-change = 'markAsDirty()' dir-select-all)
-									.panel-subitem
-										.form-group
-											h6 Search algorithm
-											.ui-select
-												select(ng-model="playerTempObj.settings.searchAlg" ng-options="opt.value as opt.name for opt in searchAlgs" ng-change = 'markAsDirty()')							
+									//- 		input.form-control(ng-model="playerTempObj.settings.modalLogo" ng-change = 'markAsDirty()' dir-select-all)						
 									.panel-subitem
 										.form-group
 											h6 Title

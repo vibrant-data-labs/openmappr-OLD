@@ -47,8 +47,12 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
 
     $scope.searchAlgs = [
         {
-            value: 'naive',
+            value: 'substring',
             name: 'Substring search'
+        },
+        {
+            value: 'matchSorter',
+            name: 'Match Sorter search'
         },
         {
             value: 'elasticsearch',

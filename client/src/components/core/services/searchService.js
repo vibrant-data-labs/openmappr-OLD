@@ -43,7 +43,7 @@ function($q, $http, dataGraph, cfpLoadingBar) {
         var allNodes = dataGraph.getAllNodes();
 
         // NAIVE SEARCH
-        if (searchAlg === 'naive') {
+        if (searchAlg === 'naive' || searchAlg === 'substring') {
             var idx = 0;
             return new Promise(resolve => {
                 var data = _.reduce(allNodes, function (acc, cv) {
@@ -80,6 +80,23 @@ function($q, $http, dataGraph, cfpLoadingBar) {
 
                 cfpLoadingBar.complete();
                 resolve(data);
+            });
+        }
+
+        if (searchAlg === 'matchSorter') {
+            return new Promise(resolve => {
+                var data = matchSorter(allNodes, text, {
+                    keys: filterAttrIds.map(r => 'attr.' + r),
+                    threshold: 3});
+
+                    
+                cfpLoadingBar.complete();
+                resolve(data.map(r => ({
+                    _source: {
+                        id: r.id,
+                    },
+                    highlight: _.reduce(filterAttrIds, (acc, cv) => { acc.cv = ''; return acc; } , {})
+                })));
             });
         }
 
