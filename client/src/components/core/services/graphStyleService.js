@@ -1394,7 +1394,7 @@ angular.module('common')
                         key: 'mapboxMapID',
                         title: 'Map Style',
                         type: 'select',
-                        values: ['vibrantdata.ioeefmpb','vibrantdata.j5c7ofm2','vibrantdata.ic45fi91','vibrantdata.jjkpgbkp','vibrantdata.oidk9gmi'],
+                        values: ['mapbox/streets-v11','mapbox/outdoors-v11','mapbox/light-v10','mapbox/dark-v10','mapbox/satellite-v9','mapbox/satellite-streets-v11'],
                         class: 'stage-setting',
                         tooltip: 'The ID for the Mapbox Tiles',
                         enabled: true

@@ -134,7 +134,7 @@ angular.module('mappr')
                 "invertX": false,
                 "invertY": true,
                 "scatterAspect": 0.5,
-                "mapboxMapID": "vibrantdata.ioeefmpb",
+                "mapboxMapID": "mapbox/light-v10",
                 "nodeOnHover": "expand",
                 "nodeOnClick": "select",
                 "nodeOnDblClick": "select",
