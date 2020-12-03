@@ -77,7 +77,7 @@
       color: #616161;
       margin: 0 4px 4px 0;
       width: 31%;
-
+      
       &-wide {
         width: 100%;
 
@@ -95,6 +95,13 @@
       }
       &:hover {
         border-color: darken(#E2E2E2, 16);
+      }
+      &.disappearing {
+        opacity: 0;
+        transition: opacity 1s;
+      }
+      &.loading {
+        opacity: 0;
       }
     }
 

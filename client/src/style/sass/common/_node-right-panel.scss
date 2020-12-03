@@ -276,6 +276,11 @@
       &-wide {
         width: 100%;
       }
+      
+      &.disappearing {
+        opacity: 0;
+        transition: all 1s;
+      }
     }
 
     .cat-item {
@@ -334,5 +339,21 @@
     &__value {
       font-size: 14px;
     }
+  }
+}
+
+@keyframes tagListDisappearAnimation{
+  0%{
+    opacity: 1;
+    transform: rotateX(90deg);
+  }
+  50%{
+    opacity: 0.5;
+    transform: rotateX(0deg);
+  }
+  100%{
+    display: none;
+    opacity: 0;
+    transform: rotateX(90deg);
   }
 }
