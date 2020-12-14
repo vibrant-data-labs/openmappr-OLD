@@ -1,5 +1,6 @@
 'use strict';
 var path = require('path');
+var request = require('request');
 
 var authRouter = require('./auth/auth_router'),
     userRouter = require('./user/user_router'),
@@ -69,6 +70,12 @@ function setupRoutes (app) {
 
     // Ping
     app.get('/heartbeat', (req, res) => res.status(200).send('beating'));
+    
+    // Proxy
+    app.get('/images/*', (req, res) => {
+        const url = req.params[0];
+        request.get(url).pipe(res);
+    });
 
     // admin
     // app.get('/admin/*', (req, res) => res.render(path.join('./', req.url)));

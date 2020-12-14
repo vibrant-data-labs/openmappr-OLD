@@ -587,6 +587,7 @@ angular.module('common')
                     if (mapToSectionOne(attr)) result.section1.push({ ...setToSectionOne(attr, values[attr.id]) });
                     if (mapToSectionTwo(attr)) result.section2.push({ 
                         key: attr.title ? attr.title : attr.id, 
+                        isPicture: attr.attrType === 'picture' && attr.renderType === 'default',
                         value: values[attr.id], 
                         text: attr.renderType === 'text' ? { 
                             isExpanded: values[attr.id].split(' ').length <= $scope.mapprSettings.nodeFocusTextLength,
