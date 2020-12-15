@@ -1,6 +1,6 @@
 angular.module('common')
-    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService', 'hoverService', 'selectService',
-        function ($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService, hoverService, selectService) {
+    .controller('NodeOverlayCtrl', ['$scope', '$rootScope', '$timeout', 'BROADCAST_MESSAGES', 'zoomService', 'nodeSelectionService', 'renderGraphfactory', 'dataGraph', 'graphSelectionService', 'partitionService', 'FilterPanelService', 'AttrInfoService', 'linkService', 'hoverService', 'selectService', '$sce',
+        function ($scope, $rootScope, $timeout, BROADCAST_MESSAGES, zoomService, nodeSelectionService, renderGraphfactory, dataGraph, graphSelectionService, partitionService, FilterPanelService, AttrInfoService, linkService, hoverService, selectService, $sce) {
             'use strict';
 
             /*************************************
@@ -206,6 +206,11 @@ angular.module('common')
             });
 
             $scope.darken = window.mappr.utils.darkenColor;
+
+            $scope.parseLinks = function(text) {
+                text = text.replace(/(http|www)[^\s]+/g, function(match) { return '<a href="' + match + '" target="_blank">' + match + '</a>' });
+                return text;
+            }
 
             $scope.$watch(function() {
                 return $scope.showOverlay;
