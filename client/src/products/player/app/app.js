@@ -75,7 +75,6 @@
             }
             //disable IE ajax request caching
             $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-
         }])
 
         .config(function (AnalyticsProvider) {
