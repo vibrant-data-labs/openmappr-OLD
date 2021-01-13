@@ -58,6 +58,26 @@ function ($rootScope, renderGraphfactory, leafletData, layoutService, dataGraph,
         }
     };
 
+    L.TileLayer.prototype._endZoomAnim = function () {
+        var front = this._tileContainer,
+            bg = this._bgBuffer;
+        front.style.visibility = 'hidden';
+        front.parentNode.appendChild(front); // Bring to fore
+
+        // force reflow
+        L.Util.falseFn(bg.offsetWidth);
+
+        var zoom = this._map.getZoom();
+        this._animating = false;
+        var self = this;
+        setTimeout(function () {
+            front.style.visibility = '';
+            if (zoom > self.options.maxZoom || zoom < self.options.minZoom) {
+                this._clearBgBuffer();
+            }
+        }, 1000);
+    };
+
     /*************************************
     ******** Controller Function *********
     **************************************/
