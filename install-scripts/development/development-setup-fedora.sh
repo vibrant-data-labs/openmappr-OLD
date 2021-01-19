@@ -162,7 +162,7 @@ if [ -d "./openmappr" ] ; then
 else
   tput setaf $CYAN; echo "> Cloning OpenMappr repository from Github..."
   tput setaf $YELLOW;
-  git clone https://github.com/selfhostedworks/openmappr.git >/dev/null
+  git clone https://github.com/vibrant-data-labs/openmappr.git >/dev/null
   cd openmappr
 fi
 

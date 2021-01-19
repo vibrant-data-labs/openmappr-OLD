@@ -202,7 +202,7 @@ if [ -d "./openmappr" ] ; then
   cd openmappr
 else
   tput setaf $YELLOW;
-  git clone https://github.com/selfhostedworks/openmappr.git
+  git clone https://github.com/vibrant-data-labs/openmappr.git
   cd openmappr
 fi
 
