@@ -1,19 +1,19 @@
 # OpenMappr 📊
-## [Documentation 📄](https://github.com/selfhostedworks/openmappr/wiki)
-#### [Install Scripts](https://github.com/selfhostedworks/openmappr/wiki/Install-Scripts)
+## [Documentation 📄](https://github.com/vibrant-data-labs/openmappr/wiki)
+#### [Install Scripts](https://github.com/vibrant-data-labs/openmappr/wiki/Install-Scripts)
 #### Development
 > Windows is not officially supported at this time.
 
-* [Prerequisites Install Guide for macOS](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-macOS)
-* [Prerequisites Install Guide for Ubuntu](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Ubuntu)
-* [Prerequisites Install Guide for Fedora](https://github.com/selfhostedworks/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
-* [How to validate prerequisites are installed](https://github.com/selfhostedworks/openmappr/wiki/How-to-validate-prerequisites-are-installed)
+* [Prerequisites Install Guide for macOS](https://github.com/vibrant-data-labs/openmappr/wiki/Prerequisites-Install-Guide-for-macOS)
+* [Prerequisites Install Guide for Ubuntu](https://github.com/vibrant-data-labs/openmappr/wiki/Prerequisites-Install-Guide-for-Ubuntu)
+* [Prerequisites Install Guide for Fedora](https://github.com/vibrant-data-labs/openmappr/wiki/Prerequisites-Install-Guide-for-Fedora)
+* [How to validate prerequisites are installed](https://github.com/vibrant-data-labs/openmappr/wiki/How-to-validate-prerequisites-are-installed)
 
 #### Deployment
-* [How to connect to an OpenMappr server](https://github.com/selfhostedworks/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
-* [How to deploy a production server](https://github.com/selfhostedworks/openmappr/wiki/How-to-deploy-a-production-server)
-* [How to use a local or remote Mongo host](https://github.com/selfhostedworks/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
-* [How to integrate Sendgrid for feedback](https://github.com/selfhostedworks/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
+* [How to connect to an OpenMappr server](https://github.com/vibrant-data-labs/openmappr/wiki/How-to-connect-to-an-Openmappr-server)
+* [How to deploy a production server](https://github.com/vibrant-data-labs/openmappr/wiki/How-to-deploy-a-production-server)
+* [How to use a local or remote Mongo host](https://github.com/vibrant-data-labs/openmappr/wiki/How-to-use-a-local-or-remote-Mongo-host)
+* [How to integrate Sendgrid for feedback](https://github.com/vibrant-data-labs/openmappr/wiki/How-to-integrate-Sendgrid-for-feedback)
 
 ## Starting local development 👨‍💻
 First you need to install the following prerequisites.  The installation instructions may vary based on your operating system.  Please review the prerequisite install guides listed above.
@@ -26,7 +26,7 @@ First you need to install the following prerequisites.  The installation instruc
 
 Then you will want to download or clone the project, and open up a terminal inside the project folder.
 ```bash
-git clone https://github.com/selfhostedworks/openmappr.git
+git clone https://github.com/vibrant-data-labs/openmappr.git
 cd openmappr
 ```
 After doing so, run the following commands to install all the dependencies:
