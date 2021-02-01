@@ -153,17 +153,24 @@
 													select(ng-model="playerTempObj.settings.searchAlg" ng-options="opt.value as opt.name for opt in searchAlgs" ng-change = 'markAsDirty()')											
 								.divider
 							.panel-item
-								.row.vert-align
-									.col-xs-8
-										h6.title.text-uppercase Splash
-									.col-xs-4
-										.bool
-											.onoffswitch
-												input.onoffswitch-checkbox(id='show-splash-switch' type='checkbox', ng-model='playerTempObj.settings.showModal', ng-change = 'markAsDirty()')
-												label.onoffswitch-label(for='show-splash-switch')
-													.onoffswitch-inner
-													.onoffswitch-switch
-								p The splash screen appears as a modal overlay during initial load of your player. Its a good place to explain and introduce your mapp using text or other media.
+
+								style.
+									.high-block {
+										padding: 10px 0;
+									}
+
+								.row.vert-align.high-block
+									.col-xs-6
+										h6.title.text-uppercase Default page
+									.col-xs-6
+										.ui-select
+											select(
+												ng-model="playerTempObj.settings.startPage"
+												ng-options="opt.value as opt.name for opt in startPages"
+												ng-change="handleStartPageChanges(); markAsDirty();"
+											)											
+											//- TODO: remember about "playerTempObj.settings.showModal"
+
 								.panel-sublist(ng-if="playerTempObj.settings.showModal")
 									.panel-subitem(ng-if="playerTempObj.settings.simpleSplash == false")
 										//only show if simple splash is false (for legacy players)
