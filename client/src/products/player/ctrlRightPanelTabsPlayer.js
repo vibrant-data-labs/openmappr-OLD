@@ -40,6 +40,8 @@ angular.module('common')
             $scope.currentExport = 'all';
 
             $scope.exportCurrentData = function() {
+                debugger;
+
                 var currentExport = $scope.currentExport;
                 $rootScope.exportSelection(currentExport);
             }
