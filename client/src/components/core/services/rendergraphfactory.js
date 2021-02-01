@@ -233,11 +233,6 @@ function ($q) {
             settings: settings
         });
 
-        s.addRenderer({
-            container: 'graph-container',
-            type: 'canvas'
-        });
-
         if(mapprSettings) {
             sig.settings(mapprSettings);
         }

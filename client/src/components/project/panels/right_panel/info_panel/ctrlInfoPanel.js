@@ -360,7 +360,6 @@ angular.module('common')
             }
 
             function exportSelectionFromPlayer(type) {
-                debugger;
                 // console.log('*** "dataGraph" =>', dataGraph);
 
                 var sigObj_1 = renderGraphfactory.sig();
