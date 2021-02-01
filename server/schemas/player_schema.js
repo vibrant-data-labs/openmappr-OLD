@@ -23,6 +23,7 @@ var PlayerSchema = new mongoose.Schema({
         modalIntroHtml: String,
         modalTitle:     String,
         searchAlg:      String,
+        startPage:      String,
         modalSubtitle:  String,
         modalLogo:      String,
         modalBackground: String,

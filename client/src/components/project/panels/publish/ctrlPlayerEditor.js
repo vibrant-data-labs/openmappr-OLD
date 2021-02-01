@@ -64,6 +64,14 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
         }
     ];
 
+    $scope.startPages = [
+        { name: 'Filters',      value: 'filter' },
+        { name: 'List',         value: 'info' },
+        { name: 'Snapshots',    value: 'snapshots' },
+        { name: 'Legend',       value: 'summary' },
+        { name: 'Splash',       value: 'modal' },
+    ];
+
     $scope.headerTypes = [
         {
             value:'simple',
@@ -119,6 +127,7 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
     $scope.updatePlayer = updatePlayer;
     $scope.finalisePlayer = finalisePlayer;
     $scope.isUrlAvailable = isUrlAvailable;
+    $scope.handleStartPageChanges = handleStartPageChanges;
 
     $scope.markAsDirty = function(){
         $scope.playerTempObj.playerDirty = true;
@@ -340,6 +349,11 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
                 $scope.playerTempObj.isUniquePlayerUrl = false;
             }
         });
+    }
+
+    function handleStartPageChanges() {
+        var isPageSplash = $scope.playerTempObj.settings.startPage == 'modal';
+        $scope.playerTempObj.settings.showModal = isPageSplash;
     }
 
     function initPlayer() {
