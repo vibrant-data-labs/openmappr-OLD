@@ -1,6 +1,5 @@
 # OpenMappr 📊
 ## [Documentation 📄](https://github.com/vibrant-data-labs/openmappr/wiki)
-#### [Install Scripts](https://github.com/vibrant-data-labs/openmappr/wiki/Install-Scripts)
 #### Development
 > Windows is not officially supported at this time.
 
