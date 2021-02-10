@@ -152,7 +152,11 @@ angular.module('common')
                     this.hoveredNodes = _.clone(selectService.selectedNodes || []);
                 }
 
-                _hoverHelper(this.hoveredNodes, 0, !!selectService.singleNode);
+                playerFactory.currPlayer(true)
+                .then((currPlayer) => {
+                    var degree = _.get(currPlayer, 'settings.neighborhoodDegree') || defaultNeighborhoodDegree;
+                    _hoverHelper(this.hoveredNodes, degree, !!selectService.singleNode);
+                });
             }
 
             function _hoverHelper(ids, degree, withNeighbors) {
