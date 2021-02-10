@@ -72,6 +72,13 @@ function($scope, $rootScope, $window, $sce, $q, $uibModal, snapshotService, uiSe
         { name: 'Splash',       value: 'modal' },
     ];
 
+    $scope.neighborhoodDegrees = [
+        { name: '0', value: 0 },
+        { name: '1', value: 1 },
+        { name: '2', value: 2 },
+        { name: '3', value: 3 },
+    ];
+
     $scope.headerTypes = [
         {
             value:'simple',
