@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'renderGraphfactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService', 'subsetService',
-        function ($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, renderGraphfactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService, subsetService) {
+    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'renderGraphfactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService', 'subsetService', 'snapshotService',
+        function ($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, renderGraphfactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService, subsetService, snapshotService) {
             'use strict';
 
             /*************************************
@@ -327,8 +327,6 @@ angular.module('common')
             }
 
             function exportSelectionFromApp(downloadSelection, downloadNeighbours) {
-                debugger;
-
                 var currProject = projFactory.currProjectUnsafe();
                 if (!currProject) throw new Error('No project');
                 var currSelection = graphSelectionService.getSelectedNodesLinksIds(downloadNeighbours);
@@ -360,11 +358,9 @@ angular.module('common')
             }
 
             function exportSelectionFromPlayer(type) {
-                // console.log('*** "dataGraph" =>', dataGraph);
-
                 var sigObj_1 = renderGraphfactory.sig();
-                console.log('*** "sigObj_1" =>', sigObj_1);
-                sigObj_1.toSVG({download: true, filename: 'output_1.svg', size: 1000});
+                var snapshot = snapshotService.getCurrentSnapshot();
+                sigObj_1.toSVG({download: true, filename: (snapshot ? snapshot.snapName : 'output') + '.svg', size: 1000});
 
                 // renderGraphfactory.getSig().then(sigObj_2 => {
                 //     console.log('*** "sigObj_2" =>', sigObj_2);

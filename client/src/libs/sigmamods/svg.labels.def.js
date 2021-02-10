@@ -37,8 +37,8 @@
       text.setAttributeNS(null, 'font-family', settings('font'));
       text.setAttributeNS(null, 'fill', fontColor);
 
-      text.innerHTML = 'test123';
-      text.textContent = 'test 345';
+      text.innerHTML = 'text';
+      text.textContent = 'text';
 
       return text;
     },

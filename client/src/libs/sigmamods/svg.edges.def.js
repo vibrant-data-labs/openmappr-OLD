@@ -1,4 +1,4 @@
-;(function() {
+; (function () {
   'use strict';
 
   sigma.utils.pkg('sigma.svg.edges');
@@ -16,20 +16,28 @@
      * @param  {object}                   target     The target node object.
      * @param  {configurable}             settings   The settings function.
      */
-    create: function(edge, source, target, settings) {
-      var color = edge.color,
-          prefix = settings('prefix') || '',
-          edgeColor = settings('edgeColor'),
-          defaultNodeColor = settings('defaultNodeColor'),
-          defaultEdgeColor = settings('defaultEdgeColor');
+    create: function (edge, source, target, settings) {
+      var color = edge.colorStr,
+        prefix = settings('prefix') || '',
+        edgeColor = settings('edgeColorStrat'),
+        defaultNodeColor = settings('nodeColorDefaultValue'),
+        defaultEdgeColor = settings('edgeColorDefaultValue');
 
-      if (!color)
+      var sourceCol = (source) ? source.colorStr : 'rgb(0,0,0)';
+      var targetCol = (target) ? target.colorStr : 'rgb(0,0,0)';
+
         switch (edgeColor) {
           case 'source':
-            color = source.color || defaultNodeColor;
+            color = source.colorStr || defaultNodeColor;
             break;
           case 'target':
-            color = target.color || defaultNodeColor;
+            color = target.colorStr || defaultNodeColor;
+            break;
+          case 'attr':
+            color = edge.colorStr;
+            break;
+          case 'gradient':
+            color = sourceCol;
             break;
           default:
             color = defaultEdgeColor;
@@ -55,7 +63,7 @@
      * @param  {object}                   target     The target node object.
      * @param  {configurable}             settings   The settings function.
      */
-    update: function(edge, line, source, target, settings) {
+    update: function (edge, line, source, target, settings) {
       var prefix = settings('prefix') || '';
 
       line.setAttributeNS(null, 'stroke-width', edge[prefix + 'size'] || 1);
