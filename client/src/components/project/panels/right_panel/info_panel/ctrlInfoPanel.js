@@ -15,8 +15,8 @@
             -- NeighborClusters
 */
 angular.module('common')
-    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService', 'subsetService',
-        function ($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService, subsetService) {
+    .controller('InfoPanelCtrl', ['$scope', '$rootScope', 'graphSelectionService', 'dataGraph', 'networkService', 'FilterPanelService', 'AttrInfoService', 'projFactory', 'playerFactory', 'renderGraphfactory', 'BROADCAST_MESSAGES', '$injector', '$uibModal', 'uiService', 'infoPanelService', 'selectService', 'subsetService',
+        function ($scope, $rootScope, graphSelectionService, dataGraph, networkService, FilterPanelService, AttrInfoService, projFactory, playerFactory, renderGraphfactory, BROADCAST_MESSAGES, $injector, $uibModal, uiService, infoPanelService, selectService, subsetService) {
             'use strict';
 
             /*************************************
@@ -327,10 +327,12 @@ angular.module('common')
             }
 
             function exportSelectionFromApp(downloadSelection, downloadNeighbours) {
+                debugger;
+
                 var currProject = projFactory.currProjectUnsafe();
                 if (!currProject) throw new Error('No project');
                 var currSelection = graphSelectionService.getSelectedNodesLinksIds(downloadNeighbours);
-                var currentNetwork = networkService.getCurrentNetwork();
+                var currentNetwork = networkService.gWetCurrentNetwork();
                 var fileNamePrefix = $scope.selectionHeading
                     ? currentNetwork.name + ' - ' + $scope.selectionHeading
                     : null;
@@ -358,43 +360,58 @@ angular.module('common')
             }
 
             function exportSelectionFromPlayer(type) {
-                var nodes = [];
-                var links = [];
-                if (type == 'all') {
-                    nodes = dataGraph.getAllNodes();
-                    links = dataGraph.getAllEdges();
-                } else if (type == 'select') {
-                    nodes = selectService.getSelectedNodes();
-                    links = dataGraph.getEdgesByNodes(nodes);
-                } else if (type == 'subset') {
-                    nodes = subsetService.subsetNodes;
-                    links = dataGraph.getEdgesByNodes(nodes);
-                }
+                // console.log('*** "dataGraph" =>', dataGraph);
 
-                var currentNetwork = networkService.getCurrentNetwork();
-                var fileName = (function () {
-                    var div = document.createElement("div");
-                    div.innerHTML = $scope.headerTitle; // In player's CtrlApp. Is html string
-                    return div.textContent || div.innerText || "Mappr";
-                }());
+                var sigObj_1 = renderGraphfactory.sig();
+                console.log('*** "sigObj_1" =>', sigObj_1);
+                sigObj_1.toSVG({download: true, filename: 'output_1.svg', size: 1000});
 
-                var postObj = {
-                    networkId: currentNetwork.id,
-                    downloadFormat: 'xlsx',
-                    fileNamePrefix: type
-                };
+                // renderGraphfactory.getSig().then(sigObj_2 => {
+                //     console.log('*** "sigObj_2" =>', sigObj_2);
+                //     sigObj_2.toSVG({download: true, filename: 'output_2.svg', size: 1000});
+                // });
 
-                postObj.selectionData = {
-                    nodeIds: _.pluck(nodes, 'id'),
-                    linkIds: _.pluck(links, 'id')
-                };
+                // var sigOutput = sigObj.toSVG({download: true, filename: 'bubbles.svg', size: 1000});
+                // console.log('*** "sigOutput" =>', sigOutput);
 
-                playerFactory.currPlayer()
-                    .then(function (player) {
-                        playerFactory.downloadSelection(player._id, postObj, function (result) {
-                            _export(result, fileName);
-                        });
-                    });
+
+                // var nodes = [];
+                // var links = [];
+                // if (type == 'all') {
+                //     nodes = dataGraph.getAllNodes();
+                //     links = dataGraph.getAllEdges();
+                // } else if (type == 'select') {
+                //     nodes = selectService.getSelectedNodes();
+                //     links = dataGraph.getEdgesByNodes(nodes);
+                // } else if (type == 'subset') {
+                //     nodes = subsetService.subsetNodes;
+                //     links = dataGraph.getEdgesByNodes(nodes);
+                // }
+
+                // var currentNetwork = networkService.getCurrentNetwork();
+                // var fileName = (function () {
+                //     var div = document.createElement("div");
+                //     div.innerHTML = $scope.headerTitle; // In player's CtrlApp. Is html string
+                //     return div.textContent || div.innerText || "Mappr";
+                // }());
+
+                // var postObj = {
+                //     networkId: currentNetwork.id,
+                //     downloadFormat: 'xlsx',
+                //     fileNamePrefix: type
+                // };
+
+                // postObj.selectionData = {
+                //     nodeIds: _.pluck(nodes, 'id'),
+                //     linkIds: _.pluck(links, 'id')
+                // };
+
+                // playerFactory.currPlayer()
+                //     .then(function (player) {
+                //         playerFactory.downloadSelection(player._id, postObj, function (result) {
+                //             _export(result, fileName);
+                //         });
+                //     });
             }
 
             function _export(data, fileName) {
