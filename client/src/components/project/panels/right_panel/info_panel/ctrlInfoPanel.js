@@ -360,16 +360,8 @@ angular.module('common')
             function exportSelectionFromPlayer(type) {
                 var sigObj_1 = renderGraphfactory.sig();
                 var snapshot = snapshotService.getCurrentSnapshot();
-                sigObj_1.toSVG({download: true, filename: (snapshot ? snapshot.snapName : 'output') + '.svg', size: 1000});
-
-                // renderGraphfactory.getSig().then(sigObj_2 => {
-                //     console.log('*** "sigObj_2" =>', sigObj_2);
-                //     sigObj_2.toSVG({download: true, filename: 'output_2.svg', size: 1000});
-                // });
-
-                // var sigOutput = sigObj.toSVG({download: true, filename: 'bubbles.svg', size: 1000});
-                // console.log('*** "sigOutput" =>', sigOutput);
-
+                console.log('sigObj!', sigObj_1);
+                sigObj_1.toSVG({download: true, filename: (snapshot ? snapshot.snapName : 'output') + '.svg', size: window.innerWidth});
 
                 // var nodes = [];
                 // var links = [];
