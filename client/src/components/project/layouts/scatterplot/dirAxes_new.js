@@ -210,7 +210,7 @@ function ($rootScope, $q, $compile, $timeout, renderGraphfactory, layoutService,
             scope[axis + 'axisId'] = scope.layout.attr[axis];
             scope.attrs = [];
             _.each(dataGraph.getNodeAttrs(), function(attr) {
-                if(AttrInfoService.isDistrAttr(attr, infoObj.getForId(attr.id)) && attr.isNumeric) {
+                if(AttrInfoService.isDistrAttr(attr, infoObj.getForId(attr.id)) && attr.isNumeric && attr.visible) {
                     scope.attrs.push(attr);
                 }
             });

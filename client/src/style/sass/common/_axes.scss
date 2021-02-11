@@ -17,7 +17,7 @@
     .xaxis-bkgrnd {
         background: $axis-bkgrnd;
         border-top: 1px solid $panel-border;
-        bottom: 0;
+        bottom: 2em;
         height: 100px;
         left: 0;
         right: 0;
@@ -38,7 +38,7 @@
 
 
     .xaxis-container {
-        bottom: 0;
+        bottom: 2em;
         height: 100px;
         left: -190px;
         right: 0;
@@ -170,7 +170,7 @@
 
     .xaxis-tit {
 
-        bottom: 40px;
+        bottom: calc(40px + 2em);
         display: table;
         left: 50%;
         margin-left: -250px;
