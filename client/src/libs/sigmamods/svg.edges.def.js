@@ -26,6 +26,10 @@
 
       var sourceCol = (source) ? source.colorStr : 'rgb(0,0,0)';
       var targetCol = (target) ? target.colorStr : 'rgb(0,0,0)';
+      var x1 = source[prefix + 'x'],
+      y1 = source[prefix + 'y'],
+      x2 = target[prefix + 'x'],
+      y2 = target[prefix + 'y'];
 
         switch (edgeColor) {
           case 'source':
@@ -41,7 +45,7 @@
             fillId = this.createGradient(
               source.colorStr || defaultNodeColor,
               target.colorStr || defaultNodeColor,
-            edge.id, svg);
+            edge.id, svg, x1, y1, x2, y2);
             break;
           default:
             color = defaultEdgeColor;
@@ -52,11 +56,6 @@
 
       var curvature = settings('edgeCurvature');
       if (curvature > 0) {
-        var x1 = source[prefix + 'x'],
-        y1 = source[prefix + 'y'],
-        x2 = target[prefix + 'x'],
-        y2 = target[prefix + 'y'],
-
         curvature = curvature * 1.33;
         line = document.createElementNS(settings('xmlns'), 'path');
         var path = {
@@ -89,26 +88,26 @@
       return line;
     },
 
-    createGradient: function(col1, col2, id, svg) {
+    createGradient: function(col1, col2, id, svg, x1, y1, x2, y2) {
       var defs = svg.querySelector('defs');
       var fillId = 'col' + id;
-
-      if (!this._colors) {
-        this._colors = {};
-
-        this._colors[col1] = { [col2]: fillId };
-      } else if (!this._colors[col1]) {
-        this._colors[col1] = { [col2]: fillId };
-      } else if (this._colors[col1] && !this._colors[col1][col2]) {
-        this._colors[col1][col2] = fillId;
-      } else if (this._colors[col1] && this._colors[col2]) {
-        return this._colors[col1][col2];
-      }
 
       var gradientElement = document.createElementNS(null, 'linearGradient');
       defs.appendChild(gradientElement);
 
-      gradientElement.setAttributeNS(null, 'id', fillId);
+      var gradAttrs = {
+        id: fillId,
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        gradientUnits: 'userSpaceOnUse'
+      };
+
+      var keys = Object.keys(gradAttrs);
+      for(var i = 0; i < keys.length; i++) {
+        gradientElement.setAttributeNS(null, keys[i], gradAttrs[keys[i]]);
+      }
 
       var colors = [col1, col2];
       for(var i = 0; i < colors.length; i++) {
