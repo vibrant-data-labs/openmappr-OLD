@@ -24,7 +24,7 @@
       circle.setAttributeNS(
         null, 'fill', node.colorStr || settings('defaultNodeColor'));
       circle.setAttributeNS(
-        null, 'stroke', 'white'
+        null, 'stroke', mappr.utils.darkenColor(node.color || settings('defaultNodeColor'))
       );
 
       // Returning the DOM Element

@@ -70,7 +70,7 @@
       this.options.prefix = 'renderer' + sigma.utils.id() + ':';
   
       // Initialize the DOM elements
-      this.initDOM('svg');
+      this._dom = this.initDOM('svg');
   
       // Initialize captors:
       this.captors = [];
@@ -165,15 +165,34 @@
         index[a[i].id] = a[i];
   
       // Find which edges are on screen
-      for (a = graph.edges(), i = 0, l = a.length; i < l; i++) {
-        o = a[i];
-        if (
-          (index[o.source] || index[o.target]) &&
-          (!o.hidden && !nodes(o.source).hidden && !nodes(o.target).hidden)
-        )
-          this.edgesOnScreen.push(o);
-      }
+      var neighbourFn = 'getNodeNeighbours';
+      if (embedSettings('edgeDirectionalRender') === 'all')
+        neighbourFn = 'getNodeNeighbours';
+      else if (embedSettings('edgeDirectionalRender') === 'incoming')
+        neighbourFn = 'getInNodeNeighbours';
+      else if (embedSettings('edgeDirectionalRender') === 'outgoing')
+        neighbourFn = 'getOutNodeNeighbours';
   
+        console.log('neighbourFn!', neighbourFn);
+      var _edgesCache = {};
+      for (a = this.nodesOnScreen, i = 0, l = a.length; i < l; i++) {
+        o = a[i];
+        var edges = graph[neighbourFn](o.id);
+
+        var keys = Object.keys(edges);
+        for(var j = 0; j < keys.length; j++) {
+          var innerKeys = Object.keys(edges[keys[j]]);
+          for(var k = 0; k < innerKeys.length; k++) {
+            var edge = edges[keys[j]][innerKeys[k]];
+            if(!_edgesCache[edge.id]) {
+              _edgesCache[edge.id] = true;
+              this.edgesOnScreen.push(edge);
+            }
+          }
+        }
+      }
+      _edgesCache = null;
+
       // Display nodes
       //---------------
       renderers = sigma.svg.nodes;
@@ -241,7 +260,8 @@
               a[i],
               source,
               target,
-              embedSettings
+              embedSettings,
+              this._dom
             );
   
             this.domElements.edges[a[i].id] = e;
@@ -283,6 +303,9 @@
           g,
           l,
           i;
+
+      var defs = document.createElementNS(null, 'defs');
+      dom.appendChild(defs);
   
       dom.style.position = 'absolute';
       dom.setAttribute('class', c + '-svg');
@@ -314,6 +337,8 @@
       // Appending measurement canvas
       this.container.appendChild(canvas);
       this.measurementCanvas = canvas.getContext('2d');
+
+      return dom;
     };
   
     /**
