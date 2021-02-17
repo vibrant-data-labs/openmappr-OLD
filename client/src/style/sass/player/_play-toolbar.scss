@@ -279,6 +279,9 @@
       padding: 0 10px;
       font: 400 14px/26px 'Poppins';
       line-height: 23px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     &:nth-child(1) { .row-data__content { color:  rgba(50, 60, 71, 0.8); } }
