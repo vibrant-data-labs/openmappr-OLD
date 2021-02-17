@@ -170,7 +170,7 @@
 											)											
 											//- TODO: remember about "playerTempObj.settings.showModal"
 
-								.panel-sublist(ng-if="playerTempObj.settings.showModal")
+								.panel-sublist
 									.panel-subitem(ng-if="playerTempObj.settings.simpleSplash == false")
 										//only show if simple splash is false (for legacy players)
 										.row.vert-align
@@ -189,15 +189,15 @@
 									//- 		input.form-control(ng-model="playerTempObj.settings.modalLogo" ng-change = 'markAsDirty()' dir-select-all)						
 									.panel-subitem
 										.form-group
-											h6 Title
+											h6 Splash Title
 											input.form-control(ng-model="playerTempObj.settings.modalTitle" ng-change = 'markAsDirty()' dir-select-all)
 									.panel-subitem
 										.form-group
-											h6 Sub-title
+											h6 Splash Sub-title
 											text-angular.ui-editor.no-text-transform(ng-model="playerTempObj.settings.modalSubtitle" ta-toolbar-button-class="btn btn-xs btn-default", ng-change = 'markAsDirty()')
 									.panel-subitem
 										.form-group
-											h6 Description
+											h6 Splash Description
 											text-angular.ui-editor.no-text-transform(ng-model="playerTempObj.settings.modalDescription", ta-toolbar-button-class="btn btn-xs btn-default", ng-change = 'markAsDirty()')
 									.panel-subitem
 										.form-group
