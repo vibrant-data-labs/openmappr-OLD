@@ -13,14 +13,14 @@ function ($rootScope, $q, $compile, $timeout, renderGraphfactory, layoutService,
         //
         '<div id="axes" class="axis-container">'+
             '<div ng-show="yshow" class="yaxis-tit"><div><h4 class="truncate no-text-transform" uib-tooltip="{{mapprSettings.yAxTooltip}}" tooltip-placement="right">' + 
-            '<select ng-change="updateYLayout(attr.id)" ng-model="yaxisId">' + 
+            '<select class="resizeselect" ng-change="updateYLayout(attr.id)" ng-model="yaxisId">' + 
             '<option ng-repeat="attr in attrs" value="{{attr.id}}" ng-selected="attr.id == yaxisId">{{attr.title}}</option>' +
             '</select>' +
             '</h4></div></div>'+
             '<div ng-show="yshow" class="yaxis-bkgrnd"></div>'+
             '<div ng-show="yshow && mapprSettings.yAxTickShow" class="yaxis"></div>'+
             '<div ng-show="xshow" class="xaxis-tit"><div><h4 class="truncate no-text-transform" uib-tooltip="{{mapprSettings.xAxTooltip}}" tooltip-placement="top">' + 
-            '<select ng-change="updateXLayout(attr.id)" ng-model="xaxisId">' + 
+            '<select class="resizeselect" ng-change="updateXLayout(attr.id)" ng-model="xaxisId">' + 
             '<option ng-repeat="attr in attrs" value="{{attr.id}}" ng-selected="attr.id == xaxisId">{{attr.title}}</option>' +
             '</select>' +            
             '</h4></div></div>'+
@@ -334,6 +334,10 @@ function ($rootScope, $q, $compile, $timeout, renderGraphfactory, layoutService,
             }
 
             showAxisMarkers(axis);
+
+            $timeout(() => {
+                $('.resizeselect').resizeselect();
+            });
         }
 
         /**

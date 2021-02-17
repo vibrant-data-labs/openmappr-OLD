@@ -19,7 +19,7 @@
         border-top: 1px solid $panel-border;
         bottom: 2em;
         height: 100px;
-        left: 0;
+        left: 20px;
         right: 0;
         position: absolute;
         width: 95%;
@@ -180,6 +180,19 @@
         z-index: 3;
         pointer-events: auto;
 
+        select {
+            width: 100%;            
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid rgb(230, 230, 230);
+            font: 500 16px / 20px "Poppins";
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            appearance:none;
+            background: url(/img/search/arrow-down.svg) no-repeat right white;
+            text-overflow: ellipsis;
+        }
+
         h4 {
             color: $text-color;
             font-weight: 500;
@@ -207,6 +220,19 @@
         > div {
             display: table-cell;
             vertical-align: middle;
+        }
+
+        select {
+            width: 100%;
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid rgb(230, 230, 230);
+            font: 500 16px / 20px "Poppins";
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            appearance:none;
+            background: url(/img/search/arrow-down.svg) no-repeat right white;
+            text-overflow: ellipsis;
         }
 
         h4 {
