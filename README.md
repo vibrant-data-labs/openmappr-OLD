@@ -1,3 +1,9 @@
+# PLEASE NOTE THAT THIS REPOSITORY IS OUT OF DATE AND NO LONGER MAINTAINED.
+# WE CREATED A NEW VERSION OF OPENMAPPR THAT DOES NOT REQUIRE HOSTING ON A COMPUTE SERVER
+# INSTEAD YOU PUBLISH MAPS DIRECTLY FROM PYTHON. 
+# TO USE THE NEW OPENMAPPR GO TO https://github.com/vibrant-data-labs/py2mappr 
+
+
 # OpenMappr 📊
 ## [Documentation 📄](https://github.com/vibrant-data-labs/openmappr/wiki)
 #### Development
